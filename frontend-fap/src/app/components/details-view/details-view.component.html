@@ -1,0 +1,25 @@
+<div class="details-view">
+
+  <!--<div style=" width:50%; display:flex; align-items: center; justify-content: flex-end">
+    <img style="margin: 0; padding: 0; max-width:500px; max-height:300px;" mat-card-image src="https://source.unsplash.com/random" alt="Pandom Photo">
+  </div>-->
+  <form class="details-form" *ngIf="movie">
+    <div *ngFor="let property of movie | keyvalue: noSort">
+      <div *ngIf="!isArray(property.value); else elseBlock" class="input-row">
+        <div class="label">{{property.key}}</div>
+        <mat-form-field class="input" appearance="fill" >
+          <mat-label>{{property.key}}</mat-label>
+          <input matInput placeholder="Add Tag" value="{{property.value}}">
+        </mat-form-field>
+      </div>
+      <ng-template #elseBlock>
+        <div  class="input-row">
+          <div class="label">{{property.key}}</div>
+          <!--<app-tag-input [tags]="property.value.toString().length === 0 ? [] : property.value.toString().split(',')" class="input"></app-tag-input>-->
+          <!--<app-tag-input class="input"></app-tag-input>-->
+        </div>
+      </ng-template>
+    </div>
+    <button mat-raised-button color="primary" (click)="createMovie()">Submit</button>
+  </form>
+</div>

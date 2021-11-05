@@ -1,0 +1,21 @@
+<div class="content">
+  <!-- Movie List -->
+  <div class="list-container">
+    <mat-tab-group>
+      <mat-tab label="Movies">
+        <div class="tab-content">
+          <app-list-view (rowChangeEvent)="changeDetails($event)"></app-list-view>
+        </div>
+      </mat-tab>
+      <mat-tab label="Directresses">
+        <app-list-view></app-list-view>
+      </mat-tab>
+      <mat-tab label="Planner">
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+  <!-- Movie Details -->
+  <div class="details-container">
+      <app-details-view [movie]="selectedMovie"></app-details-view>
+  </div>
+</div>

@@ -6,7 +6,7 @@ services:
     command: >
       bash -c "
       npm install --quiet &&
-      npm run start:dev
+      npm run start
       "
     volumes:
       - './:/app'

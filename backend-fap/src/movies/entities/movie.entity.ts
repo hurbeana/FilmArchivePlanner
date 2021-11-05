@@ -34,7 +34,7 @@ export class Movie {
   @Column('simple-array', { nullable: true }) //Replace simple-array?
   stillFiles?: String[]; //TODO Replace this with "Path[]"
 
-  @Column('simple-array',{ nullable: true }) //Replace simple-array?
+  @Column('simple-array', { nullable: true }) //Replace simple-array?
   subtitleFiles?: String[]; //TODO Replace this with "Path"
 
   @Column('simple-array', { nullable: true }) //Replace simple-array?

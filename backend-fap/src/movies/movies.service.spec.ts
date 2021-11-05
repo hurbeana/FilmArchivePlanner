@@ -10,11 +10,13 @@ describe('MoviesService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [MoviesService,
-      {
-        provide: getRepositoryToken(Movie),
-        useClass: Repository
-      }],
+      providers: [
+        MoviesService,
+        {
+          provide: getRepositoryToken(Movie),
+          useClass: Repository,
+        },
+      ],
     }).compile();
 
     service = module.get<MoviesService>(MoviesService);

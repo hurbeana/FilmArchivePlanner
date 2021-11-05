@@ -1,9 +1,4 @@
-import {
-  IsBoolean,
-  IsInt,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsBoolean, IsInt, IsOptional, IsString } from 'class-validator';
 
 export class CreateMovieDto {
   @IsString()
@@ -13,12 +8,29 @@ export class CreateMovieDto {
   englishTitle: String;
 
   //TODO Need to implement movie upload and file matching to DTO
-  //movieFile: String; //TODO Replace this with "Path"
-  //previewFile?: String; //TODO Replace this with "Path"
-  //trailerFile?: String; //TODO Replace this with "Path"
-  //stillFiles?: String[]; //TODO Replace this with "Path[]"
-  //subtitleFiles?: String[]; //TODO Replace this with "Path[]"
-  //directors?: Director[]; //TODO Add directress
+
+  @IsString()
+  movieFile: String; //TODO Replace this with "Path"
+
+  @IsString()
+  @IsOptional()
+  previewFile?: String; //TODO Replace this with "Path"
+
+  @IsString()
+  @IsOptional()
+  trailerFile?: String; //TODO Replace this with "Path"
+
+  @IsOptional()
+  @IsString({ each: true })
+  stillFiles?: String[]; //TODO Replace this with "Path[]"
+
+  @IsOptional()
+  @IsString({ each: true })
+  subtitleFiles?: String[]; //TODO Replace this with "Path[]"
+
+  @IsOptional()
+  @IsString({ each: true })
+  directors?: String[]; //TODO Add directress
 
   @IsOptional()
   @IsString({ each: true })

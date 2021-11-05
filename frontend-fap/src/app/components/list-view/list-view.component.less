@@ -1,0 +1,28 @@
+:host{
+  width: 100%;
+  height: calc(100vh - 64px - 48px - 1px); // 100vh - 64px header - 48px tabs - 1px border
+  position: relative;
+  display: flex;
+  overflow-y: scroll;
+}
+
+.mat-column-id {
+  width: 50px;
+}
+
+.mat-column-originalTitle {
+  width: 300px;
+}
+
+.mat-row .mat-cell {
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+  cursor: pointer;
+}
+.mat-row:hover .mat-cell {
+  border-color: currentColor;
+}
+
+.row-is-clicked {
+  font-weight: bold;
+}

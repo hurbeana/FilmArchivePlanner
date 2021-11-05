@@ -60,6 +60,7 @@
             "development": {
               "buildOptimizer": false,
               "optimization": false,
+              "extractCss": true,
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
