@@ -1,0 +1,42 @@
+version: '3.1'
+
+services:
+  backend:
+    image: node:14.18
+    command: >
+      bash -c "
+      npm install --quiet &&
+      npm run start:dev
+      "
+    volumes:
+      - './:/app'
+    working_dir: /app
+    depends_on:
+      - 'db'
+    ports:
+      - 3000:3000
+    network_mode: host
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: root
+    ports:
+      - 5432:5432
+    networks:
+      - backend_net
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - backend_net
+    depends_on:
+      - 'db'
+
+networks:
+  backend_net:
+    driver: bridge
