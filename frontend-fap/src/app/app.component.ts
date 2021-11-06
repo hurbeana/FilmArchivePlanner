@@ -1,7 +1,6 @@
-import { Component } from '@angular/core';
-import {DummyMovieService} from "./services/movie.dummy.service";
+import {Component} from '@angular/core';
 import {Store} from "@ngrx/store";
-import {retrievedMovieList} from "./state/movies/movies.actions";
+import {retrievedMovieList} from "./movies/state/movies.actions";
 
 @Component({
   selector: 'app-root',
