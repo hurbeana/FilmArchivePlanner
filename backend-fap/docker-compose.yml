@@ -1,0 +1,49 @@
+version: "3.8"
+services:
+  api:
+    #image: backend-fap
+    build:
+      dockerfile: Dockerfile
+      context: .
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgres://user:password@postgres:5432/db
+      NODE_ENV: development
+      PORT: 3000
+    ports:
+      - "3000:3000" #HOST LISTENS TO PORT XXXX : CONTAINER LISTENS TO PORT XXXX
+
+  postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - '8080:8080'
+    depends_on:
+      - 'db'
+
+#host
+##################################################################
+#                                                                #
+#                                                                #
+#                                                                #
+#                                                                #
+#                                                                #
+#  docker         :5432               :3000             :8080    #
+#  ############################################################  #
+#  #              :5432               :3000             :8080 #  #
+#  #   ################      ##############     ############# #  #
+#  #   #   postgres   #      #   nestjs   #     #  adminer  # #  #
+#  #   ################      ##############     ############# #  #
+#  ############################################################  #
+#                                                                #
+##################################################################
