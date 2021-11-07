@@ -5,100 +5,135 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { AutoMap } from '@automapper/classes';
+
 @Entity()
 export class Movie {
+  @AutoMap()
   @PrimaryGeneratedColumn()
   id: number;
 
+  @AutoMap()
   @CreateDateColumn()
   created_at: Date;
 
+  @AutoMap()
   @UpdateDateColumn()
   last_updated: Date;
 
+  @AutoMap()
   @Column()
-  originalTitle: String;
+  originalTitle: string;
 
+  @AutoMap()
   @Column()
-  englishTitle: String;
+  englishTitle: string;
 
+  @AutoMap()
+  @Column()
+  movieFile: string; //TODO Replace this with "Path"
+
+  @AutoMap()
   @Column({ nullable: true })
-  movieFile?: String; //TODO Replace this with "Path"
+  previewFile?: string; //TODO Replace this with "Path"
 
+  @AutoMap()
   @Column({ nullable: true })
-  previewFile?: String; //TODO Replace this with "Path"
+  trailerFile?: string; //TODO Replace this with "Path"
 
-  @Column({ nullable: true })
-  trailerFile?: String; //TODO Replace this with "Path"
-
+  @AutoMap()
   @Column('simple-array', { nullable: true }) //Replace simple-array?
-  stillFiles?: String[]; //TODO Replace this with "Path[]"
+  stillFiles?: string[]; //TODO Replace this with "Path[]"
 
+  @AutoMap()
   @Column('simple-array', { nullable: true }) //Replace simple-array?
-  subtitleFiles?: String[]; //TODO Replace this with "Path"
+  subtitleFiles?: string[]; //TODO Replace this with "Path"
 
+  @AutoMap()
+  @Column('simple-array') //Replace simple-array?
+  directors: string[]; //TODO Add directress and replace String
+
+  @AutoMap()
   @Column('simple-array', { nullable: true }) //Replace simple-array?
-  directors?: String[]; //TODO Add directress and replace String
+  countriesOfProduction?: string[]; //TODO Replace with Tag[]
 
-  @Column('simple-array', { nullable: true }) //Replace simple-array?
-  countriesOfProduction?: String[]; //TODO Replace with Tag[]
-
+  @AutoMap()
   @Column({ nullable: true })
   yearOfProduction?: number;
 
+  @AutoMap()
   @Column('bigint')
   duration: number;
 
+  @AutoMap()
   @Column('simple-array', { nullable: true }) //Replace simple-array
-  animationTechniques?: String[]; //TODO Replace with Tag[]
+  animationTechniques?: string[]; //TODO Replace with Tag[]
 
+  @AutoMap()
   @Column('simple-array', { nullable: true }) //Replace simple-array
-  softwareUsed?: String[]; //TODO Replace with Tag[]
+  softwareUsed?: string[]; //TODO Replace with Tag[]
 
+  @AutoMap()
   @Column('simple-array', { nullable: true }) //Replace simple-array
-  keywords?: String[]; //TODO Replace with Tag[]
+  keywords?: string[]; //TODO Replace with Tag[]
 
+  @AutoMap()
   @Column()
-  germanSynopsis: String;
+  germanSynopsis: string;
 
+  @AutoMap()
   @Column()
-  englishSynopsis: String;
+  englishSynopsis: string;
 
+  @AutoMap()
   @Column()
-  submissionCategory: String; //TODO Replace with Tag
+  submissionCategory: string; //TODO Replace with Tag
 
+  @AutoMap()
   @Column({ nullable: true })
-  hasDialog?: Boolean;
+  hasDialog?: boolean;
 
+  @AutoMap()
   @Column('simple-array', { nullable: true }) //Replace simple-array
-  dialogLanguages?: String[]; //TODO Replace with Tag[]
+  dialogLanguages?: string[]; //TODO Replace with Tag[]
 
+  @AutoMap()
   @Column({ nullable: true })
-  hasSubtitles?: Boolean;
+  hasSubtitles?: boolean;
 
+  @AutoMap()
   @Column()
-  isStudentFilm: Boolean;
+  isStudentFilm: boolean;
 
+  @AutoMap()
   @Column({ nullable: true })
-  filmSchool?: String;
+  filmSchool?: string;
 
+  @AutoMap()
   @Column({ nullable: true })
-  script?: String;
+  script?: string;
 
+  @AutoMap()
   @Column({ nullable: true })
-  animation?: String;
+  animation?: string;
 
+  @AutoMap()
   @Column({ nullable: true })
-  editing?: String;
+  editing?: string;
 
+  @AutoMap()
   @Column({ nullable: true })
-  sound?: String;
+  sound?: string;
 
+  @AutoMap()
   @Column({ nullable: true })
-  music?: String;
+  music?: string;
 
+  @AutoMap()
   @Column({ nullable: true })
-  productionCompany?: String;
+  productionCompany?: string;
 
-  //contact: Contact; //TODO Add contact
+  @AutoMap()
+  @Column()
+  contact: string; //TODO Change to Contact type
 }

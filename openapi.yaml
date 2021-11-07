@@ -93,7 +93,10 @@ paths:
       responses:
         201:
           description: Successful creation
-          content: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieDto'
         400:
           description: Invalid input
           content: { }
@@ -148,7 +151,10 @@ paths:
       responses:
         204:
           description: Operation successful
-          content: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieDto'
         400:
           description: Invalid input
           content: { }
@@ -196,11 +202,17 @@ components:
     MovieDto:
       required:
         - id
+        - created_at
+        - last_updated
       allOf:
         - properties:
             id:
               type: integer
               format: int64
+            created_at:
+              type: string
+            last_updated:
+              type: string
         - $ref: '#/components/schemas/CreateUpdateMovieDto'
     CreateUpdateMovieDto:
       required:

@@ -21,6 +21,9 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@automapper/classes": "^6.3.1",
+    "@automapper/core": "^6.3.1",
+    "@automapper/nestjs": "^6.3.1",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^1.1.0",
     "@nestjs/core": "^8.0.0",
@@ -36,6 +39,7 @@
     "typeorm": "^0.2.38"
   },
   "devDependencies": {
+    "@automapper/types": "^6.3.1",
     "@nestjs/cli": "^8.0.0",
     "@nestjs/schematics": "^8.0.0",
     "@nestjs/testing": "^8.0.0",

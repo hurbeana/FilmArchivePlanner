@@ -1,4 +1,3 @@
-import { Movie } from './movies/entities/movie.entity';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config'
@@ -6,6 +5,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MoviesModule } from './movies/movies.module';
 import { Connection } from 'typeorm';
+import { AutomapperModule } from '@automapper/nestjs';
+import { classes } from '@automapper/classes';
 
 //TODO make db configurable via .env file, see https://docs.nestjs.com/techniques/configuration
 // also this https://docs.nestjs.com/techniques/database#async-configuration
@@ -22,6 +23,10 @@ import { Connection } from 'typeorm';
       synchronize: true, //TODO Turn off for non dev, auto-creates tables for entities
     }),
     MoviesModule,
+    AutomapperModule.forRoot({
+      options: [{ name: '', pluginInitializer: classes }],
+      singular: true,
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

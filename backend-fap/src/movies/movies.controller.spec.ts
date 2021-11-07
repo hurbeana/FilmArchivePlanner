@@ -4,12 +4,20 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { MoviesController } from './movies.controller';
 import { MoviesService } from './movies.service';
 import { Movie } from './entities/movie.entity';
+import { AutomapperModule } from '@automapper/nestjs';
+import { classes } from '@automapper/classes';
 
 describe('MoviesController', () => {
   let controller: MoviesController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [
+        AutomapperModule.forRoot({
+          options: [{ name: '', pluginInitializer: classes }],
+          singular: true,
+        }),
+      ],
       controllers: [MoviesController],
       providers: [
         MoviesService,
