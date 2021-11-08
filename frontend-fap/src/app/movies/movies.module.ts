@@ -18,6 +18,7 @@ import {DetailsViewComponent} from "./components/details-view/details-view.compo
 /* state management*/
 import {moviesReducer} from "./state/movies.reducer";
 import {MovieEffects} from "./state/movies.effects";
+import {MoviesRoutingModule} from "./movies-routing.module";
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import {MovieEffects} from "./state/movies.effects";
     MatInputModule,
     MatTabsModule,
     MatTableModule,
+    MoviesRoutingModule,
   ]
 })
 /* Movie Module contains everything related to movies */

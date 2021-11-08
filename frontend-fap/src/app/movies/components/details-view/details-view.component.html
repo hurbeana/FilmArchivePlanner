@@ -1,24 +1,66 @@
-<div class="details-view">
-
-  <!--<div style=" width:50%; display:flex; align-items: center; justify-content: flex-end">
-    <img style="margin: 0; padding: 0; max-width:500px; max-height:300px;" mat-card-image src="https://source.unsplash.com/random" alt="Pandom Photo">
-  </div>-->
-  <form class="details-form" *ngIf="movie">
-    <div *ngFor="let property of movie | keyvalue: noSort">
-      <div *ngIf="!isArray(property.value); else elseBlock" class="input-row">
-        <div class="label">{{property.key}}</div>
-        <mat-form-field class="input" appearance="fill" >
-          <mat-label>{{property.key}}</mat-label>
-          <input matInput placeholder="Add Tag" value="{{property.value}}">
-        </mat-form-field>
-      </div>
-      <ng-template #elseBlock>
-        <div  class="input-row">
-          <div class="label">{{property.key}}</div>
-          <shared-tag-input [tags]="property.value.toString().length === 0 ? [] : property.value.toString().split(',')" class="input"></shared-tag-input>
-        </div>
-      </ng-template>
-    </div>
-    <button mat-raised-button color="primary" (click)="createMovie()">Submit</button>
-  </form>
+<div  *ngIf="movie" class="details-view">
+  <h2 class="mat-h1">{{movie?.originalTitle}}</h2>
+  <div style="display:flex; align-items: center; justify-content: start">
+    <img style="margin: 10px 0; padding: 0; max-width:500px; max-height:300px;" mat-card-image src="https://source.unsplash.com/random/300x300?sig={{movie?.id}}" alt="{{movie?.stillFiles}}">
+  </div>
+  <div class="details-grid">
+      <span class="mat-primary label-colon" i18n>Original Title</span>
+      <span>{{movie?.originalTitle}}</span>
+      <span class="mat-primary label-colon" i18n>English Title</span>
+      <span>{{movie?.englishTitle}}</span>
+      <span class="mat-primary label-colon" i18n>Movie File</span>
+      <span>{{movie?.movieFile}}</span>
+      <span class="mat-primary label-colon" i18n>Preview File</span>
+      <span>{{movie?.previewFile}}</span>
+      <span class="mat-primary label-colon" i18n>Trailer File</span>
+      <span>{{movie?.trailerFile}}</span>
+      <span class="mat-primary label-colon" i18n>Still File</span>
+      <span>{{movie?.stillFiles}}</span>
+      <span class="mat-primary label-colon" i18n>Subtitle Folder</span>
+      <span>{{movie?.subtitleFolder}}</span>
+      <span class="mat-primary label-colon" i18n>Directors</span>
+      <span>{{movie?.directors}}</span>
+      <span class="mat-primary label-colon" i18n>Countries of Production</span>
+      <span>{{movie?.countriesOfProduction}}</span>
+      <span class="mat-primary label-colon" i18n>Year of Production</span>
+      <span>{{movie?.yearOfProduction}}</span>
+      <span class="mat-primary label-colon" i18n>Duration</span>
+      <span>{{movie?.duration}}</span>
+      <span class="mat-primary label-colon" i18n>Animation Technique</span>
+      <span>{{movie?.animationTechniques}}</span>
+      <span class="mat-primary label-colon" i18n>Software Used</span>
+      <span>{{movie?.softwareUsed}}</span>
+      <span class="mat-primary label-colon" i18n>Keywords</span>
+      <span>{{movie?.keywords}}</span>
+      <span class="mat-primary label-colon" i18n>German Synopsis</span>
+      <span>{{movie?.germanSynopsis}}</span>
+      <span class="mat-primary label-colon" i18n>English Synopsis</span>
+      <span>{{movie?.englishSynopsis}}</span>
+      <span class="mat-primary label-colon" i18n>Submission Category</span>
+      <span>{{movie?.submissionCategory}}</span>
+      <span class="mat-primary label-colon" i18n>Has Dialog</span>
+      <shared-yes-no-label>{{movie?.hasDialog}}</shared-yes-no-label>
+      <span class="mat-primary label-colon" i18n>Original Title</span>
+      <span>{{movie?.dialogLanguages}}</span>
+      <span class="mat-primary label-colon" i18n>Has Subtitles</span>
+      <span>{{movie?.hasSubtitles}}</span>
+      <span class="mat-primary label-colon" i18n>Is Student Film</span>
+      <shared-yes-no-label>{{movie?.isStudentFilm}}</shared-yes-no-label>
+      <span class="mat-primary label-colon" i18n>Film School</span>
+      <span>{{movie?.filmSchool}}</span>
+      <span class="mat-primary label-colon" i18n>Script</span>
+      <span>{{movie?.script}}</span>
+      <span class="mat-primary label-colon" i18n>Animation</span>
+      <span>{{movie?.animation}}</span>
+      <span class="mat-primary label-colon" i18n>Editing</span>
+      <span>{{movie?.editing}}</span>
+      <span class="mat-primary label-colon" i18n>Sound</span>
+      <span>{{movie?.sound}}</span>
+      <span class="mat-primary label-colon" i18n>Music</span>
+      <span>{{movie?.music}}</span>
+      <span class="mat-primary label-colon" i18n>Production Company</span>
+      <span>{{movie?.productionCompany}}</span>
+      <span class="mat-primary label-colon" i18n>Contact</span>
+      <span>{{movie?.contact}}</span>
+  </div>
 </div>

@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="en">
+  <file id="ngi18n" original="ng.template">
+    <unit id="5365813322944561433">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:7</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:43</note>
+      </notes>
+      <segment>
+        <source>Original Title</source>
+      </segment>
+    </unit>
+    <unit id="3390764610002600019">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:9</note>
+      </notes>
+      <segment>
+        <source>English Title</source>
+      </segment>
+    </unit>
+    <unit id="5798400700034143644">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:11</note>
+      </notes>
+      <segment>
+        <source>Movie File</source>
+      </segment>
+    </unit>
+    <unit id="3812799984769687924">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:13</note>
+      </notes>
+      <segment>
+        <source>Preview File</source>
+      </segment>
+    </unit>
+    <unit id="8354046126695169758">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:15</note>
+      </notes>
+      <segment>
+        <source>Trailer File</source>
+      </segment>
+    </unit>
+    <unit id="7536201549694998705">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:17</note>
+      </notes>
+      <segment>
+        <source>Still File</source>
+      </segment>
+    </unit>
+    <unit id="8063276897623182518">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:19</note>
+      </notes>
+      <segment>
+        <source>Subtitle Folder</source>
+      </segment>
+    </unit>
+    <unit id="8707352275157977601">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:21</note>
+      </notes>
+      <segment>
+        <source>Directors</source>
+      </segment>
+    </unit>
+    <unit id="1199643963944280124">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:23</note>
+      </notes>
+      <segment>
+        <source>Countries of Production</source>
+      </segment>
+    </unit>
+    <unit id="2433325232271409797">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:25</note>
+      </notes>
+      <segment>
+        <source>Year of Production</source>
+      </segment>
+    </unit>
+    <unit id="7410432243549869948">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:27</note>
+      </notes>
+      <segment>
+        <source>Duration</source>
+      </segment>
+    </unit>
+    <unit id="5407748950392055431">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:29</note>
+      </notes>
+      <segment>
+        <source>Animation Technique</source>
+      </segment>
+    </unit>
+    <unit id="6134504358793820828">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:31</note>
+      </notes>
+      <segment>
+        <source>Software Used</source>
+      </segment>
+    </unit>
+    <unit id="1604795977599078115">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:33</note>
+      </notes>
+      <segment>
+        <source>Keywords</source>
+      </segment>
+    </unit>
+    <unit id="7583812820943189780">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:35</note>
+      </notes>
+      <segment>
+        <source>German Synopsis</source>
+      </segment>
+    </unit>
+    <unit id="3566288383839309544">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:37</note>
+      </notes>
+      <segment>
+        <source>English Synopsis</source>
+      </segment>
+    </unit>
+    <unit id="3956956799684372859">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:39</note>
+      </notes>
+      <segment>
+        <source>Submission Category</source>
+      </segment>
+    </unit>
+    <unit id="5009339133193077332">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:41</note>
+      </notes>
+      <segment>
+        <source>Has Dialog</source>
+      </segment>
+    </unit>
+    <unit id="867769673309108471">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:45</note>
+      </notes>
+      <segment>
+        <source>Has Subtitles</source>
+      </segment>
+    </unit>
+    <unit id="3019351446432017027">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:47</note>
+      </notes>
+      <segment>
+        <source>Is Student Film</source>
+      </segment>
+    </unit>
+    <unit id="6208868359327244226">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:49</note>
+      </notes>
+      <segment>
+        <source>Film School</source>
+      </segment>
+    </unit>
+    <unit id="4483221505481206961">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:51</note>
+      </notes>
+      <segment>
+        <source>Script</source>
+      </segment>
+    </unit>
+    <unit id="7885570895165894241">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:53</note>
+      </notes>
+      <segment>
+        <source>Animation</source>
+      </segment>
+    </unit>
+    <unit id="1539113513920641823">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:55</note>
+      </notes>
+      <segment>
+        <source>Editing</source>
+      </segment>
+    </unit>
+    <unit id="6230180786088475979">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:57</note>
+      </notes>
+      <segment>
+        <source>Sound</source>
+      </segment>
+    </unit>
+    <unit id="855872803871324523">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:59</note>
+      </notes>
+      <segment>
+        <source>Music</source>
+      </segment>
+    </unit>
+    <unit id="1003959228692855706">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:61</note>
+      </notes>
+      <segment>
+        <source>Production Company</source>
+      </segment>
+    </unit>
+    <unit id="7922989125096435449">
+      <notes>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:63</note>
+      </notes>
+      <segment>
+        <source>Contact</source>
+      </segment>
+    </unit>
+    <unit id="2807800733729323332">
+      <notes>
+        <note category="location">src/app/shared/components/yes-no-label/yes-no-label.component.html:1</note>
+      </notes>
+      <segment>
+        <source>Yes</source>
+      </segment>
+    </unit>
+    <unit id="3542042671420335679">
+      <notes>
+        <note category="location">src/app/shared/components/yes-no-label/yes-no-label.component.html:2</note>
+      </notes>
+      <segment>
+        <source>No</source>
+      </segment>
+    </unit>
+  </file>
+</xliff>

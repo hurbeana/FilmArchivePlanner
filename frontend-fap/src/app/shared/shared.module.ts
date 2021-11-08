@@ -6,11 +6,13 @@ import {MatChipsModule} from "@angular/material/chips";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatIconModule} from "@angular/material/icon";
 import {MatFormFieldModule} from "@angular/material/form-field";
+import { YesNoLabelComponent } from './components/yes-no-label/yes-no-label.component';
 
 
 @NgModule({
   declarations: [
-    TagInputComponent
+    TagInputComponent,
+    YesNoLabelComponent
   ],
   imports: [
     CommonModule,
@@ -29,6 +31,7 @@ import {MatFormFieldModule} from "@angular/material/form-field";
     FormsModule,
     ReactiveFormsModule,
     TagInputComponent,
+    YesNoLabelComponent,
   ]
 })
 /* The shared module contains components, which are shared and reused from the feature

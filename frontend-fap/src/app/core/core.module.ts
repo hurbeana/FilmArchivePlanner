@@ -13,12 +13,14 @@ import {MoviesModule} from "../movies/movies.module";
 import {MatButtonModule} from "@angular/material/button";
 
 import {FooterComponent} from './components/footer/footer.component';
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     ContentComponent,
-    FooterComponent
+    FooterComponent,
+    HomeComponent
   ],
   imports: [
     CommonModule,
@@ -30,7 +32,7 @@ import {FooterComponent} from './components/footer/footer.component';
     MatButtonModule,
     MatToolbarModule,
     MatTabsModule,
-    MoviesModule
+    MoviesModule,
   ],
   exports: [
     HeaderComponent,

@@ -1,48 +1,27 @@
 :host{
   //height: calc(100vh - 64px - 48px - 1px); // 100vh - 64px header - 48px tabs - 1px border
-  height: calc(100vh - 64px - 1px); // 100vh - 64px header - 48px tabs - 1px border
+  //height: calc(100vh - 64px - 1px); // 100vh - 64px header - 48px tabs - 1px border
   position: relative;
   display: flex;
-  overflow-y: scroll;
+  //overflow-y: scroll;
 }
 
 :host .details-view {
   width: 100%;
+  margin: 1em 2em 1em 4em;
+
 }
 
 :host .details-form {
   margin-top: 20px;
 }
 
-:host .input-row{
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  justify-content: flex-end;
-  padding-right: 20px;
+.details-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 1em;
 }
 
-:host .input-row .label{
-  padding-right:15px;
+.label-colon:after{
+  content: ':';
 }
-:host .input-row .input{
-  width: 75%;
-}
-:host .input-row input{
-  margin-left:4px;
-}
-
-:host .input-row ::ng-deep .mat-form-field-flex{
-  padding: 0;
-}
-
-/* Do not show label for inputs */
-:host .input-row ::ng-deep .mat-form-field-label-wrapper{
-  display: none;
-}
-/* Do not show underline for inputs  */
-:host .input-row ::ng-deep .mat-form-field-underline {
-  display: none;
-}
-
-

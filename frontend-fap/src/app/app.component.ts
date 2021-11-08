@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {Store} from "@ngrx/store";
 import {retrievedMovieList} from "./movies/state/movies.actions";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-root',
@@ -8,17 +9,16 @@ import {retrievedMovieList} from "./movies/state/movies.actions";
   styleUrls: ['./app.component.less']
 })
 export class AppComponent {
-  title = 'frontend-FAP';
+  title = 'Festivator';
 
 
   constructor(
-    private store: Store
+    private store: Store,
+    private titleService: Title
   ) {}
 
   ngOnInit() {
-    //this.moviesService
-    //  .getMovies()
-    //  .subscribe((movies) => this.store.dispatch(retrievedMovieList({ movies })));
-    this.store.dispatch(retrievedMovieList());
+    this.titleService.setTitle(this.title); // set webpage title
+    this.store.dispatch(retrievedMovieList()); // get movie list initial
   }
 }

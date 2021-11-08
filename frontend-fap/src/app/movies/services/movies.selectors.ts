@@ -10,3 +10,12 @@ export const selectMovieCollection = createSelector(
   }
 );
 
+export const selectItemById =
+  (id: number) => createSelector(selectMovies, (allItems) => {
+  if (allItems) {
+    return allItems.find(item => item.id === id);
+  } else {
+    return {};
+  }
+});
+
