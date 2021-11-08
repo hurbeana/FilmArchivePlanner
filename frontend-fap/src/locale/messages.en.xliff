@@ -1,6 +1,55 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="en">
   <file id="ngi18n" original="ng.template">
+    <unit id="2821179408673282599">
+      <notes>
+        <note category="location">src/app/core/components/header/header.component.html:17</note>
+      </notes>
+      <segment>
+        <source>Home</source>
+      </segment>
+    </unit>
+    <unit id="8436385934277401930">
+      <notes>
+        <note category="location">src/app/core/components/header/header.component.html:18</note>
+      </notes>
+      <segment>
+        <source>Movies</source>
+      </segment>
+    </unit>
+    <unit id="8707352275157977601">
+      <notes>
+        <note category="location">src/app/core/components/header/header.component.html:19</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:21</note>
+      </notes>
+      <segment>
+        <source>Directors</source>
+      </segment>
+    </unit>
+    <unit id="2465892170746390748">
+      <notes>
+        <note category="location">src/app/core/components/header/header.component.html:20</note>
+      </notes>
+      <segment>
+        <source>Paner</source>
+      </segment>
+    </unit>
+    <unit id="7819314041543176992">
+      <notes>
+        <note category="location">src/app/core/components/header/header.component.html:21</note>
+      </notes>
+      <segment>
+        <source>Close</source>
+      </segment>
+    </unit>
+    <unit id="7155455028388575214">
+      <notes>
+        <note category="location">src/app/core/components/home/home.component.html:2</note>
+      </notes>
+      <segment>
+        <source>Welcome to Festivator!</source>
+      </segment>
+    </unit>
     <unit id="5365813322944561433">
       <notes>
         <note category="location">src/app/movies/components/details-view/details-view.component.html:7</note>
@@ -56,14 +105,6 @@
       </notes>
       <segment>
         <source>Subtitle Folder</source>
-      </segment>
-    </unit>
-    <unit id="8707352275157977601">
-      <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:21</note>
-      </notes>
-      <segment>
-        <source>Directors</source>
       </segment>
     </unit>
     <unit id="1199643963944280124">

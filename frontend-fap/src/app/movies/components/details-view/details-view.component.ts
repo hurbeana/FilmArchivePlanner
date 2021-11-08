@@ -1,10 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Movie} from "../../models/movie";
-import {select, Store} from "@ngrx/store";
+import {Store} from "@ngrx/store";
 import {AppState} from "../../../app.state";
-import {createMovie} from "../../state/movies.actions";
 import {ActivatedRoute} from "@angular/router";
-import {selectMovieCollection} from "../../services/movies.selectors";
 
 @Component({
   selector: 'movies-details-view',
@@ -16,8 +14,8 @@ export class DetailsViewComponent implements OnInit {
   @Input() movie: Movie | null;
 
   constructor(
-    private store: Store<AppState>,
-    private route: ActivatedRoute
+    //private store: Store<AppState>,
+    //private route: ActivatedRoute
     ) {}
 
 

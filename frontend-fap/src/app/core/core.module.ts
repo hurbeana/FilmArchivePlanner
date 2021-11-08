@@ -7,20 +7,19 @@ import {AppRoutingModule} from "../app-routing.module";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MatIconModule} from "@angular/material/icon";
 import {MatToolbarModule} from "@angular/material/toolbar";
-import {ContentComponent} from "./components/content/content.component";
 import {MatTabsModule} from "@angular/material/tabs";
-import {MoviesModule} from "../movies/movies.module";
 import {MatButtonModule} from "@angular/material/button";
 
 import {FooterComponent} from './components/footer/footer.component';
-import { HomeComponent } from './components/home/home.component';
+import {HomeComponent} from './components/home/home.component';
+import {MatSidenavModule} from "@angular/material/sidenav";
+import {MatListModule} from "@angular/material/list";
 
 @NgModule({
   declarations: [
     HeaderComponent,
-    ContentComponent,
     FooterComponent,
-    HomeComponent
+    HomeComponent,
   ],
   imports: [
     CommonModule,
@@ -32,11 +31,11 @@ import { HomeComponent } from './components/home/home.component';
     MatButtonModule,
     MatToolbarModule,
     MatTabsModule,
-    MoviesModule,
+    MatSidenavModule,
+    MatListModule,
   ],
   exports: [
     HeaderComponent,
-    ContentComponent,
     FooterComponent,
     HttpClientModule,
     BrowserModule,

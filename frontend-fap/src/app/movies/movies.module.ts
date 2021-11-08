@@ -7,7 +7,7 @@ import {MatInputModule} from "@angular/material/input";
 import {MatTabsModule} from "@angular/material/tabs";
 import {MatTableModule} from "@angular/material/table";
 import {CommonModule} from '@angular/common';
-import {StoreModule} from "@ngrx/store";
+import {Store, StoreModule} from "@ngrx/store";
 import {EffectsModule} from "@ngrx/effects";
 import {SharedModule} from "../shared/shared.module";
 
@@ -19,16 +19,20 @@ import {DetailsViewComponent} from "./components/details-view/details-view.compo
 import {moviesReducer} from "./state/movies.reducer";
 import {MovieEffects} from "./state/movies.effects";
 import {MoviesRoutingModule} from "./movies-routing.module";
+import {ContentComponent} from "./components/content/content.component";
+import {retrievedMovieList} from "./state/movies.actions";
 
 
 @NgModule({
   declarations: [
     DetailsViewComponent,
     ListViewComponent,
+    ContentComponent
   ],
   exports: [
     ListViewComponent,
-    DetailsViewComponent
+    DetailsViewComponent,
+    ContentComponent
   ],
   imports: [
     CommonModule,
@@ -44,4 +48,8 @@ import {MoviesRoutingModule} from "./movies-routing.module";
   ]
 })
 /* Movie Module contains everything related to movies */
-export class MoviesModule { }
+export class MoviesModule {
+  constructor(private store: Store) {
+    this.store.dispatch(retrievedMovieList());
+  }
+}

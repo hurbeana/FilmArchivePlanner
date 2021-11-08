@@ -1,3 +1,21 @@
+core-header:host {
+  display: flex;
+  flex-flow: column;
+}
+
+core-header:host .main-toolbar{
+  flex: 0 0 auto; /* apply height set by material toolbar*/
+}
+
+core-header:host .main-content{
+  flex: 1 1 auto; /* take up remaining space */
+}
+
+
+core-header:host .main-sidenav{
+  width: 200px;
+}
+
 .example-spacer {
   flex: 1 1 auto;
 }

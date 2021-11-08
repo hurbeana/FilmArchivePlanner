@@ -1,4 +1,5 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {MatSidenav} from "@angular/material/sidenav";
 
 @Component({
   selector: 'core-header',
@@ -6,7 +7,8 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./header.component.less']
 })
 export class HeaderComponent implements OnInit {
-
+  @ViewChild(MatSidenav)
+  sidenav!: MatSidenav;
   constructor() { }
 
   ngOnInit(): void {

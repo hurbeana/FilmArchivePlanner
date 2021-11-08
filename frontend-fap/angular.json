@@ -102,8 +102,7 @@
               "proxyConfig": "src/proxy.conf.json"
             },
             "development": {
-              "browserTarget": "frontend-FAP:build:development",
-              "proxyConfig": "src/proxy.conf.json"
+              "browserTarget": "frontend-FAP:build:development"
             }
           },
           "defaultConfiguration": "development"

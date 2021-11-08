@@ -1,0 +1,10 @@
+<div class="movie-content">
+  <!-- Movie List -->
+  <div class="list-container">
+        <movies-list-view (rowChangeEvent)="changeDetails($event)"></movies-list-view>
+  </div>
+  <!-- Movie Details -->
+  <div class="details-container">
+    <movies-details-view [movie]="selectedMovie"></movies-details-view>
+  </div>
+</div>

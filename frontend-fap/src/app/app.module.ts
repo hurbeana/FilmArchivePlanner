@@ -5,7 +5,7 @@ import {AppComponent} from './app.component';
 
 /* Modules*/
 import {CoreModule} from "./core/core.module";
-import {MoviesModule} from "./movies/movies.module";
+import {MatSidenavModule} from "@angular/material/sidenav";
 
 
 @NgModule({
@@ -14,7 +14,7 @@ import {MoviesModule} from "./movies/movies.module";
   ],
   imports: [
     CoreModule,
-    MoviesModule
+    MatSidenavModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

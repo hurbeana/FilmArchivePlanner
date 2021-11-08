@@ -1,5 +1,5 @@
-<div  *ngIf="movie" class="details-view">
-  <h2 class="mat-h1">{{movie?.originalTitle}}</h2>
+<mat-card  *ngIf="movie" class="details-view">
+  <mat-card-title class="mat-h1">{{movie?.originalTitle}}</mat-card-title>
   <div style="display:flex; align-items: center; justify-content: start">
     <img style="margin: 10px 0; padding: 0; max-width:500px; max-height:300px;" mat-card-image src="https://source.unsplash.com/random/300x300?sig={{movie?.id}}" alt="{{movie?.stillFiles}}">
   </div>
@@ -63,4 +63,4 @@
       <span class="mat-primary label-colon" i18n>Contact</span>
       <span>{{movie?.contact}}</span>
   </div>
-</div>
+</mat-card>
