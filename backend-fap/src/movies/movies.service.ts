@@ -6,6 +6,12 @@ import { Repository } from 'typeorm';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/types';
 import { MovieDto } from './dto/movie.dto';
+import { SearchMovieDto } from './dto/search-movie.dto';
+import {
+  IPaginationOptions,
+  paginate,
+  Pagination,
+} from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class MoviesService {
@@ -30,6 +36,56 @@ export class MoviesService {
     return this.moviesRepository
       .find()
       .then((entities) => entities.map((entity) => this.mapMovieToDto(entity)));
+  }
+
+  /**
+   * Retrieve Movie List with pagination
+   * @param options Pagination options, such as pagenumber, pagesize, ...
+   * @param search Search DTO for detailed search
+   * @param orderBy field to order by
+   * @param sortOrder sortorder, either ASC or DESC
+   * @param searchstring
+   */
+  paginate(
+    options: IPaginationOptions,
+    search: SearchMovieDto,
+    orderBy: string,
+    sortOrder: 'ASC' | 'DESC' = 'DESC',
+    searchstring: string,
+  ): Promise<Pagination<MovieDto>> {
+    const queryBuilder = this.moviesRepository.createQueryBuilder('movie');
+    if (searchstring) {
+      // searchstring higher prio
+      Object.keys(SearchMovieDto.getStringSearch()).forEach((k) =>
+        queryBuilder.orWhere(`movie.${k} ILIKE :${k}`, {
+          [k]: `%${searchstring}%`,
+        }),
+      );
+    } else if (search) {
+      Object.entries(search)
+        .filter(([, v]) => v) // filter empty properties
+        .forEach(([k, v]) => {
+          if (typeof v === 'number' || typeof v === 'boolean') {
+            queryBuilder.orWhere(`movie.${k} = :${k}`, { [k]: v });
+          } else if (typeof v === 'string') {
+            queryBuilder.orWhere(`movie.${k} ILIKE :${k}`, { [k]: `%${v}%` });
+          } else {
+            //TODO: more types?
+          }
+        });
+    }
+    if (orderBy) {
+      queryBuilder.orderBy(orderBy, sortOrder);
+    }
+    // console.log(queryBuilder);
+    return paginate<Movie>(queryBuilder, options).then(
+      (page) =>
+        new Pagination<MovieDto>(
+          page.items.map((entity) => this.mapMovieToDto(entity)),
+          page.meta,
+          page.links,
+        ),
+    );
   }
 
   findOne(id: number): Promise<MovieDto> {

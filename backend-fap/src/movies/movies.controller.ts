@@ -1,15 +1,18 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Param,
+  Controller,
   Delete,
-  Put,
+  Get,
   Logger,
+  Param,
+  Post,
+  Put,
+  Query,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateUpdateMovieDto } from './dto/create-update-movie.dto';
+import { IPaginationOptions } from 'nestjs-typeorm-paginate';
+import { SearchMoviePagingDto } from './dto/search-movie-paging.dto';
 
 @Controller('movies')
 export class MoviesController {
@@ -24,9 +27,22 @@ export class MoviesController {
   }
 
   @Get()
-  findAll() {
+  findAll(@Query() searchPaging: SearchMoviePagingDto) {
     this.logger.log('Get movies called.');
-    return this.moviesService.findAll();
+    this.logger.log(searchPaging);
+    const { limit, page, orderBy, sortOrder, searchstring, ...search } =
+      searchPaging;
+    const p: IPaginationOptions = {
+      page: page ?? 1,
+      limit: limit ?? 10,
+    };
+    return this.moviesService.paginate(
+      p,
+      search,
+      orderBy,
+      sortOrder,
+      searchstring,
+    );
   }
 
   @Get(':id')
