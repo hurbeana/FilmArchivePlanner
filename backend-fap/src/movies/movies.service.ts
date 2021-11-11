@@ -1,5 +1,5 @@
 import { Movie } from './entities/movie.entity';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUpdateMovieDto } from './dto/create-update-movie.dto';
 import { Repository } from 'typeorm';
@@ -18,11 +18,12 @@ export class MoviesService {
     this.mapper.createMap(Movie, MovieDto);
   }
 
+  private readonly logger = new Logger(MoviesService.name);
+
   async create(createMovieDto: CreateUpdateMovieDto): Promise<MovieDto> {
-    const movie = this.moviesRepository.create(createMovieDto);
-    return this.moviesRepository
-      .save(movie)
-      .then((entity) => this.mapMovieToDto(entity));
+    const movieParam = this.moviesRepository.create(createMovieDto);
+    const createdMovie = await this.moviesRepository.save(movieParam);
+    return this.mapMovieToDto(createdMovie);
   }
 
   findAll(): Promise<MovieDto[]> {
@@ -37,9 +38,21 @@ export class MoviesService {
       .then((entity) => this.mapMovieToDto(entity));
   }
 
-  update(id: number, updateMovieDto: CreateUpdateMovieDto) {
-    //TODO implement - should return Promise<MovieDto>
-    return updateMovieDto;
+  async update(
+    id: number,
+    updateMovieDto: CreateUpdateMovieDto,
+  ): Promise<MovieDto> {
+    try {
+      await this.moviesRepository.findOneOrFail(id);
+    } catch (e) {
+      this.logger.error(`Updating movie with id ${id} failed.`, e.stack);
+      throw new NotFoundException();
+    }
+
+    const movieParam = this.moviesRepository.create(updateMovieDto);
+    movieParam.id = id;
+    const updatedMovie = await this.moviesRepository.save(movieParam);
+    return this.mapMovieToDto(updatedMovie);
   }
 
   remove(id: number) {
