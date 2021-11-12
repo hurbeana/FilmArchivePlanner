@@ -1,0 +1,7 @@
+[db]
+type = "postgres"
+host = "db"
+port = 5432
+username = "root"
+password = "root"
+database = "root"
