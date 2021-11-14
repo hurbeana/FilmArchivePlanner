@@ -11,21 +11,23 @@ const api: string='http://localhost:3000/movies'; //TODO: url to rest
 export class MovieService {
   constructor(private http: HttpClient) {}
 
-  getMovies(): Observable<Movie[]> {
-    return this.http.get<Movie[]>(api);
-  }
-
   createMovie(movie: CreateUpdateMovieDto): Observable<Movie> {
-    console.log("CREATE MOVIE");
-    console.log(movie);
+    console.log("[MovieService] - CREATE MOVIE");
     return this.http.post<Movie>(api, movie);
   }
 
+  getMovies(): Observable<Movie[]> {
+    console.log("[MovieService] - GET MOVIES");
+    return this.http.get<Movie[]>(api);
+  }
+
   updateMovie(movie: Movie) {
+    console.log("[MovieService] - UPDATE MOVIE");
     return this.http.put(api, movie);
   }
 
   deleteMovie(id: number){
+    console.log("[MovieService] - DELETE MOVIE");
     return this.http.delete(api);
   }
 }

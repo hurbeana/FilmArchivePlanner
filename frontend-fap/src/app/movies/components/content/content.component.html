@@ -1,7 +1,8 @@
-<div class="movie-content">
+<div class="content clearfix" appResizable>
   <!-- Movie List -->
-  <div class="list-container">
-        <movies-list-view (rowChangeEvent)="changeDetails($event)"></movies-list-view>
+  <div class="table-container">
+    <div id="dragbar"></div>
+    <table-view (selectedMovieChanged)="changeDetails($event)"></table-view>
   </div>
   <!-- Movie Details -->
   <div class="details-container">

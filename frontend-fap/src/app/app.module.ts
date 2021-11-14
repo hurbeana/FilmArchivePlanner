@@ -7,7 +7,6 @@ import {AppComponent} from './app.component';
 import {CoreModule} from "./core/core.module";
 import {MatSidenavModule} from "@angular/material/sidenav";
 
-
 @NgModule({
   declarations: [
     AppComponent,

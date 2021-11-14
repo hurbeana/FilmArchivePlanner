@@ -1,4 +1,6 @@
 import {Component} from '@angular/core';
+import {Store} from "@ngrx/store";
+import * as MovieActions from "./movies/state/movies.actions";
 import {Title} from "@angular/platform-browser";
 
 @Component({
@@ -15,6 +17,6 @@ export class AppComponent {
   ) {}
 
   ngOnInit() {
-    this.titleService.setTitle(this.title); // set webpage title
+    this.titleService.setTitle(this.title); // set page title
   }
 }

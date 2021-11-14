@@ -1,0 +1,121 @@
+<div class="form-group form-inline input-group">
+  <input class="form-control ml-2 mb-2" type="text" name="searchTerm" [(ngModel)]="searchTerm" placeholder="Search..."/>
+  <button class="btn btn-primary mb-2" (click)="populate()">Add Movie (for testing)</button>
+</div>
+
+<!-- *** NEW *** -->
+
+<div class="table-responsive bordered-box">
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">
+        <div class="header-value" i18n>Original Title
+          <div class="arrow"></div>
+        </div>
+      </th>
+      <th scope="col">
+        <div class="header-value" i18n>English Title
+          <div class="arrow"></div>
+        </div>
+      </th>
+      <th scope="col">
+        <div class="header-value" i18n>Movie File
+          <div class="arrow"></div>
+        </div>
+      </th>
+      <!--<th scope="col" sortable="stillFiles" (sort)="onSort($event)"><div class="header-value">Population<div class="arrow"></div></div></th>-->
+      <th scope="col">
+        <div class="header-value" i18n>Year of Production
+          <div class="arrow"></div>
+        </div>
+      </th>
+      <th scope="col">
+        <div class="header-value" i18n>Is Student Film
+          <div class="arrow"></div>
+        </div>
+      </th>
+    </tr>
+    </thead>
+
+    <tbody *ngIf="movies | async as movieList">
+    <tr *ngFor="let movie of movieList | slice:((page-1) * pageSize):(page-1) * pageSize + pageSize"
+        (click)="selectMovie(movie)"
+    >
+      <td>{{ movie.id }}</td>
+      <td>
+        <!--<img [src]="'https://picsum.photos/20/20'" class="mr-2" style="width: 20px">-->
+        <ngb-highlight [result]="movie.originalTitle" [term]="searchTerm"></ngb-highlight>
+      </td>
+      <td>
+        <ngb-highlight [result]="movie.englishTitle" [term]="searchTerm"></ngb-highlight>
+      </td>
+      <td>
+        <ngb-highlight [result]="movie.movieFile" [term]="searchTerm"></ngb-highlight>
+      </td>
+      <!--<td><ngb-highlight [result]="movie.stillFiles" [term]="searchTerm"></ngb-highlight></td>-->
+      <td>
+        <ngb-highlight [result]="movie.yearOfProduction.toString()" [term]="searchTerm"></ngb-highlight>
+      </td>
+      <td>
+        <ngb-highlight [result]="movie.isStudentFilm ? 'True' : 'False'" [term]="searchTerm"></ngb-highlight>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="d-flex justify-content-between p-2 pt-0 pb-0">
+
+    <ngb-pagination
+      size="sm"
+      [collectionSize]="numberOfMovies" [(page)]="page" [pageSize]="pageSize">
+    </ngb-pagination>
+
+    <!--<div class="ml-3" *ngIf="service.loading$ | async">Loading...</div>-->
+
+    <div>
+      <select class="form-select form-select-sm" style="width: auto" name="pageSize" [(ngModel)]="pageSize">
+        <option [ngValue]="2">2 items per page</option>
+        <option [ngValue]="4">4 items per page</option>
+        <option [ngValue]="6">6 items per page</option>
+        <option [ngValue]="8">8 items per page</option>
+        <option [ngValue]="16">16 items per page</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+
+<!--
+<mat-table [dataSource]="movies" role="grid" class="mat-elevation-z8 demo-table" style="width:100%;">
+
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+  </ng-container>
+
+
+  <ng-container matColumnDef="originalTitle">
+    <mat-header-cell *matHeaderCellDef> Original Title </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.originalTitle}} </mat-cell>
+  </ng-container>
+
+
+  <ng-container matColumnDef="movieFile">
+    <mat-header-cell *matHeaderCellDef> Movie File </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.movieFile}} </mat-cell>
+  </ng-container>
+
+
+  <ng-container matColumnDef="previewFile">
+    <mat-header-cell *matHeaderCellDef> PreviewFile </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.previewFile}} </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row
+      (click)="changeRow(row)"
+      [class.row-is-clicked]="clickedRows[0] ? clickedRows[0].id === row.id : false"
+      *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
+-->

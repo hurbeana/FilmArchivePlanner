@@ -1,66 +1,65 @@
-<mat-card  *ngIf="movie" class="details-view">
-  <mat-card-title class="mat-h1">{{movie?.originalTitle}}</mat-card-title>
-  <div style="display:flex; align-items: center; justify-content: start">
-    <img style="margin: 10px 0; padding: 0; max-width:500px; max-height:300px;" mat-card-image src="https://source.unsplash.com/random/300x300?sig={{movie?.id}}" alt="{{movie?.stillFiles}}">
+<div *ngIf="movie" class="details-view">
+  <div style="display:flex; align-items: center; justify-content: flex-end">
+    <img style="margin: 10px 0; padding: 0; max-width:200px; max-height:200px;" mat-card-image src="https://source.unsplash.com/random/300x300?sig={{movie?.id}}" alt="{{movie?.stillFiles}}">
   </div>
   <div class="details-grid">
       <span class="mat-primary label-colon" i18n>Original Title</span>
-      <span>{{movie?.originalTitle}}</span>
+      <input type="text" disabled value="{{movie?.originalTitle}}">
       <span class="mat-primary label-colon" i18n>English Title</span>
-      <span>{{movie?.englishTitle}}</span>
+      <input type="text" disabled value="{{movie?.englishTitle}}">
       <span class="mat-primary label-colon" i18n>Movie File</span>
-      <span>{{movie?.movieFile}}</span>
+      <input type="text" disabled value="{{movie?.movieFile}}">
       <span class="mat-primary label-colon" i18n>Preview File</span>
-      <span>{{movie?.previewFile}}</span>
+      <input type="text" disabled value="{{movie?.previewFile}}">
       <span class="mat-primary label-colon" i18n>Trailer File</span>
-      <span>{{movie?.trailerFile}}</span>
+      <input type="text" disabled value="{{movie?.trailerFile}}">
       <span class="mat-primary label-colon" i18n>Still File</span>
-      <span>{{movie?.stillFiles}}</span>
+      <input type="text" disabled value="{{movie?.stillFiles}}">
       <span class="mat-primary label-colon" i18n>Subtitle Folder</span>
-      <span>{{movie?.subtitleFolder}}</span>
+      <input type="text" disabled value="{{movie?.subtitleFiles}}">
       <span class="mat-primary label-colon" i18n>Directors</span>
-      <span>{{movie?.directors}}</span>
+      <input type="text" disabled value="{{movie?.directors}}">
       <span class="mat-primary label-colon" i18n>Countries of Production</span>
-      <span>{{movie?.countriesOfProduction}}</span>
+      <input type="text" disabled value="{{movie?.countriesOfProduction}}">
       <span class="mat-primary label-colon" i18n>Year of Production</span>
-      <span>{{movie?.yearOfProduction}}</span>
+      <input type="text" disabled value="{{movie?.yearOfProduction}}">
       <span class="mat-primary label-colon" i18n>Duration</span>
-      <span>{{movie?.duration}}</span>
+      <input type="text" disabled value="{{movie?.duration}}">
       <span class="mat-primary label-colon" i18n>Animation Technique</span>
-      <span>{{movie?.animationTechniques}}</span>
+      <input type="text" disabled value="{{movie?.animationTechniques}}">
       <span class="mat-primary label-colon" i18n>Software Used</span>
-      <span>{{movie?.softwareUsed}}</span>
+      <input type="text" disabled value="{{movie?.softwareUsed}}">
       <span class="mat-primary label-colon" i18n>Keywords</span>
-      <span>{{movie?.keywords}}</span>
+      <input type="text" disabled value="{{movie?.keywords}}">
       <span class="mat-primary label-colon" i18n>German Synopsis</span>
-      <span>{{movie?.germanSynopsis}}</span>
+      <input type="text" disabled value="{{movie?.germanSynopsis}}">
       <span class="mat-primary label-colon" i18n>English Synopsis</span>
-      <span>{{movie?.englishSynopsis}}</span>
+      <input type="text" disabled value="{{movie?.englishSynopsis}}">
       <span class="mat-primary label-colon" i18n>Submission Category</span>
-      <span>{{movie?.submissionCategory}}</span>
+      <input type="text" disabled value="{{movie?.submissionCategory}}">
       <span class="mat-primary label-colon" i18n>Has Dialog</span>
       <shared-yes-no-label>{{movie?.hasDialog}}</shared-yes-no-label>
       <span class="mat-primary label-colon" i18n>Original Title</span>
-      <span>{{movie?.dialogLanguages}}</span>
+      <input type="text" disabled value="{{movie?.dialogLanguages}}">
       <span class="mat-primary label-colon" i18n>Has Subtitles</span>
-      <span>{{movie?.hasSubtitles}}</span>
+      <input type="text" disabled value="{{movie?.hasSubtitles}}">
       <span class="mat-primary label-colon" i18n>Is Student Film</span>
       <shared-yes-no-label>{{movie?.isStudentFilm}}</shared-yes-no-label>
       <span class="mat-primary label-colon" i18n>Film School</span>
-      <span>{{movie?.filmSchool}}</span>
+      <input type="text" disabled value="{{movie?.filmSchool}}">
       <span class="mat-primary label-colon" i18n>Script</span>
-      <span>{{movie?.script}}</span>
+      <input type="text" disabled value="{{movie?.script}}">
       <span class="mat-primary label-colon" i18n>Animation</span>
-      <span>{{movie?.animation}}</span>
+      <input type="text" disabled value="{{movie?.animation}}">
       <span class="mat-primary label-colon" i18n>Editing</span>
-      <span>{{movie?.editing}}</span>
+      <input type="text" disabled value="{{movie?.editing}}">
       <span class="mat-primary label-colon" i18n>Sound</span>
-      <span>{{movie?.sound}}</span>
+      <input type="text" disabled value="{{movie?.sound}}">
       <span class="mat-primary label-colon" i18n>Music</span>
-      <span>{{movie?.music}}</span>
+      <input type="text" disabled value="{{movie?.music}}">
       <span class="mat-primary label-colon" i18n>Production Company</span>
-      <span>{{movie?.productionCompany}}</span>
+      <input type="text" disabled value="{{movie?.productionCompany}}">
       <span class="mat-primary label-colon" i18n>Contact</span>
-      <span>{{movie?.contact}}</span>
+      <input type="text" disabled value="{{movie?.contact}}">
   </div>
-</mat-card>
+</div>

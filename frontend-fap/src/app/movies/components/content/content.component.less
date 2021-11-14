@@ -1,19 +1,52 @@
-.movie-content{
+.content{
   display: flex;
-  flex-flow: row;
+  flex-flow: row nowrap;
 }
 
-.list-container{
-  flex: 1;
-  overflow-y: auto;
-  min-height: 0;
+.table-container{
+  width: 75%;
+  border-right: 1px solid lightgray;
+}
+
+.tab-content{
+  display:flex;
+  flex-flow:row nowrap;
 }
 
 .details-container{
-  flex: 1;
-  overflow-y: auto;
-  min-height: 0;
-  max-height: calc(100vh - 68px - 2em); // 100vh - 64px header - 48px tabs - 1px border
-
+  width: 25%
 }
 
+/*** resizable sidebar **/
+.clearfix:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+.details-container{
+  float: right;
+  width: 25%;
+}
+.table-container{
+  width:75%;
+  float: left;
+  overflow-y: hidden;
+}
+
+#dragbar{
+  background-color:black;
+  height:100%;
+  float: right;
+  width: 5px;
+  cursor: col-resize;
+}
+
+.ghostbar{
+  width:5px;
+  background-color:#000;
+  opacity:0.5;
+  position:absolute;
+  cursor: col-resize;
+  z-index:999
+}

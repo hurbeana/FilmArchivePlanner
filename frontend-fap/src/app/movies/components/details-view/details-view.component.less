@@ -1,12 +1,15 @@
 :host{
+  width:100%;
+  height: calc(100vh - 64px - 28px); // 100vh - 64px header - 30px footer + 2px border
   position: relative;
   display: flex;
-    background-color: white;
+  overflow-y: scroll;
+  background-color: white;
 }
 
 :host .details-view {
   width: 100%;
-  margin: 1em 2em 1em 4em;
+  margin: 1.5em;
 
 }
 
@@ -15,9 +18,14 @@
 }
 
 .details-grid{
+  text-align: right;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  row-gap: 1em;
+  row-gap: 0.1em;
+}
+
+.details-grid span{
+  padding-right: 15px;
 }
 
 .label-colon:after{

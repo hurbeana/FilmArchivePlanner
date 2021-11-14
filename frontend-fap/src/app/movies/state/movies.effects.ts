@@ -3,33 +3,36 @@ import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {EMPTY} from 'rxjs';
 import {catchError, map, mergeMap, switchMap} from 'rxjs/operators';
 import {MovieService} from "../services/movie.service";
-import {createMovie, createMovieSuccess, retrievedMovieList, retrieveMoviesSuccessful} from "./movies.actions";
+import * as MovieActions from "./movies.actions";
 
 @Injectable()
 export class MovieEffects {
 
+  constructor(
+    private actions$: Actions,
+    private moviesService: MovieService,
+  ) {}
+
+  /* is called, whenever an action of type 'getMovies' is called */
   loadMovies$ = createEffect(() => this.actions$.pipe(
-      ofType(retrievedMovieList),
-    mergeMap(() => this.moviesService.getMovies() //TODO: replace with actual service
+    ofType(MovieActions.loadMovies),
+    mergeMap(() => this.moviesService.getMovies()
         .pipe(
-          map(movies => (retrieveMoviesSuccessful({movies}))),
+          map(movies => (MovieActions.loadedMoviesSuccess({movies}))),
           catchError(() => EMPTY) // TODO: error handling
         ))
     )
   );
 
+
+  /* is called, whenever an action of type 'createMovie' is called */
   createMovie$ = createEffect(() => this.actions$.pipe(
-      ofType(createMovie),
-      switchMap(({movie}) => this.moviesService.createMovie(movie) //TODO: replace with actual service
+      ofType(MovieActions.createMovie),
+      switchMap(({movie}) => this.moviesService.createMovie(movie)
         .pipe(
-          map(movie => createMovieSuccess({movie})),
+          map(movie => MovieActions.createdMovieSuccess({movie})),
           catchError(() => EMPTY) // TODO: error handling
         ))
     )
   );
-  constructor(
-    private actions$: Actions,
-    private moviesService: MovieService,
-    //private dummyMovieService: DummyMovieService, //TODO: remove
-  ) {}
 }

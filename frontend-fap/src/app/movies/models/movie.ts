@@ -6,7 +6,7 @@ export interface Movie {
   previewFile:	string,
   trailerFile:	string,
   stillFiles:	string[],
-  subtitleFolder:	string,
+  subtitleFiles:	string[],
   directors:	string[],
   countriesOfProduction:	string[],
   yearOfProduction:	number,

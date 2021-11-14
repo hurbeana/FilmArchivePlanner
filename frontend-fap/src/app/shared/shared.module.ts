@@ -7,12 +7,14 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatIconModule} from "@angular/material/icon";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {YesNoLabelComponent} from './components/yes-no-label/yes-no-label.component';
+import {ResizableDirective} from './resizable.directive';
 
 
 @NgModule({
   declarations: [
     TagInputComponent,
-    YesNoLabelComponent
+    YesNoLabelComponent,
+    ResizableDirective
   ],
   imports: [
     CommonModule,
@@ -32,6 +34,7 @@ import {YesNoLabelComponent} from './components/yes-no-label/yes-no-label.compon
     ReactiveFormsModule,
     TagInputComponent,
     YesNoLabelComponent,
+    ResizableDirective
   ]
 })
 /* The shared module contains components, which are shared and reused from the feature
