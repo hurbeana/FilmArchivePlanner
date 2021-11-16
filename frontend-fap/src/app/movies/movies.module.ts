@@ -43,7 +43,7 @@ import * as MovieActions from './state/movies.actions';
     ReactiveFormsModule,
     NgbModule,
     StoreModule.forRoot({
-      movies: moviesReducer,
+      pagination: moviesReducer,
       selectedMovie: moviesReducer,
       searchTerm: moviesReducer
     }),
@@ -60,6 +60,6 @@ import * as MovieActions from './state/movies.actions';
 /* Movie Module contains everything related to movies */
 export class MoviesModule {
   constructor(private store: Store) {
-    this.store.dispatch(MovieActions.loadMovies());
+    this.store.dispatch(MovieActions.getMovies({search: "", page: 1, limit: 16}));
   }
 }

@@ -1,9 +1,10 @@
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 
 import {Observable} from 'rxjs';
 import {Movie} from "../models/movie";
 import {CreateUpdateMovieDto} from "../models/create.movie";
+import {PaginationState} from "../../app.state";
 
 const api: string='http://localhost:3000/movies'; //TODO: url to rest
 
@@ -16,10 +17,16 @@ export class MovieService {
     return this.http.post<Movie>(api, movie);
   }
 
-  getMovies(): Observable<Movie[]> {
-    console.log("[MovieService] - GET MOVIES");
-    return this.http.get<Movie[]>(api);
-  }
+  getMovies(search: string, page: number, limit: number): Observable<PaginationState> {
+    console.log("[MovieService] - GET MOVIES WITH SEARCH PAGE AND LIMIT", "'"+search+"'", page, limit);
+    let params;
+    if(search == ""){
+      params = new HttpParams({fromObject : {'page': page, 'limit': limit}});
+    }else{
+      params = new HttpParams({fromObject : {'searchstring': search, 'page': page, 'limit': limit}});
+    }
+    return this.http.get<PaginationState>(api, {params: params});
+}
 
   updateMovie(movie: Movie) {
     console.log("[MovieService] - UPDATE MOVIE");
@@ -27,7 +34,7 @@ export class MovieService {
   }
 
   deleteMovie(id: number){
-    console.log("[MovieService] - DELETE MOVIE");
+    console.log("[MovieService] - DELETE MOVIE", id);
     return this.http.delete(api);
   }
 }

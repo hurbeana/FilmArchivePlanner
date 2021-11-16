@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {EMPTY} from 'rxjs';
-import {catchError, map, mergeMap, switchMap} from 'rxjs/operators';
+import {catchError, map, switchMap} from 'rxjs/operators';
 import {MovieService} from "../services/movie.service";
 import * as MovieActions from "./movies.actions";
 
@@ -14,11 +14,11 @@ export class MovieEffects {
   ) {}
 
   /* is called, whenever an action of type 'getMovies' is called */
-  loadMovies$ = createEffect(() => this.actions$.pipe(
-    ofType(MovieActions.loadMovies),
-    mergeMap(() => this.moviesService.getMovies()
+  getMovies$ = createEffect(() => this.actions$.pipe(
+    ofType(MovieActions.getMovies),
+    switchMap(({search, page, limit}) => this.moviesService.getMovies(search, page, limit)
         .pipe(
-          map(movies => (MovieActions.loadedMoviesSuccess({movies}))),
+          map(pagination => (MovieActions.gotMoviesSuccess({pagination: pagination}))),
           catchError(() => EMPTY) // TODO: error handling
         ))
     )

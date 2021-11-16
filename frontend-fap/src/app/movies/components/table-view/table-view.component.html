@@ -1,5 +1,5 @@
 <div class="form-group form-inline input-group">
-  <input class="form-control ml-2 mb-2" type="text" name="searchTerm" [(ngModel)]="searchTerm" placeholder="Search..."/>
+  <input class="form-control ml-2 mb-2" type="text" name="searchTerm" [(ngModel)]="searchTerm" placeholder="Search..." #search>
   <button class="btn btn-primary mb-2" (click)="populate()">Add Movie (for testing)</button>
 </div>
 
@@ -40,7 +40,7 @@
     </thead>
 
     <tbody *ngIf="movies | async as movieList">
-    <tr *ngFor="let movie of movieList | slice:((page-1) * pageSize):(page-1) * pageSize + pageSize"
+    <tr *ngFor="let movie of movieList"
         (click)="selectMovie(movie)"
     >
       <td>{{ movie.id }}</td>
@@ -56,7 +56,7 @@
       </td>
       <!--<td><ngb-highlight [result]="movie.stillFiles" [term]="searchTerm"></ngb-highlight></td>-->
       <td>
-        <ngb-highlight [result]="movie.yearOfProduction.toString()" [term]="searchTerm"></ngb-highlight>
+        <ngb-highlight [result]="movie.yearOfProduction?.toString()" [term]="searchTerm"></ngb-highlight>
       </td>
       <td>
         <ngb-highlight [result]="movie.isStudentFilm ? 'True' : 'False'" [term]="searchTerm"></ngb-highlight>
@@ -68,13 +68,13 @@
 
     <ngb-pagination
       size="sm"
-      [collectionSize]="numberOfMovies" [(page)]="page" [pageSize]="pageSize">
+      [collectionSize]="numberOfMovies" [(page)]="page" [pageSize]="pageSize" (pageChange)="setPage($event)">
     </ngb-pagination>
 
-    <!--<div class="ml-3" *ngIf="service.loading$ | async">Loading...</div>-->
+    <div class="ml-3" *ngIf="loading | async">Loading...</div>
 
     <div>
-      <select class="form-select form-select-sm" style="width: auto" name="pageSize" [(ngModel)]="pageSize">
+      <select class="form-select form-select-sm" style="width: auto" name="pageSize" [(ngModel)]="pageSize" (ngModelChange)="setPageSize($event)">
         <option [ngValue]="2">2 items per page</option>
         <option [ngValue]="4">4 items per page</option>
         <option [ngValue]="6">6 items per page</option>
