@@ -90,8 +90,12 @@ export class MoviesService {
 
   findOne(id: number): Promise<MovieDto> {
     return this.moviesRepository
-      .findOne(id)
-      .then((entity) => this.mapMovieToDto(entity));
+      .findOneOrFail(id)
+      .then((entity) => this.mapMovieToDto(entity))
+      .catch((e) => {
+        this.logger.error(`Getting movie with id ${id} failed.`, e.stack);
+        throw new NotFoundException();
+      });
   }
 
   async update(

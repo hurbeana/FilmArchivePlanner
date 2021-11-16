@@ -107,6 +107,13 @@ describe('MoviesService', () => {
 
     expect(await service.update(mockId, updateMovieDto)).toEqual(movieDto);
   });
+
+  test('given nonexistent id when get then throw NotFoundException', () => {
+    jest.spyOn(repo, 'findOneOrFail').mockImplementation(() => {
+      throw new NotFoundException();
+    });
+    expect(() => service.findOne(6)).toThrow(NotFoundException);
+  });
 });
 
 function initializeMovieDto(movieDto: CreateUpdateMovieDto) {
