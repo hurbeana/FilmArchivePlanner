@@ -10,6 +10,7 @@ import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
 import { FilesModule } from './files/files.module';
 import { DatabaseModule } from './database/database.module';
+import { DirectorsModule } from './directors/directors.module';
 import configuration from './config/configuration';
 
 @Module({
@@ -29,6 +30,7 @@ import configuration from './config/configuration';
     }),
     FilesModule,
     DatabaseModule,
+    DirectorsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

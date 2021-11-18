@@ -13,6 +13,9 @@ import {
   Pagination,
 } from 'nestjs-typeorm-paginate';
 
+/**
+ * Service for movies CRUD
+ */
 @Injectable()
 export class MoviesService {
   constructor(
@@ -26,16 +29,15 @@ export class MoviesService {
 
   private readonly logger = new Logger(MoviesService.name);
 
+  /**
+   * Saves a movie to the database
+   * @param createMovieDto The movie to save
+   * @returns {Promise<MovieDto>} The created movie, including id and timestamps
+   */
   async create(createMovieDto: CreateUpdateMovieDto): Promise<MovieDto> {
     const movieParam = this.moviesRepository.create(createMovieDto);
     const createdMovie = await this.moviesRepository.save(movieParam);
     return this.mapMovieToDto(createdMovie);
-  }
-
-  findAll(): Promise<MovieDto[]> {
-    return this.moviesRepository
-      .find()
-      .then((entities) => entities.map((entity) => this.mapMovieToDto(entity)));
   }
 
   /**
@@ -45,8 +47,9 @@ export class MoviesService {
    * @param orderBy field to order by
    * @param sortOrder sortorder, either ASC or DESC
    * @param searchstring
+   * @returns {Promise<Pagination<MovieDto>>} The movies in a paginated form
    */
-  paginate(
+  find(
     options: IPaginationOptions,
     search: SearchMovieDto,
     orderBy: string,
@@ -88,6 +91,11 @@ export class MoviesService {
     );
   }
 
+  /**
+   * Returns the movie with the specified id
+   * @param id the id of the movie to return
+   * @returns {Promise<MovieDto>} The movie with the specified id
+   */
   findOne(id: number): Promise<MovieDto> {
     return this.moviesRepository
       .findOneOrFail(id)
@@ -98,6 +106,12 @@ export class MoviesService {
       });
   }
 
+  /**
+   * Updates the movie with the specified id
+   * @param id the id of the movie to update
+   * @param updateMovieDto the movie to update
+   * @returns {Promise<MovieDto>} the updated movie
+   */
   async update(
     id: number,
     updateMovieDto: CreateUpdateMovieDto,
@@ -115,6 +129,10 @@ export class MoviesService {
     return this.mapMovieToDto(updatedMovie);
   }
 
+  /**
+   * Deletes the movie with the specified id from the database
+   * @param id the id of the movie to delete
+   */
   remove(id: number) {
     //TODO implement
     return `This action removes a #${id} movie`;

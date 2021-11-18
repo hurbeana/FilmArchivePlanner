@@ -14,6 +14,10 @@ import { CreateUpdateMovieDto } from './dto/create-update-movie.dto';
 import { IPaginationOptions } from 'nestjs-typeorm-paginate';
 import { SearchMoviePagingDto } from './dto/search-movie-paging.dto';
 
+/**
+ * Controller for movies.
+ * Contains REST endpoints for movies CRUD.
+ */
 @Controller('movies')
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
@@ -27,7 +31,7 @@ export class MoviesController {
   }
 
   @Get()
-  findAll(@Query() searchPaging: SearchMoviePagingDto) {
+  find(@Query() searchPaging: SearchMoviePagingDto) {
     this.logger.log('Get movies called.');
     this.logger.log(searchPaging);
     const { limit, page, orderBy, sortOrder, searchstring, ...search } =
@@ -36,13 +40,7 @@ export class MoviesController {
       page: page ?? 1,
       limit: limit ?? 10,
     };
-    return this.moviesService.paginate(
-      p,
-      search,
-      orderBy,
-      sortOrder,
-      searchstring,
-    );
+    return this.moviesService.find(p, search, orderBy, sortOrder, searchstring);
   }
 
   @Get(':id')
