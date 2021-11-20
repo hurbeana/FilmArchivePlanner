@@ -58,7 +58,7 @@ export class DirectorsService {
     sortOrder: 'ASC' | 'DESC' = 'DESC',
     searchstring: string,
   ): Promise<Pagination<DirectorDto>> {
-    const queryBuilder = this.directorRepository.createQueryBuilder('movie');
+    const queryBuilder = this.directorRepository.createQueryBuilder('director');
     if (searchstring) {
       // searchstring higher prio
       Object.keys(SearchDirectorDto.getStringSearch()).forEach((k) =>
@@ -74,7 +74,7 @@ export class DirectorsService {
             queryBuilder.orWhere(`director.${k} = :${k}`, { [k]: v });
           } else if (typeof v === 'string') {
             queryBuilder.orWhere(`director.${k} ILIKE :${k}`, {
-              [k]: `%${v}%`,
+              [k]: `%${v}%`
             });
           } else {
             //TODO: more types?
