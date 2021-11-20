@@ -2,10 +2,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { AutoMap } from '@automapper/classes';
+import { Director } from '../../directors/entities/director.entity';
 
 @Entity()
 export class Movie {
@@ -49,9 +52,10 @@ export class Movie {
   @Column('simple-array', { nullable: true }) //Replace simple-array?
   subtitleFiles?: string[]; //TODO Replace this with "Path"
 
-  @AutoMap()
-  @Column('simple-array') //Replace simple-array?
-  directors: string[]; //TODO Add directress and replace String
+  @AutoMap({ typeFn: () => Director })
+  @ManyToMany(() => Director)
+  @JoinTable()
+  directors: Director[];
 
   @AutoMap()
   @Column('simple-array', { nullable: true }) //Replace simple-array?

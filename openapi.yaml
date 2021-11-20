@@ -12,7 +12,7 @@ tags:
   - name: contacts
     description: Endpoints for contact operations TODO
   - name: directors
-    description: Endpoints for director/directress operations TODO
+    description: Endpoints for director/directress operations
   - name: events
     description: Endpoints for event operations TODO
   - name: movies
@@ -31,11 +31,11 @@ paths:
       summary: Get all movies
       description: Get all movies from the archive. Query parameters can be used to return only certain movies.
       operationId: getMovies
-      parameters: # TODO Define search parameters
+      parameters:
         - in: query
           name: searchMoviePagingDto
           schema:
-            type: object
+            $ref: '#/components/schemas/SearchMoviePagingDto'
           description: All properties of searchMoviePagingDto are valid parameters see specifaction for details. The searchstring parameter disables all detailed field search parameters.
       responses:
         200:
@@ -166,33 +166,280 @@ paths:
         404:
           description: Movie not found
           content: { }
+  /directors:
+    get:
+      tags:
+        - directors
+      summary: Get all directors
+      description: Get all directors from the archive. Query parameters can be used to return only certain directors.
+      operationId: getDirectors
+      parameters:
+        - in: query
+          name: searchDirectorPagingDto
+          schema:
+            $ref: '#/components/schemas/SearchDirectorPagingDto'
+          description: All properties of searchDirectorPagingDto are valid parameters see specifaction for details. The searchstring parameter disables all detailed field search parameters.
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DirectorDto'
+        400:
+          description: Invalid input
+          content: { }
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+    post:
+      tags:
+        - directors
+      summary: Add new director
+      description: Adds a new director to the archive
+      operationId: addDirector
+      requestBody:
+        description: Director object that needs to be added to the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUpdateDirectorDto'
+        required: true
+      responses:
+        201:
+          description: Successful creation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DirectorDto'
+        400:
+          description: Invalid input
+          content: { }
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+      x-codegen-request-body-name: body
+  /directors/{id}:
+    get:
+      tags:
+        - directors
+      summary: Get director
+      description: Returns a single director with the specified ID
+      operationId: getDirectorById
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DirectorDto'
+        400:
+          description: Invalid ID supplied
+          content: { }
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+        404:
+          description: Not found
+          content: { }
+    put:
+      tags:
+        - directors
+      summary: Update director
+      description: Updates the director with the specified ID
+      operationId: updateDirector
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUpdateDirectorDto'
+      responses:
+        204:
+          description: Operation successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DirectorDto'
+        400:
+          description: Invalid input
+          content: { }
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+        404:
+            description: Not found
+            content: { }
+    delete:
+      tags:
+        - directors
+      summary: Delete director
+      description: Deletes the director with the specified ID
+      operationId: deleteDirector
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        400:
+          description: Invalid ID supplied
+          content: { }
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+        404:
+          description: Not found
+          content: { }
 components:
   parameters:
     Id:
       name: id
       in: path
-      description: ID of movie to return
+      description: ID of entity to return
       required: true
       schema:
         type: integer
         format: int64
   schemas:
-    MovieDto:
-      required:
-        - id
-        - created_at
-        - last_updated
-      allOf:
-        - properties:
-            id:
-              type: integer
-              format: int64
-            created_at:
-              type: string
-            last_updated:
-              type: string
-        - $ref: '#/components/schemas/CreateUpdateMovieDto'
+    DatabaseEntrySchema:
+      properties:
+        id:
+          type: integer
+          format: int64
+        created_at:
+          type: string
+        last_updated:
+          type: string
+    PagingSchema:
+      properties:
+        page:
+          description: Used for pagination. The number of the page to return.
+          type: integer
+        limit:
+          description: Used for pagination. The number of items to return.
+          type: integer
+        sortOrder:
+          description: Used for pagination. The number of items to return.
+          type: string
+        orderBy:
+          description: Used for pagination. The number of items to return.
+          type: string
+        searchstring:
+          description: Searches all string fields containing the searchstring and returns every match. If specified, detailed search fields are ignored.
+          type: string
+    MovieSchema:
+      properties:
+        originalTitle:
+          type: string
+        englishTitle:
+          type: string
+        movieFile:
+          type: string # TODO change to file type
+        previewFile:
+          type: string # TODO change to file type
+        trailerFile:
+          type: string # TODO change to file type
+        stillFiles:
+          type: array
+          items:
+            type: string # TODO change to file type
+        subtitleFiles:
+          type: array
+          items:
+            type: string # TODO change to file type
+        directors:
+          type: array
+          items:
+            $ref: '#/components/schemas/DirectorReferenceDto'
+        countriesOfProduction:
+          type: array
+          items:
+            type: string # TODO change to tag type
+        yearOfProduction:
+          type: integer
+          format: int32
+        duration:
+          type: integer
+          format: int32
+          description: Duration in minutes
+        animationTechniques:
+          type: array
+          items:
+            type: string # TODO change to tag type
+        softwareUsed:
+          type: array
+          items:
+            type: string # TODO change to tag type
+        keywords:
+          type: array
+          items:
+            type: string # TODO change to tag type
+        germanSynopsis:
+          type: string
+        englishSynopsis:
+          type: string
+        submissionCategory:
+          type: string # TODO change to tag type
+        hasDialog:
+          type: boolean
+        dialogLanguages:
+          type: array
+          items:
+            type: string # TODO change to tag type
+        hasSubtitles:
+          type: boolean
+        isStudentFilm:
+          type: boolean
+        filmSchool:
+          type: string
+        script:
+          type: string
+        animation:
+          type: string
+        editing:
+          type: string
+        sound:
+          type: string
+        music:
+          type: string
+        productionCompany:
+          type: string
+        contact:
+          type: string # TODO change to contact type
+    DirectorSchema:
+      properties:
+        firstName:
+          type: string
+        middleName:
+          type: string
+        lastName:
+          type: string
+        biographyEnglish:
+          type: string
+        biographyGerman:
+          type: string
+        filmography:
+          type: string
     CreateUpdateMovieDto:
+      type: object
       required:
         - originalTitle
         - englishTitle
@@ -205,177 +452,42 @@ components:
         - submissionCategory
         - isStudentFilm
         - contact
+      allOf:
+        - $ref: '#/components/schemas/MovieSchema'
+    MovieDto:
       type: object
-      properties:
-        originalTitle:
-          type: string
-        englishTitle:
-          type: string
-        movieFile:
-          type: string
-        previewFile:
-          type: string
-        trailerFile:
-          type: string
-        stillFiles:
-          type: array
-          items:
-            type: string
-        subtitleFiles:
-          type: array
-          items:
-            type: string
-        directors:
-          type: array
-          items:
-            type: string # TODO change to director type
-        countriesOfProduction:
-          type: array
-          items:
-            type: string # TODO change to tag type
-        yearOfProduction:
-          type: integer
-          format: int32
-        duration:
-          type: integer
-          format: int32
-          description: Duration in minutes
-        animationTechniques:
-          type: array
-          items:
-            type: string # TODO change to tag type
-        softwareUsed:
-          type: array
-          items:
-            type: string # TODO change to tag type
-        keywords:
-          type: array
-          items:
-            type: string # TODO change to tag type
-        germanSynopsis:
-          type: string
-        englishSynopsis:
-          type: string
-        submissionCategory:
-          type: string # TODO change to tag type
-        hasDialog:
-          type: boolean
-        dialogLanguages:
-          type: array
-          items:
-            type: string # TODO change to tag type
-        hasSubtitles:
-          type: boolean
-        isStudentFilm:
-          type: boolean
-        filmSchool:
-          type: string
-        script:
-          type: string
-        animation:
-          type: string
-        editing:
-          type: string
-        sound:
-          type: string
-        music:
-          type: string
-        productionCompany:
-          type: string
-        contact:
-          type: string # TODO change to contact type
+      allOf:
+        - $ref: '#/components/schemas/DatabaseEntrySchema'
+        - $ref: '#/components/schemas/CreateUpdateMovieDto'
     SearchMoviePagingDto:
       type: object
+      allOf:
+        - $ref: '#/components/schemas/PagingSchema'
+        - $ref: '#/components/schemas/MovieSchema'
+    CreateUpdateDirectorDto:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - biographyEnglish
+      allOf:
+        - $ref: '#/components/schemas/DirectorSchema'
+    DirectorDto:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/DatabaseEntrySchema'
+        - $ref: '#/components/schemas/CreateUpdateDirectorDto'
+    SearchDirectorPagingDto:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PagingSchema'
+        - $ref: '#/components/schemas/DirectorSchema'
+    DirectorReferenceDto:
+      type: object
       properties:
-          page:
-             description: Used for pagination. The number of the page to return.
-             type: integer
-          limit:
-            description: Used for pagination. The number of items to return.
-            type: integer
-          sortOrder:
-            description: Used for pagination. The number of items to return.
-            type: string
-          orderBy:
-            description: Used for pagination. The number of items to return.
-            type: string
-        searchstring:
-          description: Searches all string fields containing the searchstring and returns every match. If specified, detailed search fields are ignored.
-          type: string
-        originalTitle:
-          type: string
-        englishTitle:
-          type: string
-        movieFile:
-          type: string
-        previewFile:
-          type: string
-        trailerFile:
-          type: string
-        stillFiles:
-          type: array
-          items:
-            type: string
-        subtitleFiles:
-          type: array
-          items:
-            type: string
-        directors:
-          type: array
-          items:
-            type: string # TODO change to director type
-        countriesOfProduction:
-          type: array
-          items:
-            type: string # TODO change to tag type
-        yearOfProduction:
+        id:
           type: integer
-          format: int32
-        duration:
-          type: integer
-          format: int32
-          description: Duration in minutes
-        animationTechniques:
-          type: array
-          items:
-            type: string # TODO change to tag type
-        softwareUsed:
-          type: array
-          items:
-            type: string # TODO change to tag type
-        keywords:
-          type: array
-          items:
-            type: string # TODO change to tag type
-        germanSynopsis:
+          format: int64
+        fullName:
           type: string
-        englishSynopsis:
-          type: string
-        submissionCategory:
-          type: string # TODO change to tag type
-        hasDialog:
-          type: boolean
-        dialogLanguages:
-          type: array
-          items:
-            type: string # TODO change to tag type
-        hasSubtitles:
-          type: boolean
-        isStudentFilm:
-          type: boolean
-        filmSchool:
-          type: string
-        script:
-          type: string
-        animation:
-          type: string
-        editing:
-          type: string
-        sound:
-          type: string
-        music:
-          type: string
-        productionCompany:
-          type: string
-        contact:
-          type: string # TODO change to contact type
+          description: First name + last name of the director

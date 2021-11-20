@@ -37,8 +37,8 @@ export class DirectorsService {
   async create(
     createDirectorDto: CreateUpdateDirectorDto,
   ): Promise<DirectorDto> {
-    const direcorParam = this.directorRepository.create(createDirectorDto);
-    const createdDirector = await this.directorRepository.save(direcorParam);
+    const directorParam = this.directorRepository.create(createDirectorDto);
+    const createdDirector = await this.directorRepository.save(directorParam);
     return this.mapDirectorToDto(createdDirector);
   }
 

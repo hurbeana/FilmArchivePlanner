@@ -6,6 +6,8 @@ import { MoviesService } from './movies.service';
 import { Movie } from './entities/movie.entity';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
+import { DirectorsService } from '../directors/directors.service';
+import { Director } from '../directors/entities/director.entity';
 
 describe('MoviesController', () => {
   let controller: MoviesController;
@@ -23,6 +25,11 @@ describe('MoviesController', () => {
         MoviesService,
         {
           provide: getRepositoryToken(Movie),
+          useClass: Repository,
+        },
+        DirectorsService,
+        {
+          provide: getRepositoryToken(Director),
           useClass: Repository,
         },
       ],

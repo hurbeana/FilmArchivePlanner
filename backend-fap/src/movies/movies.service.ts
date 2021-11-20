@@ -1,5 +1,10 @@
 import { Movie } from './entities/movie.entity';
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUpdateMovieDto } from './dto/create-update-movie.dto';
 import { Repository } from 'typeorm';
@@ -12,6 +17,10 @@ import {
   paginate,
   Pagination,
 } from 'nestjs-typeorm-paginate';
+import { Director } from '../directors/entities/director.entity';
+import { DirectorReferenceDto } from '../directors/dto/director-reference.dto';
+import { mapFrom } from '@automapper/core';
+import { DirectorsService } from '../directors/directors.service';
 
 /**
  * Service for movies CRUD
@@ -23,7 +32,12 @@ export class MoviesService {
     private moviesRepository: Repository<Movie>,
     @InjectMapper()
     private mapper: Mapper,
+    private readonly directorsService: DirectorsService,
   ) {
+    this.mapper.createMap(Director, DirectorReferenceDto).forMember(
+      (destination) => destination.fullName,
+      mapFrom((source) => source.firstName + ' ' + source.lastName),
+    );
     this.mapper.createMap(Movie, MovieDto);
   }
 
@@ -35,9 +49,10 @@ export class MoviesService {
    * @returns {Promise<MovieDto>} The created movie, including id and timestamps
    */
   async create(createMovieDto: CreateUpdateMovieDto): Promise<MovieDto> {
+    await this.checkIfReferencedEntitiesExist(createMovieDto.directors);
     const movieParam = this.moviesRepository.create(createMovieDto);
     const createdMovie = await this.moviesRepository.save(movieParam);
-    return this.mapMovieToDto(createdMovie);
+    return this.findOne(createdMovie.id);
   }
 
   /**
@@ -56,7 +71,9 @@ export class MoviesService {
     sortOrder: 'ASC' | 'DESC' = 'DESC',
     searchstring: string,
   ): Promise<Pagination<MovieDto>> {
-    const queryBuilder = this.moviesRepository.createQueryBuilder('movie');
+    const queryBuilder = this.moviesRepository
+      .createQueryBuilder('movie')
+      .leftJoinAndSelect('movie.directors', 'director');
     if (searchstring) {
       // searchstring higher prio
       Object.keys(SearchMovieDto.getStringSearch()).forEach((k) =>
@@ -80,7 +97,6 @@ export class MoviesService {
     if (orderBy) {
       queryBuilder.orderBy(orderBy, sortOrder);
     }
-    // console.log(queryBuilder);
     return paginate<Movie>(queryBuilder, options).then(
       (page) =>
         new Pagination<MovieDto>(
@@ -98,7 +114,7 @@ export class MoviesService {
    */
   findOne(id: number): Promise<MovieDto> {
     return this.moviesRepository
-      .findOneOrFail(id)
+      .findOneOrFail(id, { relations: ['directors'] })
       .then((entity) => this.mapMovieToDto(entity))
       .catch((e) => {
         this.logger.error(`Getting movie with id ${id} failed.`, e.stack);
@@ -116,6 +132,7 @@ export class MoviesService {
     id: number,
     updateMovieDto: CreateUpdateMovieDto,
   ): Promise<MovieDto> {
+    await this.checkIfReferencedEntitiesExist(updateMovieDto.directors);
     try {
       await this.moviesRepository.findOneOrFail(id);
     } catch (e) {
@@ -126,7 +143,7 @@ export class MoviesService {
     const movieParam = this.moviesRepository.create(updateMovieDto);
     movieParam.id = id;
     const updatedMovie = await this.moviesRepository.save(movieParam);
-    return this.mapMovieToDto(updatedMovie);
+    return this.findOne(updatedMovie.id);
   }
 
   /**
@@ -140,5 +157,18 @@ export class MoviesService {
 
   private mapMovieToDto(movie: Movie): MovieDto {
     return this.mapper.map(movie, MovieDto, Movie);
+  }
+
+  private async checkIfReferencedEntitiesExist(
+    directors: DirectorReferenceDto[],
+  ) {
+    for (const director of directors) {
+      try {
+        await this.directorsService.findOne(director.id);
+      } catch (e) {
+        this.logger.error(`Could not find director ${director.id}`, e.stack);
+        throw new BadRequestException(`Director ${director.id} does not exist`);
+      }
+    }
   }
 }

@@ -1,5 +1,15 @@
-import { IsBoolean, IsInt, IsOptional, IsString } from 'class-validator';
+import {
+  ArrayNotEmpty,
+  IsArray,
+  IsBoolean,
+  IsInt,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { AutoMap } from '@automapper/classes';
+import { Type } from 'class-transformer';
+import { DirectorReferenceDto } from '../../directors/dto/director-reference.dto';
 
 export class CreateUpdateMovieDto {
   @AutoMap()
@@ -36,9 +46,12 @@ export class CreateUpdateMovieDto {
   @IsString({ each: true })
   subtitleFiles?: string[]; //TODO Replace this with "Path[]"
 
-  @AutoMap()
-  @IsString({ each: true })
-  directors: string[]; //TODO Add directress
+  @AutoMap({ typeFn: () => DirectorReferenceDto })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @ArrayNotEmpty()
+  @Type(() => DirectorReferenceDto)
+  directors: DirectorReferenceDto[];
 
   @AutoMap()
   @IsOptional()
