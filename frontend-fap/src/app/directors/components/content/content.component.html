@@ -1,0 +1,11 @@
+<div class="content clearfix" appResizable>
+  <!-- Director List -->
+  <div class="table-container">
+    <div id="dragbar"></div>
+    <table-view (selectedDirectorChanged)="changeDetails($event)"></table-view>
+  </div>
+  <!-- Director Details -->
+  <div class="details-container">
+    <directors-details-view [director]="selectedDirector"></directors-details-view>
+  </div>
+</div>

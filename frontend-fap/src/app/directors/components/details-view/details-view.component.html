@@ -1,0 +1,19 @@
+<div *ngIf="director" class="details-view">
+  <div style="display:flex; align-items: center; justify-content: flex-end">
+    <img style="margin: 10px 0; padding: 0; max-width:200px; max-height:200px;" mat-card-image src="https://source.unsplash.com/random/300x300?sig={{director?.id}}">
+  </div>
+  <div class="details-grid">
+      <span class="mat-primary label-colon" i18n>First name</span>
+      <input type="text" disabled value="{{director?.firstName}}">
+      <span class="mat-primary label-colon" i18n>Middle name</span>
+      <input type="text" disabled value="{{director?.middleName}}">
+      <span class="mat-primary label-colon" i18n>Last name</span>
+      <input type="text" disabled value="{{director?.lastName}}">
+      <span class="mat-primary label-colon" i18n>English biography</span>
+      <input type="text" disabled value="{{director?.biographyEnglish}}">
+      <span class="mat-primary label-colon" i18n>German biography</span>
+      <input type="text" disabled value="{{director?.biographyGerman}}">
+      <span class="mat-primary label-colon" i18n>Filmography</span>
+      <input type="text" disabled value="{{director?.filmography}}">
+  </div>
+</div>
