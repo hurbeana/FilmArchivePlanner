@@ -1,5 +1,5 @@
 /* Bootstrap Table */
-:host{
+:host {
   display: block;
   //width: 100%;
   padding: 10px;
@@ -8,35 +8,35 @@
 }
 
 
-.table-responsive{
+.table-responsive {
   width: 100%;
 }
 
-.table > :not(:first-child){
+.table > :not(:first-child) {
   border: none;
 }
 
-.bordered-box{
+.bordered-box {
   border: 1px solid #dbdbdb;
   border-radius: 4px;
 }
 
-thead, tbody, tfoot, tr, td, th{
+thead, tbody, tfoot, tr, td, th {
   border-color: #dbdbdb;
 }
 
-th.rowscope{
+th.rowscope {
   background-color: white;
-  width:100px;
+  width: 100px;
 }
 
-tr:hover{
+tr:hover {
   background-color: #f0f0f0;
   cursor: pointer;
 }
 
 
-th{
+th {
   background-color: #f0f0f0;
 }
 
@@ -46,16 +46,16 @@ th[sortable] {
   -webkit-user-select: none;
 }
 
-.header-value{
+.header-value {
   width: 100%;
   display: flex;
   flex-flow: row nowrap;
 }
 
-.arrow{
-  display:block;
+.arrow {
+  display: block;
   width: 20px;
-  height:100%;
+  height: 100%;
 }
 
 th[sortable].desc .arrow:after, th[sortable].asc .arrow:after {
@@ -85,7 +85,7 @@ ngb-carousel .picsum-img-wrapper {
   padding-top: 55%; /* Keep ratio for 900x500 images */
 }
 
-ngb-carousel .picsum-img-wrapper>img {
+ngb-carousel .picsum-img-wrapper > img {
   position: absolute;
   top: 0;
   left: 0;
@@ -107,6 +107,10 @@ ngb-carousel .picsum-img-wrapper>img {
   box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.25);
 }
 
-::ng-deep .sr-only{
+::ng-deep .sr-only {
   display: none;
+}
+
+.active-link {
+  font-weight: 600;
 }

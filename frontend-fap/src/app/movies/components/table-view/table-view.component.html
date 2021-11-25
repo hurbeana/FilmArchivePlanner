@@ -1,5 +1,6 @@
 <div class="form-group form-inline input-group">
-  <input class="form-control ml-2 mb-2" type="text" name="searchTerm" [(ngModel)]="searchTerm" placeholder="Search..." #search>
+  <input class="form-control ml-2 mb-2" type="text" name="searchTerm" [(ngModel)]="searchTerm" placeholder="Search..."
+         #search>
   <button class="btn btn-primary mb-2" (click)="populate()">Add Movie (for testing)</button>
 </div>
 
@@ -36,13 +37,13 @@
           <div class="arrow"></div>
         </div>
       </th>
+      <th scope="col"></th>
     </tr>
     </thead>
 
     <tbody *ngIf="movies | async as movieList">
     <tr *ngFor="let movie of movieList"
-        (click)="selectMovie(movie)"
-    >
+        (click)="selectMovie(movie)">
       <td>{{ movie.id }}</td>
       <td>
         <!--<img [src]="'https://picsum.photos/20/20'" class="mr-2" style="width: 20px">-->
@@ -61,6 +62,13 @@
       <td>
         <ngb-highlight [result]="movie.isStudentFilm ? 'True' : 'False'" [term]="searchTerm"></ngb-highlight>
       </td>
+      <td>
+        <button
+          [routerLink]="[movie.id]"
+          routerLinkActive="active-link">
+          view
+        </button>
+      </td>
     </tr>
     </tbody>
   </table>
@@ -74,7 +82,8 @@
     <div class="ml-3" *ngIf="loading | async">Loading...</div>
 
     <div>
-      <select class="form-select form-select-sm" style="width: auto" name="pageSize" [(ngModel)]="pageSize" (ngModelChange)="setPageSize($event)">
+      <select class="form-select form-select-sm" style="width: auto" name="pageSize" [(ngModel)]="pageSize"
+              (ngModelChange)="setPageSize($event)">
         <option [ngValue]="2">2 items per page</option>
         <option [ngValue]="4">4 items per page</option>
         <option [ngValue]="6">6 items per page</option>

@@ -1,16 +1,16 @@
-<mat-toolbar color="primary" class = "main-toolbar">
-    <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
-      <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
-    </button>
-    <span>Archiv8tor</span>
-    <span class="example-spacer"></span>
-    <div>
+<mat-toolbar color="primary" class="main-toolbar">
+  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+    <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
+  </button>
+  <span>Archiv8tor</span>
+  <span class="example-spacer"></span>
+  <div>
 
-    </div>
-    <button mat-icon-button class="example-icon person-outline" aria-label="Example icon-button with person icon">
-      <mat-icon>person_outline</mat-icon>
-    </button>
-  </mat-toolbar>
+  </div>
+  <button mat-icon-button class="example-icon person-outline" aria-label="Example icon-button with person icon">
+    <mat-icon>person_outline</mat-icon>
+  </button>
+</mat-toolbar>
 <mat-sidenav-container class="main-content">
   <mat-sidenav class="main-sidenav" position="start" mode="over">
     <mat-nav-list>
@@ -22,6 +22,6 @@
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-      <router-outlet></router-outlet>
+    <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

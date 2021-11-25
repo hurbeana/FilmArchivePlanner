@@ -1,0 +1,77 @@
+:host {
+  display: flex;
+}
+
+:host .details-view {
+  width: 100%;
+  margin: 2em;
+
+}
+
+:host .details-form {
+  margin-top: 20px;
+}
+
+.header-flex {
+  display: flex;
+  justify-content: center;
+}
+
+.header-flex {
+  display: flex;
+}
+
+.header-details {
+  margin: 0 2em 2em 0;
+}
+
+.info-spacer {
+  margin: 0 4px;
+}
+
+.info-spacer:after {
+  content: '|';
+}
+
+.details-flex {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.details-grid {
+  max-height: 500px;
+  width: 100%;
+  text-align: left;
+  display: flex;
+  flex-flow: column wrap;
+  flex-wrap: wrap;
+  row-gap: 0.1em;
+  margin: 1em;
+}
+
+.details-grid span:nth-child(8n+1),
+.details-grid span:nth-child(8n+2),
+.details-grid span:nth-child(8n+3),
+.details-grid span:nth-child(8n+4) {
+}
+
+.details-grid > div {
+  display: flex;
+  flex-direction: column;
+  margin: 0.5em;
+}
+
+
+.details-grid span {
+  margin: 0;
+}
+
+.label-colon:after {
+  content: ':';
+}
+
+.text-bold {
+  font-weight: 500;
+}

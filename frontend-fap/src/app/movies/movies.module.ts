@@ -13,6 +13,7 @@ import { SharedModule } from '../shared/shared.module';
 
 /* Components */
 import { DetailsViewComponent } from './components/details-view/details-view.component';
+import { FullDetailViewComponent } from './components/full-detail-view/full-detail-view.component';
 
 /* state management*/
 import { moviesReducer } from './state/movies.reducer';
@@ -22,44 +23,51 @@ import { MoviesRoutingModule } from './movies-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ContentComponent } from './components/content/content.component';
-import { NgbdSortableHeader, TableViewComponent } from './components/table-view/table-view.component';
+import {
+    NgbdSortableHeader,
+    TableViewComponent,
+} from './components/table-view/table-view.component';
 import * as MovieActions from './state/movies.actions';
 
 @NgModule({
-  declarations: [
-    DetailsViewComponent,
-    TableViewComponent,
-    NgbdSortableHeader,
-    ContentComponent
-  ],
-  exports: [
-    TableViewComponent,
-    DetailsViewComponent,
-    ContentComponent
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgbModule,
-    StoreModule.forRoot({
-      pagination: moviesReducer,
-      selectedMovie: moviesReducer,
-      searchTerm: moviesReducer
-    }),
-    EffectsModule.forRoot([MovieEffects]),
-    SharedModule,
-    MatButtonModule,
-    MatCardModule,
-    MatInputModule,
-    MatTabsModule,
-    MatTableModule,
-    MoviesRoutingModule,
-  ]
+    declarations: [
+        DetailsViewComponent,
+        TableViewComponent,
+        NgbdSortableHeader,
+        ContentComponent,
+        FullDetailViewComponent,
+    ],
+    exports: [
+        TableViewComponent,
+        DetailsViewComponent,
+        ContentComponent,
+        FullDetailViewComponent,
+    ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NgbModule,
+        StoreModule.forRoot({
+            pagination: moviesReducer,
+            selectedMovie: moviesReducer,
+            searchTerm: moviesReducer,
+        }),
+        EffectsModule.forRoot([MovieEffects]),
+        SharedModule,
+        MatButtonModule,
+        MatCardModule,
+        MatInputModule,
+        MatTabsModule,
+        MatTableModule,
+        MoviesRoutingModule,
+    ],
 })
 /* Movie Module contains everything related to movies */
 export class MoviesModule {
-  constructor(private store: Store) {
-    this.store.dispatch(MovieActions.getMovies({search: "", page: 1, limit: 16}));
-  }
+    constructor(private store: Store) {
+        this.store.dispatch(
+            MovieActions.getMovies({ search: '', page: 1, limit: 16 })
+        );
+    }
 }
