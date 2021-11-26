@@ -74,7 +74,7 @@ export class DirectorsService {
             queryBuilder.orWhere(`director.${k} = :${k}`, { [k]: v });
           } else if (typeof v === 'string') {
             queryBuilder.orWhere(`director.${k} ILIKE :${k}`, {
-              [k]: `%${v}%`
+              [k]: `%${v}%`,
             });
           } else {
             //TODO: more types?

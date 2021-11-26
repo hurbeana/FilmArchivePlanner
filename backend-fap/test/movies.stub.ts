@@ -1,4 +1,4 @@
-import { Movie } from "../src/movies/entities/movie.entity";
+import { Movie } from '../src/movies/entities/movie.entity';
 
 export const moviesListStub = (): Array<Movie> => {
   return [
