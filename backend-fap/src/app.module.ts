@@ -12,6 +12,7 @@ import { FilesModule } from './files/files.module';
 import { DatabaseModule } from './database/database.module';
 import { DirectorsModule } from './directors/directors.module';
 import configuration from './config/configuration';
+import { ContactsModule } from './contacts/contacts.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import configuration from './config/configuration';
     FilesModule,
     DatabaseModule,
     DirectorsModule,
+    ContactsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

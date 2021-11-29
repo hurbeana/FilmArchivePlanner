@@ -10,7 +10,7 @@ servers:
   - url: http://localhost:3000/api/v1
 tags:
   - name: contacts
-    description: Endpoints for contact operations TODO
+    description: Endpoints for contact operations
   - name: directors
     description: Endpoints for director/directress operations
   - name: events
@@ -308,6 +308,148 @@ paths:
         404:
           description: Not found
           content: { }
+  /contacts:
+    get:
+      tags:
+        - contacts
+      summary: Get all contacts
+      description: Get all contacts from the archive. Query parameters can be used to return only certain contacts.
+      operationId: getContacts
+      parameters:
+        - in: query
+          name: searchContactPagingDto
+          schema:
+            $ref: '#/components/schemas/SearchContactPagingDto'
+          description: All properties of searchContactPagingDto are valid parameters see specifaction for details. The searchstring parameter disables all detailed field search parameters.
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContactDto'
+        400:
+          description: Invalid input
+          content: { }
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+    post:
+      tags:
+        - contacts
+      summary: Add new contact
+      description: Adds a new contact to the archive
+      operationId: addContact
+      requestBody:
+        description: Contact object that needs to be added to the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUpdateContactDto'
+        required: true
+      responses:
+        201:
+          description: Successful creation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactDto'
+        400:
+          description: Invalid input
+          content: { }
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+      x-codegen-request-body-name: body
+  /contacts/{id}:
+    get:
+      tags:
+        - contacts
+      summary: Get contact
+      description: Returns a single contact with the specified ID
+      operationId: getContactById
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactDto'
+        400:
+          description: Invalid ID supplied
+          content: { }
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+        404:
+          description: Not found
+          content: { }
+    put:
+      tags:
+        - contacts
+      summary: Update contact
+      description: Updates the contact with the specified ID
+      operationId: updateContact
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUpdateContactDto'
+      responses:
+        204:
+          description: Operation successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactDto'
+        400:
+          description: Invalid input
+          content: { }
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+        404:
+          description: Not found
+          content: { }
+    delete:
+      tags:
+        - contacts
+      summary: Delete contact
+      description: Deletes the contact with the specified ID
+      operationId: deleteContact
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        400:
+          description: Invalid ID supplied
+          content: { }
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+        404:
+          description: Not found
+          content: { }
 components:
   parameters:
     Id:
@@ -345,6 +487,7 @@ components:
         searchstring:
           description: Searches all string fields containing the searchstring and returns every match. If specified, detailed search fields are ignored.
           type: string
+
     MovieSchema:
       properties:
         originalTitle:
@@ -423,7 +566,7 @@ components:
         productionCompany:
           type: string
         contact:
-          type: string # TODO change to contact type
+          $ref: '#/components/schemas/ContactReferenceDto'
     DirectorSchema:
       properties:
         firstName:
@@ -438,6 +581,20 @@ components:
           type: string
         filmography:
           type: string
+    ContactSchema:
+      properties:
+        type:
+          type: string # TODO change to tag type
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        website:
+          type: string
+
+
     CreateUpdateMovieDto:
       type: object
       required:
@@ -464,6 +621,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/PagingSchema'
         - $ref: '#/components/schemas/MovieSchema'
+
     CreateUpdateDirectorDto:
       type: object
       required:
@@ -491,3 +649,30 @@ components:
         fullName:
           type: string
           description: First name + last name of the director
+
+    CreateUpdateContactDto:
+      type: object
+      required:
+        - type
+        - name
+      allOf:
+        - $ref: '#/components/schemas/ContactSchema'
+    ContactDto:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/DatabaseEntrySchema'
+        - $ref: '#/components/schemas/CreateUpdateContactDto'
+    SearchContactPagingDto:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PagingSchema'
+        - $ref: '#/components/schemas/ContactSchema'
+    ContactReferenceDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          description: Name of the contact

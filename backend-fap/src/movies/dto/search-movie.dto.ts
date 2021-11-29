@@ -8,7 +8,6 @@ export class SearchMovieDto extends PartialType(MovieDto) {
   public static getStringSearch(): SearchMovieDto {
     return {
       animation: '',
-      contact: '',
       editing: '',
       englishSynopsis: '',
       englishTitle: '',

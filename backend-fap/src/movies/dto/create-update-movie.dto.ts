@@ -3,21 +3,27 @@ import {
   IsArray,
   IsBoolean,
   IsInt,
+  IsNotEmpty,
+  IsNotEmptyObject,
   IsOptional,
+  IsPositive,
   IsString,
   ValidateNested,
 } from 'class-validator';
 import { AutoMap } from '@automapper/classes';
 import { Type } from 'class-transformer';
 import { DirectorReferenceDto } from '../../directors/dto/director-reference.dto';
+import { ContactReferenceDto } from '../../contacts/dto/contact-reference.dto';
 
 export class CreateUpdateMovieDto {
   @AutoMap()
   @IsString()
+  @IsNotEmpty()
   originalTitle: string;
 
   @AutoMap()
   @IsString()
+  @IsNotEmpty()
   englishTitle: string;
 
   //TODO Need to implement movie upload and file matching to DTO
@@ -61,10 +67,12 @@ export class CreateUpdateMovieDto {
   @AutoMap()
   @IsOptional()
   @IsInt()
+  @IsPositive()
   yearOfProduction?: number;
 
   @AutoMap()
   @IsInt()
+  @IsPositive()
   duration: number;
 
   @AutoMap()
@@ -84,14 +92,17 @@ export class CreateUpdateMovieDto {
 
   @AutoMap()
   @IsString()
+  @IsNotEmpty()
   germanSynopsis: string;
 
   @AutoMap()
   @IsString()
+  @IsNotEmpty()
   englishSynopsis: string;
 
   @AutoMap()
   @IsString()
+  @IsNotEmpty()
   submissionCategory: string; //TODO Replace with Tag
 
   @AutoMap()
@@ -148,7 +159,7 @@ export class CreateUpdateMovieDto {
   @IsString()
   productionCompany?: string;
 
-  @AutoMap()
-  @IsString()
-  contact: string; //TODO Change to Contact type
+  @AutoMap({ typeFn: () => ContactReferenceDto })
+  @IsNotEmptyObject()
+  contact: ContactReferenceDto;
 }

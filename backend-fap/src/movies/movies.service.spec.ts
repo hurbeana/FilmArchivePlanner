@@ -11,6 +11,9 @@ import { NotFoundException } from '@nestjs/common';
 import { DirectorsService } from '../directors/directors.service';
 import { Director } from '../directors/entities/director.entity';
 import { DirectorReferenceDto } from '../directors/dto/director-reference.dto';
+import { ContactReferenceDto } from '../contacts/dto/contact-reference.dto';
+import { Contact } from '../contacts/entities/contact.entity';
+import { ContactsService } from '../contacts/contacts.service';
 
 const mockId = 1;
 const mockUpdatedAt = new Date();
@@ -19,6 +22,7 @@ const mockCreatedAt = new Date();
 describe('MoviesService', () => {
   let moviesService: MoviesService;
   let directorsService: DirectorsService;
+  let contactsService: ContactsService;
   let repo: Repository<Movie>;
 
   beforeEach(async () => {
@@ -40,11 +44,17 @@ describe('MoviesService', () => {
           provide: getRepositoryToken(Director),
           useClass: Repository,
         },
+        ContactsService,
+        {
+          provide: getRepositoryToken(Contact),
+          useClass: Repository,
+        },
       ],
     }).compile();
 
     moviesService = module.get<MoviesService>(MoviesService);
     directorsService = module.get<DirectorsService>(DirectorsService);
+    contactsService = module.get<ContactsService>(ContactsService);
     // Save the instance of the repository and set the correct generics
     repo = module.get<Repository<Movie>>(getRepositoryToken(Movie));
   });
@@ -68,6 +78,14 @@ describe('MoviesService', () => {
       .mockImplementation((): Promise<Director> => {
         return new Promise(function (resolve) {
           resolve(new Director());
+        });
+      });
+
+    jest
+      .spyOn(contactsService, 'findOne')
+      .mockImplementation((): Promise<Contact> => {
+        return new Promise(function (resolve) {
+          resolve(new Contact());
         });
       });
 
@@ -98,8 +116,16 @@ describe('MoviesService', () => {
     jest.spyOn(repo, 'findOneOrFail').mockImplementation(() => {
       throw new Error();
     });
+    jest
+      .spyOn(contactsService, 'findOne')
+      .mockImplementation((): Promise<Contact> => {
+        return new Promise(function (resolve) {
+          resolve(new Contact());
+        });
+      });
     const createUpdateMovieDto = new CreateUpdateMovieDto();
     createUpdateMovieDto.directors = [];
+    createUpdateMovieDto.contact = new Contact();
     return moviesService.update(1, createUpdateMovieDto).catch((error) => {
       console.log(error.stack);
       expect(error).toBeInstanceOf(NotFoundException);
@@ -121,6 +147,14 @@ describe('MoviesService', () => {
       .mockImplementation((): Promise<Director> => {
         return new Promise(function (resolve) {
           resolve(new Director());
+        });
+      });
+
+    jest
+      .spyOn(contactsService, 'findOne')
+      .mockImplementation((): Promise<Contact> => {
+        return new Promise(function (resolve) {
+          resolve(new Contact());
         });
       });
 
@@ -177,6 +211,8 @@ function initializeMovieDto(movieDto: CreateUpdateMovieDto) {
   director1.id = 1;
   const director2 = new DirectorReferenceDto();
   director2.id = 2;
+  const contact1 = new ContactReferenceDto();
+  contact1.id = 1;
 
   movieDto.originalTitle = 'a';
   movieDto.englishTitle = 'b';
@@ -185,7 +221,7 @@ function initializeMovieDto(movieDto: CreateUpdateMovieDto) {
   movieDto.duration = 12;
   movieDto.germanSynopsis = 'd';
   movieDto.englishSynopsis = 'g';
-  movieDto.contact = 'h';
+  movieDto.contact = contact1;
   movieDto.submissionCategory = 'i';
   movieDto.isStudentFilm = true;
 }
@@ -207,6 +243,9 @@ function mockRepoCreate(createMovie: CreateUpdateMovieDto): Movie {
   const director2 = new Director();
   director2.id = createMovie.directors[1].id;
   movie.directors = [director1, director2];
+  const contact1 = new Contact();
+  contact1.id = createMovie.contact.id;
+  movie.contact = contact1;
 
   movie.originalTitle = createMovie.originalTitle;
   movie.englishTitle = createMovie.englishTitle;
@@ -214,7 +253,6 @@ function mockRepoCreate(createMovie: CreateUpdateMovieDto): Movie {
   movie.duration = createMovie.duration;
   movie.germanSynopsis = createMovie.germanSynopsis;
   movie.englishSynopsis = createMovie.englishSynopsis;
-  movie.contact = createMovie.contact;
   movie.submissionCategory = createMovie.submissionCategory;
   movie.isStudentFilm = createMovie.isStudentFilm;
   return movie;

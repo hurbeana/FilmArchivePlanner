@@ -8,6 +8,8 @@ import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
 import { DirectorsService } from '../directors/directors.service';
 import { Director } from '../directors/entities/director.entity';
+import { ContactsService } from '../contacts/contacts.service';
+import { Contact } from '../contacts/entities/contact.entity';
 
 describe('MoviesController', () => {
   let controller: MoviesController;
@@ -30,6 +32,11 @@ describe('MoviesController', () => {
         DirectorsService,
         {
           provide: getRepositoryToken(Director),
+          useClass: Repository,
+        },
+        ContactsService,
+        {
+          provide: getRepositoryToken(Contact),
           useClass: Repository,
         },
       ],

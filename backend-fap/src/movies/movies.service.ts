@@ -21,6 +21,9 @@ import { Director } from '../directors/entities/director.entity';
 import { DirectorReferenceDto } from '../directors/dto/director-reference.dto';
 import { mapFrom } from '@automapper/core';
 import { DirectorsService } from '../directors/directors.service';
+import { ContactReferenceDto } from '../contacts/dto/contact-reference.dto';
+import { ContactsService } from '../contacts/contacts.service';
+import { Contact } from '../contacts/entities/contact.entity';
 
 /**
  * Service for movies CRUD
@@ -33,11 +36,13 @@ export class MoviesService {
     @InjectMapper()
     private mapper: Mapper,
     private readonly directorsService: DirectorsService,
+    private readonly contactsService: ContactsService,
   ) {
     this.mapper.createMap(Director, DirectorReferenceDto).forMember(
       (destination) => destination.fullName,
       mapFrom((source) => source.firstName + ' ' + source.lastName),
     );
+    this.mapper.createMap(Contact, ContactReferenceDto);
     this.mapper.createMap(Movie, MovieDto);
   }
 
@@ -49,7 +54,8 @@ export class MoviesService {
    * @returns {Promise<MovieDto>} The created movie, including id and timestamps
    */
   async create(createMovieDto: CreateUpdateMovieDto): Promise<MovieDto> {
-    await this.checkIfReferencedEntitiesExist(createMovieDto.directors);
+    await this.checkIfReferencedDirectorsExist(createMovieDto.directors);
+    await this.checkIfReferencedContactExists(createMovieDto.contact);
     const movieParam = this.moviesRepository.create(createMovieDto);
     const createdMovie = await this.moviesRepository.save(movieParam);
     return this.findOne(createdMovie.id);
@@ -73,7 +79,8 @@ export class MoviesService {
   ): Promise<Pagination<MovieDto>> {
     const queryBuilder = this.moviesRepository
       .createQueryBuilder('movie')
-      .leftJoinAndSelect('movie.directors', 'director');
+      .leftJoinAndSelect('movie.directors', 'director')
+      .leftJoinAndSelect('movie.contact', 'contact');
     if (searchstring) {
       // searchstring higher prio
       Object.keys(SearchMovieDto.getStringSearch()).forEach((k) =>
@@ -114,7 +121,7 @@ export class MoviesService {
    */
   findOne(id: number): Promise<MovieDto> {
     return this.moviesRepository
-      .findOneOrFail(id, { relations: ['directors'] })
+      .findOneOrFail(id, { relations: ['directors', 'contact'] })
       .then((entity) => this.mapMovieToDto(entity))
       .catch((e) => {
         this.logger.error(`Getting movie with id ${id} failed.`, e.stack);
@@ -132,7 +139,8 @@ export class MoviesService {
     id: number,
     updateMovieDto: CreateUpdateMovieDto,
   ): Promise<MovieDto> {
-    await this.checkIfReferencedEntitiesExist(updateMovieDto.directors);
+    await this.checkIfReferencedDirectorsExist(updateMovieDto.directors);
+    await this.checkIfReferencedContactExists(updateMovieDto.contact);
     try {
       await this.moviesRepository.findOneOrFail(id);
     } catch (e) {
@@ -164,7 +172,7 @@ export class MoviesService {
     return this.mapper.map(movie, MovieDto, Movie);
   }
 
-  private async checkIfReferencedEntitiesExist(
+  private async checkIfReferencedDirectorsExist(
     directors: DirectorReferenceDto[],
   ) {
     for (const director of directors) {
@@ -174,6 +182,15 @@ export class MoviesService {
         this.logger.error(`Could not find director ${director.id}`, e.stack);
         throw new BadRequestException(`Director ${director.id} does not exist`);
       }
+    }
+  }
+
+  private async checkIfReferencedContactExists(contact: ContactReferenceDto) {
+    try {
+      await this.contactsService.findOne(contact.id);
+    } catch (e) {
+      this.logger.error(`Could not find contact ${contact.id}`, e.stack);
+      throw new BadRequestException(`Contact ${contact.id} does not exist`);
     }
   }
 }

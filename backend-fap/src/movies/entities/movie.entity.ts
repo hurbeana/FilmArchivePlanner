@@ -4,11 +4,13 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { AutoMap } from '@automapper/classes';
 import { Director } from '../../directors/entities/director.entity';
+import { Contact } from '../../contacts/entities/contact.entity';
 
 @Entity()
 export class Movie {
@@ -138,6 +140,6 @@ export class Movie {
   productionCompany?: string;
 
   @AutoMap()
-  @Column()
-  contact: string; //TODO Change to Contact type
+  @ManyToOne(() => Contact)
+  contact: Contact;
 }
