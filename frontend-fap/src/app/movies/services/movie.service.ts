@@ -10,7 +10,7 @@ const api: string = 'http://localhost:3000/movies'; //TODO: url to rest
 
 @Injectable({ providedIn: 'root' })
 export class MovieService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   createMovie(movie: CreateUpdateMovieDto): Observable<Movie> {
     console.log('[MovieService] - CREATE MOVIE');
@@ -49,8 +49,8 @@ export class MovieService {
     return this.http.put(api, movie);
   }
 
-  deleteMovie(id: number) {
-    console.log('[MovieService] - DELETE MOVIE', id);
-    return this.http.delete(api);
+  deleteMovie(movie: Movie) {
+    console.log('[MovieService] - DELETE MOVIE', movie.id);
+    return this.http.delete(`${api}/${movie.id}`);
   }
 }

@@ -1,6 +1,5 @@
 <div class="form-group form-inline input-group">
-  <input class="form-control ml-2 mb-2" type="text" name="searchTerm" [(ngModel)]="searchTerm" placeholder="Search..."
-         #search>
+  <input class="form-control ml-2 mb-2" type="text" name="searchTerm" [(ngModel)]="searchTerm" placeholder="Search..." #search>
   <button class="btn btn-primary mb-2" (click)="populate()">Add Movie (for testing)</button>
 </div>
 
@@ -9,81 +8,84 @@
 <div class="table-responsive bordered-box">
   <table class="table">
     <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">
-        <div class="header-value" i18n>Original Title
-          <div class="arrow"></div>
-        </div>
-      </th>
-      <th scope="col">
-        <div class="header-value" i18n>English Title
-          <div class="arrow"></div>
-        </div>
-      </th>
-      <th scope="col">
-        <div class="header-value" i18n>Movie File
-          <div class="arrow"></div>
-        </div>
-      </th>
-      <!--<th scope="col" sortable="stillFiles" (sort)="onSort($event)"><div class="header-value">Population<div class="arrow"></div></div></th>-->
-      <th scope="col">
-        <div class="header-value" i18n>Year of Production
-          <div class="arrow"></div>
-        </div>
-      </th>
-      <th scope="col">
-        <div class="header-value" i18n>Is Student Film
-          <div class="arrow"></div>
-        </div>
-      </th>
-      <th scope="col"></th>
-    </tr>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">
+          <div class="header-value" i18n>Original Title
+            <div class="arrow"></div>
+          </div>
+        </th>
+        <th scope="col">
+          <div class="header-value" i18n>English Title
+            <div class="arrow"></div>
+          </div>
+        </th>
+        <th scope="col">
+          <div class="header-value" i18n>Movie File
+            <div class="arrow"></div>
+          </div>
+        </th>
+        <!--<th scope="col" sortable="stillFiles" (sort)="onSort($event)"><div class="header-value">Population<div class="arrow"></div></div></th>-->
+        <th scope="col">
+          <div class="header-value" i18n>Year of Production
+            <div class="arrow"></div>
+          </div>
+        </th>
+        <th scope="col">
+          <div class="header-value" i18n>Is Student Film
+            <div class="arrow"></div>
+          </div>
+        </th>
+        <th scope="col">Actions</th>
+      </tr>
     </thead>
 
     <tbody *ngIf="movies | async as movieList">
-    <tr *ngFor="let movie of movieList"
-        (click)="selectMovie(movie)">
-      <td>{{ movie.id }}</td>
-      <td>
-        <!--<img [src]="'https://picsum.photos/20/20'" class="mr-2" style="width: 20px">-->
-        <ngb-highlight [result]="movie.originalTitle" [term]="searchTerm"></ngb-highlight>
-      </td>
-      <td>
-        <ngb-highlight [result]="movie.englishTitle" [term]="searchTerm"></ngb-highlight>
-      </td>
-      <td>
-        <ngb-highlight [result]="movie.movieFile" [term]="searchTerm"></ngb-highlight>
-      </td>
-      <!--<td><ngb-highlight [result]="movie.stillFiles" [term]="searchTerm"></ngb-highlight></td>-->
-      <td>
-        <ngb-highlight [result]="movie.yearOfProduction?.toString()" [term]="searchTerm"></ngb-highlight>
-      </td>
-      <td>
-        <ngb-highlight [result]="movie.isStudentFilm ? 'True' : 'False'" [term]="searchTerm"></ngb-highlight>
-      </td>
-      <td>
-        <button
-          [routerLink]="[movie.id]"
-          routerLinkActive="active-link">
-          view
-        </button>
-      </td>
-    </tr>
+      <tr *ngFor="let movie of movieList" (click)="selectMovie(movie)">
+        <td>{{ movie.id }}</td>
+        <td>
+          <!--<img [src]="'https://picsum.photos/20/20'" class="mr-2" style="width: 20px">-->
+          <ngb-highlight [result]="movie.originalTitle" [term]="searchTerm"></ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight [result]="movie.englishTitle" [term]="searchTerm"></ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight [result]="movie.movieFile" [term]="searchTerm"></ngb-highlight>
+        </td>
+        <!--<td><ngb-highlight [result]="movie.stillFiles" [term]="searchTerm"></ngb-highlight></td>-->
+        <td>
+          <ngb-highlight [result]="movie.yearOfProduction?.toString()" [term]="searchTerm"></ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight [result]="movie.isStudentFilm ? 'True' : 'False'" [term]="searchTerm"></ngb-highlight>
+        </td>
+        <td>
+          <button [routerLink]="[movie.id]" routerLinkActive="active-link">
+            view
+          </button>
+          <!-- delete button -->
+          <button type="button" class="btn btn-primary btn-sm btn-delete" (click)="openConfirmDeleteMovieModal(movie)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-trash" viewBox="0 0 16 16">
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+              <path fill-rule="evenodd"
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+            </svg>
+          </button>
+        </td>
+      </tr>
     </tbody>
   </table>
   <div class="d-flex justify-content-between p-2 pt-0 pb-0">
 
-    <ngb-pagination
-      size="sm"
-      [collectionSize]="numberOfMovies" [(page)]="page" [pageSize]="pageSize" (pageChange)="setPage($event)">
+    <ngb-pagination size="sm" [collectionSize]="numberOfMovies" [(page)]="page" [pageSize]="pageSize" (pageChange)="setPage($event)">
     </ngb-pagination>
 
     <div class="ml-3" *ngIf="loading | async">Loading...</div>
 
     <div>
-      <select class="form-select form-select-sm" style="width: auto" name="pageSize" [(ngModel)]="pageSize"
-              (ngModelChange)="setPageSize($event)">
+      <select class="form-select form-select-sm" style="width: auto" name="pageSize" [(ngModel)]="pageSize" (ngModelChange)="setPageSize($event)">
         <option [ngValue]="2">2 items per page</option>
         <option [ngValue]="4">4 items per page</option>
         <option [ngValue]="6">6 items per page</option>

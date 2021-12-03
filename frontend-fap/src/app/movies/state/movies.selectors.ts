@@ -1,5 +1,5 @@
-import {createFeatureSelector, createSelector} from '@ngrx/store';
-import {AppState} from '../../app.state';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { AppState } from '../../app.state';
 
 //feature "movies" has to exist in app.state.ts
 //export const movies = createFeatureSelector<AppState>('movies');

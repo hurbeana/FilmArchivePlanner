@@ -1,14 +1,14 @@
-import {createAction, props} from '@ngrx/store';
-import {Movie} from '../models/movie';
-import {CreateUpdateMovieDto} from '../models/create.movie';
-import {PaginationState} from '../../app.state';
+import { createAction, props } from '@ngrx/store';
+import { Movie } from '../models/movie';
+import { CreateUpdateMovieDto } from '../models/create.movie';
+import { PaginationState } from '../../app.state';
 
 /* whenever this action is called, the 'getMovies$' effect in movies.effects.ts  is executed */
 export const getMovies = createAction(
   '[Movie List] Get Movies',
   props<{ search: string; page: number; limit: number }>()
 );
-export const gotMoviesSuccess = createAction(
+export const getMoviesSuccess = createAction(
   '[Movies List] Loaded Movies Success',
   props<{ pagination: PaginationState }>()
 );
@@ -17,7 +17,7 @@ export const getMovie = createAction(
   '[Movie List] Get Movie',
   props<{ id: number }>()
 );
-export const gotMovieSuccess = createAction(
+export const getMovieSuccess = createAction(
   '[Movies List] Loaded Movie Success',
   props<{ movie: Movie }>()
 );
@@ -37,7 +37,5 @@ export const setSelectedMovie = createAction(
   props<{ selectedMovie: Movie }>()
 );
 
-export const removeMovie = createAction(
-  '[Movie List] Remove Movie',
-  props<{ movieId: number }>()
-);
+export const deleteMovie = createAction('[Movie List] Delete Movie', props<{ movieToDelete: Movie, search: string, page: number, limit: number }>());
+export const deleteMovieSuccess = createAction('[Movie List] Delete Movie Success', props<{ movieToDelete: Movie, search: string, page: number, limit: number }>());

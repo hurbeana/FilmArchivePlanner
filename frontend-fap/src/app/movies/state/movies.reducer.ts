@@ -19,12 +19,12 @@ export const initialState: AppState = {
 export const moviesReducer = createReducer(
   initialState,
   on(MovieActions.getMovies, (state) => state),
-  on(MovieActions.gotMoviesSuccess, (state, { pagination }) => ({
+  on(MovieActions.getMoviesSuccess, (state, { pagination }) => ({
     ...state,
     pagination: pagination,
   })),
   on(MovieActions.getMovie, (state) => state),
-  on(MovieActions.gotMovieSuccess, (state, { movie }) => ({
+  on(MovieActions.getMovieSuccess, (state, { movie }) => ({
     ...state,
     detailsMovie: movie,
   })),
@@ -32,5 +32,19 @@ export const moviesReducer = createReducer(
   on(MovieActions.setSelectedMovie, (state, { selectedMovie }) => ({
     ...state,
     selectedMovie,
+  })),
+
+  on(MovieActions.deleteMovieSuccess, (state, { movieToDelete }) => ({
+    ...state,
+    pagination: {
+      ...state.pagination,
+      items: [...state.pagination.items.filter(item => item.id !== movieToDelete.id)],
+      meta: {
+        ...state.pagination.meta,
+        totalItems: state.pagination.meta.totalItems === 0 ? 0 : state.pagination.meta.totalItems - 1,
+        totalPages: state.pagination.items.length === state.pagination.meta.itemsPerPage ? state.pagination.meta.totalPages + 1 : state.pagination.meta.totalPages,
+        currentPage: state.pagination.items.length === 1 ? state.pagination.meta.currentPage - 1 : state.pagination.meta.currentPage
+      }
+    }
   }))
 );

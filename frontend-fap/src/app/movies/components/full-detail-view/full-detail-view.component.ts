@@ -15,7 +15,7 @@ export class FullDetailViewComponent implements OnInit {
   movie?: Movie;
   id: number;
 
-  constructor(private route: ActivatedRoute, private store: Store<AppState>) {}
+  constructor(private route: ActivatedRoute, private store: Store<AppState>) { }
 
   ngOnInit(): void {
     this.store
