@@ -11,6 +11,7 @@ cache:
 stages:
   - build
   - test
+  - lint
 
 build_fe:
   stage: build
@@ -35,3 +36,11 @@ test_be:
     - npm ci --cache .npm --prefer-offline
   script:
     - npm test
+
+lint_be:
+  stage: lint
+  before_script:
+    - cd ./backend-fap
+    - npm ci --cache .npm --prefer-offline
+  script:
+    - npm run lint
