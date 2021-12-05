@@ -328,7 +328,8 @@ export class MoviesService {
   async findOne(id: number): Promise<MovieDto> {
     let movie;
     try {
-      movie = await this.moviesRepository.findOneOrFail(id, {
+      movie = await this.moviesRepository.findOneOrFail({
+        where: { id },
         relations: [
           'directors',
           'contact',
@@ -367,7 +368,7 @@ export class MoviesService {
     await this.checkIfReferencedContactExists(updateMovieDto.contact);
     await this.checkIfReferencedTagsExist(updateMovieDto);
     try {
-      await this.moviesRepository.findOneOrFail(id);
+      await this.moviesRepository.findOneOrFail({ where: { id } });
     } catch (e) {
       this.logger.error(`Updating movie with id ${id} failed.`, e.stack);
       throw new NotFoundException();
@@ -386,7 +387,7 @@ export class MoviesService {
    */
   async delete(id: number): Promise<void> {
     try {
-      await this.moviesRepository.findOneOrFail(id);
+      await this.moviesRepository.findOneOrFail({ where: { id } });
     } catch (e) {
       this.logger.error(`Deleting movie with id ${id} failed.`, e.stack);
       throw new NotFoundException();

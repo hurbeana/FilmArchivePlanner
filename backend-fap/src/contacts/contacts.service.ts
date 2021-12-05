@@ -115,7 +115,8 @@ export class ContactsService {
   async findOne(id: number): Promise<ContactDto> {
     let contact: Contact;
     try {
-      contact = await this.contactRepository.findOneOrFail(id, {
+      contact = await this.contactRepository.findOneOrFail({
+        where: { id },
         relations: ['type'],
       });
     } catch (e) {
@@ -138,7 +139,7 @@ export class ContactsService {
     await this.validateEmailAndPhone(updateContactDto);
     await this.checkIfReferencedTagExists(updateContactDto.type);
     try {
-      await this.contactRepository.findOneOrFail(id);
+      await this.contactRepository.findOneOrFail({ where: { id } });
     } catch (e) {
       this.logger.error(`Updating contact with id ${id} failed.`, e.stack);
       throw new NotFoundException();
@@ -156,7 +157,7 @@ export class ContactsService {
    */
   async delete(id: number): Promise<void> {
     try {
-      await this.contactRepository.findOneOrFail(id);
+      await this.contactRepository.findOneOrFail({ where: { id } });
     } catch (e) {
       this.logger.error(`Deleting contact with id ${id} failed.`, e.stack);
       throw new NotFoundException();

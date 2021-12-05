@@ -265,7 +265,7 @@ export class DirectorsService {
   async findOne(id: number): Promise<DirectorDto> {
     let director: Director;
     try {
-      director = await this.directorRepository.findOneOrFail(id);
+      director = await this.directorRepository.findOneOrFail({ where: { id } });
     } catch (e) {
       this.logger.error(`Getting director with id ${id} failed.`, e.stack);
       throw new NotFoundException();
@@ -284,7 +284,7 @@ export class DirectorsService {
     updateDirectorDto: CreateUpdateDirectorDto,
   ): Promise<DirectorDto> {
     try {
-      await this.directorRepository.findOneOrFail(id);
+      await this.directorRepository.findOneOrFail({ where: { id } });
     } catch (e) {
       this.logger.error(`Getting director with id ${id} failed.`, e.stack);
       throw new NotFoundException();
@@ -304,7 +304,7 @@ export class DirectorsService {
    */
   async delete(id: number): Promise<void> {
     try {
-      await this.directorRepository.findOneOrFail(id);
+      await this.directorRepository.findOneOrFail({ where: { id } });
     } catch (e) {
       this.logger.error(`Deleting director with id ${id} failed.`, e.stack);
       throw new NotFoundException();

@@ -108,7 +108,7 @@ export class TagsService {
   async findOne(id: number): Promise<TagDto> {
     let tag: Tag;
     try {
-      tag = await this.tagRepository.findOneOrFail(id);
+      tag = await this.tagRepository.findOneOrFail({ where: { id } });
     } catch (e) {
       this.logger.error(`Getting tag with id ${id} failed.`, e.stack);
       throw new NotFoundException();
@@ -152,7 +152,7 @@ export class TagsService {
     await this.validateTag(updateTagDto);
     updateTagDto.value = updateTagDto.value.toLowerCase();
     try {
-      await this.tagRepository.findOneOrFail(id);
+      await this.tagRepository.findOneOrFail({ where: { id } });
     } catch (e) {
       this.logger.error(`Getting tag with id ${id} failed.`, e.stack);
       throw new NotFoundException();
@@ -170,7 +170,7 @@ export class TagsService {
    */
   async delete(id: number): Promise<void> {
     try {
-      await this.tagRepository.findOneOrFail(id);
+      await this.tagRepository.findOneOrFail({ where: { id } });
     } catch (e) {
       this.logger.error(`Deleting tag with id ${id} failed.`, e.stack);
       throw new NotFoundException();
