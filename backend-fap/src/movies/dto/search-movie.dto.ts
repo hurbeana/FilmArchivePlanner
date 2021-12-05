@@ -16,12 +16,9 @@ export class SearchMovieDto extends PartialType(MovieDto) {
       movieFile: '',
       music: '',
       originalTitle: '',
-      previewFile: '',
       productionCompany: '',
       script: '',
       sound: '',
-      submissionCategory: '',
-      trailerFile: '',
     };
   }
 }

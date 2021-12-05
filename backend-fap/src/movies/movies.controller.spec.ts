@@ -10,6 +10,8 @@ import { DirectorsService } from '../directors/directors.service';
 import { Director } from '../directors/entities/director.entity';
 import { ContactsService } from '../contacts/contacts.service';
 import { Contact } from '../contacts/entities/contact.entity';
+import { TagsService } from '../tags/tags.service';
+import { Tag } from '../tags/entities/tag.entity';
 
 describe('MoviesController', () => {
   let controller: MoviesController;
@@ -38,6 +40,11 @@ describe('MoviesController', () => {
         {
           provide: getRepositoryToken(Contact),
           useClass: Repository,
+        },
+        TagsService,
+        {
+          provide: getRepositoryToken(Tag),
+          useClass: Tag,
         },
       ],
     }).compile();

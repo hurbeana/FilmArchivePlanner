@@ -14,6 +14,9 @@ import { DirectorReferenceDto } from '../directors/dto/director-reference.dto';
 import { ContactReferenceDto } from '../contacts/dto/contact-reference.dto';
 import { Contact } from '../contacts/entities/contact.entity';
 import { ContactsService } from '../contacts/contacts.service';
+import { TagsService } from '../tags/tags.service';
+import { Tag } from '../tags/entities/tag.entity';
+import { TagType } from '../tags/tagtype.enum';
 
 const mockId = 1;
 const mockUpdatedAt = new Date();
@@ -23,6 +26,7 @@ describe('MoviesService', () => {
   let moviesService: MoviesService;
   let directorsService: DirectorsService;
   let contactsService: ContactsService;
+  let tagsService: TagsService;
   let repo: Repository<Movie>;
 
   beforeEach(async () => {
@@ -49,12 +53,18 @@ describe('MoviesService', () => {
           provide: getRepositoryToken(Contact),
           useClass: Repository,
         },
+        TagsService,
+        {
+          provide: getRepositoryToken(Tag),
+          useClass: Tag,
+        },
       ],
     }).compile();
 
     moviesService = module.get<MoviesService>(MoviesService);
     directorsService = module.get<DirectorsService>(DirectorsService);
     contactsService = module.get<ContactsService>(ContactsService);
+    tagsService = module.get<TagsService>(TagsService);
     // Save the instance of the repository and set the correct generics
     repo = module.get<Repository<Movie>>(getRepositoryToken(Movie));
   });
@@ -90,6 +100,16 @@ describe('MoviesService', () => {
       });
 
     jest
+      .spyOn(tagsService, 'findOne')
+      .mockImplementation((tagId: number): Promise<Tag> => {
+        return new Promise(function (resolve) {
+          const tag = new Tag();
+          setTagTypeById(tag, tagId);
+          resolve(tag);
+        });
+      });
+
+    jest
       .spyOn(repo, 'save')
       .mockImplementation((movie: Movie): Promise<Movie> => {
         return mockRepoSave(movie);
@@ -116,6 +136,15 @@ describe('MoviesService', () => {
     jest.spyOn(repo, 'findOneOrFail').mockImplementation(() => {
       throw new Error();
     });
+
+    jest
+      .spyOn(directorsService, 'findOne')
+      .mockImplementation((): Promise<Director> => {
+        return new Promise(function (resolve) {
+          resolve(new Director());
+        });
+      });
+
     jest
       .spyOn(contactsService, 'findOne')
       .mockImplementation((): Promise<Contact> => {
@@ -123,9 +152,49 @@ describe('MoviesService', () => {
           resolve(new Contact());
         });
       });
+
+    jest
+      .spyOn(tagsService, 'findOne')
+      .mockImplementation((tagId: number): Promise<Tag> => {
+        return new Promise(function (resolve) {
+          const tag = new Tag();
+          setTagTypeById(tag, tagId);
+          resolve(tag);
+        });
+      });
+
     const createUpdateMovieDto = new CreateUpdateMovieDto();
     createUpdateMovieDto.directors = [];
     createUpdateMovieDto.contact = new Contact();
+
+    const animationTag1 = new Tag();
+    animationTag1.type = TagType.Animation;
+    animationTag1.id = 1;
+    const animationTag2 = new Tag();
+    animationTag2.type = TagType.Animation;
+    animationTag2.id = 2;
+    const categoryTag = new Tag();
+    categoryTag.type = TagType.Category;
+    categoryTag.id = 3;
+    const countryTag = new Tag();
+    countryTag.type = TagType.Country;
+    countryTag.id = 4;
+    const keywordTag = new Tag();
+    keywordTag.type = TagType.Keyword;
+    keywordTag.id = 5;
+    const languageTag = new Tag();
+    languageTag.type = TagType.Language;
+    languageTag.id = 6;
+    const softwareTag = new Tag();
+    softwareTag.type = TagType.Software;
+    softwareTag.id = 7;
+    createUpdateMovieDto.animationTechniques = [animationTag1, animationTag2];
+    createUpdateMovieDto.submissionCategories = [categoryTag];
+    createUpdateMovieDto.countriesOfProduction = [countryTag];
+    createUpdateMovieDto.keywords = [keywordTag];
+    createUpdateMovieDto.dialogLanguages = [languageTag];
+    createUpdateMovieDto.softwareUsed = [softwareTag];
+
     return moviesService.update(1, createUpdateMovieDto).catch((error) => {
       console.log(error.stack);
       expect(error).toBeInstanceOf(NotFoundException);
@@ -155,6 +224,16 @@ describe('MoviesService', () => {
       .mockImplementation((): Promise<Contact> => {
         return new Promise(function (resolve) {
           resolve(new Contact());
+        });
+      });
+
+    jest
+      .spyOn(tagsService, 'findOne')
+      .mockImplementation((tagId: number): Promise<Tag> => {
+        return new Promise(function (resolve) {
+          const tag = new Tag();
+          setTagTypeById(tag, tagId);
+          resolve(tag);
         });
       });
 
@@ -222,8 +301,8 @@ function initializeMovieDto(movieDto: CreateUpdateMovieDto) {
   movieDto.germanSynopsis = 'd';
   movieDto.englishSynopsis = 'g';
   movieDto.contact = contact1;
-  movieDto.submissionCategory = 'i';
   movieDto.isStudentFilm = true;
+  addMockTagsToMovie(movieDto);
 }
 
 function mockRepoSave(movie: Movie): Promise<Movie> {
@@ -242,18 +321,83 @@ function mockRepoCreate(createMovie: CreateUpdateMovieDto): Movie {
   director1.id = createMovie.directors[0].id;
   const director2 = new Director();
   director2.id = createMovie.directors[1].id;
-  movie.directors = [director1, director2];
   const contact1 = new Contact();
   contact1.id = createMovie.contact.id;
-  movie.contact = contact1;
 
   movie.originalTitle = createMovie.originalTitle;
   movie.englishTitle = createMovie.englishTitle;
   movie.movieFile = createMovie.movieFile;
+  movie.directors = [director1, director2];
   movie.duration = createMovie.duration;
   movie.germanSynopsis = createMovie.germanSynopsis;
   movie.englishSynopsis = createMovie.englishSynopsis;
-  movie.submissionCategory = createMovie.submissionCategory;
+  movie.contact = contact1;
   movie.isStudentFilm = createMovie.isStudentFilm;
+  addMockTagsToMovie(movie);
   return movie;
+}
+
+function addMockTagsToMovie(movie) {
+  const animationTag1 = new Tag();
+  animationTag1.type = TagType.Animation;
+  animationTag1.id = 1;
+  const animationTag2 = new Tag();
+  animationTag2.type = TagType.Animation;
+  animationTag2.id = 2;
+  const categoryTag = new Tag();
+  categoryTag.type = TagType.Category;
+  categoryTag.id = 3;
+  const countryTag = new Tag();
+  countryTag.type = TagType.Country;
+  countryTag.id = 4;
+  const keywordTag = new Tag();
+  keywordTag.type = TagType.Keyword;
+  keywordTag.id = 5;
+  const languageTag = new Tag();
+  languageTag.type = TagType.Language;
+  languageTag.id = 6;
+  const softwareTag = new Tag();
+  softwareTag.type = TagType.Software;
+  softwareTag.id = 7;
+  movie.animationTechniques = [animationTag1, animationTag2];
+  movie.submissionCategories = [categoryTag];
+  movie.countriesOfProduction = [countryTag];
+  movie.keywords = [keywordTag];
+  movie.dialogLanguages = [languageTag];
+  movie.softwareUsed = [softwareTag];
+  return movie;
+}
+
+function setTagTypeById(tag, tagId) {
+  switch (tagId) {
+    case 1: {
+      tag.type = TagType.Animation;
+      break;
+    }
+    case 2: {
+      tag.type = TagType.Animation;
+      break;
+    }
+    case 3: {
+      tag.type = TagType.Category;
+      break;
+    }
+    case 4: {
+      tag.type = TagType.Country;
+      break;
+    }
+    case 5: {
+      tag.type = TagType.Keyword;
+      break;
+    }
+    case 6: {
+      tag.type = TagType.Language;
+      break;
+    }
+    case 7: {
+      tag.type = TagType.Software;
+      break;
+    }
+  }
+  return tag;
 }

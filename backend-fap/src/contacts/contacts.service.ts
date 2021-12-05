@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { CreateUpdateContactDto } from './dto/create-update-contact.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/types';
 import { Contact } from './entities/contact.entity';
@@ -17,6 +17,10 @@ import {
   Pagination,
 } from 'nestjs-typeorm-paginate';
 import { SearchContactDto } from './dto/search-contact.dto';
+import { Tag } from '../tags/entities/tag.entity';
+import { TagReferenceDto } from '../tags/dto/tag-reference.dto';
+import { TagsService } from '../tags/tags.service';
+import { TagType } from '../tags/tagtype.enum';
 
 /**
  * Service for contacts CRUD
@@ -28,8 +32,10 @@ export class ContactsService {
     private contactRepository: Repository<Contact>,
     @InjectMapper()
     private mapper: Mapper,
+    private readonly tagsService: TagsService,
   ) {
     this.mapper.createMap(Contact, ContactDto);
+    this.mapper.createMap(Tag, TagReferenceDto);
   }
 
   private readonly logger = new Logger(ContactsService.name);
@@ -41,9 +47,10 @@ export class ContactsService {
    */
   async create(createContactDto: CreateUpdateContactDto): Promise<ContactDto> {
     await this.validateEmailAndPhone(createContactDto);
+    await this.checkIfReferencedTagExists(createContactDto.type);
     const contactParam = this.contactRepository.create(createContactDto);
     const createdContact = await this.contactRepository.save(contactParam);
-    return this.mapContactToDto(createdContact);
+    return this.findOne(createdContact.id);
   }
 
   /**
@@ -62,33 +69,34 @@ export class ContactsService {
     sortOrder: 'ASC' | 'DESC' = 'DESC',
     searchstring: string,
   ): Promise<Pagination<ContactDto>> {
-    const queryBuilder = this.contactRepository.createQueryBuilder('contact');
+    let whereObj = [];
+    let orderObj = {};
     if (searchstring) {
       // searchstring higher prio
-      Object.keys(SearchContactDto.getStringSearch()).forEach((k) =>
-        queryBuilder.orWhere(`contact.${k} ILIKE :${k}`, {
-          [k]: `%${searchstring}%`,
-        }),
-      );
+      whereObj = Object.keys(SearchContactDto.getStringSearch()).map((k) => ({
+        [k]: ILike('%' + searchstring + '%'),
+      }));
     } else if (search) {
-      Object.entries(search)
+      whereObj = Object.entries(search)
         .filter(([, v]) => v) // filter empty properties
-        .forEach(([k, v]) => {
+        .map(([k, v]) => {
           if (typeof v === 'number' || typeof v === 'boolean') {
-            queryBuilder.orWhere(`contact.${k} = :${k}`, { [k]: v });
+            return { [k]: v };
           } else if (typeof v === 'string') {
-            queryBuilder.orWhere(`contact.${k} ILIKE :${k}`, {
-              [k]: `%${v}%`,
-            });
+            return { [k]: ILike('%' + v + '%') };
           } else {
             //TODO: more types?
           }
         });
     }
     if (orderBy) {
-      queryBuilder.orderBy(orderBy, sortOrder);
+      orderObj = { [orderBy]: sortOrder };
     }
-    return paginate<Contact>(queryBuilder, options).then(
+    return paginate<Contact>(this.contactRepository, options, {
+      relations: ['type'],
+      where: whereObj,
+      order: orderObj,
+    }).then(
       (page) =>
         new Pagination<ContactDto>(
           page.items.map((entity) => this.mapContactToDto(entity)),
@@ -106,7 +114,9 @@ export class ContactsService {
   async findOne(id: number): Promise<ContactDto> {
     let contact: Contact;
     try {
-      contact = await this.contactRepository.findOneOrFail(id);
+      contact = await this.contactRepository.findOneOrFail(id, {
+        relations: ['type'],
+      });
     } catch (e) {
       this.logger.error(`Getting contact with id ${id} failed.`, e.stack);
       throw new NotFoundException();
@@ -125,17 +135,18 @@ export class ContactsService {
     updateContactDto: CreateUpdateContactDto,
   ): Promise<ContactDto> {
     await this.validateEmailAndPhone(updateContactDto);
+    await this.checkIfReferencedTagExists(updateContactDto.type);
     try {
       await this.contactRepository.findOneOrFail(id);
     } catch (e) {
-      this.logger.error(`Getting contact with id ${id} failed.`, e.stack);
+      this.logger.error(`Updating contact with id ${id} failed.`, e.stack);
       throw new NotFoundException();
     }
 
     const contactParam = this.contactRepository.create(updateContactDto);
     contactParam.id = id;
     const updatedContact = await this.contactRepository.save(contactParam);
-    return this.mapContactToDto(updatedContact);
+    return this.findOne(updatedContact.id);
   }
 
   /**
@@ -165,5 +176,21 @@ export class ContactsService {
         `Contact ${contact.name} must have a phone or an email.`,
       );
     }
+  }
+
+  private async checkIfReferencedTagExists(tag: TagReferenceDto) {
+    let result;
+    try {
+      result = await this.tagsService.findOne(tag.id);
+    } catch (e) {
+      this.logger.error(`Could not find tag ${tag.id}`, e.stack);
+      throw new BadRequestException(`Tag ${tag.id} does not exist`);
+    }
+    if (result.type !== TagType.Contact) {
+      throw new BadRequestException(
+        `The TagType of tag ${tag.id} must be TagType.Contact`,
+      );
+    }
+    return result;
   }
 }

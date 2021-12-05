@@ -7,7 +7,7 @@ externalDocs:
   description: Git repository
   url: https://reset.inso.tuwien.ac.at/repo/2021ws-ase-pr-group/21ws-ase-pr-qse-04
 servers:
-  - url: http://localhost:3000/api/v1
+  - url: http://localhost:3000
 tags:
   - name: contacts
     description: Endpoints for contact operations
@@ -20,7 +20,7 @@ tags:
   - name: plans
     description: Endpoints for plan operations TODO
   - name: tags
-    description: Endpoints for tag operations TODO
+    description: Endpoints for tag operations
   - name: users
     description: Endpoints for user operations TODO
 paths:
@@ -450,6 +450,150 @@ paths:
         404:
           description: Not found
           content: { }
+
+  /tags:
+    get:
+      tags:
+        - tags
+      summary: Get all tags
+      description: Get all tags from the archive. Query parameters can be used to return only certain tags.
+      operationId: getTags
+      parameters:
+        - in: query
+          name: searchTagPagingDto
+          schema:
+            $ref: '#/components/schemas/SearchTagPagingDto'
+          description: All properties of searchTagPagingDto are valid parameters see specifaction for details. The searchstring parameter disables all detailed field search parameters.
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TagDto'
+        400:
+          description: Invalid input
+          content: { }
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+    post:
+      tags:
+        - tags
+      summary: Add new tag
+      description: Adds a new tag to the archive
+      operationId: addTag
+      requestBody:
+        description: Tag object that needs to be added to the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUpdateTagDto'
+        required: true
+      responses:
+        201:
+          description: Successful creation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagDto'
+        400:
+          description: Invalid input
+          content: { }
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+      x-codegen-request-body-name: body
+  /tags/{id}:
+    get:
+      tags:
+        - tags
+      summary: Get tag
+      description: Returns a single tag with the specified ID
+      operationId: getTagById
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagDto'
+        400:
+          description: Invalid ID supplied
+          content: { }
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+        404:
+          description: Not found
+          content: { }
+    put:
+      tags:
+        - tags
+      summary: Update tag
+      description: Updates the tag with the specified ID
+      operationId: updateTag
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUpdateTagDto'
+      responses:
+        204:
+          description: Operation successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagDto'
+        400:
+          description: Invalid input
+          content: { }
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+        404:
+          description: Not found
+          content: { }
+    delete:
+      tags:
+        - tags
+      summary: Delete tag
+      description: Deletes the tag with the specified ID
+      operationId: deleteTag
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        400:
+          description: Invalid ID supplied
+          content: { }
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+        404:
+          description: Not found
+          content: { }
+
 components:
   parameters:
     Id:
@@ -515,7 +659,7 @@ components:
         countriesOfProduction:
           type: array
           items:
-            type: string # TODO change to tag type
+            $ref: '#/components/schemas/TagReferenceDto'
         yearOfProduction:
           type: integer
           format: int32
@@ -526,27 +670,29 @@ components:
         animationTechniques:
           type: array
           items:
-            type: string # TODO change to tag type
+            $ref: '#/components/schemas/TagReferenceDto'
         softwareUsed:
           type: array
           items:
-            type: string # TODO change to tag type
+            $ref: '#/components/schemas/TagReferenceDto'
         keywords:
           type: array
           items:
-            type: string # TODO change to tag type
+            $ref: '#/components/schemas/TagReferenceDto'
         germanSynopsis:
           type: string
         englishSynopsis:
           type: string
-        submissionCategory:
-          type: string # TODO change to tag type
+        submissionCategories:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagReferenceDto'
         hasDialog:
           type: boolean
         dialogLanguages:
           type: array
           items:
-            type: string # TODO change to tag type
+            $ref: '#/components/schemas/TagReferenceDto'
         hasSubtitles:
           type: boolean
         isStudentFilm:
@@ -584,7 +730,7 @@ components:
     ContactSchema:
       properties:
         type:
-          type: string # TODO change to tag type
+          $ref: '#/components/schemas/TagReferenceDto'
         name:
           type: string
         email:
@@ -593,7 +739,16 @@ components:
           type: string
         website:
           type: string
-
+    TagSchema:
+      properties:
+        type:
+          type: string
+        value:
+          type: string
+        user:
+          type: string # TODO change to user type
+        public:
+          type: boolean
 
     CreateUpdateMovieDto:
       type: object
@@ -606,7 +761,7 @@ components:
         - duration
         - germanSynopsis
         - englishSynopsis
-        - submissionCategory
+        - submissionCategories
         - isStudentFilm
         - contact
       allOf:
@@ -676,3 +831,32 @@ components:
         name:
           type: string
           description: Name of the contact
+
+    CreateUpdateTagDto:
+      type: object
+      required:
+        - type
+        - name
+      allOf:
+        - $ref: '#/components/schemas/TagSchema'
+    TagDto:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/DatabaseEntrySchema'
+        - $ref: '#/components/schemas/CreateUpdateTagDto'
+    SearchTagPagingDto:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PagingSchema'
+        - $ref: '#/components/schemas/TagSchema'
+    TagReferenceDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        value:
+          type: string
+        type:
+          type: string
+

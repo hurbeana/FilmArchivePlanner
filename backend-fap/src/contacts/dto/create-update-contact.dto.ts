@@ -1,10 +1,11 @@
 import { AutoMap } from '@automapper/classes';
-import { IsOptional, IsString } from 'class-validator';
+import { IsNotEmptyObject, IsOptional, IsString } from 'class-validator';
+import { TagReferenceDto } from '../../tags/dto/tag-reference.dto';
 
 export class CreateUpdateContactDto {
   @AutoMap()
-  @IsString()
-  type: string; //TODO Replace this with "Tag"
+  @IsNotEmptyObject()
+  type: TagReferenceDto;
 
   @AutoMap()
   @IsString()

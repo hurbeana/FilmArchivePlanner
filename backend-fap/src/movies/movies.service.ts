@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUpdateMovieDto } from './dto/create-update-movie.dto';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/types';
 import { MovieDto } from './dto/movie.dto';
@@ -24,6 +24,10 @@ import { DirectorsService } from '../directors/directors.service';
 import { ContactReferenceDto } from '../contacts/dto/contact-reference.dto';
 import { ContactsService } from '../contacts/contacts.service';
 import { Contact } from '../contacts/entities/contact.entity';
+import { TagReferenceDto } from '../tags/dto/tag-reference.dto';
+import { Tag } from '../tags/entities/tag.entity';
+import { TagsService } from '../tags/tags.service';
+import { TagType } from '../tags/tagtype.enum';
 
 /**
  * Service for movies CRUD
@@ -37,12 +41,14 @@ export class MoviesService {
     private mapper: Mapper,
     private readonly directorsService: DirectorsService,
     private readonly contactsService: ContactsService,
+    private readonly tagsService: TagsService,
   ) {
     this.mapper.createMap(Director, DirectorReferenceDto).forMember(
       (destination) => destination.fullName,
       mapFrom((source) => source.firstName + ' ' + source.lastName),
     );
     this.mapper.createMap(Contact, ContactReferenceDto);
+    this.mapper.createMap(Tag, TagReferenceDto);
     this.mapper.createMap(Movie, MovieDto);
   }
 
@@ -56,6 +62,7 @@ export class MoviesService {
   async create(createMovieDto: CreateUpdateMovieDto): Promise<MovieDto> {
     await this.checkIfReferencedDirectorsExist(createMovieDto.directors);
     await this.checkIfReferencedContactExists(createMovieDto.contact);
+    await this.checkIfReferencedTagsExist(createMovieDto);
     const movieParam = this.moviesRepository.create(createMovieDto);
     const createdMovie = await this.moviesRepository.save(movieParam);
     return this.findOne(createdMovie.id);
@@ -77,34 +84,43 @@ export class MoviesService {
     sortOrder: 'ASC' | 'DESC' = 'DESC',
     searchstring: string,
   ): Promise<Pagination<MovieDto>> {
-    const queryBuilder = this.moviesRepository
-      .createQueryBuilder('movie')
-      .leftJoinAndSelect('movie.directors', 'director')
-      .leftJoinAndSelect('movie.contact', 'contact');
+    let whereObj = [];
+    let orderObj = {};
     if (searchstring) {
       // searchstring higher prio
-      Object.keys(SearchMovieDto.getStringSearch()).forEach((k) =>
-        queryBuilder.orWhere(`movie.${k} ILIKE :${k}`, {
-          [k]: `%${searchstring}%`,
-        }),
-      );
+      whereObj = Object.keys(SearchMovieDto.getStringSearch()).map((k) => ({
+        [k]: ILike('%' + searchstring + '%'),
+      }));
     } else if (search) {
-      Object.entries(search)
+      whereObj = Object.entries(search)
         .filter(([, v]) => v) // filter empty properties
-        .forEach(([k, v]) => {
+        .map(([k, v]) => {
           if (typeof v === 'number' || typeof v === 'boolean') {
-            queryBuilder.orWhere(`movie.${k} = :${k}`, { [k]: v });
+            return { [k]: v };
           } else if (typeof v === 'string') {
-            queryBuilder.orWhere(`movie.${k} ILIKE :${k}`, { [k]: `%${v}%` });
+            return { [k]: ILike('%' + v + '%') };
           } else {
             //TODO: more types?
           }
         });
     }
     if (orderBy) {
-      queryBuilder.orderBy(orderBy, sortOrder);
+      orderObj = { [orderBy]: sortOrder };
     }
-    return paginate<Movie>(queryBuilder, options).then(
+    return paginate<Movie>(this.moviesRepository, options, {
+      relations: [
+        'directors',
+        'contact',
+        'countriesOfProduction',
+        'animationTechniques',
+        'softwareUsed',
+        'keywords',
+        'submissionCategories',
+        'dialogLanguages',
+      ],
+      where: whereObj,
+      order: orderObj,
+    }).then(
       (page) =>
         new Pagination<MovieDto>(
           page.items.map((entity) => this.mapMovieToDto(entity)),
@@ -121,7 +137,18 @@ export class MoviesService {
    */
   findOne(id: number): Promise<MovieDto> {
     return this.moviesRepository
-      .findOneOrFail(id, { relations: ['directors', 'contact'] })
+      .findOneOrFail(id, {
+        relations: [
+          'directors',
+          'contact',
+          'countriesOfProduction',
+          'animationTechniques',
+          'softwareUsed',
+          'keywords',
+          'submissionCategories',
+          'dialogLanguages',
+        ],
+      })
       .then((entity) => this.mapMovieToDto(entity))
       .catch((e) => {
         this.logger.error(`Getting movie with id ${id} failed.`, e.stack);
@@ -141,6 +168,7 @@ export class MoviesService {
   ): Promise<MovieDto> {
     await this.checkIfReferencedDirectorsExist(updateMovieDto.directors);
     await this.checkIfReferencedContactExists(updateMovieDto.contact);
+    await this.checkIfReferencedTagsExist(updateMovieDto);
     try {
       await this.moviesRepository.findOneOrFail(id);
     } catch (e) {
@@ -162,7 +190,7 @@ export class MoviesService {
     try {
       await this.moviesRepository.findOneOrFail(id);
     } catch (e) {
-      this.logger.error('Error while deleting movie with ID ' + id, e.stack);
+      this.logger.error(`Deleting movie with id ${id} failed.`, e.stack);
       throw new NotFoundException();
     }
     await this.moviesRepository.delete(id);
@@ -191,6 +219,57 @@ export class MoviesService {
     } catch (e) {
       this.logger.error(`Could not find contact ${contact.id}`, e.stack);
       throw new BadRequestException(`Contact ${contact.id} does not exist`);
+    }
+  }
+
+  private async checkIfReferencedTagsExist(movieDto: CreateUpdateMovieDto) {
+    const checkArray = [
+      {
+        tags: movieDto.animationTechniques,
+        type: TagType.Animation,
+        name: 'animationTechniques',
+      },
+      {
+        tags: movieDto.submissionCategories,
+        type: TagType.Category,
+        name: 'submissionCategories',
+      },
+      {
+        tags: movieDto.countriesOfProduction,
+        type: TagType.Country,
+        name: 'countriesOfProduction',
+      },
+      {
+        tags: movieDto.keywords,
+        type: TagType.Keyword,
+        name: 'keywords',
+      },
+      {
+        tags: movieDto.dialogLanguages,
+        type: TagType.Language,
+        name: 'dialogLanguages',
+      },
+      {
+        tags: movieDto.softwareUsed,
+        type: TagType.Software,
+        name: 'softwareUsed',
+      },
+    ];
+    for (const obj of checkArray) {
+      for (const tag of obj.tags) {
+        let result;
+        try {
+          result = await this.tagsService.findOne(tag.id);
+        } catch (e) {
+          this.logger.error(`Could not find tag ${tag.id}`, e.stack);
+          throw new BadRequestException(`Tag ${tag.id} does not exist`);
+        }
+        if (result.type !== obj.type) {
+          throw new BadRequestException(
+            `The TagTypes of ${obj.name} must all be ${obj.type}`,
+          );
+        }
+      }
     }
   }
 }

@@ -13,6 +13,7 @@ import { DatabaseModule } from './database/database.module';
 import { DirectorsModule } from './directors/directors.module';
 import configuration from './config/configuration';
 import { ContactsModule } from './contacts/contacts.module';
+import { TagsModule } from './tags/tags.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ContactsModule } from './contacts/contacts.module';
     DatabaseModule,
     DirectorsModule,
     ContactsModule,
+    TagsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,16 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ContactsController } from './contacts.controller';
-import { ContactsService } from './contacts.service';
+import { TagsController } from './tags.controller';
+import { TagsService } from './tags.service';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Contact } from './entities/contact.entity';
+import { Tag } from './entities/tag.entity';
 import { Repository } from 'typeorm';
-import { TagsService } from '../tags/tags.service';
-import { Tag } from '../tags/entities/tag.entity';
 
-describe('ContactsController', () => {
-  let controller: ContactsController;
+describe('TagsController', () => {
+  let controller: TagsController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -20,22 +18,17 @@ describe('ContactsController', () => {
           singular: true,
         }),
       ],
-      controllers: [ContactsController],
+      controllers: [TagsController],
       providers: [
-        ContactsService,
-        {
-          provide: getRepositoryToken(Contact),
-          useClass: Repository,
-        },
         TagsService,
         {
           provide: getRepositoryToken(Tag),
-          useClass: Tag,
+          useClass: Repository,
         },
       ],
     }).compile();
 
-    controller = module.get<ContactsController>(ContactsController);
+    controller = module.get<TagsController>(TagsController);
   });
 
   it('should be defined', () => {

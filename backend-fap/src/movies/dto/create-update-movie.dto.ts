@@ -14,6 +14,7 @@ import { AutoMap } from '@automapper/classes';
 import { Type } from 'class-transformer';
 import { DirectorReferenceDto } from '../../directors/dto/director-reference.dto';
 import { ContactReferenceDto } from '../../contacts/dto/contact-reference.dto';
+import { TagReferenceDto } from '../../tags/dto/tag-reference.dto';
 
 export class CreateUpdateMovieDto {
   @AutoMap()
@@ -59,10 +60,11 @@ export class CreateUpdateMovieDto {
   @Type(() => DirectorReferenceDto)
   directors: DirectorReferenceDto[];
 
-  @AutoMap()
-  @IsOptional()
-  @IsString({ each: true })
-  countriesOfProduction?: string[]; //TODO Replace with Tag[]
+  @AutoMap({ typeFn: () => TagReferenceDto })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => TagReferenceDto)
+  countriesOfProduction?: TagReferenceDto[];
 
   @AutoMap()
   @IsOptional()
@@ -75,20 +77,23 @@ export class CreateUpdateMovieDto {
   @IsPositive()
   duration: number;
 
-  @AutoMap()
-  @IsOptional()
-  @IsString({ each: true })
-  animationTechniques?: string[]; //TODO Replace with Tag[]
+  @AutoMap({ typeFn: () => TagReferenceDto })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => TagReferenceDto)
+  animationTechniques?: TagReferenceDto[];
 
-  @AutoMap()
-  @IsOptional()
-  @IsString({ each: true })
-  softwareUsed?: string[]; //TODO Replace with Tag[]
+  @AutoMap({ typeFn: () => TagReferenceDto })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => TagReferenceDto)
+  softwareUsed?: TagReferenceDto[];
 
-  @AutoMap()
-  @IsOptional()
-  @IsString({ each: true })
-  keywords?: string[]; //TODO Replace with Tag[]
+  @AutoMap({ typeFn: () => TagReferenceDto })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => TagReferenceDto)
+  keywords?: TagReferenceDto[];
 
   @AutoMap()
   @IsString()
@@ -100,20 +105,23 @@ export class CreateUpdateMovieDto {
   @IsNotEmpty()
   englishSynopsis: string;
 
-  @AutoMap()
-  @IsString()
-  @IsNotEmpty()
-  submissionCategory: string; //TODO Replace with Tag
+  @AutoMap({ typeFn: () => TagReferenceDto })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @ArrayNotEmpty()
+  @Type(() => TagReferenceDto)
+  submissionCategories: TagReferenceDto[]; // TODO allow empty Array like the others???
 
   @AutoMap()
   @IsOptional()
   @IsBoolean()
   hasDialog?: boolean;
 
-  @AutoMap()
-  @IsOptional()
-  @IsString({ each: true })
-  dialogLanguages?: string[]; //TODO Replace with Tag[]
+  @AutoMap({ typeFn: () => TagReferenceDto })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => TagReferenceDto)
+  dialogLanguages?: TagReferenceDto[];
 
   @AutoMap()
   @IsOptional()

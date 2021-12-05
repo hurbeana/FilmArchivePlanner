@@ -11,6 +11,7 @@ import {
 import { AutoMap } from '@automapper/classes';
 import { Director } from '../../directors/entities/director.entity';
 import { Contact } from '../../contacts/entities/contact.entity';
+import { Tag } from '../../tags/entities/tag.entity';
 
 @Entity()
 export class Movie {
@@ -59,9 +60,10 @@ export class Movie {
   @JoinTable()
   directors: Director[];
 
-  @AutoMap()
-  @Column('simple-array', { nullable: true }) //Replace simple-array?
-  countriesOfProduction?: string[]; //TODO Replace with Tag[]
+  @AutoMap({ typeFn: () => Tag })
+  @ManyToMany(() => Tag)
+  @JoinTable()
+  countriesOfProduction?: Tag[];
 
   @AutoMap()
   @Column({ nullable: true })
@@ -71,17 +73,20 @@ export class Movie {
   @Column('bigint')
   duration: number;
 
-  @AutoMap()
-  @Column('simple-array', { nullable: true }) //Replace simple-array
-  animationTechniques?: string[]; //TODO Replace with Tag[]
+  @AutoMap({ typeFn: () => Tag })
+  @ManyToMany(() => Tag)
+  @JoinTable()
+  animationTechniques?: Tag[];
 
-  @AutoMap()
-  @Column('simple-array', { nullable: true }) //Replace simple-array
-  softwareUsed?: string[]; //TODO Replace with Tag[]
+  @AutoMap({ typeFn: () => Tag })
+  @ManyToMany(() => Tag)
+  @JoinTable()
+  softwareUsed?: Tag[];
 
-  @AutoMap()
-  @Column('simple-array', { nullable: true }) //Replace simple-array
-  keywords?: string[]; //TODO Replace with Tag[]
+  @AutoMap({ typeFn: () => Tag })
+  @ManyToMany(() => Tag)
+  @JoinTable()
+  keywords?: Tag[];
 
   @AutoMap()
   @Column()
@@ -91,17 +96,19 @@ export class Movie {
   @Column()
   englishSynopsis: string;
 
-  @AutoMap()
-  @Column()
-  submissionCategory: string; //TODO Replace with Tag
+  @AutoMap({ typeFn: () => Tag })
+  @ManyToMany(() => Tag)
+  @JoinTable()
+  submissionCategories: Tag[];
 
   @AutoMap()
   @Column({ nullable: true })
   hasDialog?: boolean;
 
-  @AutoMap()
-  @Column('simple-array', { nullable: true }) //Replace simple-array
-  dialogLanguages?: string[]; //TODO Replace with Tag[]
+  @AutoMap({ typeFn: () => Tag })
+  @ManyToMany(() => Tag)
+  @JoinTable()
+  dialogLanguages?: Tag[];
 
   @AutoMap()
   @Column({ nullable: true })

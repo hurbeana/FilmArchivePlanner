@@ -1,18 +1,15 @@
 import {
-  Check,
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { AutoMap } from '@automapper/classes';
-import { Tag } from '../../tags/entities/tag.entity';
+import { TagType } from '../tagtype.enum';
 
 @Entity()
-@Check('"email" IS NOT NULL OR "phone" IS NOT NULL')
-export class Contact {
+export class Tag {
   @AutoMap()
   @PrimaryGeneratedColumn()
   id: number;
@@ -26,22 +23,22 @@ export class Contact {
   last_updated: Date;
 
   @AutoMap()
-  @ManyToOne(() => Tag)
-  type: Tag;
+  @Column({
+    type: 'enum',
+    enum: TagType,
+    default: TagType.Keyword,
+  })
+  type: TagType;
 
   @AutoMap()
   @Column()
-  name: string;
+  value: string;
 
   @AutoMap()
-  @Column({ nullable: true })
-  email?: string;
+  @Column()
+  user: string; //TODO: Replace with user entity
 
   @AutoMap()
-  @Column({ nullable: true })
-  phone?: string;
-
-  @AutoMap()
-  @Column({ nullable: true })
-  website?: string;
+  @Column({ default: true })
+  public: boolean;
 }
