@@ -8,6 +8,12 @@ import { classes } from '@automapper/classes';
 import { CreateUpdateDirectorDto } from './dto/create-update-director.dto';
 import { DirectorDto } from './dto/director.dto';
 import { NotFoundException } from '@nestjs/common';
+import {
+  BiographyEnglishFile,
+  BiographyGermanFile,
+  FilmographyFile,
+} from './entities/directorfiles.entity';
+import { FILES_PERSISTENCY_PROVIDER } from '../files/files.constants';
 
 const mockId = 1;
 const mockUpdatedAt = new Date();
@@ -30,6 +36,26 @@ describe('DirectorsService', () => {
         {
           provide: getRepositoryToken(Director),
           useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(Director),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(BiographyEnglishFile),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(BiographyGermanFile),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(FilmographyFile),
+          useClass: Repository,
+        },
+        {
+          provide: FILES_PERSISTENCY_PROVIDER,
+          useValue: {},
         },
       ],
     }).compile();
@@ -65,6 +91,14 @@ describe('DirectorsService', () => {
           return mockRepoCreate(createDirector);
         },
       );
+
+    jest
+      .spyOn(service, 'findOne')
+      .mockImplementation((id: number): Promise<DirectorDto> => {
+        return new Promise(function (resolve) {
+          resolve(directorDto); // TODO investigate the find one
+        });
+      });
 
     expect(await service.create(createDirectorDto)).toEqual(directorDto);
   });
@@ -133,9 +167,6 @@ describe('DirectorsService', () => {
 });
 
 function initializeDirectorDto(directorDto: CreateUpdateDirectorDto) {
-  directorDto.biographyEnglish = 'a';
-  directorDto.biographyGerman = 'b';
-  directorDto.filmography = 'c';
   directorDto.firstName = 'd';
   directorDto.middleName = 'e';
   directorDto.lastName = 'f';
@@ -154,9 +185,6 @@ function mockRepoCreate(
   createUpdateDirectorDto: CreateUpdateDirectorDto,
 ): Director {
   const director = new Director();
-  director.biographyEnglish = createUpdateDirectorDto.biographyEnglish;
-  director.biographyGerman = createUpdateDirectorDto.biographyGerman;
-  director.filmography = createUpdateDirectorDto.filmography;
   director.firstName = createUpdateDirectorDto.firstName;
   director.middleName = createUpdateDirectorDto.middleName;
   director.lastName = createUpdateDirectorDto.lastName;

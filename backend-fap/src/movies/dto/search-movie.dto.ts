@@ -13,7 +13,6 @@ export class SearchMovieDto extends PartialType(MovieDto) {
       englishTitle: '',
       filmSchool: '',
       germanSynopsis: '',
-      movieFile: '',
       music: '',
       originalTitle: '',
       productionCompany: '',

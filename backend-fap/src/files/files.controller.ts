@@ -1,67 +1,120 @@
+import { IFsService } from './interfaces/fs-service.interface';
+import { FILES_PERSISTENCY_PROVIDER } from './files.constants';
 import {
+  Body,
   Controller,
   Delete,
   Get,
+  Inject,
+  Logger,
   NotImplementedException,
   Param,
   Post,
+  Query,
+  Response,
+  StreamableFile,
   UploadedFile,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
 import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
+import { createReadStream } from 'fs';
 import { CachedFileDto } from './dto/cached-file.dto';
-import { FilesService } from './files.service';
+import { GetRemoveFileDto } from './dto/get-remove-file.dto';
 
 @Controller('files')
 export class FilesController {
-  constructor(private readonly filesService: FilesService) {}
+  private readonly logger = new Logger(FilesController.name);
 
-  @Get('/cache/:id')
-  findOneCache(@Param('id') id: string): CachedFileDto {
-    console.log(id);
-    // TODO: return metainformation about cached file
-    // return this.filesService.findOne(id);
-    throw new NotImplementedException();
+  constructor(
+    @Inject(FILES_PERSISTENCY_PROVIDER)
+    private readonly filesService: IFsService,
+  ) {}
+
+  /**
+   * Contact cache and return cached file infos
+   *
+   * @param {string} cid ID of cached file
+   * @returns {CachedFileDto} Information on the cached file
+   */
+  @Get('/cache/:cid')
+  async getInfoCache(@Param('cid') cid: string): Promise<CachedFileDto> {
+    return this.filesService.getCachedInfo(cid);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: number) {
-    console.log(id);
-    // TODO: retrieves and stream file from persistent storage
-    // return this.filesService.findOne(id);
-    throw new NotImplementedException();
+  /**
+   * Retrieves and sends file from remote storage
+   *
+   * @param {string} pid The string path to the file on remote storage
+   * @param {*} res The expressjs response object
+   * @returns {StreamableFile} A streamable file via http
+   */
+  @Get(':pid')
+  async getFile(
+    @Param('pid') pid: string,
+    @Query() getRemoveFileDto: GetRemoveFileDto,
+    @Response({ passthrough: true })
+    res,
+  ): Promise<StreamableFile> {
+    this.logger.log(`Starting file serving`);
+    const cachePath = await this.filesService.getFile(pid, getRemoveFileDto);
+    this.logger.log(`Serving file ${cachePath.filename}`);
+    const file = createReadStream(cachePath.path);
+    res.set({
+      'Content-Type': cachePath.mimetype,
+      'Content-Disposition': `attachment; filename="${cachePath.originalname}`,
+    });
+    return new StreamableFile(file);
   }
 
+  /**
+   * Saves a file to cache and returns cached files' information
+   *
+   * @param {Express.Multer.File} file The file to be cached from Multer
+   * @returns {Promise<CachedFileDto>} The cached files' information
+   */
   @Post('/cache')
   @UseInterceptors(FileInterceptor('file'))
-  uploadFile(@UploadedFile() file: Express.Multer.File): CachedFileDto {
-    // TODO: Saves multiple files and returns their metadata (CachedFile)
-    console.log(file);
-    throw new NotImplementedException();
+  async uploadFile(
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<CachedFileDto> {
+    return this.filesService.cacheFile(file);
   }
 
+  /**
+   * Saves multiple files to persistent storage and returns all cached files' information
+   *
+   * @param {Array<Express.Multer.File>} files The files to be cached
+   * @returns {*} An Array of the cached files' information
+   */
   @Post('/cache/many')
   @UseInterceptors(AnyFilesInterceptor())
-  uploadFiles(
-    @UploadedFiles() files: Array<Express.Multer.File>,
-  ): Array<CachedFileDto> {
-    // TODO: Same as uploadFile but for multiple files
-    console.log(files);
-    throw new NotImplementedException();
+  async uploadFiles(@UploadedFiles() files: Array<Express.Multer.File>) {
+    files.map((file) => this.filesService.cacheFile(file));
+    return files;
   }
 
+  /**
+   * Removes the cached file from cache given its cache id
+   *
+   * @param {string} id The cached files' id from cache
+   * @returns {Promise<CachedFileDto>} The removed files informations from cache
+   */
   @Delete('/cache/:id')
-  removeFileCache(@Param('id') id: string) {
-    // TODO: remove from cache (remove redis key/values)
-    console.log(id);
-    throw new NotImplementedException();
+  async removeFileCache(@Param('id') id: string): Promise<CachedFileDto> {
+    return this.filesService.removeCachedFile(id);
   }
 
+  /**
+   * Removes file from remote permanently storage
+   *
+   * @param {string} id The Path entity id
+   */
   @Delete(':id')
-  removeFile(@Param('id') id: string) {
-    // TODO: remove from persistent storage
-    console.log(id);
-    throw new NotImplementedException();
+  async removeFile(
+    @Param('id') id: string,
+    @Query() getRemoveFileDto: GetRemoveFileDto,
+  ): Promise<void> {
+    await this.filesService.removeFile(id, getRemoveFileDto);
   }
 }

@@ -12,6 +12,20 @@ import { ContactsService } from '../contacts/contacts.service';
 import { Contact } from '../contacts/entities/contact.entity';
 import { TagsService } from '../tags/tags.service';
 import { Tag } from '../tags/entities/tag.entity';
+import {
+  BiographyEnglishFile,
+  BiographyGermanFile,
+  FilmographyFile,
+} from '../directors/entities/directorfiles.entity';
+import { FILES_PERSISTENCY_PROVIDER } from '../files/files.constants';
+import {
+  MovieFile,
+  DCPFile,
+  PreviewFile,
+  TrailerFile,
+  StillFile,
+  SubtitleFile,
+} from './entities/moviefiles.entity';
 
 describe('MoviesController', () => {
   let controller: MoviesController;
@@ -44,7 +58,55 @@ describe('MoviesController', () => {
         TagsService,
         {
           provide: getRepositoryToken(Tag),
-          useClass: Tag,
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(MovieFile),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(DCPFile),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(PreviewFile),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(TrailerFile),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(StillFile),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(SubtitleFile),
+          useClass: Repository,
+        },
+        {
+          provide: FILES_PERSISTENCY_PROVIDER,
+          useValue: {},
+        },
+        {
+          provide: getRepositoryToken(Director),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(BiographyEnglishFile),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(BiographyGermanFile),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(FilmographyFile),
+          useClass: Repository,
+        },
+        {
+          provide: FILES_PERSISTENCY_PROVIDER,
+          useValue: {},
         },
       ],
     }).compile();

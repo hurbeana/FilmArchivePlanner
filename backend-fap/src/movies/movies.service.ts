@@ -1,6 +1,10 @@
+import { IFsService } from './../files/interfaces/fs-service.interface';
 import { Movie } from './entities/movie.entity';
 import {
   BadRequestException,
+  HttpException,
+  HttpStatus,
+  Inject,
   Injectable,
   Logger,
   NotFoundException,
@@ -28,6 +32,21 @@ import { TagReferenceDto } from '../tags/dto/tag-reference.dto';
 import { Tag } from '../tags/entities/tag.entity';
 import { TagsService } from '../tags/tags.service';
 import { TagType } from '../tags/tagtype.enum';
+import { FILES_PERSISTENCY_PROVIDER } from '../files/files.constants';
+import { FileDto } from '../files/dto/file.dto';
+import { File } from '../files/entities/file.entity';
+import {
+  DCPFile,
+  MovieFile,
+  PreviewFile,
+  StillFile,
+  SubtitleFile,
+  TrailerFile,
+} from './entities/moviefiles.entity';
+import { join } from 'path';
+import { MOVIEROOTFOLDER } from './movies.constants';
+import { MovieFilesFolder } from './movies.enum';
+import * as namor from 'namor';
 
 /**
  * Service for movies CRUD
@@ -37,11 +56,25 @@ export class MoviesService {
   constructor(
     @InjectRepository(Movie)
     private moviesRepository: Repository<Movie>,
+    @InjectRepository(MovieFile)
+    private movieFilesRepository: Repository<MovieFile>,
+    @InjectRepository(DCPFile)
+    private dcpFilesRepository: Repository<DCPFile>,
+    @InjectRepository(PreviewFile)
+    private previewFilesRepository: Repository<PreviewFile>,
+    @InjectRepository(TrailerFile)
+    private trailerFilesRepository: Repository<TrailerFile>,
+    @InjectRepository(StillFile)
+    private stillFilesRepository: Repository<StillFile>,
+    @InjectRepository(SubtitleFile)
+    private subtitlesFilesRepository: Repository<SubtitleFile>,
     @InjectMapper()
     private mapper: Mapper,
     private readonly directorsService: DirectorsService,
     private readonly contactsService: ContactsService,
     private readonly tagsService: TagsService,
+    @Inject(FILES_PERSISTENCY_PROVIDER)
+    private filesServices: IFsService,
   ) {
     this.mapper.createMap(Director, DirectorReferenceDto).forMember(
       (destination) => destination.fullName,
@@ -50,9 +83,165 @@ export class MoviesService {
     this.mapper.createMap(Contact, ContactReferenceDto);
     this.mapper.createMap(Tag, TagReferenceDto);
     this.mapper.createMap(Movie, MovieDto);
+    this.mapper.createMap(MovieFile, FileDto);
+    this.mapper.createMap(DCPFile, FileDto);
+    this.mapper.createMap(PreviewFile, FileDto);
+    this.mapper.createMap(TrailerFile, FileDto);
+    this.mapper.createMap(StillFile, FileDto);
+    this.mapper.createMap(SubtitleFile, FileDto);
   }
 
   private readonly logger = new Logger(MoviesService.name);
+
+  private async createFiles(
+    createUpdateMovieDto: CreateUpdateMovieDto,
+  ): Promise<Movie> {
+    // get or create folderId for unique folders
+    if (createUpdateMovieDto.folderId === undefined) {
+      createUpdateMovieDto.folderId = namor.generate();
+    }
+    // generate basepath for this movie
+    const basePath = join(
+      MOVIEROOTFOLDER,
+      `${createUpdateMovieDto.originalTitle.replace(/ /g, '_')}-${
+        createUpdateMovieDto.folderId
+      }`,
+    );
+
+    // TODO: I think this check for undefined may not work correctly
+    // check if cached files to be commited contain duplicates and if there are any throw an exception
+    const allFiles = []
+      .concat(
+        createUpdateMovieDto.movieFiles,
+        createUpdateMovieDto.dcpFiles,
+        createUpdateMovieDto.previewFile,
+        createUpdateMovieDto.trailerFile,
+        createUpdateMovieDto.stillFiles,
+        createUpdateMovieDto.subtitleFiles,
+      )
+      .filter((x) => x);
+
+    const allFileNames = [];
+    const duplicateNames = new Set<string>();
+
+    // duplicates can be cached file to cached file and cached file to already persisted file (when updating a movie)
+    for (const file of allFiles) {
+      if (file !== undefined) {
+        if (file.path === undefined) {
+          const cachedFileName = (
+            await this.filesServices.getCachedInfo(file.id)
+          ).originalname;
+          allFileNames.push(cachedFileName);
+        } else {
+          allFileNames.push(file.filename);
+        }
+      }
+    }
+
+    for (let i = 0; i < allFileNames.length; i++) {
+      for (let j = 0; j < allFileNames.length; j++) {
+        if (i === j) continue;
+        if (allFileNames[i] === allFileNames[j]) {
+          duplicateNames.add(allFileNames[i]);
+        }
+      }
+    }
+
+    if (duplicateNames.size > 0) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          error: 'Following files names are duplicate',
+          files: Array.from(duplicateNames.values()),
+        },
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+
+    // helper function to commit only cached files, may be extracted to a utiltiy service
+    const commitFiles = async <T extends File>(
+      basePath: string,
+      fileDtos: FileDto[],
+      repository: Repository<File>,
+      folder = '',
+    ): Promise<T[]> => {
+      if (!fileDtos || !fileDtos[0]) {
+        return [];
+      }
+      const entities = [];
+      const cachedFileDtos = fileDtos.filter((file) => file.path === undefined);
+      const storedFileDtos = fileDtos.filter((file) => file.path !== undefined);
+      for (const fileDto of cachedFileDtos) {
+        const path = [basePath];
+        if (folder !== '') path.push(folder);
+        this.logger.log('Calling fileservices with');
+        const resultDto = await this.filesServices.commitFile(
+          fileDto.id as string,
+          path,
+        );
+        const entity = await repository.save(
+          repository.create(resultDto as any),
+        );
+        entities.push(entity);
+      }
+      return [...storedFileDtos, ...entities] as T[];
+    };
+
+    // were good, commit all files
+    const movieFiles = await commitFiles<MovieFile>(
+      basePath,
+      createUpdateMovieDto.movieFiles,
+      this.movieFilesRepository,
+      MovieFilesFolder.MOVIEFILES,
+    );
+
+    const dcpFiles = await commitFiles<DCPFile>(
+      basePath,
+      createUpdateMovieDto.dcpFiles,
+      this.dcpFilesRepository,
+      MovieFilesFolder.DCPFILES,
+    );
+
+    const previewFile = (
+      await commitFiles<PreviewFile>(
+        basePath,
+        [createUpdateMovieDto.previewFile],
+        this.previewFilesRepository,
+        MovieFilesFolder.PREVIEWFILE,
+      )
+    )[0];
+    const trailerFile = (
+      await commitFiles<TrailerFile>(
+        basePath,
+        [createUpdateMovieDto.trailerFile],
+        this.trailerFilesRepository,
+        MovieFilesFolder.TRAILERFILE,
+      )
+    )[0];
+    const stillFiles = await commitFiles<StillFile>(
+      basePath,
+      createUpdateMovieDto.stillFiles,
+      this.stillFilesRepository,
+      MovieFilesFolder.STILLFILES,
+    );
+    const subtitleFiles = await commitFiles<SubtitleFile>(
+      basePath,
+      createUpdateMovieDto.subtitleFiles,
+      this.subtitlesFilesRepository,
+      MovieFilesFolder.SUBTITLEFILES,
+    );
+
+    // create the new movie
+    return this.moviesRepository.create({
+      ...createUpdateMovieDto,
+      movieFiles,
+      dcpFiles,
+      previewFile,
+      trailerFile,
+      stillFiles,
+      subtitleFiles,
+    });
+  }
 
   /**
    * Saves a movie to the database
@@ -63,8 +252,9 @@ export class MoviesService {
     await this.checkIfReferencedDirectorsExist(createMovieDto.directors);
     await this.checkIfReferencedContactExists(createMovieDto.contact);
     await this.checkIfReferencedTagsExist(createMovieDto);
-    const movieParam = this.moviesRepository.create(createMovieDto);
-    const createdMovie = await this.moviesRepository.save(movieParam);
+    const createdMovie = await this.moviesRepository.save(
+      await this.createFiles(createMovieDto),
+    );
     return this.findOne(createdMovie.id);
   }
 
@@ -77,7 +267,7 @@ export class MoviesService {
    * @param searchstring
    * @returns {Promise<Pagination<MovieDto>>} The movies in a paginated form
    */
-  find(
+  async find(
     options: IPaginationOptions,
     search: SearchMovieDto,
     orderBy: string,
@@ -135,9 +325,10 @@ export class MoviesService {
    * @param id the id of the movie to return
    * @returns {Promise<MovieDto>} The movie with the specified id
    */
-  findOne(id: number): Promise<MovieDto> {
-    return this.moviesRepository
-      .findOneOrFail(id, {
+  async findOne(id: number): Promise<MovieDto> {
+    let movie;
+    try {
+      movie = await this.moviesRepository.findOneOrFail(id, {
         relations: [
           'directors',
           'contact',
@@ -147,13 +338,19 @@ export class MoviesService {
           'keywords',
           'submissionCategories',
           'dialogLanguages',
+          'movieFiles',
+          'dcpFiles',
+          'previewFile',
+          'trailerFile',
+          'stillFiles',
+          'subtitleFiles',
         ],
-      })
-      .then((entity) => this.mapMovieToDto(entity))
-      .catch((e) => {
-        this.logger.error(`Getting movie with id ${id} failed.`, e.stack);
-        throw new NotFoundException();
       });
+    } catch (e) {
+      this.logger.error(`Getting movie with id ${id} failed.`, e.stack);
+      throw new NotFoundException();
+    }
+    return this.mapMovieToDto(movie);
   }
 
   /**
@@ -176,9 +373,10 @@ export class MoviesService {
       throw new NotFoundException();
     }
 
-    const movieParam = this.moviesRepository.create(updateMovieDto);
+    const movieParam = await this.createFiles(updateMovieDto);
     movieParam.id = id;
     const updatedMovie = await this.moviesRepository.save(movieParam);
+    //return updatedMovie;
     return this.findOne(updatedMovie.id);
   }
 

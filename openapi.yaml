@@ -23,6 +23,8 @@ tags:
     description: Endpoints for tag operations
   - name: users
     description: Endpoints for user operations TODO
+  - name: files
+    description: Endpoints for file operations
 paths:
   /movies:
     get:
@@ -594,6 +596,183 @@ paths:
           description: Not found
           content: { }
 
+  /files/cache/many:
+    post:
+      tags:
+        - files
+      summary: Add new many cached file
+      description: Adds a new many file to the cache
+      operationId: addManyCachedfile
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+        required: true
+      responses:
+        201:
+          description: Successful creation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecvFileDto'
+        400:
+          description: Invalid input
+          content: { }
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+      x-codegen-request-body-name: body
+  /files/cache/{id}:
+    get:
+      tags:
+        - files
+      summary: Get cached file
+      description: Returns a single cached file with the specified ID
+      operationId: getCachedFileById
+      parameters:
+        - $ref: '#/components/parameters/UuId'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecvFileDto'
+        400:
+          description: Invalid ID supplied
+          content: { }
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+        404:
+          description: Not found
+          content: { }
+    post:
+      tags:
+        - files
+      summary: Add new cached file
+      description: Adds a new file to the cache
+      operationId: addCachedfile
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                # 'file' will be the field name in this multipart request
+                file:
+                  type: string
+                  format: binary
+        required: true
+      responses:
+        201:
+          description: Successful creation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecvFileDto'
+        400:
+          description: Invalid input
+          content: { }
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+      x-codegen-request-body-name: body
+    delete:
+      tags:
+        - files
+      summary: Delete cached file
+      description: Deletes the cached file with the specified ID
+      operationId: deleteCachedFile
+      parameters:
+        - $ref: '#/components/parameters/UuId'
+      responses:
+        400:
+          description: Invalid ID supplied
+          content: { }
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+        404:
+          description: Movie not found
+          content: { }
+  /files/{id}:
+    get:
+      tags:
+        - files
+      summary: Get stored file
+      description: Returns a single stored file with the specified ID
+      operationId: getStoredFileById
+      parameters:
+        - $ref: '#/components/parameters/UuId'
+        - in: query
+          name: fileType
+          schema:
+            type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecvFileDto'
+        400:
+          description: Invalid ID supplied
+          content: { }
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+        404:
+          description: Not found
+          content: { }
+    delete:
+      tags:
+        - files
+      summary: Delete stored file
+      description: Deletes the stored file with the specified ID
+      operationId: deleteStoredFile
+      parameters:
+        - $ref: '#/components/parameters/UuId'
+      responses:
+        400:
+          description: Invalid ID supplied
+          content: { }
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+        404:
+          description: Movie not found
+          content: { }
+
+    
+
 components:
   parameters:
     Id:
@@ -604,12 +783,21 @@ components:
       schema:
         type: integer
         format: int64
+        minimum: 1
+    UuId:
+      name: uuid
+      in: path
+      description: UuID of entity to return
+      required: true
+      schema:
+        type: string
   schemas:
     DatabaseEntrySchema:
       properties:
         id:
           type: integer
           format: int64
+          minimum: 1
         created_at:
           type: string
         last_updated:
@@ -619,9 +807,11 @@ components:
         page:
           description: Used for pagination. The number of the page to return.
           type: integer
+          minimum: 1
         limit:
           description: Used for pagination. The number of items to return.
           type: integer
+          minimum: 1
         sortOrder:
           description: Used for pagination. The number of items to return.
           type: string
@@ -639,19 +829,25 @@ components:
         englishTitle:
           type: string
         movieFile:
-          type: string # TODO change to file type
+          type: array
+          items:
+            $ref: '#/components/schemas/FileDto'
+        dcpFiles:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileDto'
         previewFile:
-          type: string # TODO change to file type
+          $ref: '#/components/schemas/FileDto'
         trailerFile:
-          type: string # TODO change to file type
+          $ref: '#/components/schemas/FileDto'
         stillFiles:
           type: array
           items:
-            type: string # TODO change to file type
+            $ref: '#/components/schemas/FileDto'
         subtitleFiles:
           type: array
           items:
-            type: string # TODO change to file type
+            $ref: '#/components/schemas/FileDto'
         directors:
           type: array
           items:
@@ -663,9 +859,11 @@ components:
         yearOfProduction:
           type: integer
           format: int32
+          minimum: 1
         duration:
           type: integer
           format: int32
+          minimum: 1
           description: Duration in minutes
         animationTechniques:
           type: array
@@ -722,11 +920,11 @@ components:
         lastName:
           type: string
         biographyEnglish:
-          type: string
+          $ref: '#/components/schemas/FileDto'
         biographyGerman:
-          type: string
+          $ref: '#/components/schemas/FileDto'
         filmography:
-          type: string
+          $ref: '#/components/schemas/FileDto'
     ContactSchema:
       properties:
         type:
@@ -749,6 +947,12 @@ components:
           type: string # TODO change to user type
         public:
           type: boolean
+    FileCachedJsonSchema:
+      properties:
+        id:
+          type: string
+
+          
 
     CreateUpdateMovieDto:
       type: object
@@ -801,6 +1005,7 @@ components:
         id:
           type: integer
           format: int64
+          minimum: 1
         fullName:
           type: string
           description: First name + last name of the director
@@ -828,6 +1033,7 @@ components:
         id:
           type: integer
           format: int64
+          minimum: 1
         name:
           type: string
           description: Name of the contact
@@ -855,8 +1061,43 @@ components:
         id:
           type: integer
           format: int64
+          minimum: 1
         value:
           type: string
         type:
           type: string
 
+    FileDto:
+      type: object
+      properties:
+        id:
+          type: string
+        path:
+          type: string
+        filename:
+          type: string
+        mimetype:
+          type: string
+    RecvFileDto:
+      type: object
+      properties:
+        id:
+          type: string
+        fieldname:
+          type: string
+        originalname:
+          type: string
+        encoding:
+          type: string
+        mimetype:
+          type: string
+        destination:
+          type: string
+        filename:
+          type: string
+        path:
+          type: string
+        size:
+          type: integer
+          format: int64
+          minimum: 1

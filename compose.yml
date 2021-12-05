@@ -2,16 +2,25 @@ version: '3.8'
 
 services:
   backend:
+    # build:
+    #   context: ./backend-fap
+    #   dockerfile: Dockerfile
+    # user: "${SFTP_UID}:${SFTP_GID}"
     image: node:14.18
     depends_on:
       - db
+      - redis
+      - sftp
     ports:
       - '${BE_PORT}:3000'
     volumes:
       - './backend-fap/:/app'
+      # - '${BE_CACHE_DIR}:${BE_CACHE_DIR}'
     working_dir: /app
     command: >
       bash -c "
+      apt-get update &&
+      apt-get install -y cmake &&
       npm install &&
       npm run ${BE_NPM_RUN}"
     env_file:
@@ -46,6 +55,22 @@ services:
       - '${POSTGRES_PORT}:5432'
     env_file:
       - .env
+
+  redis:
+    image: bitnami/redis:latest
+    restart: always
+    ports:
+      - '${REDIS_PORT_NUMBER}:${REDIS_PORT_NUMBER}'
+    env_file:
+      - .env
+
+  sftp:
+    image: atmoz/sftp:alpine
+    restart: always
+    ports:
+      - '${SFTP_PORT}:22'
+    command: ${SFTP_USER}:${SFTP_PASSWORD}:${SFTP_UID}::upload
+
 #host
 ##################################################################
 #                                                                #

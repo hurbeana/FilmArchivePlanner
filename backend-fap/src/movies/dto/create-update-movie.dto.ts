@@ -1,3 +1,4 @@
+import { FileDto } from './../../files/dto/file.dto';
 import {
   ArrayNotEmpty,
   IsArray,
@@ -19,6 +20,11 @@ import { TagReferenceDto } from '../../tags/dto/tag-reference.dto';
 export class CreateUpdateMovieDto {
   @AutoMap()
   @IsString()
+  @IsOptional()
+  folderId?: string;
+
+  @AutoMap()
+  @IsString()
   @IsNotEmpty()
   originalTitle: string;
 
@@ -27,31 +33,43 @@ export class CreateUpdateMovieDto {
   @IsNotEmpty()
   englishTitle: string;
 
-  //TODO Need to implement movie upload and file matching to DTO
-
-  @AutoMap()
-  @IsString()
-  movieFile: string; //TODO Replace this with "Path"
-
-  @AutoMap()
-  @IsString()
+  @AutoMap({ typeFn: () => FileDto })
+  @IsArray()
+  @ValidateNested({ each: true })
   @IsOptional()
-  previewFile?: string; //TODO Replace this with "Path"
+  @Type(() => FileDto)
+  movieFiles?: FileDto[];
 
-  @AutoMap()
-  @IsString()
+  @AutoMap({ typeFn: () => FileDto })
+  @IsArray()
+  @ValidateNested({ each: true })
   @IsOptional()
-  trailerFile?: string; //TODO Replace this with "Path"
+  @Type(() => FileDto)
+  dcpFiles?: FileDto[];
 
-  @AutoMap()
+  @AutoMap({ typeFn: () => FileDto })
   @IsOptional()
-  @IsString({ each: true })
-  stillFiles?: string[]; //TODO Replace this with "Path[]"
+  @Type(() => FileDto)
+  previewFile?: FileDto;
 
-  @AutoMap()
+  @AutoMap({ typeFn: () => FileDto })
   @IsOptional()
-  @IsString({ each: true })
-  subtitleFiles?: string[]; //TODO Replace this with "Path[]"
+  @Type(() => FileDto)
+  trailerFile?: FileDto;
+
+  @AutoMap({ typeFn: () => FileDto })
+  @IsArray()
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => FileDto)
+  stillFiles?: FileDto[];
+
+  @AutoMap({ typeFn: () => FileDto })
+  @IsArray()
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => FileDto)
+  subtitleFiles?: FileDto[];
 
   @AutoMap({ typeFn: () => DirectorReferenceDto })
   @IsArray()

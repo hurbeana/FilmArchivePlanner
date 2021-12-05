@@ -6,6 +6,12 @@ import { classes } from '@automapper/classes';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Director } from './entities/director.entity';
 import { Repository } from 'typeorm';
+import {
+  BiographyEnglishFile,
+  BiographyGermanFile,
+  FilmographyFile,
+} from './entities/directorfiles.entity';
+import { FILES_PERSISTENCY_PROVIDER } from '../files/files.constants';
 
 describe('DirectorsController', () => {
   let controller: DirectorsController;
@@ -24,6 +30,22 @@ describe('DirectorsController', () => {
         {
           provide: getRepositoryToken(Director),
           useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(BiographyEnglishFile),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(BiographyGermanFile),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(FilmographyFile),
+          useClass: Repository,
+        },
+        {
+          provide: FILES_PERSISTENCY_PROVIDER,
+          useValue: {},
         },
       ],
     }).compile();

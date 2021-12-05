@@ -1,7 +1,36 @@
-[db]
-type = "postgres"
-host = "db"
-port = 5432
-username = "root"
-password = "root"
-database = "root"
+[db]                            # settings for the database
+type = "postgres"               # string connectiontype 
+host = "db"                     # string database hostname or IP of server
+port = 5432                     # integer port number of server
+username = "root"               # string username for database
+password = "root"               # string password for database
+database = "root"               # string (postgres) database to use
+
+[files]                         # general settings for files
+persistenceType = 'sftp'        # string choose one implementation for remote storage from 'sftp' | 'localfs'
+baseUploadPath = '/upload'      # string the base path on remote to where to upload files
+# downloadTTL = 1800000         # integer ttl in ms for files that are being downloaded and cached (default 30 mins)
+
+[files.endpoint]                # settings for the fileupload
+dest = '/tmp/fapCache'          # string directory used for caching
+
+[files.cache]                   # settings for the cache
+host = 'redis'                  # string redis hostname or IP of server
+port = 6379                     # integer redis port number on server
+auth_pass = 'root'              # string password for redis
+# ttl = 86400                   # integer ttl (in seconds) for uploaded files that are cached (default 1 day)
+# max = 500                     # integer maximum number of files allowed in cache (to prevent flooding, default 500)
+
+[files.connectOptions]          # sftp connection settings
+host = 'sftp'                   # string hostname or IP of server
+# port = 22                     # integer Port number of the server
+# forceIPv4 = false             # boolean (optional) Only connect via IPv4 address
+# forceIPv6 = false             # boolean (optional) Only connect via IPv6 address
+user = 'testuser'               # string username for authentication
+password = 'testpwd'            # string password for password-based user authentication
+# passphrase = 'a pass phrase'  # string for an encrypted private key
+# readyTimeout = 20000          # integer how long (in ms) to wait for the SSH handshake
+# strictVendor = true           # boolean performs a strict server vendor check
+# retries = 2                   # integer Number of times to retry connecting
+# retry_factor = 2              # integer Time factor used to calculate time between retries
+# retry_minTimeout = 2000       # integer Minimum timeout between attempts

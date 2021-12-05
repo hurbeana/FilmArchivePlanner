@@ -2,9 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -12,12 +15,24 @@ import { AutoMap } from '@automapper/classes';
 import { Director } from '../../directors/entities/director.entity';
 import { Contact } from '../../contacts/entities/contact.entity';
 import { Tag } from '../../tags/entities/tag.entity';
+import {
+  MovieFile,
+  DCPFile,
+  PreviewFile,
+  TrailerFile,
+  StillFile,
+  SubtitleFile,
+} from './moviefiles.entity';
 
 @Entity()
 export class Movie {
   @AutoMap()
   @PrimaryGeneratedColumn()
   id: number;
+
+  @AutoMap()
+  @Column()
+  folderId: string;
 
   @AutoMap()
   @CreateDateColumn()
@@ -35,25 +50,29 @@ export class Movie {
   @Column()
   englishTitle: string;
 
-  @AutoMap()
-  @Column()
-  movieFile: string; //TODO Replace this with "Path"
+  @AutoMap({ typeFn: () => MovieFile })
+  @OneToMany(() => MovieFile, (file) => file.movie)
+  movieFiles?: MovieFile[];
 
-  @AutoMap()
-  @Column({ nullable: true })
-  previewFile?: string; //TODO Replace this with "Path"
+  @AutoMap({ typeFn: () => DCPFile })
+  @OneToMany(() => DCPFile, (file) => file.movie)
+  dcpFiles?: DCPFile[];
 
-  @AutoMap()
-  @Column({ nullable: true })
-  trailerFile?: string; //TODO Replace this with "Path"
+  @AutoMap({ typeFn: () => PreviewFile })
+  @OneToOne(() => PreviewFile, (file) => file.movie, { eager: true })
+  previewFile?: PreviewFile;
 
-  @AutoMap()
-  @Column('simple-array', { nullable: true }) //Replace simple-array?
-  stillFiles?: string[]; //TODO Replace this with "Path[]"
+  @AutoMap({ typeFn: () => TrailerFile })
+  @OneToOne(() => TrailerFile, (file) => file.movie, { eager: true })
+  trailerFile?: TrailerFile;
 
-  @AutoMap()
-  @Column('simple-array', { nullable: true }) //Replace simple-array?
-  subtitleFiles?: string[]; //TODO Replace this with "Path"
+  @AutoMap({ typeFn: () => StillFile })
+  @OneToMany(() => StillFile, (file) => file.movie)
+  stillFiles?: StillFile[];
+
+  @AutoMap({ typeFn: () => SubtitleFile })
+  @OneToMany(() => SubtitleFile, (file) => file.movie)
+  subtitleFiles?: SubtitleFile[];
 
   @AutoMap({ typeFn: () => Director })
   @ManyToMany(() => Director)

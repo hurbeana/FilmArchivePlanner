@@ -1,3 +1,17 @@
+import {
+  BiographyEnglishFile,
+  BiographyGermanFile,
+  FilmographyFile,
+} from './../directors/entities/directorfiles.entity';
+import {
+  DCPFile,
+  MovieFile,
+  PreviewFile,
+  StillFile,
+  SubtitleFile,
+  TrailerFile,
+} from './entities/moviefiles.entity';
+import { FilesModule } from './../files/files.module';
 import { Movie } from './entities/movie.entity';
 import { Module } from '@nestjs/common';
 import { MoviesService } from './movies.service';
@@ -13,17 +27,37 @@ import { Contact } from '../contacts/entities/contact.entity';
 import { TagsService } from 'src/tags/tags.service';
 import { TagsModule } from 'src/tags/tags.module';
 import { Tag } from 'src/tags/entities/tag.entity';
+import { createFilesOptions } from '../config/files-config.functions';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Movie]),
+    TypeOrmModule.forFeature([
+      Movie,
+      MovieFile,
+      DCPFile,
+      PreviewFile,
+      TrailerFile,
+      StillFile,
+      SubtitleFile,
+    ]),
+    FilesModule.forRootAsync({
+      imports: [],
+      useFactory: createFilesOptions,
+      inject: [ConfigService],
+    }),
     AutomapperModule,
     DirectorsModule,
-    TypeOrmModule.forFeature([Director]),
     ContactsModule,
     TypeOrmModule.forFeature([Contact]),
     TagsModule,
     TypeOrmModule.forFeature([Tag]),
+    TypeOrmModule.forFeature([
+      Director,
+      BiographyEnglishFile,
+      BiographyGermanFile,
+      FilmographyFile,
+    ]),
   ],
   controllers: [MoviesController],
   providers: [MoviesService, DirectorsService, ContactsService, TagsService],

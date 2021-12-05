@@ -1,4 +1,20 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { IFsService } from './../files/interfaces/fs-service.interface';
+import { FILES_PERSISTENCY_PROVIDER } from './../files/files.constants';
+import { DIRECTORROOTFOLDER } from './directors.constants';
+import { FileDto } from './../files/dto/file.dto';
+import {
+  BiographyEnglishFile,
+  BiographyGermanFile,
+  FilmographyFile,
+} from './entities/directorfiles.entity';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUpdateDirectorDto } from './dto/create-update-director.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -12,6 +28,10 @@ import {
   Pagination,
 } from 'nestjs-typeorm-paginate';
 import { SearchDirectorDto } from './dto/search-director.dto';
+import { join } from 'path';
+import * as namor from 'namor';
+import { DirectorFilesFolder } from './directors.enum';
+import { File } from '../files/entities/file.entity';
 
 /**
  * Service for directors CRUD
@@ -21,13 +41,152 @@ export class DirectorsService {
   constructor(
     @InjectRepository(Director)
     private directorRepository: Repository<Director>,
+    @InjectRepository(BiographyEnglishFile)
+    private biographyEnglishRepository: Repository<BiographyEnglishFile>,
+    @InjectRepository(BiographyGermanFile)
+    private biographyGermanRepository: Repository<BiographyGermanFile>,
+    @InjectRepository(FilmographyFile)
+    private filmographyRepository: Repository<FilmographyFile>,
     @InjectMapper()
     private mapper: Mapper,
+    @Inject(FILES_PERSISTENCY_PROVIDER)
+    private filesServices: IFsService,
   ) {
     this.mapper.createMap(Director, DirectorDto);
+    this.mapper.createMap(BiographyEnglishFile, FileDto);
+    this.mapper.createMap(BiographyGermanFile, FileDto);
+    this.mapper.createMap(FilmographyFile, FileDto);
   }
 
   private readonly logger = new Logger(DirectorsService.name);
+
+  // helper function to commit only cached files, may be extracted to a utiltiy service
+  private async commitFiles<T extends File>(
+    basePath: string,
+    fileDtos: FileDto[],
+    repository: Repository<File>,
+    folder = '',
+  ): Promise<T[]> {
+    if (!fileDtos || !fileDtos[0]) {
+      return [];
+    }
+    const entities = [];
+    const cachedFileDtos = fileDtos.filter((file) => file.path === undefined);
+    const storedFileDtos = fileDtos.filter((file) => file.path !== undefined);
+    for (const fileDto of cachedFileDtos) {
+      const path = [basePath];
+      if (folder !== '') path.push(folder);
+      this.logger.log('Calling fileservices with');
+      const resultDto = await this.filesServices.commitFile(
+        fileDto.id as string,
+        path,
+      );
+      const entity = await repository.save(repository.create(resultDto as any));
+      entities.push(entity);
+    }
+    return [...storedFileDtos, ...entities] as T[];
+  }
+
+  private async createFiles(
+    createUpdateDirectorDto: CreateUpdateDirectorDto,
+  ): Promise<Director> {
+    // get or create folderId for unique folders
+    if (createUpdateDirectorDto.folderId === undefined) {
+      createUpdateDirectorDto.folderId = namor.generate();
+    }
+    // generate basepath for this movie
+    const basePath = join(
+      DIRECTORROOTFOLDER,
+      `${createUpdateDirectorDto.lastName.replace(
+        / /g,
+        '_',
+      )}.${createUpdateDirectorDto.firstName.replace(/ /g, '_')}-${
+        createUpdateDirectorDto.folderId
+      }`,
+    );
+
+    // check if cached files to be commited contain duplicates and if there are any throw an exception
+    const allFiles = []
+      .concat(
+        createUpdateDirectorDto.biographyEnglish,
+        createUpdateDirectorDto.biographyGerman,
+        createUpdateDirectorDto.filmography,
+      )
+      .filter((x) => x);
+
+    const allFileNames = [];
+    const duplicateNames = new Set<string>();
+
+    // duplicates can be cached file to cached file and cached file to already persisted file (when updating a movie)
+    for (const file of allFiles) {
+      if (file !== undefined) {
+        if (file.path === undefined) {
+          const cachedFileName = (
+            await this.filesServices.getCachedInfo(file.id)
+          ).originalname;
+          allFileNames.push(cachedFileName);
+        } else {
+          allFileNames.push(file.filename);
+        }
+      }
+    }
+
+    for (let i = 0; i < allFileNames.length; i++) {
+      for (let j = 0; j < allFileNames.length; j++) {
+        if (i === j) continue;
+        if (allFileNames[i] === allFileNames[j]) {
+          duplicateNames.add(allFileNames[i]);
+        }
+      }
+    }
+
+    if (duplicateNames.size > 0) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          error: 'Following files names are duplicate',
+          files: Array.from(duplicateNames.values()),
+        },
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+
+    // were good, commit all files
+    const biographyEnglishFile = (
+      await this.commitFiles<BiographyEnglishFile>(
+        basePath,
+        [createUpdateDirectorDto.biographyEnglish],
+        this.biographyEnglishRepository,
+        DirectorFilesFolder.BIOGRAPHYENGLISHFILE,
+      )
+    )[0];
+
+    const biographyGermanFile = (
+      await this.commitFiles<BiographyGermanFile>(
+        basePath,
+        [createUpdateDirectorDto.biographyGerman],
+        this.biographyGermanRepository,
+        DirectorFilesFolder.BIOGRAPHYGERMANFILE,
+      )
+    )[0];
+
+    const filmographyFile = (
+      await this.commitFiles<FilmographyFile>(
+        basePath,
+        [createUpdateDirectorDto.filmography],
+        this.filmographyRepository,
+        DirectorFilesFolder.FILMOGRAPHYFILE,
+      )
+    )[0];
+
+    // create the new director
+    return this.directorRepository.create({
+      ...createUpdateDirectorDto,
+      biographyEnglish: biographyEnglishFile,
+      biographyGerman: biographyGermanFile,
+      filmography: filmographyFile,
+    });
+  }
 
   /**
    * Saves a director to the database
@@ -37,9 +196,13 @@ export class DirectorsService {
   async create(
     createDirectorDto: CreateUpdateDirectorDto,
   ): Promise<DirectorDto> {
-    const directorParam = this.directorRepository.create(createDirectorDto);
-    const createdDirector = await this.directorRepository.save(directorParam);
-    return this.mapDirectorToDto(createdDirector);
+    const savedDirector = await this.directorRepository.save(
+      await this.createFiles(createDirectorDto),
+    );
+    //const directorParam = this.directorRepository.create(createDirectorDto);
+    //const createdDirector = await this.directorRepository.save(directorParam);
+    //return this.mapDirectorToDto(createdDirector);
+    return this.findOne(savedDirector.id);
   }
 
   /**
@@ -51,7 +214,7 @@ export class DirectorsService {
    * @param searchstring
    * @returns {Promise<Pagination<DirectorDto>>} The directors in a paginated form
    */
-  find(
+  async find(
     options: IPaginationOptions,
     search: SearchDirectorDto,
     orderBy: string,
@@ -127,7 +290,9 @@ export class DirectorsService {
       throw new NotFoundException();
     }
 
-    const directorParam = this.directorRepository.create(updateDirectorDto);
+    const directorParam = this.directorRepository.create(
+      await this.createFiles(updateDirectorDto),
+    );
     directorParam.id = id;
     const updatedDirector = await this.directorRepository.save(directorParam);
     return this.mapDirectorToDto(updatedDirector);

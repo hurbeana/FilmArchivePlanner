@@ -1,7 +1,14 @@
 import { AutoMap } from '@automapper/classes';
-import { IsOptional, IsString } from 'class-validator';
+import { IsNotEmptyObject, IsOptional, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import { FileDto } from '../../files/dto/file.dto';
 
 export class CreateUpdateDirectorDto {
+  @AutoMap()
+  @IsString()
+  @IsOptional()
+  folderId: string;
+
   @AutoMap()
   @IsString()
   firstName: string;
@@ -15,17 +22,18 @@ export class CreateUpdateDirectorDto {
   @IsString()
   lastName: string;
 
-  @AutoMap()
-  @IsString()
-  biographyEnglish: string; //TODO Replace this with "Path"
+  @AutoMap({ typeFn: () => FileDto })
+  @Type(() => FileDto)
+  @IsNotEmptyObject()
+  biographyEnglish: FileDto;
 
-  @AutoMap()
-  @IsString()
+  @AutoMap({ typeFn: () => FileDto })
   @IsOptional()
-  biographyGerman?: string; //TODO Replace this with "Path"
+  @Type(() => FileDto)
+  biographyGerman?: FileDto;
 
-  @AutoMap()
-  @IsString()
+  @AutoMap({ typeFn: () => FileDto })
   @IsOptional()
-  filmography?: string; //TODO Replace this with "Path"
+  @Type(() => FileDto)
+  filmography?: FileDto;
 }

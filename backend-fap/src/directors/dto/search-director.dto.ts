@@ -10,9 +10,9 @@ export class SearchDirectorDto extends PartialType(DirectorDto) {
       firstName: '',
       middleName: '',
       lastName: '',
-      biographyEnglish: '',
-      biographyGerman: '',
-      filmography: '',
+      //biographyEnglish: null,
+      //biographyGerman: null,
+      //filmography: null,
     };
   }
 }

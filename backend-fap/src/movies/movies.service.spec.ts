@@ -1,5 +1,5 @@
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MoviesService } from './movies.service';
 import { Movie } from './entities/movie.entity';
@@ -17,6 +17,21 @@ import { ContactsService } from '../contacts/contacts.service';
 import { TagsService } from '../tags/tags.service';
 import { Tag } from '../tags/entities/tag.entity';
 import { TagType } from '../tags/tagtype.enum';
+import { DirectorDto } from '../directors/dto/director.dto';
+import {
+  DCPFile,
+  MovieFile,
+  PreviewFile,
+  StillFile,
+  SubtitleFile,
+  TrailerFile,
+} from './entities/moviefiles.entity';
+import { FILES_PERSISTENCY_PROVIDER } from '../files/files.constants';
+import {
+  BiographyEnglishFile,
+  BiographyGermanFile,
+  FilmographyFile,
+} from '../directors/entities/directorfiles.entity';
 
 const mockId = 1;
 const mockUpdatedAt = new Date();
@@ -56,7 +71,55 @@ describe('MoviesService', () => {
         TagsService,
         {
           provide: getRepositoryToken(Tag),
-          useClass: Tag,
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(MovieFile),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(DCPFile),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(PreviewFile),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(TrailerFile),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(StillFile),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(SubtitleFile),
+          useClass: Repository,
+        },
+        {
+          provide: FILES_PERSISTENCY_PROVIDER,
+          useValue: {},
+        },
+        {
+          provide: getRepositoryToken(Director),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(BiographyEnglishFile),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(BiographyGermanFile),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(FilmographyFile),
+          useClass: Repository,
+        },
+        {
+          provide: FILES_PERSISTENCY_PROVIDER,
+          useValue: {},
         },
       ],
     }).compile();
@@ -85,9 +148,9 @@ describe('MoviesService', () => {
 
     jest
       .spyOn(directorsService, 'findOne')
-      .mockImplementation((): Promise<Director> => {
+      .mockImplementation((id: number): Promise<DirectorDto> => {
         return new Promise(function (resolve) {
-          resolve(new Director());
+          resolve(new DirectorDto());
         });
       });
 
@@ -281,7 +344,9 @@ describe('MoviesService', () => {
     jest.spyOn(repo, 'findOneOrFail').mockImplementation(() => {
       throw new NotFoundException();
     });
-    expect(() => moviesService.findOne(6)).toThrow(NotFoundException);
+    return moviesService
+      .findOne(6)
+      .catch((error) => expect(error).toBeInstanceOf(NotFoundException));
   });
 });
 
@@ -295,7 +360,6 @@ function initializeMovieDto(movieDto: CreateUpdateMovieDto) {
 
   movieDto.originalTitle = 'a';
   movieDto.englishTitle = 'b';
-  movieDto.movieFile = 'c';
   movieDto.directors = [director1, director2];
   movieDto.duration = 12;
   movieDto.germanSynopsis = 'd';
@@ -326,7 +390,6 @@ function mockRepoCreate(createMovie: CreateUpdateMovieDto): Movie {
 
   movie.originalTitle = createMovie.originalTitle;
   movie.englishTitle = createMovie.englishTitle;
-  movie.movieFile = createMovie.movieFile;
   movie.directors = [director1, director2];
   movie.duration = createMovie.duration;
   movie.germanSynopsis = createMovie.germanSynopsis;
