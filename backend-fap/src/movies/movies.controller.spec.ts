@@ -1,5 +1,5 @@
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MoviesController } from './movies.controller';
 import { MoviesService } from './movies.service';
@@ -40,6 +40,7 @@ describe('MoviesController', () => {
       ],
       controllers: [MoviesController],
       providers: [
+        EntityManager,
         MoviesService,
         {
           provide: getRepositoryToken(Movie),

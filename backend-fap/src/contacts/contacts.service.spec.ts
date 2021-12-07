@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ContactsService } from './contacts.service';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { Contact } from './entities/contact.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { AutomapperModule } from '@automapper/nestjs';
@@ -31,6 +31,7 @@ describe('ContactsService', () => {
         }),
       ],
       providers: [
+        EntityManager,
         ContactsService,
         {
           provide: getRepositoryToken(Contact),

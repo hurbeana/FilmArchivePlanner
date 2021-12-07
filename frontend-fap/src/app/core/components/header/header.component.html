@@ -12,14 +12,15 @@
   </button>
 </mat-toolbar>
 <mat-sidenav-container class="main-content">
-  <mat-sidenav class="main-sidenav" position="start" mode="over">
+  <mat-sidenav class="main-sidenav" position="start" mode="over" (click)='sidenav.close()'>
     <mat-nav-list>
       <a mat-list-item [routerLink]="'/'" i18n>Home</a>
       <a mat-list-item [routerLink]="'/movies'" i18n>Movies</a>
       <a mat-list-item [routerLink]="'/directors'" i18n>Directors</a>
       <a mat-list-item [routerLink]="'/contacts'" i18n>Contacts</a>
-      <a mat-list-item [routerLink]="'/planer'" i18n>Paner</a>
-      <a mat-list-item (click)="sidenav.toggle()" href="" i18n>Close</a>
+      <a mat-list-item [routerLink]="'/tags'" i18n>Tag Manager</a>
+      <!--<a mat-list-item [routerLink]="'/planner'" i18n>Planner</a>-->
+      <a mat-list-item (click)="sidenav.toggle()" i18n>Close</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

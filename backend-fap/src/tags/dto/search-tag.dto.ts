@@ -7,9 +7,13 @@ export class SearchTagDto extends PartialType(TagDto) {
    */
   public static getStringSearch(): {
     value: string;
+    user: string;
+    type: string;
   } {
     return {
       value: '',
+      user: '',
+      type: '',
     };
   }
 }

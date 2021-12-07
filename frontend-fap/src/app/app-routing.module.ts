@@ -19,6 +19,10 @@ const routes: Routes = [
     loadChildren: () =>
       import('./contacts/contacts.module').then((m) => m.ContactsModule),
   }, // lazy load module
+  {
+    path: 'tags',
+    loadChildren: () => import('./tags/tags.module').then((m) => m.TagsModule),
+  }, // lazy load module
 ];
 
 @NgModule({

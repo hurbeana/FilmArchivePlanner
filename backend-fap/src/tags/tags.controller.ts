@@ -67,4 +67,10 @@ export class TagsController {
     this.logger.log(`Delete tag with id ${id} called.`);
     return this.tagsService.delete(id);
   }
+
+  @Get('/tagIdIsInUse/:id')
+  tagIsUsed(@Param('id') id: number) {
+    this.logger.log(`Get if tag with id ${id} is in use.`);
+    return this.tagsService.tagIdIsInUse(id);
+  }
 }

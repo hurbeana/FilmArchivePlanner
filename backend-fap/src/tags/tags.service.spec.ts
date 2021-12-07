@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TagsService } from './tags.service';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { Tag } from './entities/tag.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { AutomapperModule } from '@automapper/nestjs';
@@ -27,6 +27,7 @@ describe('TagsService', () => {
         }),
       ],
       providers: [
+        EntityManager,
         TagsService,
         {
           provide: getRepositoryToken(Tag),
@@ -68,7 +69,7 @@ describe('TagsService', () => {
     expect(tag.public).toEqual(tagDto.public);
     expect(tag.type).toEqual(tagDto.type);
     expect(tag.user).toEqual(tagDto.user);
-    expect(tag.value).toEqual(tagDto.value.toLowerCase()); // tags are all saved as lowercase
+    expect(tag.value).toEqual(tagDto.value);
     expect(tag.created_at).toEqual(tagDto.created_at);
     expect(tag.last_updated).toEqual(tagDto.last_updated);
     //expect(await service.create(createTagDto)).toEqual(tagDto);
@@ -145,7 +146,7 @@ describe('TagsService', () => {
     expect(tag.public).toEqual(tagDto.public);
     expect(tag.type).toEqual(tagDto.type);
     expect(tag.user).toEqual(tagDto.user);
-    expect(tag.value).toEqual(tagDto.value.toLowerCase()); // tags are all saved as lowercase
+    expect(tag.value).toEqual(tagDto.value);
     expect(tag.created_at).toEqual(tagDto.created_at);
     expect(tag.last_updated).toEqual(tagDto.last_updated);
     //expect(await service.update(mockId, updateTagDto)).toEqual(tagDto);

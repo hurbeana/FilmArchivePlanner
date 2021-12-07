@@ -1,5 +1,5 @@
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { DeepPartial, Repository } from 'typeorm';
+import { DeepPartial, EntityManager, Repository } from 'typeorm';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MoviesService } from './movies.service';
 import { Movie } from './entities/movie.entity';
@@ -53,6 +53,7 @@ describe('MoviesService', () => {
         }),
       ],
       providers: [
+        EntityManager,
         MoviesService,
         {
           provide: getRepositoryToken(Movie),

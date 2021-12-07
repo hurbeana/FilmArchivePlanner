@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { CreateUpdateTagDto } from './dto/create-update-tag.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, ILike, Repository } from 'typeorm';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/types';
 import { Tag } from './entities/tag.entity';
@@ -29,6 +29,7 @@ export class TagsService {
     private tagRepository: Repository<Tag>,
     @InjectMapper()
     private mapper: Mapper,
+    private entityManager: EntityManager,
   ) {
     this.mapper.createMap(Tag, TagDto);
   }
@@ -42,7 +43,6 @@ export class TagsService {
    */
   async create(createTagDto: CreateUpdateTagDto): Promise<TagDto> {
     await this.validateTag(createTagDto);
-    createTagDto.value = createTagDto.value.toLowerCase(); //tags should be case insensitive
     const tagParam = this.tagRepository.create(createTagDto);
     const createdTag = await this.tagRepository.save(tagParam);
     return this.mapTagToDto(createdTag);
@@ -61,36 +61,37 @@ export class TagsService {
     options: IPaginationOptions,
     search: SearchTagDto,
     orderBy: string,
-    sortOrder: 'ASC' | 'DESC' = 'DESC',
+    sortOrder: 'ASC' | 'DESC' = 'ASC',
     searchstring: string,
   ): Promise<Pagination<TagDto>> {
-    const queryBuilder = this.tagRepository.createQueryBuilder('tag');
+    let whereObj = [];
+    let orderObj = {};
     if (searchstring) {
       // searchstring higher prio
-      Object.keys(SearchTagDto.getStringSearch()).forEach((k) =>
-        queryBuilder.orWhere(`tag.${k} ILIKE :${k}`, {
-          [k]: `%${searchstring}%`,
-        }),
-      );
+      whereObj = Object.keys(SearchTagDto.getStringSearch()).map((k) => ({
+        [k]: ILike('%' + searchstring + '%'),
+      }));
     } else if (search) {
-      Object.entries(search)
+      whereObj = Object.entries(search)
         .filter(([, v]) => v) // filter empty properties
-        .forEach(([k, v]) => {
+        .map(([k, v]) => {
           if (typeof v === 'number' || typeof v === 'boolean') {
-            queryBuilder.orWhere(`tag.${k} = :${k}`, { [k]: v });
+            return { [k]: v };
           } else if (typeof v === 'string') {
-            queryBuilder.orWhere(`tag.${k} ILIKE :${k}`, {
-              [k]: `%${v}%`,
-            });
+            return { [k]: ILike('%' + v + '%') };
           } else {
             //TODO: more types?
           }
         });
     }
     if (orderBy) {
-      queryBuilder.orderBy(orderBy, sortOrder);
+      orderObj = { [orderBy]: sortOrder };
     }
-    return paginate<Tag>(queryBuilder, options).then(
+    return paginate<Tag>(this.tagRepository, options, {
+      relations: [],
+      where: whereObj,
+      order: orderObj,
+    }).then(
       (page) =>
         new Pagination<TagDto>(
           page.items.map((entity) => this.mapTagToDto(entity)),
@@ -150,7 +151,6 @@ export class TagsService {
    */
   async update(id: number, updateTagDto: CreateUpdateTagDto): Promise<TagDto> {
     await this.validateTag(updateTagDto);
-    updateTagDto.value = updateTagDto.value.toLowerCase();
     try {
       await this.tagRepository.findOneOrFail({ where: { id } });
     } catch (e) {
@@ -176,6 +176,35 @@ export class TagsService {
       throw new NotFoundException();
     }
     await this.tagRepository.delete(id);
+  }
+
+  /**
+   * Checks if a Tag is referenced in some other table
+   * @param tagId the id of the tag that we want to know if it is "used"
+   */
+  async tagIdIsInUse(tagId: number): Promise<boolean> {
+    try {
+      const result = await this.entityManager.query(
+        `SELECT joinedTags."tagId" FROM (
+                SELECT "tagId" FROM "movie_animation_techniques_tag" UNION
+                SELECT "tagId" FROM "movie_countries_of_production_tag" UNION
+                SELECT "tagId" FROM "movie_dialog_languages_tag" UNION
+                SELECT "tagId" FROM "movie_keywords_tag" UNION
+                SELECT "tagId" FROM "movie_software_used_tag" UNION
+                SELECT "tagId" FROM "movie_submission_categories_tag" UNION
+                SELECT "typeId" as "tagId" FROM "contact"
+              ) as joinedTags
+              WHERE joinedTags."tagId" = $1`,
+        [tagId],
+      );
+      return result.length > 0;
+    } catch (e) {
+      this.logger.error(
+        `Checking if tag with id ${tagId} is in use failed.`,
+        e.stack,
+      );
+      throw new NotFoundException();
+    }
   }
 
   private mapTagToDto(tag: Tag): TagDto {

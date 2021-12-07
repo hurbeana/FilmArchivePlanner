@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { NgSelectModule } from '@ng-select/ng-select';
 
 /* Modules */
 import { MatButtonModule } from '@angular/material/button';
@@ -14,12 +13,12 @@ import { SharedModule } from '../shared/shared.module';
 
 /* Components */
 import { DetailsViewComponent } from './components/details-view/details-view.component';
-import { FullDetailViewComponent } from './components/full-detail-view/full-detail-view.component';
 
 /* state management*/
-import { moviesReducer } from './state/movies.reducer';
-import { MovieEffects } from './state/movies.effects';
-import { MoviesRoutingModule } from './movies-routing.module';
+import { tagsReducer } from './state/tags.reducer';
+import { TagEffects } from './state/tags.effects';
+import { TagsRoutingModule } from './tags-routing.module';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ContentComponent } from './components/content/content.component';
@@ -27,7 +26,10 @@ import {
   NgbdSortableHeader,
   TableViewComponent,
 } from './components/table-view/table-view.component';
-import * as MovieActions from './state/movies.actions';
+import * as TagActions from './state/tags.actions';
+import { ConfirmDeleteTagModal } from './components/table-view/confirm-delete-tag-modal.component';
+import { CreateTagModal } from './components/table-view/create-tag-modal.component';
+import { EditTagModal } from './components/table-view/edit-tag-modal.component';
 
 @NgModule({
   declarations: [
@@ -35,40 +37,34 @@ import * as MovieActions from './state/movies.actions';
     TableViewComponent,
     NgbdSortableHeader,
     ContentComponent,
-    FullDetailViewComponent,
+    ConfirmDeleteTagModal,
+    CreateTagModal,
+    EditTagModal,
   ],
-  exports: [
-    TableViewComponent,
-    DetailsViewComponent,
-    ContentComponent,
-    FullDetailViewComponent,
-  ],
+  exports: [TableViewComponent, DetailsViewComponent, ContentComponent],
   imports: [
     CommonModule,
-    NgSelectModule,
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
     StoreModule.forRoot({
-      pagination: moviesReducer,
-      selectedMovie: moviesReducer,
-      searchTerm: moviesReducer,
+      pagination: tagsReducer,
+      selectedTag: tagsReducer,
+      searchTerm: tagsReducer,
     }),
-    EffectsModule.forRoot([MovieEffects]),
+    EffectsModule.forRoot([TagEffects]),
     SharedModule,
     MatButtonModule,
     MatCardModule,
     MatInputModule,
     MatTabsModule,
     MatTableModule,
-    MoviesRoutingModule,
+    TagsRoutingModule,
   ],
 })
-/* Movie Module contains everything related to movies */
-export class MoviesModule {
+/* Tag Module contains everything related to Tags */
+export class TagsModule {
   constructor(private store: Store) {
-    this.store.dispatch(
-      MovieActions.getMovies({ search: '', page: 1, limit: 16 })
-    );
+    this.store.dispatch(TagActions.getTags({ search: '', page: 1, limit: 16 }));
   }
 }

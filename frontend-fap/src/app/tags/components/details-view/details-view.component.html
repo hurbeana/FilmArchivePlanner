@@ -1,0 +1,17 @@
+<div *ngIf="tag" class="details-view">
+  <!--
+  <div style="display:flex; align-items: center; justify-content: flex-end">
+    <img style="margin: 10px 0; padding: 0; max-width:200px; max-height:200px;" mat-card-image src="https://source.unsplash.com/random/300x300?sig={{tag?.id}}">
+  </div>
+  -->
+  <div class="details-grid">
+      <span class="mat-primary label-colon" i18n>Value</span>
+      <input type="text" disabled value="{{tag?.value}}">
+      <span class="mat-primary label-colon" i18n>Type</span>
+      <input type="text" disabled value="{{tag?.type}}">
+      <span class="mat-primary label-colon" i18n>User</span>
+      <input type="text" disabled value="{{tag?.user}}">
+      <span class="mat-primary label-colon" i18n>Public</span>
+      <input type="text" disabled value="{{tag?.public}}">
+  </div>
+</div>

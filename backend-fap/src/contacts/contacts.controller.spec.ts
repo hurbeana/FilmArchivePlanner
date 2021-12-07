@@ -5,7 +5,7 @@ import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Contact } from './entities/contact.entity';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { TagsService } from '../tags/tags.service';
 import { Tag } from '../tags/entities/tag.entity';
 
@@ -22,6 +22,7 @@ describe('ContactsController', () => {
       ],
       controllers: [ContactsController],
       providers: [
+        EntityManager,
         ContactsService,
         {
           provide: getRepositoryToken(Contact),
