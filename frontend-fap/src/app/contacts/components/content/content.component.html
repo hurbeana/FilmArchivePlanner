@@ -1,0 +1,11 @@
+<div class="content clearfix" appResizable>
+  <!-- Contact List -->
+  <div class="table-container">
+    <div id="dragbar"></div>
+    <table-view (selectedContactChanged)="changeDetails($event)"></table-view>
+  </div>
+  <!-- Contact Details -->
+  <div class="details-container">
+    <contacts-details-view [contact]="selectedContact"></contacts-details-view>
+  </div>
+</div>

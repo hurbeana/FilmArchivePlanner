@@ -1,8 +1,8 @@
-import {Movie} from './movies/models/movie';
-import {Director} from './directors/models/director'; /* The state of the application*/
+import { Movie } from './movies/models/movie';
+import { Director } from './directors/models/director';
+import { Contact } from './contacts/models/contact';
 
 /* The state of the application*/
-
 export interface PaginationState {
   // TODO rename to MoviesPaginationState
   items: Movie[];
@@ -26,6 +26,17 @@ export interface DirectorsPaginationState {
   };
 }
 
+export interface ContactsPaginationState {
+  items: Contact[];
+  meta: {
+    totalItems: number;
+    itemCount: number;
+    itemsPerPage: number;
+    totalPages: number;
+    currentPage: number;
+  };
+}
+
 export interface AppState {
   // TODO rename to MoviesState
   pagination: PaginationState; // TODO rename to moviesPagination : MoviesPaginationState
@@ -37,5 +48,11 @@ export interface AppState {
 export interface DirectorsState {
   pagination: DirectorsPaginationState;
   selectedDirector?: Director | null;
+  searchTerm: string;
+}
+
+export interface ContactsState {
+  pagination: ContactsPaginationState;
+  selectedContact?: Contact | null;
   searchTerm: string;
 }

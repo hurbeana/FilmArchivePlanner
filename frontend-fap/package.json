@@ -24,6 +24,7 @@
     "@angular/platform-browser-dynamic": "~12.2.0",
     "@angular/router": "~12.2.0",
     "@ng-bootstrap/ng-bootstrap": "^10.0.0",
+    "@ng-select/ng-select": "^7.4.0",
     "@ngrx/effects": "^12.5.1",
     "@ngrx/store": "^12.5.1",
     "angular-resizable": "^1.2.0",

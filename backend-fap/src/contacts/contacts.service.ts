@@ -65,8 +65,9 @@ export class ContactsService {
   find(
     options: IPaginationOptions,
     search: SearchContactDto,
-    orderBy: string,
-    sortOrder: 'ASC' | 'DESC' = 'DESC',
+    orderBy = 'id',
+    //TODO: Change to sort by name (requires changes in Store in Frontend)
+    sortOrder: 'ASC' | 'DESC' = 'ASC',
     searchstring: string,
   ): Promise<Pagination<ContactDto>> {
     let whereObj = [];
