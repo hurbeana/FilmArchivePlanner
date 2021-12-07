@@ -17,6 +17,7 @@ import {
   Pagination,
 } from 'nestjs-typeorm-paginate';
 import { SearchTagDto } from './dto/search-tag.dto';
+import { TagType } from './tagtype.enum';
 
 /**
  * Service for tags CRUD
@@ -113,6 +114,32 @@ export class TagsService {
       throw new NotFoundException();
     }
     return this.mapTagToDto(tag);
+  }
+
+  /**
+   * Returns all tags with specified tag type
+   * @param tagType the type of the tags to return
+   * @returns {Promise<TagDto[]>} List of tags with specified type
+   */
+  async findType(tagType: TagType): Promise<TagDto[]> {
+    let tags: Tag[];
+    try {
+      tags = await this.tagRepository.find({ where: { type: tagType } });
+    } catch (e) {
+      this.logger.error(
+        `Getting tags with tagtype ${tagType} failed.`,
+        e.stack,
+      );
+      throw new NotFoundException(); //Is this the right exception for tagType not in Enum?
+    }
+    const dtos: TagDto[] = [];
+
+    if (tags.length > 0) {
+      tags.forEach((tag) => {
+        dtos.push(this.mapTagToDto(tag));
+      });
+    }
+    return dtos;
   }
 
   /**

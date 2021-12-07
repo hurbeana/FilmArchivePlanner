@@ -13,6 +13,7 @@ import { TagsService } from './tags.service';
 import { CreateUpdateTagDto } from './dto/create-update-tag.dto';
 import { SearchTagPagingDto } from './dto/search-tag-paging.dto';
 import { IPaginationOptions } from 'nestjs-typeorm-paginate';
+import { TagType } from './tagtype.enum';
 
 /**
  * Controller for tags.
@@ -47,6 +48,12 @@ export class TagsController {
   findOne(@Param('id') id: number) {
     this.logger.log(`Get tag with id ${id} called.`);
     return this.tagsService.findOne(id);
+  }
+
+  @Get('/type/:tagType') //gets all tags by tagType
+  findType(@Param('tagType') tagType: TagType) {
+    this.logger.log(`Get tags with tag type ${tagType} called.`);
+    return this.tagsService.findType(tagType);
   }
 
   @Put(':id')

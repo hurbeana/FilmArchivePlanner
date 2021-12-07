@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: FilmArchivePlanner (FAP)
-  description: 'REST API for the FAP backend.'
+  description: "REST API for the FAP backend."
   version: 0.1.0
 externalDocs:
   description: Git repository
@@ -37,7 +37,7 @@ paths:
         - in: query
           name: searchMoviePagingDto
           schema:
-            $ref: '#/components/schemas/SearchMoviePagingDto'
+            $ref: "#/components/schemas/SearchMoviePagingDto"
           description: All properties of searchMoviePagingDto are valid parameters see specifaction for details. The searchstring parameter disables all detailed field search parameters.
       responses:
         200:
@@ -47,16 +47,16 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MovieDto'
+                  $ref: "#/components/schemas/MovieDto"
         400:
           description: Invalid input
-          content: { }
+          content: {}
         401:
           description: Unauthorized
-          content: { }
+          content: {}
         403:
           description: Missing permission
-          content: { }
+          content: {}
     post:
       tags:
         - movies
@@ -68,7 +68,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUpdateMovieDto'
+              $ref: "#/components/schemas/CreateUpdateMovieDto"
         required: true
       responses:
         201:
@@ -76,16 +76,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MovieDto'
+                $ref: "#/components/schemas/MovieDto"
         400:
           description: Invalid input
-          content: { }
+          content: {}
         401:
           description: Unauthorized
-          content: { }
+          content: {}
         403:
           description: Missing permission
-          content: { }
+          content: {}
       x-codegen-request-body-name: body
   /movies/{id}:
     get:
@@ -95,26 +95,26 @@ paths:
       description: Returns a single movie with the specified ID
       operationId: getMovieById
       parameters:
-        - $ref: '#/components/parameters/Id'
+        - $ref: "#/components/parameters/Id"
       responses:
         200:
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MovieDto'
+                $ref: "#/components/schemas/MovieDto"
         400:
           description: Invalid ID supplied
-          content: { }
+          content: {}
         401:
           description: Unauthorized
-          content: { }
+          content: {}
         403:
           description: Missing permission
-          content: { }
+          content: {}
         404:
           description: Movie not found
-          content: { }
+          content: {}
     put:
       tags:
         - movies
@@ -122,31 +122,31 @@ paths:
       description: Updates the movie with the specified ID
       operationId: updateMovie
       parameters:
-        - $ref: '#/components/parameters/Id'
+        - $ref: "#/components/parameters/Id"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUpdateMovieDto'
+              $ref: "#/components/schemas/CreateUpdateMovieDto"
       responses:
         204:
           description: Operation successful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MovieDto'
+                $ref: "#/components/schemas/MovieDto"
         400:
           description: Invalid input
-          content: { }
+          content: {}
         401:
           description: Unauthorized
-          content: { }
+          content: {}
         403:
           description: Missing permission
-          content: { }
+          content: {}
         404:
           description: Movie not found
-          content: { }
+          content: {}
     delete:
       tags:
         - movies
@@ -154,20 +154,20 @@ paths:
       description: Deletes the movie with the specified ID
       operationId: deleteMovie
       parameters:
-        - $ref: '#/components/parameters/Id'
+        - $ref: "#/components/parameters/Id"
       responses:
         400:
           description: Invalid ID supplied
-          content: { }
+          content: {}
         401:
           description: Unauthorized
-          content: { }
+          content: {}
         403:
           description: Missing permission
-          content: { }
+          content: {}
         404:
           description: Movie not found
-          content: { }
+          content: {}
   /directors:
     get:
       tags:
@@ -179,7 +179,7 @@ paths:
         - in: query
           name: searchDirectorPagingDto
           schema:
-            $ref: '#/components/schemas/SearchDirectorPagingDto'
+            $ref: "#/components/schemas/SearchDirectorPagingDto"
           description: All properties of searchDirectorPagingDto are valid parameters see specifaction for details. The searchstring parameter disables all detailed field search parameters.
       responses:
         200:
@@ -189,16 +189,16 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DirectorDto'
+                  $ref: "#/components/schemas/DirectorDto"
         400:
           description: Invalid input
-          content: { }
+          content: {}
         401:
           description: Unauthorized
-          content: { }
+          content: {}
         403:
           description: Missing permission
-          content: { }
+          content: {}
     post:
       tags:
         - directors
@@ -210,7 +210,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUpdateDirectorDto'
+              $ref: "#/components/schemas/CreateUpdateDirectorDto"
         required: true
       responses:
         201:
@@ -218,16 +218,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DirectorDto'
+                $ref: "#/components/schemas/DirectorDto"
         400:
           description: Invalid input
-          content: { }
+          content: {}
         401:
           description: Unauthorized
-          content: { }
+          content: {}
         403:
           description: Missing permission
-          content: { }
+          content: {}
       x-codegen-request-body-name: body
   /directors/{id}:
     get:
@@ -237,26 +237,26 @@ paths:
       description: Returns a single director with the specified ID
       operationId: getDirectorById
       parameters:
-        - $ref: '#/components/parameters/Id'
+        - $ref: "#/components/parameters/Id"
       responses:
         200:
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DirectorDto'
+                $ref: "#/components/schemas/DirectorDto"
         400:
           description: Invalid ID supplied
-          content: { }
+          content: {}
         401:
           description: Unauthorized
-          content: { }
+          content: {}
         403:
           description: Missing permission
-          content: { }
+          content: {}
         404:
           description: Not found
-          content: { }
+          content: {}
     put:
       tags:
         - directors
@@ -264,31 +264,31 @@ paths:
       description: Updates the director with the specified ID
       operationId: updateDirector
       parameters:
-        - $ref: '#/components/parameters/Id'
+        - $ref: "#/components/parameters/Id"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUpdateDirectorDto'
+              $ref: "#/components/schemas/CreateUpdateDirectorDto"
       responses:
         204:
           description: Operation successful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DirectorDto'
+                $ref: "#/components/schemas/DirectorDto"
         400:
           description: Invalid input
-          content: { }
+          content: {}
         401:
           description: Unauthorized
-          content: { }
+          content: {}
         403:
           description: Missing permission
-          content: { }
+          content: {}
         404:
-            description: Not found
-            content: { }
+          description: Not found
+          content: {}
     delete:
       tags:
         - directors
@@ -296,20 +296,20 @@ paths:
       description: Deletes the director with the specified ID
       operationId: deleteDirector
       parameters:
-        - $ref: '#/components/parameters/Id'
+        - $ref: "#/components/parameters/Id"
       responses:
         400:
           description: Invalid ID supplied
-          content: { }
+          content: {}
         401:
           description: Unauthorized
-          content: { }
+          content: {}
         403:
           description: Missing permission
-          content: { }
+          content: {}
         404:
           description: Not found
-          content: { }
+          content: {}
   /contacts:
     get:
       tags:
@@ -321,7 +321,7 @@ paths:
         - in: query
           name: searchContactPagingDto
           schema:
-            $ref: '#/components/schemas/SearchContactPagingDto'
+            $ref: "#/components/schemas/SearchContactPagingDto"
           description: All properties of searchContactPagingDto are valid parameters see specifaction for details. The searchstring parameter disables all detailed field search parameters.
       responses:
         200:
@@ -331,16 +331,16 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ContactDto'
+                  $ref: "#/components/schemas/ContactDto"
         400:
           description: Invalid input
-          content: { }
+          content: {}
         401:
           description: Unauthorized
-          content: { }
+          content: {}
         403:
           description: Missing permission
-          content: { }
+          content: {}
     post:
       tags:
         - contacts
@@ -352,7 +352,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUpdateContactDto'
+              $ref: "#/components/schemas/CreateUpdateContactDto"
         required: true
       responses:
         201:
@@ -360,16 +360,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ContactDto'
+                $ref: "#/components/schemas/ContactDto"
         400:
           description: Invalid input
-          content: { }
+          content: {}
         401:
           description: Unauthorized
-          content: { }
+          content: {}
         403:
           description: Missing permission
-          content: { }
+          content: {}
       x-codegen-request-body-name: body
   /contacts/{id}:
     get:
@@ -379,26 +379,26 @@ paths:
       description: Returns a single contact with the specified ID
       operationId: getContactById
       parameters:
-        - $ref: '#/components/parameters/Id'
+        - $ref: "#/components/parameters/Id"
       responses:
         200:
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ContactDto'
+                $ref: "#/components/schemas/ContactDto"
         400:
           description: Invalid ID supplied
-          content: { }
+          content: {}
         401:
           description: Unauthorized
-          content: { }
+          content: {}
         403:
           description: Missing permission
-          content: { }
+          content: {}
         404:
           description: Not found
-          content: { }
+          content: {}
     put:
       tags:
         - contacts
@@ -406,31 +406,31 @@ paths:
       description: Updates the contact with the specified ID
       operationId: updateContact
       parameters:
-        - $ref: '#/components/parameters/Id'
+        - $ref: "#/components/parameters/Id"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUpdateContactDto'
+              $ref: "#/components/schemas/CreateUpdateContactDto"
       responses:
         204:
           description: Operation successful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ContactDto'
+                $ref: "#/components/schemas/ContactDto"
         400:
           description: Invalid input
-          content: { }
+          content: {}
         401:
           description: Unauthorized
-          content: { }
+          content: {}
         403:
           description: Missing permission
-          content: { }
+          content: {}
         404:
           description: Not found
-          content: { }
+          content: {}
     delete:
       tags:
         - contacts
@@ -438,20 +438,20 @@ paths:
       description: Deletes the contact with the specified ID
       operationId: deleteContact
       parameters:
-        - $ref: '#/components/parameters/Id'
+        - $ref: "#/components/parameters/Id"
       responses:
         400:
           description: Invalid ID supplied
-          content: { }
+          content: {}
         401:
           description: Unauthorized
-          content: { }
+          content: {}
         403:
           description: Missing permission
-          content: { }
+          content: {}
         404:
           description: Not found
-          content: { }
+          content: {}
 
   /tags:
     get:
@@ -464,7 +464,7 @@ paths:
         - in: query
           name: searchTagPagingDto
           schema:
-            $ref: '#/components/schemas/SearchTagPagingDto'
+            $ref: "#/components/schemas/SearchTagPagingDto"
           description: All properties of searchTagPagingDto are valid parameters see specifaction for details. The searchstring parameter disables all detailed field search parameters.
       responses:
         200:
@@ -474,16 +474,16 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TagDto'
+                  $ref: "#/components/schemas/TagDto"
         400:
           description: Invalid input
-          content: { }
+          content: {}
         401:
           description: Unauthorized
-          content: { }
+          content: {}
         403:
           description: Missing permission
-          content: { }
+          content: {}
     post:
       tags:
         - tags
@@ -495,7 +495,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUpdateTagDto'
+              $ref: "#/components/schemas/CreateUpdateTagDto"
         required: true
       responses:
         201:
@@ -503,16 +503,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TagDto'
+                $ref: "#/components/schemas/TagDto"
         400:
           description: Invalid input
-          content: { }
+          content: {}
         401:
           description: Unauthorized
-          content: { }
+          content: {}
         403:
           description: Missing permission
-          content: { }
+          content: {}
       x-codegen-request-body-name: body
   /tags/{id}:
     get:
@@ -522,26 +522,26 @@ paths:
       description: Returns a single tag with the specified ID
       operationId: getTagById
       parameters:
-        - $ref: '#/components/parameters/Id'
+        - $ref: "#/components/parameters/Id"
       responses:
         200:
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TagDto'
+                $ref: "#/components/schemas/TagDto"
         400:
           description: Invalid ID supplied
-          content: { }
+          content: {}
         401:
           description: Unauthorized
-          content: { }
+          content: {}
         403:
           description: Missing permission
-          content: { }
+          content: {}
         404:
           description: Not found
-          content: { }
+          content: {}
     put:
       tags:
         - tags
@@ -549,31 +549,31 @@ paths:
       description: Updates the tag with the specified ID
       operationId: updateTag
       parameters:
-        - $ref: '#/components/parameters/Id'
+        - $ref: "#/components/parameters/Id"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUpdateTagDto'
+              $ref: "#/components/schemas/CreateUpdateTagDto"
       responses:
         204:
           description: Operation successful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TagDto'
+                $ref: "#/components/schemas/TagDto"
         400:
           description: Invalid input
-          content: { }
+          content: {}
         401:
           description: Unauthorized
-          content: { }
+          content: {}
         403:
           description: Missing permission
-          content: { }
+          content: {}
         404:
           description: Not found
-          content: { }
+          content: {}
     delete:
       tags:
         - tags
@@ -581,20 +581,51 @@ paths:
       description: Deletes the tag with the specified ID
       operationId: deleteTag
       parameters:
-        - $ref: '#/components/parameters/Id'
+        - $ref: "#/components/parameters/Id"
       responses:
         400:
           description: Invalid ID supplied
-          content: { }
+          content: {}
         401:
           description: Unauthorized
-          content: { }
+          content: {}
         403:
           description: Missing permission
-          content: { }
+          content: {}
         404:
           description: Not found
-          content: { }
+          content: {}
+  /tags/type/{type}:
+    get:
+      tags:
+        - tags
+      summary: Get tags by type
+      description: Returns a list of tag with the specified tag type
+      operationId: getTagByType
+      parameters:
+        - $ref: "#/components/parameters/Type"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              "schema":
+                {
+                  "type": "array",
+                  "items": { $ref: "#/components/schemas/TagDto" },
+                }
+        400:
+          description: Invalid type supplied
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Missing permission
+          content: {}
+        404:
+          description: Not found
+          content: {}
 
   /files/cache/many:
     post:
@@ -623,16 +654,16 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/RecvFileDto'
+                  $ref: "#/components/schemas/RecvFileDto"
         400:
           description: Invalid input
-          content: { }
+          content: {}
         401:
           description: Unauthorized
-          content: { }
+          content: {}
         403:
           description: Missing permission
-          content: { }
+          content: {}
       x-codegen-request-body-name: body
   /files/cache/{id}:
     get:
@@ -642,26 +673,26 @@ paths:
       description: Returns a single cached file with the specified ID
       operationId: getCachedFileById
       parameters:
-        - $ref: '#/components/parameters/UuId'
+        - $ref: "#/components/parameters/UuId"
       responses:
         200:
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RecvFileDto'
+                $ref: "#/components/schemas/RecvFileDto"
         400:
           description: Invalid ID supplied
-          content: { }
+          content: {}
         401:
           description: Unauthorized
-          content: { }
+          content: {}
         403:
           description: Missing permission
-          content: { }
+          content: {}
         404:
           description: Not found
-          content: { }
+          content: {}
     post:
       tags:
         - files
@@ -685,16 +716,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RecvFileDto'
+                $ref: "#/components/schemas/RecvFileDto"
         400:
           description: Invalid input
-          content: { }
+          content: {}
         401:
           description: Unauthorized
-          content: { }
+          content: {}
         403:
           description: Missing permission
-          content: { }
+          content: {}
       x-codegen-request-body-name: body
     delete:
       tags:
@@ -703,20 +734,20 @@ paths:
       description: Deletes the cached file with the specified ID
       operationId: deleteCachedFile
       parameters:
-        - $ref: '#/components/parameters/UuId'
+        - $ref: "#/components/parameters/UuId"
       responses:
         400:
           description: Invalid ID supplied
-          content: { }
+          content: {}
         401:
           description: Unauthorized
-          content: { }
+          content: {}
         403:
           description: Missing permission
-          content: { }
+          content: {}
         404:
           description: Movie not found
-          content: { }
+          content: {}
   /files/{id}:
     get:
       tags:
@@ -725,7 +756,7 @@ paths:
       description: Returns a single stored file with the specified ID
       operationId: getStoredFileById
       parameters:
-        - $ref: '#/components/parameters/UuId'
+        - $ref: "#/components/parameters/UuId"
         - in: query
           name: fileType
           schema:
@@ -736,19 +767,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RecvFileDto'
+                $ref: "#/components/schemas/RecvFileDto"
         400:
           description: Invalid ID supplied
-          content: { }
+          content: {}
         401:
           description: Unauthorized
-          content: { }
+          content: {}
         403:
           description: Missing permission
-          content: { }
+          content: {}
         404:
           description: Not found
-          content: { }
+          content: {}
     delete:
       tags:
         - files
@@ -756,22 +787,20 @@ paths:
       description: Deletes the stored file with the specified ID
       operationId: deleteStoredFile
       parameters:
-        - $ref: '#/components/parameters/UuId'
+        - $ref: "#/components/parameters/UuId"
       responses:
         400:
           description: Invalid ID supplied
-          content: { }
+          content: {}
         401:
           description: Unauthorized
-          content: { }
+          content: {}
         403:
           description: Missing permission
-          content: { }
+          content: {}
         404:
           description: Movie not found
-          content: { }
-
-    
+          content: {}
 
 components:
   parameters:
@@ -791,6 +820,13 @@ components:
       required: true
       schema:
         type: string
+    Type:
+      name: type
+      in: path
+      description: TagType #TODO: change TagType to Enum
+      required: true
+      schema:
+        format: string
   schemas:
     DatabaseEntrySchema:
       properties:
@@ -831,31 +867,31 @@ components:
         movieFile:
           type: array
           items:
-            $ref: '#/components/schemas/FileDto'
+            $ref: "#/components/schemas/FileDto"
         dcpFiles:
           type: array
           items:
-            $ref: '#/components/schemas/FileDto'
+            $ref: "#/components/schemas/FileDto"
         previewFile:
-          $ref: '#/components/schemas/FileDto'
+          $ref: "#/components/schemas/FileDto"
         trailerFile:
-          $ref: '#/components/schemas/FileDto'
+          $ref: "#/components/schemas/FileDto"
         stillFiles:
           type: array
           items:
-            $ref: '#/components/schemas/FileDto'
+            $ref: "#/components/schemas/FileDto"
         subtitleFiles:
           type: array
           items:
-            $ref: '#/components/schemas/FileDto'
+            $ref: "#/components/schemas/FileDto"
         directors:
           type: array
           items:
-            $ref: '#/components/schemas/DirectorReferenceDto'
+            $ref: "#/components/schemas/DirectorReferenceDto"
         countriesOfProduction:
           type: array
           items:
-            $ref: '#/components/schemas/TagReferenceDto'
+            $ref: "#/components/schemas/TagReferenceDto"
         yearOfProduction:
           type: integer
           format: int32
@@ -868,15 +904,15 @@ components:
         animationTechniques:
           type: array
           items:
-            $ref: '#/components/schemas/TagReferenceDto'
+            $ref: "#/components/schemas/TagReferenceDto"
         softwareUsed:
           type: array
           items:
-            $ref: '#/components/schemas/TagReferenceDto'
+            $ref: "#/components/schemas/TagReferenceDto"
         keywords:
           type: array
           items:
-            $ref: '#/components/schemas/TagReferenceDto'
+            $ref: "#/components/schemas/TagReferenceDto"
         germanSynopsis:
           type: string
         englishSynopsis:
@@ -884,13 +920,13 @@ components:
         submissionCategories:
           type: array
           items:
-            $ref: '#/components/schemas/TagReferenceDto'
+            $ref: "#/components/schemas/TagReferenceDto"
         hasDialog:
           type: boolean
         dialogLanguages:
           type: array
           items:
-            $ref: '#/components/schemas/TagReferenceDto'
+            $ref: "#/components/schemas/TagReferenceDto"
         hasSubtitles:
           type: boolean
         isStudentFilm:
@@ -910,7 +946,7 @@ components:
         productionCompany:
           type: string
         contact:
-          $ref: '#/components/schemas/ContactReferenceDto'
+          $ref: "#/components/schemas/ContactReferenceDto"
     DirectorSchema:
       properties:
         firstName:
@@ -920,15 +956,15 @@ components:
         lastName:
           type: string
         biographyEnglish:
-          $ref: '#/components/schemas/FileDto'
+          $ref: "#/components/schemas/FileDto"
         biographyGerman:
-          $ref: '#/components/schemas/FileDto'
+          $ref: "#/components/schemas/FileDto"
         filmography:
-          $ref: '#/components/schemas/FileDto'
+          $ref: "#/components/schemas/FileDto"
     ContactSchema:
       properties:
         type:
-          $ref: '#/components/schemas/TagReferenceDto'
+          $ref: "#/components/schemas/TagReferenceDto"
         name:
           type: string
         email:
@@ -952,8 +988,6 @@ components:
         id:
           type: string
 
-          
-
     CreateUpdateMovieDto:
       type: object
       required:
@@ -969,17 +1003,17 @@ components:
         - isStudentFilm
         - contact
       allOf:
-        - $ref: '#/components/schemas/MovieSchema'
+        - $ref: "#/components/schemas/MovieSchema"
     MovieDto:
       type: object
       allOf:
-        - $ref: '#/components/schemas/DatabaseEntrySchema'
-        - $ref: '#/components/schemas/CreateUpdateMovieDto'
+        - $ref: "#/components/schemas/DatabaseEntrySchema"
+        - $ref: "#/components/schemas/CreateUpdateMovieDto"
     SearchMoviePagingDto:
       type: object
       allOf:
-        - $ref: '#/components/schemas/PagingSchema'
-        - $ref: '#/components/schemas/MovieSchema'
+        - $ref: "#/components/schemas/PagingSchema"
+        - $ref: "#/components/schemas/MovieSchema"
 
     CreateUpdateDirectorDto:
       type: object
@@ -988,17 +1022,17 @@ components:
         - lastName
         - biographyEnglish
       allOf:
-        - $ref: '#/components/schemas/DirectorSchema'
+        - $ref: "#/components/schemas/DirectorSchema"
     DirectorDto:
       type: object
       allOf:
-        - $ref: '#/components/schemas/DatabaseEntrySchema'
-        - $ref: '#/components/schemas/CreateUpdateDirectorDto'
+        - $ref: "#/components/schemas/DatabaseEntrySchema"
+        - $ref: "#/components/schemas/CreateUpdateDirectorDto"
     SearchDirectorPagingDto:
       type: object
       allOf:
-        - $ref: '#/components/schemas/PagingSchema'
-        - $ref: '#/components/schemas/DirectorSchema'
+        - $ref: "#/components/schemas/PagingSchema"
+        - $ref: "#/components/schemas/DirectorSchema"
     DirectorReferenceDto:
       type: object
       properties:
@@ -1016,17 +1050,17 @@ components:
         - type
         - name
       allOf:
-        - $ref: '#/components/schemas/ContactSchema'
+        - $ref: "#/components/schemas/ContactSchema"
     ContactDto:
       type: object
       allOf:
-        - $ref: '#/components/schemas/DatabaseEntrySchema'
-        - $ref: '#/components/schemas/CreateUpdateContactDto'
+        - $ref: "#/components/schemas/DatabaseEntrySchema"
+        - $ref: "#/components/schemas/CreateUpdateContactDto"
     SearchContactPagingDto:
       type: object
       allOf:
-        - $ref: '#/components/schemas/PagingSchema'
-        - $ref: '#/components/schemas/ContactSchema'
+        - $ref: "#/components/schemas/PagingSchema"
+        - $ref: "#/components/schemas/ContactSchema"
     ContactReferenceDto:
       type: object
       properties:
@@ -1044,17 +1078,17 @@ components:
         - type
         - name
       allOf:
-        - $ref: '#/components/schemas/TagSchema'
+        - $ref: "#/components/schemas/TagSchema"
     TagDto:
       type: object
       allOf:
-        - $ref: '#/components/schemas/DatabaseEntrySchema'
-        - $ref: '#/components/schemas/CreateUpdateTagDto'
+        - $ref: "#/components/schemas/DatabaseEntrySchema"
+        - $ref: "#/components/schemas/CreateUpdateTagDto"
     SearchTagPagingDto:
       type: object
       allOf:
-        - $ref: '#/components/schemas/PagingSchema'
-        - $ref: '#/components/schemas/TagSchema'
+        - $ref: "#/components/schemas/PagingSchema"
+        - $ref: "#/components/schemas/TagSchema"
     TagReferenceDto:
       type: object
       properties:
