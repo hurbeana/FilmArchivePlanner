@@ -22,7 +22,7 @@ export class FilesJobScheduler {
    * This function removes all files that no longer have an entry in the cache redis keystore from the file cache directory.
    * This function is executed every 10 minutes as a cron job.
    */
-  @Cron(CronExpression.EVERY_MINUTE)
+  @Cron(CronExpression.EVERY_10_SECONDS) // TODO: change this back to 10min later
   async clearStagedFiles() {
     const cachedKeys = await this.cacheManager.store.keys();
     const cachedFileNames = new Array<string>();
@@ -33,13 +33,12 @@ export class FilesJobScheduler {
     fs.readdir(this.filesOptions.endpoint.dest, (err, files) => {
       files.forEach((file) => {
         if (cachedFileNames.indexOf(file) < 0) {
-          this.logger.log('Delete cached file:', file);
           fs.unlink(join(this.filesOptions.endpoint.dest, file), (err) => {
             if (err) {
-              this.logger.error('Could not delete cached file!', err);
+              this.logger.error(`Could not delete cached file! (${file})`, err);
               return;
             }
-            this.logger.log('File deleted!');
+            this.logger.log(`Successfully deleted cached file. (${file})`);
           });
         }
       });

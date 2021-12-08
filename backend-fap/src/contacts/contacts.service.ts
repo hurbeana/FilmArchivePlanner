@@ -17,7 +17,6 @@ import {
   Pagination,
 } from 'nestjs-typeorm-paginate';
 import { SearchContactDto } from './dto/search-contact.dto';
-import { Tag } from '../tags/entities/tag.entity';
 import { TagReferenceDto } from '../tags/dto/tag-reference.dto';
 import { TagsService } from '../tags/tags.service';
 import { TagType } from '../tags/tagtype.enum';
@@ -35,7 +34,6 @@ export class ContactsService {
     private readonly tagsService: TagsService,
   ) {
     this.mapper.createMap(Contact, ContactDto);
-    this.mapper.createMap(Tag, TagReferenceDto);
   }
 
   private readonly logger = new Logger(ContactsService.name);

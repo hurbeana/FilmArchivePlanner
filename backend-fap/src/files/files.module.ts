@@ -7,6 +7,7 @@ import {
   CacheModule,
   CACHE_MANAGER,
   DynamicModule,
+  Global,
   Logger,
   Module,
   NotImplementedException,
@@ -33,11 +34,11 @@ import { getEntityManagerToken } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
 import { AutomapperModule } from '@automapper/nestjs';
 
+@Global()
 @Module({
   imports: [ScheduleModule.forRoot(), AutomapperModule],
   providers: [FilesJobScheduler],
   controllers: [FilesController],
-  exports: [FilesJobScheduler],
 })
 export class FilesModule {
   private readonly logger = new Logger(FilesModule.name);

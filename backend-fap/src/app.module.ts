@@ -10,9 +10,7 @@ import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
 import { FilesModule } from './files/files.module';
 import { DatabaseModule } from './database/database.module';
-import { DirectorsModule } from './directors/directors.module';
 import configuration from './config/configuration';
-import { ContactsModule } from './contacts/contacts.module';
 import { TagsModule } from './tags/tags.module';
 import { createFilesOptions } from './config/files-config.functions';
 
@@ -27,14 +25,12 @@ import { createFilesOptions } from './config/files-config.functions';
       useClass: DatabaseConfigService,
       inject: [ConfigService],
     }),
-    MoviesModule,
     AutomapperModule.forRoot({
       options: [{ name: '', pluginInitializer: classes }],
       singular: true,
     }),
     DatabaseModule,
-    DirectorsModule,
-    ContactsModule,
+    MoviesModule,
     TagsModule,
     FilesModule.forRootAsync({
       imports: [],
