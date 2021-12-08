@@ -255,7 +255,7 @@ export class TableViewComponent {
     });
     let newTag: CreateUpdateTagDto = {
       value: '',
-      type: 'Country',
+      type: '',
       user: 'User',
       public: true,
     };

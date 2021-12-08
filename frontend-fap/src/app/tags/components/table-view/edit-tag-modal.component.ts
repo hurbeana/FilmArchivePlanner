@@ -18,7 +18,7 @@ import { Tag } from '../../models/tag';
       </button>
     </div>
     <div class="modal-body">
-      <div>
+      <form #tagForm="ngForm" (ngSubmit)=" tagForm.form.valid && modal.close({ tag: tagToEdit, id: tagId })">
         <div class="form-group row">
           <label for="inputState" class="col-sm-2 col-form-label">Type</label>
           <div class="col-sm-10">
@@ -43,33 +43,39 @@ import { Tag } from '../../models/tag';
               placeholder="Enter..."
               class="form-control form-control-sm"
               id="tagValue"
-              [value]="tagToEdit.value"
+              name="tagValue"
+              [(ngModel)]="tagToEdit.value"
+              #value="ngModel"
+              [ngClass]="{ 'is-invalid': visible && tagForm.submitted && value.invalid }"
+              required
             />
+            <div class="invalid-feedback" *ngIf="tagForm.submitted && value.invalid">
+              <p *ngIf="value.errors?.required">Value is required</p>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button
-        type="submit"
-        class="btn btn-outline-secondary"
-        (click)="modal.dismiss('cancel click')"
-      >
-        Cancel
-      </button>
-      <button
-        type="submit"
-        class="btn btn-success"
-        (click)="modal.close({ tag: tagToEdit, id: tagId })"
-      >
-        Ok
-      </button>
-      <!-- autoFocus a button with ngbAutofocus as attribute-->
+        <div class="modal-footer">
+          <button
+            class="btn btn-outline-secondary"
+            (click)="this.onCancelModal()"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="btn btn-success"
+          >
+            Ok
+          </button>
+          <!-- autoFocus a button with ngbAutofocus as attribute-->
+        </div>
+      </form>
     </div>
   `,
 })
 export class EditTagModal {
   constructor(public modal: NgbActiveModal) {}
+  visible: boolean = true;
   tagToEdit: Tag;
   tagId: number;
   tagTypes: any = [
@@ -87,5 +93,10 @@ export class EditTagModal {
   }
   changeTagType(event: any) {
     this.tagToEdit.type = event.target.value;
+  }
+
+  onCancelModal() {
+    this.visible = false;
+    this.modal.dismiss('cancel click');
   }
 }
