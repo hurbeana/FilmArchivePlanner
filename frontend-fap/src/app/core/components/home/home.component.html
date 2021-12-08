@@ -1,3 +1,18 @@
-<div class="home-center">
-  <h1 class="mat-h1" i18n>Welcome to Festivator!</h1>
+<div class="home-center"
+     style='
+      display: flex;
+      justify-content: center;
+      flex-flow: column nowrap;
+      height: 100%;
+      background: linear-gradient(#7EE8FA,#EEC0C6)
+'
+>
+
+  <div>
+    <h1 class="mat-h1" style="color: #3f51b5; font-size: 3em; padding-bottom: 30px;" i18n>
+      Welcome to <b>F</b>ilm <b>A</b>rchive <b>P</b>lanner!</h1>
+  </div>
+  <div>
+    <button class="btn btn-primary btn-lg" [routerLink]="'/movies'">Get Started!</button>
+  </div>
 </div>
