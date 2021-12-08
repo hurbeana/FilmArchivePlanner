@@ -8,7 +8,11 @@ export function createFilesOptions(
   configService: ConfigService,
 ): FilesModuleOptions | Promise<FilesModuleOptions> {
   const filesConfig = configService.get<FilesModuleOptions>('files');
-  return { baseUploadPath: '/tmp/fapArchive', ...filesConfig };
+  return {
+    baseUploadPath: '/tmp/fapArchive',
+    baseCachePath: '/tmp/fapCache',
+    ...filesConfig,
+  };
 }
 
 export function createMulterOptions(

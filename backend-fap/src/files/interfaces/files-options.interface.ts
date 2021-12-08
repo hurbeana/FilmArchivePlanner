@@ -22,6 +22,7 @@ export type ConnectionOptions = SFTPConnectionOptions | LocalFSOptions;
 
 export type FilesModuleOptions = {
   baseUploadPath: string;
+  baseCachePath: string;
   downloadTTL: number;
   cache?: CacheModuleOptions;
   endpoint?: MulterModuleOptions;

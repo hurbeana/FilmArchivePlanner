@@ -10,6 +10,11 @@ import { FileDto } from '../dto/file.dto';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { GetRemoveFileDto } from '../dto/get-remove-file.dto';
 import { File } from '../entities/file.entity';
+import * as fs from 'fs';
+import { promisify } from 'util';
+
+const mkdir = promisify(fs.mkdir);
+const rename = promisify(fs.rename);
 
 /**
  * An implementation of a IFsService using sftp
@@ -103,8 +108,11 @@ export class FtpFsService implements IFsService {
       filename: newUuidFilename,
       originalname: file.filename,
       mimetype: file.mimetype,
-      path: path.join(this.filesOptions.endpoint.dest, newUuidFilename),
-      destination: this.filesOptions.endpoint.dest,
+      path: path.join(
+        this.filesOptions.endpoint.baseCachePath,
+        newUuidFilename,
+      ),
+      destination: this.filesOptions.endpoint.baseCachePath,
     } as CachedFileDto;
 
     this.logger.log('Caching stored file.');
@@ -133,11 +141,36 @@ export class FtpFsService implements IFsService {
    */
   async cacheFile(file: RecvFileDto): Promise<CachedFileDto> {
     const id = namor.generate();
+    const realCachePath = path.join(
+      this.filesOptions.baseCachePath,
+      file.filename,
+    );
     const cachedFile = {
       id,
       ...file,
+      path: realCachePath,
+      destination: this.filesOptions.baseCachePath,
     };
+    // TODO: FIX RACE CONDITION WITH READY FLAG IN CACHEFILEDTO !
     await this.cacheManager.set<CachedFileDto>(id, cachedFile);
+
+    if (!fs.existsSync(this.filesOptions.baseCachePath)) {
+      await mkdir(this.filesOptions.baseCachePath);
+    }
+
+    try {
+      await rename(file.path, realCachePath);
+    } catch (err) {
+      console.error(err);
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Could not move received file to correct cache location!',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
     return cachedFile;
   }
 

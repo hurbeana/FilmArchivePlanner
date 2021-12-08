@@ -10,9 +10,10 @@ database = "root"               # string (postgres) database to use
 persistenceType = 'sftp'        # string choose one implementation for remote storage from 'sftp' | 'localfs'
 baseUploadPath = '/upload'      # string the base path on remote to where to upload files
 # downloadTTL = 1800000         # integer ttl in ms for files that are being downloaded and cached (default 30 mins)
+baseCachePath = '/tmp/fapCache' # string directory used for caching
 
 [files.endpoint]                # settings for the fileupload
-dest = '/tmp/fapCache'          # string directory used for caching
+dest = '/tmp/multerUpload'      # string directory used for multer upload files
 
 [files.cache]                   # settings for the cache
 host = 'redis'                  # string redis hostname or IP of server

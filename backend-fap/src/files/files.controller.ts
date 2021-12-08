@@ -1,13 +1,11 @@
 import { IFsService } from './interfaces/fs-service.interface';
 import { FILES_PERSISTENCY_PROVIDER } from './files.constants';
 import {
-  Body,
   Controller,
   Delete,
   Get,
   Inject,
   Logger,
-  NotImplementedException,
   Param,
   Post,
   Query,
