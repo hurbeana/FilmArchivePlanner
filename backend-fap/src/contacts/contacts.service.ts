@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { CreateUpdateContactDto } from './dto/create-update-contact.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, Repository } from 'typeorm';
+import { EntityManager, ILike, Repository } from 'typeorm';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/types';
 import { Contact } from './entities/contact.entity';
@@ -32,6 +32,7 @@ export class ContactsService {
     @InjectMapper()
     private mapper: Mapper,
     private readonly tagsService: TagsService,
+    private entityManager: EntityManager,
   ) {
     this.mapper.createMap(Contact, ContactDto);
   }
@@ -72,9 +73,15 @@ export class ContactsService {
     let orderObj = {};
     if (searchstring) {
       // searchstring higher prio
-      whereObj = Object.keys(SearchContactDto.getStringSearch()).map((k) => ({
-        [k]: ILike('%' + searchstring + '%'),
-      }));
+      whereObj = Object.keys(SearchContactDto.getStringSearch()).map((k) =>
+        k === 'type'
+          ? {
+              [k]: { value: ILike('%' + searchstring + '%') },
+            }
+          : {
+              [k]: ILike('%' + searchstring + '%'),
+            },
+      );
     } else if (search) {
       whereObj = Object.entries(search)
         .filter(([, v]) => v) // filter empty properties
@@ -161,6 +168,26 @@ export class ContactsService {
       throw new NotFoundException();
     }
     await this.contactRepository.delete(id);
+  }
+
+  /**
+   * Checks if a Tag is referenced in some other table
+   * @param contactId the id of the tag that we want to know if it is "used"
+   */
+  async contactIdIsInUse(contactId: number): Promise<boolean> {
+    try {
+      const result = await this.entityManager.query(
+        `SELECT "contactId" FROM  "movie" WHERE "contactId" = $1`,
+        [contactId],
+      );
+      return result.length > 0;
+    } catch (e) {
+      this.logger.error(
+        `Checking if contact with id ${contactId} is in use failed.`,
+        e.stack,
+      );
+      throw new NotFoundException();
+    }
   }
 
   private mapContactToDto(contact: Contact): ContactDto {

@@ -69,4 +69,10 @@ export class ContactsController {
     this.logger.log(`Delete contact with id ${id} called.`);
     return this.contactsService.delete(id);
   }
+
+  @Get('/contactIdIsInUse/:id')
+  tagIsUsed(@Param('id') id: number) {
+    this.logger.log(`Get if tag with id ${id} is in use.`);
+    return this.contactsService.contactIdIsInUse(id);
+  }
 }

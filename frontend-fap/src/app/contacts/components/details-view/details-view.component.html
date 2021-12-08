@@ -1,7 +1,9 @@
 <div *ngIf="contact" class="details-view">
+  <!--
   <div style="display:flex; align-items: center; justify-content: flex-end">
     <img style="margin: 10px 0; padding: 0; max-width:200px; max-height:200px;" mat-card-image src="https://source.unsplash.com/random/300x300?sig={{contact?.id}}">
   </div>
+  -->
   <div class="details-grid">
     <span class="mat-primary label-colon" i18n>Type</span>
     <!--<ng-select
@@ -17,7 +19,7 @@
       </ng-select>-->
 
     <!--<input type="text" disabled value="{{contact?.type}}">-->
-    <input type="text" disabled value="{{contact?.type}}">
+    <input type="text" disabled value="{{contact?.type.value}}">
     <span class="mat-primary label-colon" i18n>Name</span>
     <input type="text" disabled value="{{contact?.name}}">
     <span class="mat-primary label-colon" i18n>E-Mail</span>

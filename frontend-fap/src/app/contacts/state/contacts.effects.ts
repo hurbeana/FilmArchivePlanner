@@ -40,6 +40,19 @@ export class ContactEffects {
     )
   );
 
+  /* is called, whenever an action of type 'createTag' is called */
+  updateContact$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ContactActions.updateContact),
+      switchMap(({ contact, id }) =>
+        this.contactsService.updateContact(contact, id).pipe(
+          map((contact) => ContactActions.updateContactSuccess({ contact })),
+          catchError(() => EMPTY) // TODO: error handling
+        )
+      )
+    )
+  );
+
   /* is called, whenever an action of type 'createMovie' is called */
   deleteContact$ = createEffect(() =>
     this.actions$.pipe(

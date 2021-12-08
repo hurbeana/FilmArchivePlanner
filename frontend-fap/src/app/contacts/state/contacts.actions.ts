@@ -28,6 +28,20 @@ export const setSelectedContact = createAction(
   props<{ selectedContact: Contact }>()
 );
 
+export const updateContact = createAction(
+  '[Contact List] Update Contact',
+  props<{
+    contact: CreateUpdateContactDto;
+    id: number;
+  }>()
+);
+export const updateContactSuccess = createAction(
+  '[Contact List] Update Contact Success',
+  props<{
+    contact: Contact;
+  }>()
+);
+
 export const deleteContact = createAction(
   '[Contact List] Remove Contact',
   props<{

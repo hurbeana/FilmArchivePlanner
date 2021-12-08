@@ -6,12 +6,23 @@ export const contacts = createFeatureSelector<ContactsState>('contacts');
 
 export const pagination = createFeatureSelector<ContactsState>('pagination');
 
+export const selectedContact =
+  createFeatureSelector<ContactsState>('selectedContact');
+
 export const selectContacts = createSelector(
   pagination,
   (state: ContactsState) => {
     return state.pagination.items;
   }
 );
+
+export const selectSelectedContact = createSelector(
+  selectedContact,
+  (state: ContactsState) => {
+    return state.selectedContact;
+  }
+);
+
 export const selectTotalItems = createSelector(
   pagination,
   (state: ContactsState) => {

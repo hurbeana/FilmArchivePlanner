@@ -50,7 +50,12 @@ export class TagService {
   }
 
   checkIfTagIsInUse(tag: Tag): Observable<Boolean> {
-    console.log('[MovieService] - CHECK IF TAG IS IN USE', tag.id);
+    console.log('[TagService] - CHECK IF TAG IS IN USE', tag.id);
     return this.http.get<Boolean>(`${api}/tagIdIsInUse/${tag.id}`);
+  }
+
+  getTagsByType(tagType: string): Observable<Tag[]> {
+    console.log('[TagService] - GET TAGS BY TYPE', tagType);
+    return this.http.get<Tag[]>(`${api}/type/${tagType}`);
   }
 }

@@ -39,13 +39,18 @@ export class ContactService {
     return this.http.get<ContactsPaginationState>(api, { params: params });
   }
 
-  updateContact(contact: Contact) {
+  updateContact(contact: CreateUpdateContactDto, id: number) {
     console.log('[ContactService] - UPDATE CONTACT');
-    return this.http.put(api, contact);
+    return this.http.put<Contact>(`${api}/${id}`, contact);
   }
 
   deleteContact(contact: Contact) {
     console.log('[ContactService] - DELETE CONTACT', contact.id);
     return this.http.delete(`${api}/${contact.id}`);
+  }
+
+  checkIfContactIsInUse(contact: Contact): Observable<Boolean> {
+    console.log('[TagService] - CHECK IF CONTACT IS IN USE', contact.id);
+    return this.http.get<Boolean>(`${api}/contactIdIsInUse/${contact.id}`);
   }
 }

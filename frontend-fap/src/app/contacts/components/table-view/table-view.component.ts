@@ -30,6 +30,11 @@ import {
   NgbModal,
   NgbModalConfig,
 } from '@ng-bootstrap/ng-bootstrap';
+import { CreateContactModal } from './create-contact-modal.component';
+import { EditContactModal } from './edit-contact-modal.component';
+import { TagService } from '../../../tags/services/tag.service';
+import { ConfirmDeleteContactModal } from './confirm-delete-contact-modal.component';
+import { ContactService } from '../../services/contact.service';
 
 /* SORTABLE HEADER TODO */
 export type SortColumn = keyof Contact | '';
@@ -82,7 +87,7 @@ export class TableViewComponent {
   page: number = 1;
 
   searchTerm: string;
-  selectedContact: Contact;
+  selectedContact: Contact | null | undefined;
   loading = new BehaviorSubject<boolean>(true);
 
   @ViewChild('search', { static: true })
@@ -92,7 +97,9 @@ export class TableViewComponent {
   constructor(
     private store: Store<ContactsState>,
     private route: ActivatedRoute,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private contactService: ContactService,
+    private tagService: TagService
   ) {
     this.contacts = this.store.select(ContactSelectors.selectContacts);
     this.store
@@ -135,12 +142,10 @@ export class TableViewComponent {
       .subscribe();
   }
 
-  @Output() selectedContactChanged: EventEmitter<Contact> = new EventEmitter();
-
   selectContact(contact: Contact) {
-    //this.store.dispatch(ContactActions.setSelectedContact({selectedContact: contact}));
-    this.selectedContact = contact;
-    this.selectedContactChanged.emit(this.selectedContact);
+    this.store.dispatch(
+      ContactActions.setSelectedContact({ selectedContact: contact })
+    );
   }
 
   setPage(page: number) {
@@ -163,40 +168,77 @@ export class TableViewComponent {
     );
   }
 
-  populate() {
-    let i = Math.random();
-
-    let newContactType: Object = {
-      id: 1,
-      type: 'Contact',
-      value: 'Unknown',
-      user: 'Test',
-      public: true,
-    };
-
+  openCreateContactModal() {
+    const modalRef = this.modalService.open(CreateContactModal, {
+      centered: true,
+      keyboard: true,
+      //backdrop: 'static' // won`t close on click outside when uncommented
+    });
     let newContact: CreateUpdateContactDto = {
-      type: newContactType,
-      name: 'name'.concat(i.toString()),
-      email: 'email'.concat(i.toString()),
-      phone: 'phone'.concat(i.toString()),
-      website: 'website'.concat(i.toString()),
+      type: { id: '' },
+      name: '',
+      email: '',
+      phone: '',
+      website: '',
     };
-    this.store.dispatch(ContactActions.createContact({ contact: newContact })); // create contact
-  }
-
-  deleteContact(contact: Contact) {
-    this.store.dispatch(
-      ContactActions.deleteContact({
-        contactToDelete: contact,
-        search: this.search.nativeElement.value,
-        page: this.page,
-        limit: this.pageSize,
-      })
+    modalRef.componentInstance.contactToCreate = newContact;
+    this.tagService
+      .getTagsByType('Contact')
+      .subscribe(
+        (usableTags) => (modalRef.componentInstance.usableTags = usableTags)
+      );
+    modalRef.result.then(
+      (contact) => {
+        console.log(contact);
+        this.createContact(modalRef.componentInstance.contactToCreate);
+      },
+      () => {
+        console.log('Unconfirmed close');
+      }
     );
   }
+  createContact(contact: Contact) {
+    this.store.dispatch(ContactActions.createContact({ contact: contact }));
+  }
 
-  editContact(contact: Contact) {
-    alert('EDIT');
+  openEditContactModal(contact: Contact) {
+    const modalRef = this.modalService.open(EditContactModal, {
+      centered: true,
+      keyboard: true,
+      //backdrop: 'static' // won`t close on click outside when uncommented
+    });
+
+    let contactToUpdate: CreateUpdateContactDto = {
+      type: { id: contact.type.id },
+      name: contact.name,
+      email: contact.email,
+      phone: contact.phone,
+      website: contact.website,
+    };
+
+    modalRef.componentInstance.contactToEdit = contactToUpdate;
+    modalRef.componentInstance.contactId = contact.id;
+    this.tagService
+      .getTagsByType('Contact')
+      .subscribe(
+        (usableTags) => (modalRef.componentInstance.usableTags = usableTags)
+      );
+    modalRef.result.then(
+      (result) => {
+        this.editContact(result.contact, result.id);
+      },
+      () => {
+        console.log('Unconfirmed close');
+      }
+    );
+  }
+  editContact(contact: CreateUpdateContactDto, id: number) {
+    this.store.dispatch(
+      ContactActions.updateContact({
+        contact: contact,
+        id: id,
+      })
+    );
   }
 
   openConfirmDeleteContactModal(contact: Contact) {
@@ -205,6 +247,13 @@ export class TableViewComponent {
       keyboard: true,
       //backdrop: 'static' // won`t close on click outside when uncommented
     });
+
+    this.contactService
+      .checkIfContactIsInUse(contact)
+      .subscribe(
+        (isInUse) => (modalRef.componentInstance.contactIsInUse = isInUse)
+      );
+    modalRef.componentInstance.contactIsInUse = false;
     modalRef.componentInstance.contactToDelete = contact;
     modalRef.result.then(
       (contact) => {
@@ -215,55 +264,14 @@ export class TableViewComponent {
       }
     );
   }
-}
-
-@Component({
-  //selector: 'ngbd-modal-confirm-autofocus',
-  template: `
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-title">Contact deletion</h4>
-      <button
-        type="button"
-        class="btn btn-md close"
-        aria-label="Close button"
-        aria-describedby="modal-title"
-        (click)="modal.dismiss('Cross click')"
-      >
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <p>
-        <strong
-          >Are you sure you want to delete contact
-          <span class="text-primary">{{ contactToDelete.name }} </span>?</strong
-        >
-      </p>
-      <p>
-        All information associated to this contact will be permanently deleted.
-        <span class="text-danger">This operation can not be undone.</span>
-      </p>
-    </div>
-    <div class="modal-footer">
-      <button
-        type="button"
-        class="btn btn-outline-secondary"
-        (click)="modal.dismiss('cancel click')"
-      >
-        Cancel
-      </button>
-      <button
-        type="button"
-        class="btn btn-danger"
-        (click)="modal.close(contactToDelete)"
-      >
-        Ok
-      </button>
-      <!-- autoFocus a button with ngbAutofocus as attribute-->
-    </div>
-  `,
-})
-export class ConfirmDeleteContactModal {
-  contactToDelete: Contact;
-  constructor(public modal: NgbActiveModal) {}
+  deleteContact(contact: Contact) {
+    this.store.dispatch(
+      ContactActions.deleteContact({
+        contactToDelete: contact,
+        search: this.search.nativeElement.value,
+        page: this.page,
+        limit: this.pageSize,
+      })
+    );
+  }
 }

@@ -51,6 +51,19 @@ export const contactsReducer = createReducer(
     selectedContact: selectedContact,
   })),
 
+  on(ContactActions.updateContactSuccess, (state, { contact }) => ({
+    ...state,
+    pagination: {
+      ...state.pagination,
+      items: [
+        ...state.pagination.items.map((stateContact) =>
+          stateContact.id === contact.id ? contact : stateContact
+        ),
+      ],
+    },
+    selectedContact: contact,
+  })),
+
   on(ContactActions.deleteContactSuccess, (state, { contactToDelete }) => ({
     ...state,
     pagination: {

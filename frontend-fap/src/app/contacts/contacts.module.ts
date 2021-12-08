@@ -14,6 +14,9 @@ import { SharedModule } from '../shared/shared.module';
 
 /* Components */
 import { DetailsViewComponent } from './components/details-view/details-view.component';
+import { CreateContactModal } from './components/table-view/create-contact-modal.component';
+import { EditContactModal } from './components/table-view/edit-contact-modal.component';
+import { ConfirmDeleteContactModal } from './components/table-view/confirm-delete-contact-modal.component';
 
 /* state management*/
 import { contactsReducer } from './state/contacts.reducer';
@@ -35,6 +38,9 @@ import * as ContactActions from './state/contacts.actions';
     TableViewComponent,
     NgbdSortableHeader,
     ContentComponent,
+    ConfirmDeleteContactModal,
+    CreateContactModal,
+    EditContactModal,
   ],
   exports: [TableViewComponent, DetailsViewComponent, ContentComponent],
   imports: [

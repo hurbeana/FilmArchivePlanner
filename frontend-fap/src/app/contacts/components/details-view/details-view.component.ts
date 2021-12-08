@@ -1,5 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Contact } from '../../models/contact';
+import * as ContactSelectors from '../../state/contacts.selectors';
+import { Store } from '@ngrx/store';
+import { ContactsState } from '../../../app.state';
 
 @Component({
   selector: 'contacts-details-view',
@@ -7,29 +10,13 @@ import { Contact } from '../../models/contact';
   styleUrls: ['./details-view.component.less'],
 })
 export class DetailsViewComponent implements OnInit {
-  @Input() contact: Contact | null;
-  itemsToChooseFrom: Object[] = [ //TODO: Replace with call to getTagsByType()
-    {
-      type: 'Contact',
-      value: 'Business',
-      user: 'Sebi',
-      public: true,
-    },
-    {
-      type: 'Contact',
-      value: 'Friend',
-      user: 'Carl',
-      public: true,
-    },
-    {
-      type: 'Contact',
-      value: 'Unknown',
-      user: 'Frank',
-      public: true,
-    },
-  ];
+  contact: Contact | null | undefined;
 
-  constructor() { }
+  constructor(private store: Store<ContactsState>) {
+    this.store
+      .select(ContactSelectors.selectSelectedContact)
+      .subscribe((selectedContact) => (this.contact = selectedContact));
+  }
 
   ngOnInit(): void { }
 
