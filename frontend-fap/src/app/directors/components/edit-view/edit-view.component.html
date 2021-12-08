@@ -1,0 +1,52 @@
+<div class="form-container">
+  <form class="" [formGroup]="directorsForm" (ngSubmit)="onSubmit()">
+    <fieldset class="form-group">
+      <legend i18n>General</legend>
+      <mat-form-field appearance="standard">
+        <mat-label i18n>First Name</mat-label>
+        <input matInput formControlName="firstName">
+        <mat-error *ngFor="let validation of validation_messages.firstName">
+          <mat-error *ngIf="directorsForm.controls['firstName']?.hasError(validation.type)"
+                     class="error-message">{{validation.message}}</mat-error>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="standard">
+        <mat-label i18n>Last Name</mat-label>
+        <input matInput formControlName="lastName">
+        <mat-error *ngFor="let validation of validation_messages.lastName">
+          <mat-error *ngIf="directorsForm.controls['lastName']?.hasError(validation.type)"
+                     class="error-message">{{validation.message}}</mat-error>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="standard">
+        <mat-label i18n>Middle Name</mat-label>
+        <input matInput formControlName="middleName">
+        <mat-error *ngFor="let validation of validation_messages.middleName">
+          <mat-error *ngIf="directorsForm.controls['middleName']?.hasError(validation.type)"
+                     class="error-message">{{validation.message}}</mat-error>
+        </mat-error>
+      </mat-form-field>
+
+    </fieldset>
+    <mat-divider></mat-divider>
+    <fieldset class="form-group">
+      <legend i18n>Files</legend>
+      <div>
+        <mat-label class="mat-primary label-colon" i18n>Biography English</mat-label>
+        <shared-file-upload controlname="biographyEnglish" requiredFileType="application/pdf" [multiple]="false"></shared-file-upload>
+      </div>
+      <div>
+        <mat-label class="mat-primary label-colon" i18n>Biography German</mat-label>
+        <shared-file-upload controlname="biographyGerman" requiredFileType="application/pdf" [multiple]="false"></shared-file-upload>
+      </div>
+      <div>
+        <mat-label class="mat-primary label-colon" i18n>Filmography</mat-label>
+        <shared-file-upload controlname="filmography" requiredFileType="application/pdf" [multiple]="false"></shared-file-upload>
+      </div>
+    </fieldset>
+    <div>
+      <button mat-raised-button color="primary" type="submit" i18n>Submit</button>
+      <button mat-raised-button  [routerLink]="['/directors']" i18n>back</button>
+    </div>
+  </form>
+</div>

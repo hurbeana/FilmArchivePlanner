@@ -17,7 +17,7 @@ import {
 } from '@nestjs/common';
 import { CreateUpdateDirectorDto } from './dto/create-update-director.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/types';
 import { Director } from './entities/director.entity';
@@ -221,33 +221,34 @@ export class DirectorsService {
     sortOrder: 'ASC' | 'DESC' = 'DESC',
     searchstring: string,
   ): Promise<Pagination<DirectorDto>> {
-    const queryBuilder = this.directorRepository.createQueryBuilder('director');
+    let whereObj = [];
+    let orderObj = {};
     if (searchstring) {
       // searchstring higher prio
-      Object.keys(SearchDirectorDto.getStringSearch()).forEach((k) =>
-        queryBuilder.orWhere(`director.${k} ILIKE :${k}`, {
-          [k]: `%${searchstring}%`,
-        }),
-      );
+      whereObj = Object.keys(SearchDirectorDto.getStringSearch()).map((k) => ({
+        [k]: ILike('%' + searchstring + '%'),
+      }));
     } else if (search) {
-      Object.entries(search)
+      whereObj = Object.entries(search)
         .filter(([, v]) => v) // filter empty properties
-        .forEach(([k, v]) => {
+        .map(([k, v]) => {
           if (typeof v === 'number' || typeof v === 'boolean') {
-            queryBuilder.orWhere(`director.${k} = :${k}`, { [k]: v });
+            return { [k]: v };
           } else if (typeof v === 'string') {
-            queryBuilder.orWhere(`director.${k} ILIKE :${k}`, {
-              [k]: `%${v}%`,
-            });
+            return { [k]: ILike('%' + v + '%') };
           } else {
             //TODO: more types?
           }
         });
     }
     if (orderBy) {
-      queryBuilder.orderBy(orderBy, sortOrder);
+      orderObj = { [orderBy]: sortOrder };
     }
-    return paginate<Director>(queryBuilder, options).then(
+    return paginate<Director>(this.directorRepository, options, {
+      relations: ['biographyEnglish', 'biographyGerman', 'filmography'],
+      where: whereObj,
+      order: orderObj,
+    }).then(
       (page) =>
         new Pagination<DirectorDto>(
           page.items.map((entity) => this.mapDirectorToDto(entity)),
@@ -265,7 +266,10 @@ export class DirectorsService {
   async findOne(id: number): Promise<DirectorDto> {
     let director: Director;
     try {
-      director = await this.directorRepository.findOneOrFail({ where: { id } });
+      director = await this.directorRepository.findOneOrFail({
+        relations: ['biographyEnglish', 'biographyGerman', 'filmography'],
+        where: { id },
+      });
     } catch (e) {
       this.logger.error(`Getting director with id ${id} failed.`, e.stack);
       throw new NotFoundException();

@@ -5,8 +5,20 @@ import {DirectorsState} from "../../app.state";
 export const directors = createFeatureSelector<DirectorsState>('directors');
 
 export const pagination = createFeatureSelector<DirectorsState>('pagination');
+export const selectedDirector = createFeatureSelector<DirectorsState>('selectedDirector');
+
 
 export const selectDirectors = createSelector(pagination, (state : DirectorsState) => { return state.pagination.items});
+export const selectDirector = createSelector(selectedDirector, (state: DirectorsState) => {
+  return state.selectedDirector;
+});
+export const selectDetailsDirector = createSelector(
+  selectedDirector,
+  (state: DirectorsState) => {
+    return state.detailsDirector;
+  }
+);
+
 export const selectTotalItems = createSelector(pagination, (state : DirectorsState) => { return state.pagination.meta.totalItems});
 export const selectItemCount = createSelector(pagination, (state : DirectorsState) => { return state.pagination.meta.itemCount});
 export const selectItemsPerPage = createSelector(pagination, (state : DirectorsState) => { return state.pagination.meta.itemsPerPage});

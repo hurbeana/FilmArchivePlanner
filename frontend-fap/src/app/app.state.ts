@@ -60,6 +60,7 @@ export interface AppState {
 export interface DirectorsState {
   pagination: DirectorsPaginationState;
   selectedDirector?: Director | null;
+  detailsDirector?: Director; // director which is loaded by id for fullscreen detailsview
   searchTerm: string;
 }
 

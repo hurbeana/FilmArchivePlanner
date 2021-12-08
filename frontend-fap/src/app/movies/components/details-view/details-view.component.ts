@@ -5,6 +5,7 @@ import { AppState } from '../../../app.state';
 import { Store } from '@ngrx/store';
 import * as MovieSelector from '../../state/movies.selectors';
 import { FileDto } from "../../../shared/models/file";
+import { Tag } from "../../../tags/models/tag";
 
 @Component({
   selector: 'movies-details-view',
@@ -30,10 +31,17 @@ export class DetailsViewComponent implements OnInit {
     }
     return files.map(f => this.printFile(f));
   }
-  printFile(file?: FileDto){
-    if(!file){
+  printTags(tags?: Tag[]){
+    console.log(tags);
+    if(!tags){
       return "";
     }
-    return [file.path,file.filename].join("/");
+    return tags.map(f => f.value).join(", ");
   }
-}
+  printFile(file?: FileDto) {
+    if (!file) {
+      return "";
+    }
+    return [file.path, file.filename].join("/");
+  }
+  }

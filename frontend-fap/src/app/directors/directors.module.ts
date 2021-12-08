@@ -13,6 +13,9 @@ import { SharedModule } from '../shared/shared.module';
 
 /* Components */
 import { DetailsViewComponent } from './components/details-view/details-view.component';
+import { FullDetailViewComponent } from './components/full-detail-view/full-detail-view.component';
+import { EditViewComponent } from "./components/edit-view/edit-view.component";
+import { ContentComponent } from './components/content/content.component';
 
 /* state management*/
 import { directorsReducer } from './state/directors.reducer';
@@ -21,21 +24,29 @@ import { DirectorsRoutingModule } from './directors-routing.module';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ContentComponent } from './components/content/content.component';
 import { NgbdSortableHeader, TableViewComponent } from './components/table-view/table-view.component';
 import * as DirectorActions from './state/directors.actions';
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatSelectModule } from "@angular/material/select";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
+
 
 @NgModule({
   declarations: [
     DetailsViewComponent,
     TableViewComponent,
     NgbdSortableHeader,
-    ContentComponent
+    ContentComponent,
+    FullDetailViewComponent,
+    EditViewComponent
   ],
   exports: [
     TableViewComponent,
     DetailsViewComponent,
-    ContentComponent
+    ContentComponent,
+    FullDetailViewComponent,
+    EditViewComponent,
   ],
   imports: [
     CommonModule,
@@ -48,13 +59,17 @@ import * as DirectorActions from './state/directors.actions';
       searchTerm: directorsReducer
     }),
     EffectsModule.forRoot([DirectorEffects]),
+    DirectorsRoutingModule,
     SharedModule,
     MatButtonModule,
     MatCardModule,
     MatInputModule,
     MatTabsModule,
     MatTableModule,
-    DirectorsRoutingModule,
+    MatCheckboxModule,
+    MatDividerModule,
+    MatSelectModule,
+    MatSnackBarModule,
   ]
 })
 /* Director Module contains everything related to Directors */

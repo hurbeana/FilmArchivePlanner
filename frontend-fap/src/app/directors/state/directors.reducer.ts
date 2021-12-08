@@ -1,6 +1,7 @@
 import {createReducer, on} from '@ngrx/store';
 import * as DirectorActions from './directors.actions';
 import {DirectorsState} from "../../app.state";
+import * as TagActions from "../../tags/state/tags.actions";
 
 export const initialState: DirectorsState = {
   pagination: {
@@ -28,6 +29,11 @@ export const directorsReducer = createReducer(
       }
     })
   ),
+  on(DirectorActions.getDirector, (state) => state),
+  on(DirectorActions.getDirectorSuccess, (state, { director }) => ({
+    ...state,
+    detailsDirector: director,
+  })),
   on(DirectorActions.createDirector, (state) => (state)),
   on(DirectorActions.createDirectorSuccess, (state, {director}) =>({
       ...state,
@@ -43,6 +49,20 @@ export const directorsReducer = createReducer(
       }
     })
   ),
+  on(DirectorActions.updateDirectorSuccess, (state, { director }) => {
+    console.log("reduced: ",director);
+    return ({
+      ...state,
+      pagination: {
+        ...state.pagination,
+        items: [
+          ...state.pagination.items.map((stateDirector) =>
+            stateDirector.id === director.id ? director : stateDirector
+          )
+        ]
+      }
+    });
+  }),
   on(DirectorActions.setSelectedDirector, (state, {selectedDirector}) => ({
       ...state,
     selectedDirector: selectedDirector

@@ -12,7 +12,13 @@
         <input *ngIf="getFormGroup(fileForm)?.contains('id')" [formControl]="$any(fileForm.get('id'))" type="hidden">
       <div *ngIf="getFormGroup(fileForm)?.contains('filename')">
         <span class="uploaded-file-name">{{$any(fileForm.get('filename')?.value)}}</span>
-        <button mat-icon-button color="primary" type="button  " class="delete-file mini"
+        <button *ngIf="!getFormGroup(fileForm)?.contains('path')"
+                mat-icon-button color="primary" type="button" class="delete-file mini"
+                (click)="removeCacheFile($any(fileForm.get('id')?.value))">
+          <mat-icon>delete_forever</mat-icon>
+        </button>
+        <button *ngIf="getFormGroup(fileForm)?.contains('path')"
+                mat-icon-button color="primary" type="button" class="delete-file mini"
                 (click)="removeFile($any(fileForm.get('id')?.value))">
           <mat-icon>delete_forever</mat-icon>
         </button>
@@ -28,7 +34,8 @@
       </div>
       </ng-container>
     </div>
-    <button mat-mini-fab color="primary" class="upload-btn" type="button"
+    <button *ngIf="!multiple && !getFormGroup(fileGroup)?.contains('filename')"
+      mat-mini-fab color="primary" class="upload-btn" type="button"
             (click)="fileUpload.click()">
       <mat-icon>attach_file</mat-icon>
     </button>

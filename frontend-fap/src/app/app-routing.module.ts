@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './core/components/home/home.component';
+import { NotFoundComponent } from "./shared/components/not-found/not-found.component";
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -23,6 +24,8 @@ const routes: Routes = [
     path: 'tags',
     loadChildren: () => import('./tags/tags.module').then((m) => m.TagsModule),
   }, // lazy load module
+  {path: 'notfound', component: NotFoundComponent},
+  {path: '**', component: NotFoundComponent}
 ];
 
 @NgModule({

@@ -13,6 +13,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     YesNoLabelComponent,
     ResizableDirective,
     FileUploadComponent,
+    NotFoundComponent,
   ],
   imports: [
     CommonModule,

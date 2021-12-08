@@ -2,11 +2,14 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {DetailsViewComponent} from "./components/details-view/details-view.component";
 import {ContentComponent} from "./components/content/content.component";
+import { EditViewComponent } from "./components/edit-view/edit-view.component";
+import { FullDetailViewComponent } from "./components/full-detail-view/full-detail-view.component";
 
 const routes: Routes = [
   { path: '', component: ContentComponent },
-  //{ path: '/:id', component: DetailsViewComponent }, // TODO: replace with update director component
-  //{ path: '/create', component: DetailsViewComponent } // TODO: replace with create director component
+  { path: 'edit/:id', component: EditViewComponent },
+  { path: 'create', component: EditViewComponent },
+  { path: ':id', component: FullDetailViewComponent },
 ];
 
 @NgModule({

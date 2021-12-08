@@ -24,27 +24,27 @@
     <span class="mat-primary label-colon" i18n>Directors</span>
     <input type="text" disabled value="{{movie?.directors}}">
     <span class="mat-primary label-colon" i18n>Countries of Production</span>
-    <input type="text" disabled value="{{movie?.countriesOfProduction}}">
+    <input type="text" disabled value="{{printTags(movie?.countriesOfProduction)}}">
     <span class="mat-primary label-colon" i18n>Year of Production</span>
     <input type="text" disabled value="{{movie?.yearOfProduction}}">
     <span class="mat-primary label-colon" i18n>Duration</span>
     <input type="text" disabled value="{{movie?.duration}}">
     <span class="mat-primary label-colon" i18n>Animation Technique</span>
-    <input type="text" disabled value="{{movie?.animationTechniques}}">
+    <input type="text" disabled value="{{printTags(movie?.animationTechniques)}}">
     <span class="mat-primary label-colon" i18n>Software Used</span>
-    <input type="text" disabled value="{{movie?.softwareUsed}}">
+    <input type="text" disabled value="{{printTags(movie?.softwareUsed)}}">
     <span class="mat-primary label-colon" i18n>Keywords</span>
-    <input type="text" disabled value="{{movie?.keywords}}">
+    <input type="text" disabled value="{{printTags(movie?.keywords)}}">
     <span class="mat-primary label-colon" i18n>German Synopsis</span>
     <input type="text" disabled value="{{movie?.germanSynopsis}}">
     <span class="mat-primary label-colon" i18n>English Synopsis</span>
     <input type="text" disabled value="{{movie?.englishSynopsis}}">
     <span class="mat-primary label-colon" i18n>Submission Category</span>
-    <input type="text" disabled value="{{movie?.submissionCategory}}">
+    <input type="text" disabled value="{{printTags(movie?.submissionCategory)}}">
     <span class="mat-primary label-colon" i18n>Has Dialog</span>
     <shared-yes-no-label>{{movie?.hasDialog}}</shared-yes-no-label>
     <span class="mat-primary label-colon" i18n>Original Title</span>
-    <input type="text" disabled value="{{movie?.dialogLanguages}}">
+    <input type="text" disabled value="{{printTags(movie?.dialogLanguages)}}">
     <span class="mat-primary label-colon" i18n>Has Subtitles</span>
     <input type="text" disabled value="{{movie?.hasSubtitles}}">
     <span class="mat-primary label-colon" i18n>Is Student Film</span>

@@ -3,6 +3,20 @@ import {Director} from "../models/director";
 import {CreateUpdateDirectorDto} from "../models/create.director";
 import {DirectorsPaginationState} from "../../app.state";
 
+
+/*getting single director by id*/
+export const getDirector = createAction(
+  '[Director List] Get Director',
+  props<{ id: number }>()
+);
+export const getDirectorSuccess = createAction(
+  '[Director List] Loaded Director Success',
+  props<{ director: Director }>()
+);
+export const getDirectorFailed = createAction(
+  '[Director List] Loaded Director Failed',
+  props<{ errormessage: string }>()
+);
 /* whenever this action is called, the 'getDirectors$' effect in directors.effects.ts  is executed */
 export const getDirectors = createAction('[Director List] Get Directors', props<{search: string, page: number, limit: number}>());
 export const getDirectorsSuccess = createAction('[Directors List] Loaded Directors Success', props<{ pagination: DirectorsPaginationState }>());
@@ -10,9 +24,31 @@ export const getDirectorsSuccess = createAction('[Directors List] Loaded Directo
 /* whenever this action is called, the 'createDirector$' effect in directors.effects.ts  is executed */
 export const createDirector = createAction('[Director List] Create Director', props<{ director: CreateUpdateDirectorDto }>());
 export const createDirectorSuccess = createAction('[Director List] Created Director Success', props<{ director: Director }>());
+export const createDirectorFailed = createAction(
+  '[Director List] Created Director Failed',
+  props<{ errormessage: string }>()
+);
 
+/*update director by id*/
+export const updateDirector = createAction(
+  '[Director List] Update Director',
+  props<{ id: number; director: CreateUpdateDirectorDto }>()
+);
+export const updateDirectorSuccess = createAction(
+  '[Director List] Updated Director Success',
+  props<{ director: Director }>()
+);
+export const updateDirectorFailed = createAction(
+  '[Director List] Update Director Failed',
+  props<{ errormessage: string }>()
+);
+
+
+/* set select director*/
 export const setSelectedDirector = createAction('[Director List] Set Selected Director', props<{ selectedDirector: Director }>());
 
+
+/* delete director */
 export const deleteDirector = createAction('[Director List] Remove Director', props<{ directorToDelete: Director, search: string, page: number, limit: number }>());
 export const deleteDirectorSuccess = createAction('[Director List] Remove Director Success', props<{ directorToDelete: Director, search: string, page: number, limit: number }>());
 

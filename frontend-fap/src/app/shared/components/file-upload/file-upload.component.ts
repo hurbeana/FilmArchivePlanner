@@ -2,9 +2,9 @@ import { Component, Input } from "@angular/core";
 import { Subscription } from "rxjs";
 import { HttpClient, HttpEventType } from "@angular/common/http";
 import { finalize } from "rxjs/operators";
-import { AbstractControl, FormArray, FormControl, FormGroup, FormGroupDirective } from "@angular/forms";
+import { AbstractControl, Form, FormArray, FormControl, FormGroup, FormGroupDirective } from "@angular/forms";
 import {  UploadFileResponseDto } from "../../models/upload.file.response";
-import { FileDto } from "../../models/file";
+import { FileDto, fileTypes } from "../../models/file";
 
 @Component({
   selector: 'shared-file-upload',
@@ -67,8 +67,15 @@ export class FileUploadComponent {
         if(this.multiple){
           this.formFileArray.push(newfileGroup);
         }else{
-          //TODO:
-          this.fileGroup.setControl('filename', new FormControl(file.name));
+          if(this.fileGroup.contains('id')) {
+            this.fileGroup.removeControl('id');
+            this.fileGroup.removeControl('path');
+            this.fileGroup.removeControl('mimetype');
+            this.fileGroup.setControl('filename', new FormControl(file.name));
+          }else{
+            this.fileGroup.setControl('filename', new FormControl(file.name));
+          }
+          //this.fileGroup = new FormGroup({'filename': new FormControl(file.name)});
         }
         const formData = new FormData();
         formData.append('file', file);
@@ -87,10 +94,12 @@ export class FileUploadComponent {
             );
           }else if(response?.type == HttpEventType.Response && response?.body?.id){
             console.log(response);
+            console.log(response.body.id);
 
             if(this.multiple){
               newfileGroup.addControl('id',new FormControl(response.body.id));
             }else{
+              //remove file
               this.fileGroup.enable(); // enable -> value
               this.fileGroup.setControl('id',new FormControl(response.body.id));
             }
@@ -116,12 +125,37 @@ export class FileUploadComponent {
     this.uploadSub = undefined;
   }
 
-  removeFile(id: string){
+  removeCacheFile(id: string){
     console.log(id);
     this.http.delete('http://localhost:3000/files/cache/'+id).subscribe(x => {
       console.log(x);
-      //this.files = this.files.filter(f => f.id !== id);
-      this.formFileArray.controls = this.formFileArray.controls.filter(c => c.get('id')?.value !== id);
+      if(this.multiple){
+        this.formFileArray.controls = this.formFileArray.controls.filter(c => c.get('id')?.value !== id);
+      }else{
+        this.resetFormGroup();
+        this.fileGroup.disable();
+      }
     });
+  }
+  removeFile(id: string){
+    console.log(id);
+    let filetype = fileTypes[this.controlname];
+    this.http.delete(`http://localhost:3000/files/${id}?fileType=${filetype}`).subscribe(x => {
+      console.log(x);
+      if(this.multiple){
+        this.formFileArray.controls = this.formFileArray.controls.filter(c => c.get('id')?.value !== id);
+      }else{
+        this.resetFormGroup();
+        this.fileGroup.disable();
+      }
+    });
+  }
+
+
+  resetFormGroup(){
+    this.fileGroup.removeControl('id');
+    this.fileGroup.removeControl('path');
+    this.fileGroup.removeControl('mimetype');
+    this.fileGroup.removeControl('filename');
   }
 }

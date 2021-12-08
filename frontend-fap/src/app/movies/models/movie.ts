@@ -1,5 +1,7 @@
 import { DirectorReference } from '../../directors/models/director-ref';
 import { FileDto } from "../../shared/models/file";
+import { Tag } from "../../tags/models/tag";
+import { Contact } from "../../contacts/models/contact";
 
 export interface Movie {
   id: Number;
@@ -12,17 +14,17 @@ export interface Movie {
   stillFiles?: FileDto[];
   subtitleFiles?: FileDto[];
   directors: DirectorReference[];
-  countriesOfProduction?: string[]; //TODO Replace with Tag[]
+  countriesOfProduction?: Tag[];
   yearOfProduction?: number;
   duration: number; //Duration in minutes
-  animationTechniques?: string[]; //TODO Replace with Tag[]
-  softwareUsed?: string[]; //TODO Replace with Tag[]
-  keywords?: string[]; //TODO Replace with Tag[]
+  animationTechniques?: Tag[];
+  softwareUsed?:  Tag[];
+  keywords?:  Tag[];
   germanSynopsis: string;
   englishSynopsis: string;
-  submissionCategory: string;
+  submissionCategory: Tag[];
   hasDialog?: boolean;
-  dialogLanguages?: string[]; //TODO Replace with Tag[]
+  dialogLanguages?: Tag[];
   hasSubtitles?: boolean;
   isStudentFilm: boolean;
   filmSchool?: string;
@@ -32,7 +34,7 @@ export interface Movie {
   sound?: string;
   music?: string;
   productionCompany?: string;
-  contact: string; //TODO Replace with Contact
+  contact: Contact;
   created_at: Date;
   last_updated: Date;
 }

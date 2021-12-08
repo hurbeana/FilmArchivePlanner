@@ -123,27 +123,10 @@ export class TableViewComponent {
     this.store.dispatch(DirectorActions.getDirectors({search: this.search.nativeElement.value, page: this.page, limit: pageSize}));
   }
 
-  populate(){
-    let i = Math.random();
-
-    let newDirector : CreateUpdateDirectorDto = {
-      firstName:	"firstName".concat(i.toString()),
-      middleName:	"middleName".concat(i.toString()),
-      lastName:	"lastName".concat(i.toString()),
-      biographyEnglish:	"biographyEnglish".concat(i.toString()),
-      biographyGerman:	"biographyGerman".concat(i.toString()),
-      filmography:	"filmography".concat(i.toString()),
-    };
-    this.store.dispatch(DirectorActions.createDirector({director: newDirector})); // create director
-  }
-
   deleteDirector(director: Director){
     this.store.dispatch(DirectorActions.deleteDirector({directorToDelete: director, search: this.search.nativeElement.value, page:this.page, limit:this.pageSize}));
   }
 
-  editDirector(director: Director) {
-    alert("EDIT");
-  }
 
   openConfirmDeleteDirectorModal(director: Director) {
     const modalRef = this.modalService.open(ConfirmDeleteDirectorModal,
