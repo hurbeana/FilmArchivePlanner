@@ -7,7 +7,7 @@ import * as Client from 'ssh2-sftp-client';
 import * as path from 'path';
 import { EntityManager } from 'typeorm';
 import { FileDto } from '../dto/file.dto';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { GetRemoveFileDto } from '../dto/get-remove-file.dto';
 import { File } from '../entities/file.entity';
 
@@ -18,6 +18,8 @@ import { File } from '../entities/file.entity';
  */
 @Injectable()
 export class FtpFsService implements IFsService {
+  private readonly logger = new Logger(FtpFsService.name);
+
   constructor(
     private readonly filesOptions: any, // Typescript fails to derive correct type
     private readonly cacheManager: Cache,
@@ -56,46 +58,71 @@ export class FtpFsService implements IFsService {
     pid: string,
     getRemoveFileDto: GetRemoveFileDto,
   ): Promise<CachedFileDto> {
+    /**
+     * First look for the file to get in the file cache.
+     * Renew the TTL of the cache entry for this file if found.
+     */
     const tryCachedFile = await this.getCachedInfo(pid.toString());
-    if (tryCachedFile !== null) {
+    if (tryCachedFile !== null && tryCachedFile !== undefined) {
       this.cacheManager.set<CachedFileDto>(pid.toString(), tryCachedFile, {
         ttl: this.filesOptions.downloadTTL,
       });
+      this.logger.log('Getting File from cache location.');
       return tryCachedFile;
     }
 
+    this.logger.log(
+      'File not found in cache. Retrieving file information from db.',
+    );
+    /**
+     * File is not yet cached -> get stored file information via query from db.
+     */
     const file = (
       await this.entityManager.query(
         `SELECT * FROM ${getRemoveFileDto.fileType} WHERE "id" = $1`,
         [pid],
       )
     )[0] as File;
-    if (file === undefined) {
+    if (file === undefined || file === null) {
+      const errMsg = `Could not find file with id: ${pid}`;
+      this.logger.error(errMsg);
       throw new HttpException(
         {
           status: HttpStatus.NOT_FOUND,
-          error: 'Could not find file to get',
+          error: errMsg,
         },
         HttpStatus.NOT_FOUND,
       );
     }
 
+    /**
+     * Create and set values for new file cache entry from stored file information.
+     */
+    const newUuidFilename = namor.generate();
     const cachedFile = {
-      filename: file.filename,
+      filename: newUuidFilename,
       originalname: file.filename,
       mimetype: file.mimetype,
-      path: path.join(this.filesOptions.endpoint.dest, namor.generate()),
+      path: path.join(this.filesOptions.endpoint.dest, newUuidFilename),
       destination: this.filesOptions.endpoint.dest,
     } as CachedFileDto;
 
+    this.logger.log('Caching stored file.');
+    /**
+     * Connect sftp client and copy stored file to cache location.
+     */
     const client = await this.getClient();
     await client.connect(this.filesOptions.connectOptions);
     await client.fastGet(path.join(file.path, file.filename), cachedFile.path);
+    await client.end();
+
+    /**
+     * Save cache file entry in redis cache store.
+     */
     await this.cacheManager.set<CachedFileDto>(pid.toString(), cachedFile, {
       ttl: this.filesOptions.downloadTTL,
     });
 
-    await client.end();
     return cachedFile;
   }
 
@@ -135,6 +162,9 @@ export class FtpFsService implements IFsService {
     }
     const fullPath = path.join(remotePath, cachedFile.originalname);
     await client.put(cachedFile.path, fullPath).then(() => client.end());
+
+    this.removeCachedFile(cid);
+
     return {
       path: remotePath,
       filename: cachedFile.originalname,

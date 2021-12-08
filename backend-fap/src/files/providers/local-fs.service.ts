@@ -7,13 +7,9 @@ import * as namor from 'namor';
 import * as path from 'path';
 import * as fs from 'fs';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
-import * as mime from 'mime-types';
-import { InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, Repository } from 'typeorm';
+import { EntityManager } from 'typeorm';
 import { File } from '../entities/file.entity';
 import { promisify } from 'util';
-import { Mapper } from '@automapper/types';
-import { InjectMapper } from '@automapper/nestjs';
 import { GetRemoveFileDto } from '../dto/get-remove-file.dto';
 
 const mkdir = promisify(fs.mkdir);
@@ -112,14 +108,39 @@ export class LocalFsService implements IFsService {
       this.filesOptions.baseUploadPath,
       ...subFolder,
     );
-    // TODO check if file already exists
 
     const fullPath = path.join(remotePath, cachedFile.originalname);
-    try {
-      await mkdir(remotePath, { recursive: true });
-      this.logger.log('Directories successfully created');
-    } catch (err) {
-      throw new Error(`Could not create directories ${subFolder}`);
+
+    if (fs.existsSync(fullPath)) {
+      const errMsg = `File '${cachedFile.originalname}' already exists in remote location!`;
+      this.logger.log(`${errMsg} (in path: ${remotePath})`);
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: errMsg,
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    /**
+     * Create remote subdirectory if it does not exist already
+     */
+    if (!fs.existsSync(remotePath)) {
+      try {
+        await mkdir(remotePath, { recursive: true });
+        this.logger.log('Directories successfully created');
+      } catch (err) {
+        const errMsg = `Could not create directories ${subFolder}`;
+        this.logger.error(errMsg);
+        throw new HttpException(
+          {
+            status: HttpStatus.NOT_FOUND,
+            error: errMsg,
+          },
+          HttpStatus.NOT_FOUND,
+        );
+      }
     }
 
     try {
@@ -128,15 +149,14 @@ export class LocalFsService implements IFsService {
     } catch (err) {
       throw new Error(`Error copying cached file (path: ${cachedFile.path})`);
     }
-    // TODO remove this, replace with return of dto
-    // const fileEntity = this.filesRepository.create({
-    //   path: remotePath,
-    //   filename: cachedFile.originalname,
-    //   mimetype: cachedFile.mimetype,
-    // });
-    // const createdFile = await this.filesRepository.save(fileEntity);
-    // return this.mapFileToDto(createdFile);
-    return cachedFile;
+
+    this.removeCachedFile(cid);
+
+    return {
+      path: remotePath,
+      filename: cachedFile.originalname,
+      mimetype: cachedFile.mimetype,
+    };
   }
 
   /**
