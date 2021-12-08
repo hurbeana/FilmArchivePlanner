@@ -18,8 +18,7 @@ import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import * as MovieSelectors from '../../state/movies.selectors';
 import * as MovieActions from '../../state/movies.actions';
-import { debounceTime, distinctUntilChanged, filter, tap, } from 'rxjs/operators';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { debounceTime, distinctUntilChanged, filter, tap, } from 'rxjs/operators';import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 /* SORTABLE HEADER TODO */
 export type SortColumn = keyof Movie | '';
@@ -151,42 +150,6 @@ export class TableViewComponent {
         limit: pageSize,
       })
     );
-  }
-
-  populate() {
-    let i = Math.random();
-    let newMovie: CreateUpdateMovieDto = {
-      originalTitle: 'originalTitle'.concat(i.toString()),
-      englishTitle: 'englishTitle'.concat(i.toString()),
-      movieFile: 'movieFile'.concat(i.toString()),
-      previewFile: 'previewFile'.concat(i.toString()),
-      trailerFile: 'trailerFile'.concat(i.toString()),
-      stillFiles: ['stillFiles', 'stillFiles'],
-      subtitleFiles: ['subtitleFiles'],
-      directors: ['directors', 'directors'],
-      countriesOfProduction: ['countriesOfProduction', 'countriesOfProduction'],
-      yearOfProduction: 1990,
-      duration: 200, //Duration in minutes
-      animationTechniques: ['animationTechniques', 'animationTechniques'],
-      softwareUsed: ['softwareUsed', 'softwareUsed'],
-      keywords: ['keywords', 'keywords'],
-      germanSynopsis: 'germanSynopsis'.concat(i.toString()),
-      englishSynopsis: 'englishSynopsis'.concat(i.toString()),
-      submissionCategory: 'submissionCategory'.concat(i.toString()),
-      hasDialog: true,
-      dialogLanguages: ['dialogLanguages', 'dialogLanguages'],
-      hasSubtitles: false,
-      isStudentFilm: false,
-      filmSchool: 'filmSchool'.concat(i.toString()),
-      script: 'script'.concat(i.toString()),
-      animation: 'animation'.concat(i.toString()),
-      editing: 'editing'.concat(i.toString()),
-      sound: 'sound'.concat(i.toString()),
-      music: 'music'.concat(i.toString()),
-      productionCompany: 'productionCompany'.concat(i.toString()),
-      contact: 'contact'.concat(i.toString()),
-    };
-    this.store.dispatch(MovieActions.createMovie({ movie: newMovie })); // create movie
   }
 
   deleteMovie(movie: Movie) {

@@ -1,6 +1,7 @@
 <div *ngIf="movie" class="details-view">
   <div style="display:flex; align-items: center; justify-content: flex-end">
-    <img style="margin: 10px 0; padding: 0; max-width:200px; max-height:200px;" mat-card-image src="https://source.unsplash.com/random/300x300?sig={{movie?.id}}"
+    <img style="margin: 10px 0; padding: 0; max-width:200px; max-height:200px;" mat-card-image
+         src="https://source.unsplash.com/random/300x300?sig={{movie?.id}}"
       alt="{{movie?.stillFiles}}">
   </div>
   <div class="details-grid">
@@ -8,16 +9,18 @@
     <input type="text" disabled value="{{movie?.originalTitle}}">
     <span class="mat-primary label-colon" i18n>English Title</span>
     <input type="text" disabled value="{{movie?.englishTitle}}">
-    <span class="mat-primary label-colon" i18n>Movie File</span>
-    <input type="text" disabled value="{{movie?.movieFile}}">
+    <span class="mat-primary label-colon" i18n>Movie Files</span>
+    <input type="text" disabled value="{{printFiles(movie?.movieFiles)}}">
+    <span class="mat-primary label-colon" i18n>DCP Files</span>
+    <input type="text" disabled value="{{printFiles(movie?.dcpFiles)}}">
     <span class="mat-primary label-colon" i18n>Preview File</span>
-    <input type="text" disabled value="{{movie?.previewFile}}">
+    <input type="text" disabled value="{{printFile(movie?.previewFile)}}">
     <span class="mat-primary label-colon" i18n>Trailer File</span>
-    <input type="text" disabled value="{{movie?.trailerFile}}">
+    <input type="text" disabled value="{{printFile(movie?.trailerFile)}}">
     <span class="mat-primary label-colon" i18n>Still File</span>
-    <input type="text" disabled value="{{movie?.stillFiles}}">
+    <input type="text" disabled value="{{printFiles(movie?.stillFiles)}}">
     <span class="mat-primary label-colon" i18n>Subtitle Folder</span>
-    <input type="text" disabled value="{{movie?.subtitleFiles}}">
+    <input type="text" disabled value="{{printFiles(movie?.subtitleFiles)}}">
     <span class="mat-primary label-colon" i18n>Directors</span>
     <input type="text" disabled value="{{movie?.directors}}">
     <span class="mat-primary label-colon" i18n>Countries of Production</span>

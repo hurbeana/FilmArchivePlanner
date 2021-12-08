@@ -9,18 +9,15 @@
       </div>
       <div>
         <span class="mat-subheading-2 " i18n>Directors: </span>
-        <span>{{movie?.directors}}</span>
+        <span
+          *ngFor="let director of movie?.directors">{{director.fullName}}</span>
       </div>
       <div style="height: 10px"></div>
-
       <div>{{movie?.germanSynopsis}}</div>
       <div style="height: 10px"></div>
       <div>{{movie?.englishSynopsis}}</div>
     </div>
-    <div>
-      <img style="margin: 0; padding: 0; max-width:600px; max-height:400px;" mat-card-image src="https://source.unsplash.com/random/600x400?sig={{movie?.id}}"
-        alt="{{movie?.stillFiles}}">
-    </div>
+    <gallery class="still-gallery" [items]="images"></gallery>
   </div>
   <h2 class="mat-h2" style="margin-left: 1em" i18n>Details</h2>
   <div class="details-flex">
@@ -29,99 +26,83 @@
         <span class="mat-subheading-2 text-bold" i18n>Original Title</span>
         <span>{{movie?.originalTitle ?? 'empty'}}</span>
       </div>
-      <div><span class="mat-subheading-2 text-bold" i18n>English Title</span>
+      <div>
+        <span class="mat-subheading-2 text-bold" i18n>English Title</span>
         <span>{{movie?.englishTitle ?? 'empty'}}</span>
       </div>
-      <div><span class="mat-subheading-2 text-bold" i18n>Movie File</span>
-        <span>{{movie?.movieFile ?? 'empty'}}</span>
+      <div>
+        <span class="mat-subheading-2 text-bold" i18n>Movie Files</span>
+        <span *ngFor="let file of movie?.movieFiles">{{file.filename}}</span>
       </div>
-      <div><span class="mat-subheading-2 text-bold" i18n>Preview File</span>
-        <span>{{movie?.previewFile ?? 'empty'}}</span>
+      <div>
+        <span class="mat-subheading-2 text-bold" i18n>DCP Files</span>
+        <span *ngFor="let file of movie?.dcpFiles">{{file.filename}}</span>
       </div>
-      <div><span class="mat-subheading-2 text-bold" i18n>Trailer File</span>
-        <span>{{movie?.trailerFile ?? 'empty'}}</span>
+      <div>
+        <span class="mat-subheading-2 text-bold" i18n>Preview File</span>
+        <span>{{movie?.previewFile?.filename}}</span>
       </div>
-      <div><span class="mat-subheading-2 text-bold" i18n>Still File</span>
-        <span>{{movie?.stillFiles ?? 'empty'}}</span>
+      <div>
+        <span class="mat-subheading-2 text-bold" i18n>Trailer File</span>
+        <span>{{movie?.trailerFile?.filename}}</span>
+      </div>
+      <div>
+        <span class="mat-subheading-2 text-bold" i18n>Still File</span>
+        <span *ngFor="let file of movie?.stillFiles">{{file.filename}}</span>
       </div>
       <div>
         <span class="mat-subheading-2 text-bold" i18n>Subtitle Folder</span>
-        <span>{{movie?.subtitleFiles ?? 'empty'}}</span>
+        <span *ngFor="let file of movie?.subtitleFiles">{{file.filename}}</span>
       </div>
-      <div><span class="mat-subheading-2 text-bold" i18n>Directors</span>
-        <span>{{movie?.directors ?? 'empty'}}</span>
+      <div>
+        <span class="mat-subheading-2 text-bold" i18n>Directors</span>
+        <div
+          *ngFor="let director of movie?.directors">{{director.fullName}},
+        </div>
       </div>
       <div><span class="mat-subheading-2 text-bold" i18n>Countries of Production</span>
-        <span>{{movie?.countriesOfProduction ?? 'empty'}}</span>
-      </div>
+        <span>{{movie?.countriesOfProduction ?? 'empty'}}</span></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Year of Production</span>
-        <span>{{movie?.yearOfProduction ?? 'empty'}}</span>
-      </div>
+        <span>{{movie?.yearOfProduction ?? 'empty'}}</span></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Duration</span>
-        <span>{{movie?.duration ?? 'empty'}}</span>
-      </div>
+        <span>{{movie?.duration ?? 'empty'}}</span></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Animation Technique</span>
-        <span>{{movie?.animationTechniques ?? 'empty'}}</span>
-      </div>
+        <span>{{movie?.animationTechniques ?? 'empty'}}</span></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Software Used</span>
-        <span>{{movie?.softwareUsed ?? 'empty'}}</span>
-      </div>
+        <span>{{movie?.softwareUsed ?? 'empty'}}</span></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Keywords</span>
-        <span>{{movie?.keywords ?? 'empty'}}</span>
-      </div>
-      <div>
-        <!--<span class="mat-subheading-2 " i18n>German Synopsis</span>-->
-        <!--<span>{{movie?.germanSynopsis}}</span>-->
-      </div>
-      <div>
-        <!--<span class="mat-subheading-2 " i18n>English Synopsis</span>-->
-        <!--<span>{{movie?.englishSynopsis}}</span>-->
-      </div>
+        <span>{{movie?.keywords ?? 'empty'}}</span></div>
+      <div>  <!--<span class="mat-subheading-2 " i18n>German Synopsis</span>-->
+        <!--<span>{{movie?.germanSynopsis}}</span>--></div>
+      <div> <!--<span class="mat-subheading-2 " i18n>English Synopsis</span>-->
+        <!--<span>{{movie?.englishSynopsis}}</span>--></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Submission Category</span>
-        <span>{{movie?.submissionCategory ?? 'empty'}}</span>
-      </div>
+        <span>{{movie?.submissionCategory ?? 'empty'}}</span></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Has Dialog</span>
-        <span>
-          <shared-yes-no-label>{{movie?.hasDialog}}</shared-yes-no-label>
-        </span>
-      </div>
+        <span><shared-yes-no-label>{{movie?.hasDialog}}</shared-yes-no-label></span></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Original Title</span>
-        <span>{{movie?.dialogLanguages ?? 'empty'}}</span>
-      </div>
+        <span>{{movie?.dialogLanguages ?? 'empty'}}</span></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Has Subtitles</span>
-        <span>
-          <shared-yes-no-label>{{movie?.hasSubtitles}}</shared-yes-no-label>
-        </span>
-      </div>
+        <span><shared-yes-no-label>{{movie?.hasSubtitles}}</shared-yes-no-label></span></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Is Student Film</span>
-        <span>
-          <shared-yes-no-label>{{movie?.isStudentFilm}}</shared-yes-no-label>
-        </span>
-      </div>
+        <span><shared-yes-no-label>{{movie?.isStudentFilm}}</shared-yes-no-label></span></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Film School</span>
-        <span>{{movie?.filmSchool ?? 'empty'}}</span>
-      </div>
+        <span>{{movie?.filmSchool ?? 'empty'}}</span></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Script</span>
-        <span>{{movie?.script ?? 'empty'}}</span>
-      </div>
+        <span>{{movie?.script ?? 'empty'}}</span></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Animation</span>
-        <span>{{movie?.animation ?? 'empty'}}</span>
-      </div>
+        <span>{{movie?.animation ?? 'empty'}}</span></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Editing</span>
-        <span>{{movie?.editing ?? 'empty'}}</span>
-      </div>
+        <span>{{movie?.editing ?? 'empty'}}</span></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Sound</span>
-        <span>{{movie?.sound ?? 'empty'}}</span>
-      </div>
+        <span>{{movie?.sound ?? 'empty'}}</span></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Music</span>
-        <span>{{movie?.music ?? 'empty'}}</span>
-      </div>
+        <span>{{movie?.music ?? 'empty'}}</span></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Production Company</span>
-        <span>{{movie?.productionCompany ?? 'empty'}}</span>
-      </div>
-      <div><span class="mat-subheading-2 text-bold" i18n>Contact</span>
-        <span>{{movie?.contact ?? 'empty'}}</span>
-      </div>
+        <span>{{movie?.productionCompany ?? 'empty'}}</span></div>
+      <div>
+        <span class="mat-subheading-2 text-bold" i18n>Contact</span>
+        <span>{{$any(movie?.contact).name ?? 'empty'}}</span></div>
     </div>
   </div>
 </div>

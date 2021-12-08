@@ -1,7 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 /* The global Material UI styles file */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
@@ -11,3 +17,18 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 @import "~@ng-select/ng-select/themes/default.theme.css";
 
 
+
+.success-snackbar {
+  background: #3c763d;
+  color: white;
+}
+
+.error-snackbar {
+  background: #f44336;
+  color: white;
+}
+
+.success-snackbar span.mat-button-wrapper,
+.error-snackbar span.mat-button-wrapper {
+  color: white;
+}

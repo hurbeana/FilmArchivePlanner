@@ -28,6 +28,22 @@ import {
   TableViewComponent,
 } from './components/table-view/table-view.component';
 import * as MovieActions from './state/movies.actions';
+import { EditViewComponent } from './components/edit-view/edit-view.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatSelectModule } from '@angular/material/select';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../../environments/environment';
+import { directorsReducer } from '../directors/state/directors.reducer';
+import { DirectorEffects } from '../directors/state/directors.effects';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { GalleryModule } from "ng-gallery";
+import { LightboxModule } from "ng-gallery/lightbox";
+import { contactsReducer } from "../contacts/state/contacts.reducer";
+import { tagsReducer } from "../tags/state/tags.reducer";
+import { TagsModule } from "../tags/tags.module";
+import { TagEffects } from "../tags/state/tags.effects";
+import { ContactEffects } from "../contacts/state/contacts.effects";
 
 @NgModule({
   declarations: [
@@ -35,7 +51,9 @@ import * as MovieActions from './state/movies.actions';
     TableViewComponent,
     NgbdSortableHeader,
     ContentComponent,
-    FullDetailViewComponent,
+    EditViewComponent,
+    ContentComponent,
+    FullDetailViewComponent
   ],
   exports: [
     TableViewComponent,
@@ -45,16 +63,26 @@ import * as MovieActions from './state/movies.actions';
   ],
   imports: [
     CommonModule,
-    NgSelectModule,
-    FormsModule,
+    NgSelectModule,FormsModule,
     ReactiveFormsModule,
     NgbModule,
     StoreModule.forRoot({
+      directorsPagination: directorsReducer,
+      contactsPagination: contactsReducer,
+      tagsPagination: tagsReducer,
       pagination: moviesReducer,
       selectedMovie: moviesReducer,
       searchTerm: moviesReducer,
     }),
     EffectsModule.forRoot([MovieEffects]),
+    EffectsModule.forFeature([DirectorEffects,ContactEffects,TagEffects]),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25, // Retains last 25 states
+      logOnly: environment.production, // Restrict extension to log-only mode
+      autoPause: true, // Pauses recording actions and state changes when the extension window is not open
+    }),
+    GalleryModule,
+    LightboxModule,
     SharedModule,
     MatButtonModule,
     MatCardModule,
@@ -62,7 +90,11 @@ import * as MovieActions from './state/movies.actions';
     MatTabsModule,
     MatTableModule,
     MoviesRoutingModule,
-  ],
+    MatCheckboxModule,
+    MatDividerModule,
+    MatSelectModule,
+    MatSnackBarModule,
+  ]
 })
 /* Movie Module contains everything related to movies */
 export class MoviesModule {

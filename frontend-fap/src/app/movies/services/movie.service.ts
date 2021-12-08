@@ -44,9 +44,9 @@ export class MovieService {
     return this.http.get<PaginationState>(api, { params: params });
   }
 
-  updateMovie(movie: Movie) {
+  updateMovie(id: number, movie: CreateUpdateMovieDto) {
     console.log('[MovieService] - UPDATE MOVIE');
-    return this.http.put(api, movie);
+    return this.http.put<Movie>(api + '/' + id, movie);
   }
 
   deleteMovie(movie: Movie) {

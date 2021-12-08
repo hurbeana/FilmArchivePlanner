@@ -31,7 +31,22 @@ export const createdMovieSuccess = createAction(
   '[Movie List] Created Movie Success',
   props<{ movie: Movie }>()
 );
-
+export const createMovieFailed = createAction(
+  '[Movie List] Created Movie Failed',
+  props<{ errormessage: string }>()
+);
+export const updateMovie = createAction(
+  '[Movie List] Update Movie',
+  props<{ id: number; movie: CreateUpdateMovieDto }>()
+);
+export const updatedMovieSuccess = createAction(
+  '[Movie List] Updated Movie Success',
+  props<{ movie: Movie }>()
+);
+export const updateMovieFailed = createAction(
+  '[Movie List] Update Movie Failed',
+  props<{ errormessage: string }>()
+);
 export const setSelectedMovie = createAction(
   '[Movie List] Set Selected Movie',
   props<{ selectedMovie: Movie }>()

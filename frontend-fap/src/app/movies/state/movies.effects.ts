@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { EMPTY } from 'rxjs';
+import { EMPTY, of } from 'rxjs';
 import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
 import { MovieService } from '../services/movie.service';
 import * as MovieActions from './movies.actions';
 
 @Injectable()
 export class MovieEffects {
-  constructor(private actions$: Actions, private moviesService: MovieService) { }
+  constructor(
+    private actions$: Actions,
+    private moviesService: MovieService,
+  ) {}
 
   /* is called, whenever an action of type 'getMovies' is called */
   getMovies$ = createEffect(() =>
@@ -43,12 +46,35 @@ export class MovieEffects {
       switchMap(({ movie }) =>
         this.moviesService.createMovie(movie).pipe(
           map((movie) => MovieActions.createdMovieSuccess({ movie })),
-          catchError(() => EMPTY) // TODO: error handling
+          catchError((error) =>
+            of(
+              MovieActions.createMovieFailed({
+                errormessage: this.getErrorMessage(error),
+              })
+            )
+          )
         )
       )
     )
   );
 
+  updateMovie$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(MovieActions.updateMovie),
+      switchMap(({ id, movie }) =>
+        this.moviesService.updateMovie(id, movie).pipe(
+          map((movie) => MovieActions.updatedMovieSuccess({ movie })),
+          catchError((error) =>
+            of(
+              MovieActions.updateMovieFailed({
+                errormessage: this.getErrorMessage(error),
+              })
+            )
+          )
+        )
+      )
+    )
+  );
 
   /* is called, whenever an action of type 'deleteMovie' is called */
   deleteMovie$ = createEffect(() =>
@@ -67,12 +93,30 @@ export class MovieEffects {
 
 
   reloadAfterDelete$ = createEffect(() => this.actions$.pipe(
-    ofType(MovieActions.deleteMovieSuccess),
-    mergeMap(({ movieToDelete, search, page, limit }) => this.moviesService.getMovies(search, page, limit)
-      .pipe(
-        map(pagination => (MovieActions.getMoviesSuccess({ pagination: pagination }))),
-        catchError(() => EMPTY) // TODO: error handling
-      ))
-  )
+      ofType(MovieActions.deleteMovieSuccess),
+      mergeMap(({ movieToDelete, search, page, limit }) => this.moviesService.getMovies(search, page, limit)
+        .pipe(
+          map(pagination => (MovieActions.getMoviesSuccess({ pagination: pagination }))),
+          catchError(() => EMPTY) // TODO: error handling
+        ))
+    )
   );
+
+  /*
+   * Returns User friendly error message
+   * TODO
+   * */
+  getErrorMessage(error: any): string {
+    console.log(error);
+    if (((error.status / 100) | 0) === 4) {
+      // validation error
+        return [].concat(error?.error?.message).join(', ');
+      return "No Error Details!";
+    } else if (((error.status / 100) | 0) === 5) {
+      // other error
+      return 'Error with Server Connection!';
+    } else {
+      return 'Some other Error occurred!';
+    }
+  }
 }

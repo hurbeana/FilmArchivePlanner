@@ -10,16 +10,15 @@
  * Do not edit the class manually.
  */
 
-
-export interface  CreateUpdateMovieDto {
+export interface CreateUpdateMovieDto {
   originalTitle: string;
   englishTitle: string;
-  movieFile: string;
+  movieFiles: string;
   previewFile?: string;
   trailerFile?: string;
   stillFiles: Array<string>;
   subtitleFiles?: Array<string>;
-  directors: Array<string>;
+  directors: Array<number>;
   countriesOfProduction?: Array<string>;
   yearOfProduction?: number;
   /**

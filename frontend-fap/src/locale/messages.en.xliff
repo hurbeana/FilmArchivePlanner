@@ -287,7 +287,9 @@
     <unit id="8707352275157977601">
       <notes>
         <note category="location">src/app/core/components/header/header.component.html:19</note>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:20</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:21</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:22</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:47</note>
       </notes>
       <segment>
         <source>Directors</source>
@@ -317,10 +319,109 @@
         <source>Welcome to Festivator!</source>
       </segment>
     </unit>
+    <unit id="5342432350421167093">
+      <notes>
+        <note category="location">src/app/directors/components/details-view/details-view.component.html:6</note>
+      </notes>
+      <segment>
+        <source>First name</source>
+      </segment>
+    </unit>
+    <unit id="6348574929560675098">
+      <notes>
+        <note category="location">src/app/directors/components/details-view/details-view.component.html:8</note>
+      </notes>
+      <segment>
+        <source>Middle name</source>
+      </segment>
+    </unit>
+    <unit id="3586674587150281199">
+      <notes>
+        <note category="location">src/app/directors/components/details-view/details-view.component.html:10</note>
+      </notes>
+      <segment>
+        <source>Last name</source>
+      </segment>
+    </unit>
+    <unit id="2843503675934882382">
+      <notes>
+        <note category="location">src/app/directors/components/details-view/details-view.component.html:12</note>
+      </notes>
+      <segment>
+        <source>English biography</source>
+      </segment>
+    </unit>
+    <unit id="4240726019418523524">
+      <notes>
+        <note category="location">src/app/directors/components/details-view/details-view.component.html:14</note>
+      </notes>
+      <segment>
+        <source>German biography</source>
+      </segment>
+    </unit>
+    <unit id="8752258880086234515">
+      <notes>
+        <note category="location">src/app/directors/components/details-view/details-view.component.html:16</note>
+      </notes>
+      <segment>
+        <source>Filmography</source>
+      </segment>
+    </unit>
+    <unit id="8386839868786869336">
+      <notes>
+        <note category="location">src/app/directors/components/table-view/table-view.component.html:13,16</note>
+      </notes>
+      <segment>
+        <source>First name <pc id="0" equivStart="START_TAG_DIV" equivEnd="CLOSE_TAG_DIV" type="other" dispStart="&lt;div class=&quot;arrow&quot;&gt;" dispEnd="&lt;/d"></pc></source>
+      </segment>
+    </unit>
+    <unit id="6307254359493047227">
+      <notes>
+        <note category="location">src/app/directors/components/table-view/table-view.component.html:18,21</note>
+      </notes>
+      <segment>
+        <source>Middle name <pc id="0" equivStart="START_TAG_DIV" equivEnd="CLOSE_TAG_DIV" type="other" dispStart="&lt;div class=&quot;arrow&quot;&gt;" dispEnd="&lt;/d"></pc></source>
+      </segment>
+    </unit>
+    <unit id="1448648177375014727">
+      <notes>
+        <note category="location">src/app/directors/components/table-view/table-view.component.html:23,26</note>
+      </notes>
+      <segment>
+        <source>Last Name <pc id="0" equivStart="START_TAG_DIV" equivEnd="CLOSE_TAG_DIV" type="other" dispStart="&lt;div class=&quot;arrow&quot;&gt;" dispEnd="&lt;/d"></pc></source>
+      </segment>
+    </unit>
+    <unit id="903924415662535370">
+      <notes>
+        <note category="location">src/app/directors/components/table-view/table-view.component.html:28,31</note>
+      </notes>
+      <segment>
+        <source>English biography <pc id="0" equivStart="START_TAG_DIV" equivEnd="CLOSE_TAG_DIV" type="other" dispStart="&lt;div class=&quot;arrow&quot;&gt;" dispEnd="&lt;/d"></pc></source>
+      </segment>
+    </unit>
+    <unit id="129608117723345010">
+      <notes>
+        <note category="location">src/app/directors/components/table-view/table-view.component.html:33,36</note>
+      </notes>
+      <segment>
+        <source>German biography <pc id="0" equivStart="START_TAG_DIV" equivEnd="CLOSE_TAG_DIV" type="other" dispStart="&lt;div class=&quot;arrow&quot;&gt;" dispEnd="&lt;/d"></pc></source>
+      </segment>
+    </unit>
+    <unit id="2181447307855088842">
+      <notes>
+        <note category="location">src/app/directors/components/table-view/table-view.component.html:46</note>
+      </notes>
+      <segment>
+        <source>Actions </source>
+      </segment>
+    </unit>
     <unit id="5365813322944561433">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:6</note>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:42</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:7</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:43</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:6</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:30</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:72</note>
       </notes>
       <segment>
         <source>Original Title</source>
@@ -328,7 +429,9 @@
     </unit>
     <unit id="3390764610002600019">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:8</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:9</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:14</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:33</note>
       </notes>
       <segment>
         <source>English Title</source>
@@ -336,7 +439,9 @@
     </unit>
     <unit id="5798400700034143644">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:10</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:11</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:78</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:35</note>
       </notes>
       <segment>
         <source>Movie File</source>
@@ -344,7 +449,9 @@
     </unit>
     <unit id="3812799984769687924">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:12</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:13</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:82</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:37</note>
       </notes>
       <segment>
         <source>Preview File</source>
@@ -352,7 +459,9 @@
     </unit>
     <unit id="8354046126695169758">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:14</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:15</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:87</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:39</note>
       </notes>
       <segment>
         <source>Trailer File</source>
@@ -360,7 +469,9 @@
     </unit>
     <unit id="7536201549694998705">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:16</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:17</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:92</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:41</note>
       </notes>
       <segment>
         <source>Still File</source>
@@ -368,7 +479,9 @@
     </unit>
     <unit id="8063276897623182518">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:18</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:19</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:97</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:44</note>
       </notes>
       <segment>
         <source>Subtitle Folder</source>
@@ -376,7 +489,9 @@
     </unit>
     <unit id="1199643963944280124">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:22</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:23</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:33</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:52</note>
       </notes>
       <segment>
         <source>Countries of Production</source>
@@ -384,7 +499,9 @@
     </unit>
     <unit id="2433325232271409797">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:24</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:25</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:41</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:54</note>
       </notes>
       <segment>
         <source>Year of Production</source>
@@ -392,7 +509,9 @@
     </unit>
     <unit id="7410432243549869948">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:26</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:27</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:49</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:56</note>
       </notes>
       <segment>
         <source>Duration</source>
@@ -400,7 +519,9 @@
     </unit>
     <unit id="5407748950392055431">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:28</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:29</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:164</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:58</note>
       </notes>
       <segment>
         <source>Animation Technique</source>
@@ -408,7 +529,9 @@
     </unit>
     <unit id="6134504358793820828">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:30</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:31</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:172</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:60</note>
       </notes>
       <segment>
         <source>Software Used</source>
@@ -416,7 +539,9 @@
     </unit>
     <unit id="1604795977599078115">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:32</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:33</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:184</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:62</note>
       </notes>
       <segment>
         <source>Keywords</source>
@@ -424,7 +549,8 @@
     </unit>
     <unit id="7583812820943189780">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:34</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:35</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:58</note>
       </notes>
       <segment>
         <source>German Synopsis</source>
@@ -432,7 +558,8 @@
     </unit>
     <unit id="3566288383839309544">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:36</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:37</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:66</note>
       </notes>
       <segment>
         <source>English Synopsis</source>
@@ -440,7 +567,9 @@
     </unit>
     <unit id="3956956799684372859">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:38</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:39</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:192</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:68</note>
       </notes>
       <segment>
         <source>Submission Category</source>
@@ -448,7 +577,9 @@
     </unit>
     <unit id="5009339133193077332">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:40</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:41</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:199</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:70</note>
       </notes>
       <segment>
         <source>Has Dialog</source>
@@ -456,7 +587,9 @@
     </unit>
     <unit id="867769673309108471">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:44</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:45</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:153</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:74</note>
       </notes>
       <segment>
         <source>Has Subtitles</source>
@@ -464,7 +597,9 @@
     </unit>
     <unit id="3019351446432017027">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:46</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:47</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:154</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:76</note>
       </notes>
       <segment>
         <source>Is Student Film</source>
@@ -472,7 +607,9 @@
     </unit>
     <unit id="6208868359327244226">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:48</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:49</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:156</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:78</note>
       </notes>
       <segment>
         <source>Film School</source>
@@ -480,7 +617,9 @@
     </unit>
     <unit id="4483221505481206961">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:50</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:51</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:106</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:80</note>
       </notes>
       <segment>
         <source>Script</source>
@@ -488,7 +627,9 @@
     </unit>
     <unit id="7885570895165894241">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:52</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:53</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:114</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:82</note>
       </notes>
       <segment>
         <source>Animation</source>
@@ -496,7 +637,9 @@
     </unit>
     <unit id="1539113513920641823">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:54</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:55</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:122</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:84</note>
       </notes>
       <segment>
         <source>Editing</source>
@@ -504,7 +647,9 @@
     </unit>
     <unit id="6230180786088475979">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:56</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:57</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:130</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:86</note>
       </notes>
       <segment>
         <source>Sound</source>
@@ -512,7 +657,9 @@
     </unit>
     <unit id="855872803871324523">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:58</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:59</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:138</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:88</note>
       </notes>
       <segment>
         <source>Music</source>
@@ -520,7 +667,9 @@
     </unit>
     <unit id="1003959228692855706">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:60</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:61</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:146</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:90</note>
       </notes>
       <segment>
         <source>Production Company</source>
@@ -528,10 +677,124 @@
     </unit>
     <unit id="7922989125096435449">
       <notes>
-        <note category="location">src/app/movies/components/details-view/details-view.component.html:62</note>
+        <note category="location">src/app/movies/components/details-view/details-view.component.html:63</note>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:209</note>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:92</note>
       </notes>
       <segment>
         <source>Contact</source>
+      </segment>
+    </unit>
+    <unit id="6439365426343089851">
+      <notes>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:4,5</note>
+      </notes>
+      <segment>
+        <source>General</source>
+      </segment>
+    </unit>
+    <unit id="4116911651502837995">
+      <notes>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:76,77</note>
+      </notes>
+      <segment>
+        <source>Files</source>
+      </segment>
+    </unit>
+    <unit id="7081163140977765658">
+      <notes>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:104,105</note>
+      </notes>
+      <segment>
+        <source>Production</source>
+      </segment>
+    </unit>
+    <unit id="3973530728734655410">
+      <notes>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:182,183</note>
+      </notes>
+      <segment>
+        <source>Further Details</source>
+      </segment>
+    </unit>
+    <unit id="8977976765572178507">
+      <notes>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:201</note>
+      </notes>
+      <segment>
+        <source>Dialog Languages</source>
+      </segment>
+    </unit>
+    <unit id="935187492052582731">
+      <notes>
+        <note category="location">src/app/movies/components/edit-view/edit-view.component.html:219,220</note>
+      </notes>
+      <segment>
+        <source>Submit</source>
+      </segment>
+    </unit>
+    <unit id="7694321930659260674">
+      <notes>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:11</note>
+      </notes>
+      <segment>
+        <source>Directors: </source>
+      </segment>
+    </unit>
+    <unit id="5028777105388019087">
+      <notes>
+        <note category="location">src/app/movies/components/full-detail-view/full-detail-view.component.html:26</note>
+      </notes>
+      <segment>
+        <source>Details</source>
+      </segment>
+    </unit>
+    <unit id="635763069395081767">
+      <notes>
+        <note category="location">src/app/movies/components/table-view/table-view.component.html:15,18</note>
+      </notes>
+      <segment>
+        <source>Original Title <pc id="0" equivStart="START_TAG_DIV" equivEnd="CLOSE_TAG_DIV" type="other" dispStart="&lt;div class=&quot;arrow&quot;&gt;" dispEnd="&lt;/d"></pc></source>
+      </segment>
+    </unit>
+    <unit id="5364175517756996293">
+      <notes>
+        <note category="location">src/app/movies/components/table-view/table-view.component.html:20,23</note>
+      </notes>
+      <segment>
+        <source>English Title <pc id="0" equivStart="START_TAG_DIV" equivEnd="CLOSE_TAG_DIV" type="other" dispStart="&lt;div class=&quot;arrow&quot;&gt;" dispEnd="&lt;/d"></pc></source>
+      </segment>
+    </unit>
+    <unit id="7386630043576897914">
+      <notes>
+        <note category="location">src/app/movies/components/table-view/table-view.component.html:25,28</note>
+      </notes>
+      <segment>
+        <source>Movie File <pc id="0" equivStart="START_TAG_DIV" equivEnd="CLOSE_TAG_DIV" type="other" dispStart="&lt;div class=&quot;arrow&quot;&gt;" dispEnd="&lt;/d"></pc></source>
+      </segment>
+    </unit>
+    <unit id="2395992083310498227">
+      <notes>
+        <note category="location">src/app/movies/components/table-view/table-view.component.html:31,34</note>
+      </notes>
+      <segment>
+        <source>Year of Production <pc id="0" equivStart="START_TAG_DIV" equivEnd="CLOSE_TAG_DIV" type="other" dispStart="&lt;div class=&quot;arrow&quot;&gt;" dispEnd="&lt;/d"></pc></source>
+      </segment>
+    </unit>
+    <unit id="2269019957062781456">
+      <notes>
+        <note category="location">src/app/movies/components/table-view/table-view.component.html:36,39</note>
+      </notes>
+      <segment>
+        <source>Is Student Film <pc id="0" equivStart="START_TAG_DIV" equivEnd="CLOSE_TAG_DIV" type="other" dispStart="&lt;div class=&quot;arrow&quot;&gt;" dispEnd="&lt;/d"></pc></source>
+      </segment>
+    </unit>
+    <unit id="4978207391746273097">
+      <notes>
+        <note category="location">src/app/shared/components/file-upload/file-upload.component.html:27</note>
+      </notes>
+      <segment>
+        <source>File upload canceled!</source>
       </segment>
     </unit>
     <unit id="2807800733729323332">
@@ -548,46 +811,6 @@
       </notes>
       <segment>
         <source>No</source>
-      </segment>
-    </unit>
-    <unit id="635763069395081767">
-      <notes>
-        <note category="location">src/app/movies/components/table-view/table-view.component.html:14,16</note>
-      </notes>
-      <segment>
-        <source>Original Title <pc id="0" equivStart="START_TAG_DIV" equivEnd="CLOSE_TAG_DIV" type="other" dispStart="&lt;div class=&quot;arrow&quot;&gt;" dispEnd="&lt;/"></pc></source>
-      </segment>
-    </unit>
-    <unit id="5364175517756996293">
-      <notes>
-        <note category="location">src/app/movies/components/table-view/table-view.component.html:19,21</note>
-      </notes>
-      <segment>
-        <source>English Title <pc id="0" equivStart="START_TAG_DIV" equivEnd="CLOSE_TAG_DIV" type="other" dispStart="&lt;div class=&quot;arrow&quot;&gt;" dispEnd="&lt;/"></pc></source>
-      </segment>
-    </unit>
-    <unit id="7386630043576897914">
-      <notes>
-        <note category="location">src/app/movies/components/table-view/table-view.component.html:24,26</note>
-      </notes>
-      <segment>
-        <source>Movie File <pc id="0" equivStart="START_TAG_DIV" equivEnd="CLOSE_TAG_DIV" type="other" dispStart="&lt;div class=&quot;arrow&quot;&gt;" dispEnd="&lt;/"></pc></source>
-      </segment>
-    </unit>
-    <unit id="2395992083310498227">
-      <notes>
-        <note category="location">src/app/movies/components/table-view/table-view.component.html:30,32</note>
-      </notes>
-      <segment>
-        <source>Year of Production <pc id="0" equivStart="START_TAG_DIV" equivEnd="CLOSE_TAG_DIV" type="other" dispStart="&lt;div class=&quot;arrow&quot;&gt;" dispEnd="&lt;/"></pc></source>
-      </segment>
-    </unit>
-    <unit id="2269019957062781456">
-      <notes>
-        <note category="location">src/app/movies/components/table-view/table-view.component.html:35,37</note>
-      </notes>
-      <segment>
-        <source>Is Student Film <pc id="0" equivStart="START_TAG_DIV" equivEnd="CLOSE_TAG_DIV" type="other" dispStart="&lt;div class=&quot;arrow&quot;&gt;" dispEnd="&lt;/"></pc></source>
       </segment>
     </unit>
   </file>
