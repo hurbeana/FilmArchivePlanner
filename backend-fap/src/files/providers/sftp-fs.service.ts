@@ -108,11 +108,8 @@ export class FtpFsService implements IFsService {
       filename: newUuidFilename,
       originalname: file.filename,
       mimetype: file.mimetype,
-      path: path.join(
-        this.filesOptions.endpoint.baseCachePath,
-        newUuidFilename,
-      ),
-      destination: this.filesOptions.endpoint.baseCachePath,
+      path: path.join(this.filesOptions.baseCachePath, newUuidFilename),
+      destination: this.filesOptions.baseCachePath,
     } as CachedFileDto;
 
     this.logger.log('Caching stored file.');
