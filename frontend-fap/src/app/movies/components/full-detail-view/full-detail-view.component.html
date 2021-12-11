@@ -12,12 +12,17 @@
         <span
           *ngFor="let director of movie?.directors">{{director.fullName}}</span>
       </div>
-      <div style="height: 10px"></div>
-      <div>{{movie?.germanSynopsis}}</div>
-      <div style="height: 10px"></div>
-      <div>{{movie?.englishSynopsis}}</div>
+      <div style="margin: 10px"></div>
+      <div class="mat-subheading-2 text-bold" i18n>German Synopsis</div>
+      <div class="text-container">{{movie?.germanSynopsis}}</div>
+      <div style="margin: 10px"></div>
+      <div class="mat-subheading-2 text-bold" i18n>English Synopsis</div>
+      <div class="text-container">{{movie?.englishSynopsis}}</div>
+      <div style="margin: 10px"></div>
+      <div class="mat-subheading-2 text-bold" i18n>Script</div>
+      <div class="text-container">{{movie?.script}}</div>
     </div>
-    <gallery class="still-gallery" [items]="images"></gallery>
+    <gallery *ngIf="movie?.stillFiles?.length" class="still-gallery" [items]="images"></gallery>
   </div>
   <h2 class="mat-h2" style="margin-left: 1em" i18n>Details</h2>
   <div class="details-flex">
@@ -61,23 +66,23 @@
         </div>
       </div>
       <div><span class="mat-subheading-2 text-bold" i18n>Countries of Production</span>
-        <span>{{movie?.countriesOfProduction ?? 'empty'}}</span></div>
+        <span>{{printTags(movie?.countriesOfProduction)}}</span></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Year of Production</span>
         <span>{{movie?.yearOfProduction ?? 'empty'}}</span></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Duration</span>
         <span>{{movie?.duration ?? 'empty'}}</span></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Animation Technique</span>
-        <span>{{movie?.animationTechniques ?? 'empty'}}</span></div>
+        <span>{{printTags(movie?.animationTechniques)}}</span></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Software Used</span>
-        <span>{{movie?.softwareUsed ?? 'empty'}}</span></div>
+        <span>{{printTags(movie?.softwareUsed)}}</span></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Keywords</span>
-        <span>{{movie?.keywords ?? 'empty'}}</span></div>
+        <span>{{printTags(movie?.keywords)}}</span></div>
       <div>  <!--<span class="mat-subheading-2 " i18n>German Synopsis</span>-->
         <!--<span>{{movie?.germanSynopsis}}</span>--></div>
       <div> <!--<span class="mat-subheading-2 " i18n>English Synopsis</span>-->
         <!--<span>{{movie?.englishSynopsis}}</span>--></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Submission Category</span>
-        <span>{{movie?.submissionCategory ?? 'empty'}}</span></div>
+        <span>{{printTags(movie?.submissionCategory)}}</span></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Has Dialog</span>
         <span><shared-yes-no-label>{{movie?.hasDialog}}</shared-yes-no-label></span></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Original Title</span>
@@ -88,8 +93,6 @@
         <span><shared-yes-no-label>{{movie?.isStudentFilm}}</shared-yes-no-label></span></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Film School</span>
         <span>{{movie?.filmSchool ?? 'empty'}}</span></div>
-      <div><span class="mat-subheading-2 text-bold" i18n>Script</span>
-        <span>{{movie?.script ?? 'empty'}}</span></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Animation</span>
         <span>{{movie?.animation ?? 'empty'}}</span></div>
       <div><span class="mat-subheading-2 text-bold" i18n>Editing</span>

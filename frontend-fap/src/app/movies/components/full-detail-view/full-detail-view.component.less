@@ -66,6 +66,8 @@
 
 .details-grid > div {
   display: flex;
+  flex: 1 1 0px;
+  max-width: 200px;
   flex-direction: column;
   margin: 0.5em;
 }
@@ -83,4 +85,8 @@
   font-weight: 500;
 }
 
-
+.text-container{
+  overflow: hidden; /*TODO*/
+  text-overflow: ellipsis;
+  max-height: 200px;
+}

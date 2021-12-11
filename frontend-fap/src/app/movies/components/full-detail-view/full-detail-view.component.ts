@@ -8,6 +8,7 @@ import { selectDetailsMovie } from '../../state/movies.selectors';
 import { FileDto } from "../../../shared/models/file";
 import { Gallery, GalleryItem, ImageItem, ImageSize, ThumbnailsPosition } from "ng-gallery";
 import { Lightbox } from "ng-gallery/lightbox";
+import { Tag } from "../../../tags/models/tag";
 
 @Component({
   selector: 'app-full-detail-view',
@@ -64,5 +65,17 @@ export class FullDetailViewComponent implements OnInit {
       return "";
     }
     return [file.path,file.filename].join("/");
+  }
+
+  getDownloadLink(filetyp: string,file?: FileDto): string{
+    if(!file) return "";
+    return `http://localhost:3000/files/${file.id}?fileType=${filetyp}`
+  }
+  printTags(tags?: Tag[]){
+    console.log(tags);
+    if(!tags){
+      return "";
+    }
+    return tags.map(f => f.value).join(", ");
   }
 }

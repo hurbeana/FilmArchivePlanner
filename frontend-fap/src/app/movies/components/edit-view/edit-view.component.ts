@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../app.state';
-import { Form, FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import * as MovieActions from '../../state/movies.actions';
 import {
   createdMovieSuccess,
   createMovie,
@@ -20,20 +21,20 @@ import {
   selectTagsCategoryItems,
   selectTagsCountryItems,
   selectTagsKeywordItems,
-  selectTagsLanguageItems, selectTagsSoftwareItems
-} from "../../state/movies.selectors";
+  selectTagsLanguageItems,
+  selectTagsSoftwareItems,
+} from '../../state/movies.selectors';
 import { Director } from 'src/app/directors/models/director';
 import { Observable, Subject } from 'rxjs';
 import { Actions, ofType } from '@ngrx/effects';
 import { map, takeUntil, tap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FileDto } from "../../../shared/models/file";
-import * as MovieActions from "../../state/movies.actions";
+import { FileDto } from '../../../shared/models/file';
 import * as DirectorActions from 'src/app/directors/state/directors.actions';
 import * as ContactActions from 'src/app/contacts/state/contacts.actions';
 import * as TagActions from 'src/app/tags/state/tags.actions';
-import { Contact } from "../../../contacts/models/contact";
-import { Tag } from "../../../tags/models/tag";
+import { Contact } from '../../../contacts/models/contact';
+import { Tag } from '../../../tags/models/tag';
 
 @Component({
   selector: 'app-edit-view',
@@ -48,14 +49,14 @@ export class EditViewComponent implements OnInit {
     private store: Store<AppState>,
     private actions$: Actions,
     private _snackBar: MatSnackBar,
-    private router: Router,
+    private router: Router
   ) {
     /* Fetch lists for dropdowns */
     this.store.dispatch(
-      DirectorActions.getDirectors({ search: '', page: 1, limit: 10 })
+      DirectorActions.getDirectors({ search: '', page: 1, limit: 30 })
     );
     this.store.dispatch(
-      ContactActions.getContacts({ search: '', page: 1, limit: 10 })
+      ContactActions.getContacts({ search: '', page: 1, limit: 30 })
     );
     this.store.dispatch(
       TagActions.getTags({ search: '', page: 1, limit: 50 }) //can get more as tagtypes share one list
@@ -112,14 +113,15 @@ export class EditViewComponent implements OnInit {
           this.store.dispatch(
             MovieActions.getMovies({ search: '', page: 1, limit: 16 })
           );
-          this.router.navigate(['/movies']);        })
+          this.router.navigate(['/movies']);
+        })
       )
       .subscribe();
   }
 
   openSnackBar(message: string, action: string, panelClass: string) {
     this._snackBar.open(message, action, {
-      duration: 50000,
+      duration: 5000,
       panelClass: [panelClass],
     });
   }
@@ -130,9 +132,9 @@ export class EditViewComponent implements OnInit {
     movieFiles: new FormArray([]),
     dcpFiles: new FormArray([]),
     previewFile: new FormGroup({}),
-    trailerFile:  new FormGroup({}),
+    trailerFile: new FormGroup({}),
     stillFiles: new FormArray([]),
-    subtitleFiles:  new FormArray([]),
+    subtitleFiles: new FormArray([]),
     directors: new FormControl('', [Validators.required]),
     countriesOfProduction: new FormControl([]), // TODO: tags
     yearOfProduction: new FormControl(),
@@ -154,16 +156,18 @@ export class EditViewComponent implements OnInit {
     sound: new FormControl(),
     music: new FormControl(),
     productionCompany: new FormControl(),
-    contact:  new FormControl('', [Validators.required]),
+    contact: new FormControl('', [Validators.required]),
   });
 
-  getSubmissionTagsFormGroup(){
-    return (this.moviesForm.controls['submissionCategories'] as FormArray).controls[0] as FormGroup;
+  getSubmissionTagsFormGroup() {
+    return (this.moviesForm.controls['submissionCategories'] as FormArray)
+      .controls[0] as FormGroup;
   }
 
   getContactForm() {
     return this.moviesForm.controls['contact'] as FormGroup;
   }
+
   //TODO: directors liste vom backend/store laden
 
   directors: Observable<Director[]>;
@@ -192,22 +196,45 @@ export class EditViewComponent implements OnInit {
     this.store.select(selectDetailsMovie).subscribe((movie) => {
       if (movie && this.id) {
         console.log(movie);
-        this.fillFilesFormGroup('movieFiles',movie.movieFiles);
-        this.fillFilesFormGroup('dcpFiles',movie.dcpFiles);
-        this.fillFilesFormGroup('subtitleFiles',movie.subtitleFiles);
-        this.fillFilesFormGroup('stillFiles',movie.stillFiles);
-        if(movie.trailerFile){
-          (this.moviesForm.controls['trailerFile'] as FormGroup).addControl('id',new FormControl('') );
-          (this.moviesForm.controls['trailerFile'] as FormGroup).addControl('path',new FormControl('') );
-          (this.moviesForm.controls['trailerFile'] as FormGroup).addControl('mimetype',new FormControl('') );
-          (this.moviesForm.controls['trailerFile'] as FormGroup).addControl('filename',new FormControl('') );
-
+        this.fillFilesFormGroup('movieFiles', movie.movieFiles);
+        this.fillFilesFormGroup('dcpFiles', movie.dcpFiles);
+        this.fillFilesFormGroup('subtitleFiles', movie.subtitleFiles);
+        this.fillFilesFormGroup('stillFiles', movie.stillFiles);
+        if (movie.trailerFile) {
+          (this.moviesForm.controls['trailerFile'] as FormGroup).addControl(
+            'id',
+            new FormControl('')
+          );
+          (this.moviesForm.controls['trailerFile'] as FormGroup).addControl(
+            'path',
+            new FormControl('')
+          );
+          (this.moviesForm.controls['trailerFile'] as FormGroup).addControl(
+            'mimetype',
+            new FormControl('')
+          );
+          (this.moviesForm.controls['trailerFile'] as FormGroup).addControl(
+            'filename',
+            new FormControl('')
+          );
         }
-        if(movie.previewFile){
-          (this.moviesForm.controls['previewFile'] as FormGroup).addControl('id',new FormControl('') );
-          (this.moviesForm.controls['previewFile'] as FormGroup).addControl('path',new FormControl('') );
-          (this.moviesForm.controls['previewFile'] as FormGroup).addControl('mimetype',new FormControl('') );
-          (this.moviesForm.controls['previewFile'] as FormGroup).addControl('filename',new FormControl('') );
+        if (movie.previewFile) {
+          (this.moviesForm.controls['previewFile'] as FormGroup).addControl(
+            'id',
+            new FormControl('')
+          );
+          (this.moviesForm.controls['previewFile'] as FormGroup).addControl(
+            'path',
+            new FormControl('')
+          );
+          (this.moviesForm.controls['previewFile'] as FormGroup).addControl(
+            'mimetype',
+            new FormControl('')
+          );
+          (this.moviesForm.controls['previewFile'] as FormGroup).addControl(
+            'filename',
+            new FormControl('')
+          );
         }
         this.moviesForm.patchValue(movie);
       }
@@ -222,16 +249,18 @@ export class EditViewComponent implements OnInit {
     });
   }
 
-  fillFilesFormGroup(name: string, files?: FileDto[]){
-    files?.forEach( s => (this.moviesForm.controls[name] as FormArray).push(new FormGroup(
-      {
-        id: new FormControl(''),
-        path: new FormControl(''),
-        mimetype: new FormControl(''),
-        filename: new FormControl(''),
-      })));
+  fillFilesFormGroup(name: string, files?: FileDto[]) {
+    files?.forEach((s) =>
+      (this.moviesForm.controls[name] as FormArray).push(
+        new FormGroup({
+          id: new FormControl(''),
+          path: new FormControl(''),
+          mimetype: new FormControl(''),
+          filename: new FormControl(''),
+        })
+      )
+    );
   }
-
 
   onSubmit() {
     console.log(this.moviesForm.value);
@@ -243,9 +272,7 @@ export class EditViewComponent implements OnInit {
         );
       } else {
         // create
-        this.store.dispatch(
-          createMovie({ movie: this.moviesForm.value})
-        );
+        this.store.dispatch(createMovie({ movie: this.moviesForm.value }));
       }
     } else {
       this.openSnackBar('Validation Error!', 'OK', 'error-snackbar');
@@ -253,11 +280,11 @@ export class EditViewComponent implements OnInit {
     }
   }
 
-  resetFileFormArrays(){
-      this.moviesForm.controls['movieFiles'] = new FormArray([]);
-      this.moviesForm.controls['dcpFiles'] = new FormArray([]);
-      this.moviesForm.controls['stillFiles'] = new FormArray([]);
-      this.moviesForm.controls['subtitleFiles'] = new FormArray([]);
+  resetFileFormArrays() {
+    this.moviesForm.controls['movieFiles'] = new FormArray([]);
+    this.moviesForm.controls['dcpFiles'] = new FormArray([]);
+    this.moviesForm.controls['stillFiles'] = new FormArray([]);
+    this.moviesForm.controls['subtitleFiles'] = new FormArray([]);
   }
 
   compareSelectObjects(object1: any, object2: any) {

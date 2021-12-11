@@ -34,7 +34,7 @@
       </div>
       </ng-container>
     </div>
-    <button *ngIf="!multiple && !getFormGroup(fileGroup)?.contains('filename')"
+    <button *ngIf="multiple || !getFormGroup(fileGroup)?.contains('filename')"
       mat-mini-fab color="primary" class="upload-btn" type="button"
             (click)="fileUpload.click()">
       <mat-icon>attach_file</mat-icon>

@@ -58,7 +58,7 @@ class Client:
             return self.tags[tag["value"]]
         r = self.post_json("Posting new Tag", tag, "/tags")
         new_tag = r.json()
-        tag["value"] = new_tag
+        self.tags[tag["value"]] = new_tag
         return new_tag
 
     def create_movie(self, movie):
