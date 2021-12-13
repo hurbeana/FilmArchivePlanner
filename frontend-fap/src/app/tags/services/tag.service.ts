@@ -18,24 +18,31 @@ export class TagService {
   }
 
   getTags(
-    search: string,
     page: number,
-    limit: number
+    limit: number,
+    orderBy: string | undefined,
+    sortOrder: string | undefined,
+    searchString: string | undefined
   ): Observable<TagsPaginationState> {
     console.log(
-      '[TagService] - GET TAGS WITH SEARCH PAGE AND LIMIT',
-      "'" + search + "'",
+      '[TagService] - GET TAGS WITH page, limit, orderBy, sortOrder, searchString',
       page,
-      limit
+      limit,
+      orderBy,
+      sortOrder,
+      searchString
     );
-    let params;
-    if (search == '') {
-      params = new HttpParams({ fromObject: { page: page, limit: limit } });
-    } else {
-      params = new HttpParams({
-        fromObject: { searchstring: search, page: page, limit: limit },
-      });
-    }
+
+    let params = new HttpParams({
+      fromObject: {
+        page: page,
+        limit: limit,
+        ...(orderBy !== undefined && { orderBy: orderBy }),
+        ...(sortOrder !== undefined && { sortOrder: sortOrder }),
+        ...(searchString !== undefined && { searchString: searchString }),
+      },
+    });
+
     return this.http.get<TagsPaginationState>(api, { params: params });
   }
 

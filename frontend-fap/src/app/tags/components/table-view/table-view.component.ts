@@ -25,52 +25,15 @@ import {
   filter,
   tap,
 } from 'rxjs/operators';
-import {
-  NgbActiveModal,
-  NgbModal,
-  NgbModalConfig,
-} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateTagModal } from './create-tag-modal.component';
 import { ConfirmDeleteTagModal } from './confirm-delete-tag-modal.component';
 import { EditTagModal } from './edit-tag-modal.component';
 import { TagService } from '../../services/tag.service';
-
-/* SORTABLE HEADER TODO */
-export type SortColumn = keyof Tag | '';
-export type SortDirection = 'asc' | 'desc' | '';
-const rotate: { [key: string]: SortDirection } = {
-  asc: 'desc',
-  desc: '',
-  '': 'asc',
-};
-
-const compare = (v1: string | number, v2: string | number) =>
-  v1 < v2 ? -1 : v1 > v2 ? 1 : 0;
-
-export interface SortEvent {
-  column: SortColumn;
-  direction: SortDirection;
-}
-
-@Directive({
-  selector: 'th[sortable]',
-  host: {
-    '[class.asc]': 'direction === "asc"',
-    '[class.desc]': 'direction === "desc"',
-    '(click)': 'rotate()',
-  },
-})
-export class NgbdSortableHeader {
-  @Input() sortable: SortColumn = '';
-  @Input() direction: SortDirection = '';
-  @Output() sort = new EventEmitter<SortEvent>();
-
-  rotate() {
-    this.direction = rotate[this.direction];
-    this.sort.emit({ column: this.sortable, direction: this.direction });
-  }
-}
-
+import {
+  NgbdSortableHeaderDirective,
+  SortEvent,
+} from '../../../shared/directives/sortable.directive';
 @Component({
   selector: 'table-view',
   templateUrl: './table-view.component.html',
@@ -86,13 +49,13 @@ export class TableViewComponent {
   page: number = 1;
 
   searchTerm: string;
-  selectedTag: Tag;
+  orderBy: string;
+  sortOrder: string;
   loading = new BehaviorSubject<boolean>(true);
 
   @ViewChild('search', { static: true })
   search: ElementRef;
 
-  @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
   constructor(
     private store: Store<TagsState>,
     private route: ActivatedRoute,
@@ -115,7 +78,25 @@ export class TableViewComponent {
     this.store
       .select(TagSelectors.selectCurrentPage)
       .subscribe((currentPage) => (this.page = currentPage));
+    this.store
+      .select(TagSelectors.selectOrderBy)
+      .subscribe((orderBy) => (this.orderBy = orderBy));
+    this.store
+      .select(TagSelectors.selectSortOrder)
+      .subscribe((sortOrder) => (this.sortOrder = sortOrder));
     this.loading.next(false);
+  }
+
+  loadTags() {
+    this.store.dispatch(
+      TagActions.getTags({
+        page: this.page,
+        limit: this.pageSize,
+        orderBy: this.orderBy,
+        sortOrder: this.sortOrder,
+        searchString: this.search.nativeElement.value,
+      })
+    );
   }
 
   ngAfterViewInit() {
@@ -127,25 +108,29 @@ export class TableViewComponent {
         debounceTime(200),
         distinctUntilChanged(),
         tap((event) => {
-          this.store.dispatch(
-            TagActions.getTags({
-              search: this.search.nativeElement.value,
-              page: this.page,
-              limit: this.pageSize,
-            })
-          );
+          this.loadTags();
         }),
         tap(() => this.loading.next(false))
       )
       .subscribe();
   }
 
-  @Output() selectedTagChanged: EventEmitter<Tag> = new EventEmitter();
-
   selectTag(tag: Tag) {
-    //this.store.dispatch(TagActions.setSelectedTag({selectedTag: tag}));
-    this.selectedTag = tag;
-    this.selectedTagChanged.emit(this.selectedTag);
+    this.store.dispatch(TagActions.setSelectedTag({ selectedTag: tag }));
+  }
+
+  @ViewChildren(NgbdSortableHeaderDirective) headers: QueryList<NgbdSortableHeaderDirective>;
+  onSort({ column, direction }: SortEvent) {
+    // resetting other headers
+    this.headers.forEach((header) => {
+      if (header.sortable !== column) {
+        header.direction = '';
+      }
+    });
+
+    this.sortOrder = direction;
+    this.orderBy = column;
+    this.loadTags();
   }
 
   getTagTypeClass(type: string) {
@@ -161,23 +146,13 @@ export class TableViewComponent {
   }
 
   setPage(page: number) {
-    this.store.dispatch(
-      TagActions.getTags({
-        search: this.search.nativeElement.value,
-        page: page,
-        limit: this.pageSize,
-      })
-    );
+    this.page = page;
+    this.loadTags();
   }
 
   setPageSize(pageSize: number) {
-    this.store.dispatch(
-      TagActions.getTags({
-        search: this.search.nativeElement.value,
-        page: this.page,
-        limit: pageSize,
-      })
-    );
+    this.pageSize = pageSize;
+    this.loadTags();
   }
 
   openEditTagModal(tag: Tag) {
@@ -240,9 +215,11 @@ export class TableViewComponent {
     this.store.dispatch(
       TagActions.deleteTag({
         tagToDelete: tag,
-        search: this.search.nativeElement.value,
         page: this.page,
         limit: this.pageSize,
+        orderBy: this.orderBy,
+        sortOrder: this.sortOrder,
+        searchString: this.search.nativeElement.value,
       })
     );
   }

@@ -8,29 +8,33 @@
   <table class="table">
     <thead>
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">
-        <div class="header-value" i18n>Type
-          <div class="arrow"></div>
-        </div>
-      </th>
-      <th scope="col">
+      <th style="width: 15%" scope="col" sortable="name" (sort)="onSort($event)">
         <div class="header-value" i18n>Name
           <div class="arrow"></div>
         </div>
       </th>
-      <th scope="col">
+      <th scope="col" style="width: 10%" scope="col">
+        <div class="header-value" i18n>Type
+          <div class="arrow"></div>
+        </div>
+      </th>
+      <th style="width: 20%" scope="col" sortable="email" (sort)="onSort($event)">
         <div class="header-value" i18n>E-Mail
           <div class="arrow"></div>
         </div>
       </th>
-      <th scope="col">
+      <th style="width: 15%" scope="col" sortable="phone" (sort)="onSort($event)">
         <div class="header-value" i18n>Phone
           <div class="arrow"></div>
         </div>
       </th>
-      <th scope="col">
+      <th style="width: 15%" scope="col" sortable="website" (sort)="onSort($event)">
         <div class="header-value" i18n>Website
+          <div class="arrow"></div>
+        </div>
+      </th>
+      <th style="width: 10%" scope="col" sortable="created_at" (sort)="onSort($event)">
+        <div class="header-value" i18n>Created at
           <div class="arrow"></div>
         </div>
       </th>
@@ -45,13 +49,11 @@
     <tr *ngFor="let contact of contactList"
         (click)="selectContact(contact)"
     >
-      <td>{{ contact.id }}</td>
-      <td>
-        <!--<img [src]="'https://picsum.photos/20/20'" class="mr-2" style="width: 20px">-->
-        <ngb-highlight [result]="contact.type.value" [term]="searchTerm"></ngb-highlight>
-      </td>
       <td>
         <ngb-highlight [result]="contact.name" [term]="searchTerm"></ngb-highlight>
+      </td>
+      <td>
+        <ngb-highlight [result]="contact.type.value" [term]="searchTerm"></ngb-highlight>
       </td>
       <td>
         <ngb-highlight [result]="contact.email" [term]="searchTerm"></ngb-highlight>
@@ -61,6 +63,9 @@
       </td>
       <td>
         <ngb-highlight [result]="contact.website" [term]="searchTerm"></ngb-highlight>
+      </td>
+      <td>
+        <ngb-highlight [result]="contact.created_at"></ngb-highlight>
       </td>
       <td class="actions">
         <!-- edit -->

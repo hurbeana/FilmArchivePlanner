@@ -1,5 +1,5 @@
 <div class="form-group form-inline input-group">
-  <input class="form-control ml-2 mb-2" type="text" name="searchTerm" [(ngModel)]="searchTerm" placeholder="Search..." #search>
+  <input class="form-control ml-2 mb-2" type="text" name="searchTerm" [(ngModel)]="searchTerm" placeholder="Search for Value or Type..." #search>
   <button class="btn btn-primary mb-2" (click)="openCreateTagModal()">Add Tag</button>
 </div>
 
@@ -8,30 +8,22 @@
   <table class="table">
     <thead>
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">
+      <th style="width: 40%" scope="col" sortable="value" (sort)="onSort($event)">
         <div class="header-value" i18n>Value
           <div class="arrow"></div>
         </div>
       </th>
-      <th scope="col">
+      <th style="width: 30%" scope="col" sortable="type" (sort)="onSort($event)">
         <div class="header-value" i18n>Type
           <div class="arrow"></div>
         </div>
       </th>
-      <th scope="col">
-        <div class="header-value" i18n>User
+      <th style="width: 10%" scope="col" sortable="created_at" (sort)="onSort($event)">
+        <div class="header-value" i18n>Created at
           <div class="arrow"></div>
         </div>
       </th>
-      <!--
-      <th scope="col">
-        <div class="header-value" i18n>Public
-          <div class="arrow"></div>
-        </div>
-      </th>
-      -->
-      <th scope="col" class="actions">
+      <th style="width: 30%" scope="col" class="actions">
         <div class="header-value" i18n>Actions
         </div>
       </th>
@@ -42,9 +34,7 @@
     <tr *ngFor="let tag of tagList"
         (click)="selectTag(tag)"
     >
-      <td>{{ tag.id }}</td>
       <td>
-        <!--<img [src]="'https://picsum.photos/20/20'" class="mr-2" style="width: 20px">-->
         <ngb-highlight [result]="tag.value" [term]="searchTerm"></ngb-highlight>
       </td>
       <td>
@@ -53,13 +43,8 @@
         </span>
       </td>
       <td>
-        <ngb-highlight [result]="tag.user" [term]="searchTerm"></ngb-highlight>
+        <ngb-highlight [result]="tag.created_at"></ngb-highlight>
       </td>
-      <!--
-      <td>
-        <ngb-highlight [result]="tag.public" [term]="searchTerm"></ngb-highlight>
-      </td>
-      -->
       <td class='actions'>
         <!-- edit -->
         <button type="button" class="btn btn-primary btn-sm btn-edit" (click)="openEditTagModal(tag)">

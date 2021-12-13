@@ -35,43 +35,11 @@ import { EditContactModal } from './edit-contact-modal.component';
 import { TagService } from '../../../tags/services/tag.service';
 import { ConfirmDeleteContactModal } from './confirm-delete-contact-modal.component';
 import { ContactService } from '../../services/contact.service';
-
-/* SORTABLE HEADER TODO */
-export type SortColumn = keyof Contact | '';
-export type SortDirection = 'asc' | 'desc' | '';
-const rotate: { [key: string]: SortDirection } = {
-  asc: 'desc',
-  desc: '',
-  '': 'asc',
-};
-
-const compare = (v1: string | number, v2: string | number) =>
-  v1 < v2 ? -1 : v1 > v2 ? 1 : 0;
-
-export interface SortEvent {
-  column: SortColumn;
-  direction: SortDirection;
-}
-
-@Directive({
-  selector: 'th[sortable]',
-  host: {
-    '[class.asc]': 'direction === "asc"',
-    '[class.desc]': 'direction === "desc"',
-    '(click)': 'rotate()',
-  },
-})
-export class NgbdSortableHeader {
-  @Input() sortable: SortColumn = '';
-  @Input() direction: SortDirection = '';
-  @Output() sort = new EventEmitter<SortEvent>();
-
-  rotate() {
-    this.direction = rotate[this.direction];
-    this.sort.emit({ column: this.sortable, direction: this.direction });
-  }
-}
-
+import {
+  NgbdSortableHeaderDirective,
+  SortEvent,
+} from '../../../shared/directives/sortable.directive';
+import * as TagActions from '../../../tags/state/tags.actions';
 @Component({
   selector: 'table-view',
   templateUrl: './table-view.component.html',
@@ -87,13 +55,13 @@ export class TableViewComponent {
   page: number = 1;
 
   searchTerm: string;
-  selectedContact: Contact | null | undefined;
+  orderBy: string;
+  sortOrder: string;
   loading = new BehaviorSubject<boolean>(true);
 
   @ViewChild('search', { static: true })
   search: ElementRef;
 
-  @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
   constructor(
     private store: Store<ContactsState>,
     private route: ActivatedRoute,
@@ -120,6 +88,18 @@ export class TableViewComponent {
     this.loading.next(false);
   }
 
+  loadContacts() {
+    this.store.dispatch(
+      ContactActions.getContacts({
+        page: this.page,
+        limit: this.pageSize,
+        orderBy: this.orderBy,
+        sortOrder: this.sortOrder,
+        searchString: this.search.nativeElement.value,
+      })
+    );
+  }
+
   ngAfterViewInit() {
     // server-side search
     fromEvent(this.search.nativeElement, 'keyup')
@@ -129,13 +109,7 @@ export class TableViewComponent {
         debounceTime(200),
         distinctUntilChanged(),
         tap((event) => {
-          this.store.dispatch(
-            ContactActions.getContacts({
-              search: this.search.nativeElement.value,
-              page: this.page,
-              limit: this.pageSize,
-            })
-          );
+          this.loadContacts();
         }),
         tap(() => this.loading.next(false))
       )
@@ -148,24 +122,28 @@ export class TableViewComponent {
     );
   }
 
+  @ViewChildren(NgbdSortableHeaderDirective) headers: QueryList<NgbdSortableHeaderDirective>;
+  onSort({ column, direction }: SortEvent) {
+    // resetting other headers
+    this.headers.forEach((header) => {
+      if (header.sortable !== column) {
+        header.direction = '';
+      }
+    });
+
+    this.sortOrder = direction;
+    this.orderBy = column;
+    this.loadContacts();
+  }
+
   setPage(page: number) {
-    this.store.dispatch(
-      ContactActions.getContacts({
-        search: this.search.nativeElement.value,
-        page: page,
-        limit: this.pageSize,
-      })
-    );
+    this.page = page;
+    this.loadContacts();
   }
 
   setPageSize(pageSize: number) {
-    this.store.dispatch(
-      ContactActions.getContacts({
-        search: this.search.nativeElement.value,
-        page: this.page,
-        limit: pageSize,
-      })
-    );
+    this.pageSize = pageSize;
+    this.loadContacts();
   }
 
   openCreateContactModal() {
@@ -268,9 +246,11 @@ export class TableViewComponent {
     this.store.dispatch(
       ContactActions.deleteContact({
         contactToDelete: contact,
-        search: this.search.nativeElement.value,
         page: this.page,
         limit: this.pageSize,
+        orderBy: this.orderBy,
+        sortOrder: this.sortOrder,
+        searchString: this.search.nativeElement.value,
       })
     );
   }

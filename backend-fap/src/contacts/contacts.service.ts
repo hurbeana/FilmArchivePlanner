@@ -20,6 +20,7 @@ import { SearchContactDto } from './dto/search-contact.dto';
 import { TagReferenceDto } from '../tags/dto/tag-reference.dto';
 import { TagsService } from '../tags/tags.service';
 import { TagType } from '../tags/tagtype.enum';
+import { Tag } from '../tags/entities/tag.entity';
 
 /**
  * Service for contacts CRUD
@@ -58,28 +59,27 @@ export class ContactsService {
    * @param search Search DTO for detailed search
    * @param orderBy field to order by
    * @param sortOrder sortorder, either ASC or DESC
-   * @param searchstring
+   * @param searchString
    * @returns {Promise<Pagination<ContactDto>>} The contacts in a paginated form
    */
   find(
     options: IPaginationOptions,
     search: SearchContactDto,
-    orderBy = 'id',
-    //TODO: Change to sort by name (requires changes in Store in Frontend)
-    sortOrder: 'ASC' | 'DESC' = 'ASC',
-    searchstring: string,
+    orderBy: string,
+    sortOrder: string,
+    searchString: string,
   ): Promise<Pagination<ContactDto>> {
     let whereObj = [];
     let orderObj = {};
-    if (searchstring) {
-      // searchstring higher prio
+    if (searchString) {
+      // searchString higher prio
       whereObj = Object.keys(SearchContactDto.getStringSearch()).map((k) =>
         k === 'type'
           ? {
-              [k]: { value: ILike('%' + searchstring + '%') },
+              [k]: { value: ILike('%' + searchString + '%') },
             }
           : {
-              [k]: ILike('%' + searchstring + '%'),
+              [k]: ILike('%' + searchString + '%'),
             },
       );
     } else if (search) {
@@ -95,9 +95,16 @@ export class ContactsService {
           }
         });
     }
-    if (orderBy) {
-      orderObj = { [orderBy]: sortOrder };
+    if (sortOrder && orderBy) {
+      if (orderBy === 'type') {
+        orderObj = { type: { value: sortOrder.toUpperCase() } };
+      } else {
+        orderObj = { [orderBy]: sortOrder.toUpperCase() };
+      }
+    } else {
+      orderObj = { created_at: 'ASC' };
     }
+
     return paginate<Contact>(this.contactRepository, options, {
       relations: ['type'],
       where: whereObj,

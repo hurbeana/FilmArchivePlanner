@@ -6,7 +6,13 @@ import { TagsPaginationState } from '../../app.state';
 /* whenever this action is called, the 'getTags$' effect in tags.effects.ts  is executed */
 export const getTags = createAction(
   '[Tag List] Get Tags',
-  props<{ search: string; page: number; limit: number }>()
+  props<{
+    page: number;
+    limit: number;
+    orderBy?: string;
+    sortOrder?: string;
+    searchString?: string;
+  }>()
 );
 export const getTagsSuccess = createAction(
   '[Tags List] Loaded Tags Success',
@@ -56,17 +62,21 @@ export const deleteTag = createAction(
   '[Tag List] Remove Tag',
   props<{
     tagToDelete: Tag;
-    search: string;
     page: number;
     limit: number;
+    orderBy: string;
+    sortOrder: string;
+    searchString: string;
   }>()
 );
 export const deleteTagSuccess = createAction(
   '[Tag List] Remove Tag Success',
   props<{
     tagToDelete: Tag;
-    search: string;
     page: number;
     limit: number;
+    orderBy: string;
+    sortOrder: string;
+    searchString: string;
   }>()
 );

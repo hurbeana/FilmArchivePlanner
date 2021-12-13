@@ -4,4 +4,5 @@ export interface Tag {
   type: string;
   user: string;
   public: boolean;
+  created_at: string;
 }

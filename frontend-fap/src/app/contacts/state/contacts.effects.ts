@@ -10,19 +10,21 @@ export class ContactEffects {
   constructor(
     private actions$: Actions,
     private contactsService: ContactService
-  ) { }
+  ) {}
 
   /* is called, whenever an action of type 'getContacts' is called */
   getContacts$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ContactActions.getContacts),
-      switchMap(({ search, page, limit }) =>
-        this.contactsService.getContacts(search, page, limit).pipe(
-          map((pagination) =>
-            ContactActions.getContactsSuccess({ pagination: pagination })
-          ),
-          catchError(() => EMPTY) // TODO: error handling
-        )
+      switchMap(({ page, limit, orderBy, sortOrder, searchString }) =>
+        this.contactsService
+          .getContacts(page, limit, orderBy, sortOrder, searchString)
+          .pipe(
+            map((pagination) =>
+              ContactActions.getContactsSuccess({ pagination: pagination })
+            ),
+            catchError(() => EMPTY) // TODO: error handling
+          )
       )
     )
   );
@@ -57,18 +59,21 @@ export class ContactEffects {
   deleteContact$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ContactActions.deleteContact),
-      mergeMap(({ contactToDelete, search, page, limit }) =>
-        this.contactsService.deleteContact(contactToDelete).pipe(
-          map(() =>
-            ContactActions.deleteContactSuccess({
-              contactToDelete: contactToDelete,
-              search: search,
-              page: page,
-              limit: limit,
-            })
-          ),
-          catchError(() => EMPTY) // TODO: error handling
-        )
+      mergeMap(
+        ({ contactToDelete, page, limit, orderBy, sortOrder, searchString }) =>
+          this.contactsService.deleteContact(contactToDelete).pipe(
+            map(() =>
+              ContactActions.deleteContactSuccess({
+                contactToDelete: contactToDelete,
+                page: page,
+                limit: limit,
+                orderBy: orderBy,
+                sortOrder: sortOrder,
+                searchString: searchString,
+              })
+            ),
+            catchError(() => EMPTY) // TODO: error handling
+          )
       )
     )
   );
@@ -76,13 +81,16 @@ export class ContactEffects {
   reloadAfterDelete$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ContactActions.deleteContactSuccess),
-      mergeMap(({ contactToDelete, search, page, limit }) =>
-        this.contactsService.getContacts(search, page, limit).pipe(
-          map((pagination) =>
-            ContactActions.getContactsSuccess({ pagination: pagination })
-          ),
-          catchError(() => EMPTY) // TODO: error handling
-        )
+      mergeMap(
+        ({ contactToDelete, page, limit, orderBy, sortOrder, searchString }) =>
+          this.contactsService
+            .getContacts(page, limit, orderBy, sortOrder, searchString)
+            .pipe(
+              map((pagination) =>
+                ContactActions.getContactsSuccess({ pagination: pagination })
+              ),
+              catchError(() => EMPTY) // TODO: error handling
+            )
       )
     )
   );

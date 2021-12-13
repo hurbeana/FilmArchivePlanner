@@ -18,17 +18,23 @@ import { Tag } from '../../models/tag';
       </button>
     </div>
     <div class="modal-body">
-      <form #tagForm="ngForm" (ngSubmit)=" tagForm.form.valid && modal.close({ tag: tagToEdit, id: tagId })">
+      <form
+        #tagForm="ngForm"
+        (ngSubmit)="
+          tagForm.form.valid && modal.close({ tag: tagToEdit, id: tagId })
+        "
+      >
         <div class="form-group row">
           <label for="inputState" class="col-sm-2 col-form-label">Type</label>
           <div class="col-sm-10">
             <select
-              disabled
               id="inputState"
               class="form-control form-control-sm"
+              name="type"
               [(ngModel)]="tagToEdit.type"
+              disabled
             >
-              <option *ngFor="let type of tagTypes">
+              <option *ngFor="let type of tagTypes" [value]="type">
                 <span class="badge tag_category">{{ type }}</span>
               </option>
             </select>
@@ -46,10 +52,15 @@ import { Tag } from '../../models/tag';
               name="tagValue"
               [(ngModel)]="tagToEdit.value"
               #value="ngModel"
-              [ngClass]="{ 'is-invalid': visible && tagForm.submitted && value.invalid }"
+              [ngClass]="{
+                'is-invalid': visible && tagForm.submitted && value.invalid
+              }"
               required
             />
-            <div class="invalid-feedback" *ngIf="tagForm.submitted && value.invalid">
+            <div
+              class="invalid-feedback"
+              *ngIf="tagForm.submitted && value.invalid"
+            >
               <p *ngIf="value.errors?.required">Value is required</p>
             </div>
           </div>
@@ -61,12 +72,7 @@ import { Tag } from '../../models/tag';
           >
             Cancel
           </button>
-          <button
-            type="submit"
-            class="btn btn-success"
-          >
-            Ok
-          </button>
+          <button type="submit" class="btn btn-success">Ok</button>
           <!-- autoFocus a button with ngbAutofocus as attribute-->
         </div>
       </form>
@@ -78,8 +84,9 @@ export class EditTagModal {
   visible: boolean = true;
   tagToEdit: Tag;
   tagId: number;
-  tagTypes: any = [
+  tagTypes: string[] = [
     'Animation',
+    'Category',
     'Contact',
     'Country',
     'Keyword',

@@ -1,11 +1,12 @@
-import { FileDto } from "../../shared/models/file";
+import { FileDto } from '../../shared/models/file';
 
 export interface Director {
-  id: Number,
-  firstName:	string,
-  middleName?:	string,
-  lastName:	string,
-  biographyEnglish:	FileDto,
-  biographyGerman?:	FileDto,
-  filmography?:	FileDto,
+  id: Number;
+  firstName: string;
+  middleName?: string;
+  lastName: string;
+  biographyEnglish: FileDto;
+  biographyGerman?: FileDto;
+  filmography?: FileDto;
+  created_at: string;
 }

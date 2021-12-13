@@ -20,5 +20,5 @@ export class SearchMoviePagingDto extends SearchMovieDto {
 
   @IsOptional()
   @IsString()
-  searchstring: string;
+  searchString: string;
 }

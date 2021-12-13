@@ -20,5 +20,5 @@ export class SearchTagPagingDto extends SearchTagDto {
 
   @IsOptional()
   @IsString()
-  searchstring: string;
+  searchString: string;
 }

@@ -38,7 +38,7 @@ paths:
           name: searchMoviePagingDto
           schema:
             $ref: "#/components/schemas/SearchMoviePagingDto"
-          description: All properties of searchMoviePagingDto are valid parameters see specifaction for details. The searchstring parameter disables all detailed field search parameters.
+          description: All properties of searchMoviePagingDto are valid parameters see specifaction for details. The searchString parameter disables all detailed field search parameters.
       responses:
         200:
           description: successful operation
@@ -180,7 +180,7 @@ paths:
           name: searchDirectorPagingDto
           schema:
             $ref: "#/components/schemas/SearchDirectorPagingDto"
-          description: All properties of searchDirectorPagingDto are valid parameters see specifaction for details. The searchstring parameter disables all detailed field search parameters.
+          description: All properties of searchDirectorPagingDto are valid parameters see specifaction for details. The searchString parameter disables all detailed field search parameters.
       responses:
         200:
           description: successful operation
@@ -322,7 +322,7 @@ paths:
           name: searchContactPagingDto
           schema:
             $ref: "#/components/schemas/SearchContactPagingDto"
-          description: All properties of searchContactPagingDto are valid parameters see specifaction for details. The searchstring parameter disables all detailed field search parameters.
+          description: All properties of searchContactPagingDto are valid parameters see specifaction for details. The searchString parameter disables all detailed field search parameters.
       responses:
         200:
           description: successful operation
@@ -465,7 +465,7 @@ paths:
           name: searchTagPagingDto
           schema:
             $ref: "#/components/schemas/SearchTagPagingDto"
-          description: All properties of searchTagPagingDto are valid parameters see specifaction for details. The searchstring parameter disables all detailed field search parameters.
+          description: All properties of searchTagPagingDto are valid parameters see specifaction for details. The searchString parameter disables all detailed field search parameters.
       responses:
         200:
           description: successful operation
@@ -854,8 +854,8 @@ components:
         orderBy:
           description: Used for pagination. The number of items to return.
           type: string
-        searchstring:
-          description: Searches all string fields containing the searchstring and returns every match. If specified, detailed search fields are ignored.
+        searchString:
+          description: Searches all string fields containing the searchString and returns every match. If specified, detailed search fields are ignored.
           type: string
 
     MovieSchema:

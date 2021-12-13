@@ -52,14 +52,10 @@ export class EditViewComponent implements OnInit {
     private router: Router
   ) {
     /* Fetch lists for dropdowns */
+    this.store.dispatch(DirectorActions.getDirectors({ page: 1, limit: 30 }));
+    this.store.dispatch(ContactActions.getContacts({ page: 1, limit: 30 }));
     this.store.dispatch(
-      DirectorActions.getDirectors({ search: '', page: 1, limit: 30 })
-    );
-    this.store.dispatch(
-      ContactActions.getContacts({ search: '', page: 1, limit: 30 })
-    );
-    this.store.dispatch(
-      TagActions.getTags({ search: '', page: 1, limit: 50 }) //can get more as tagtypes share one list
+      TagActions.getTags({ page: 1, limit: 50 }) //can get more as tagtypes share one list
     );
 
     this.actions$
@@ -74,9 +70,7 @@ export class EditViewComponent implements OnInit {
           );
           this.moviesForm.reset();
           this.resetFileFormArrays();
-          this.store.dispatch(
-            MovieActions.getMovies({ search: '', page: 1, limit: 16 })
-          );
+          this.store.dispatch(MovieActions.getMovies({ page: 1, limit: 16 }));
           this.router.navigate(['/movies']);
         })
       )
@@ -110,9 +104,7 @@ export class EditViewComponent implements OnInit {
             'OK',
             'success-snackbar'
           );
-          this.store.dispatch(
-            MovieActions.getMovies({ search: '', page: 1, limit: 16 })
-          );
+          this.store.dispatch(MovieActions.getMovies({ page: 1, limit: 16 }));
           this.router.navigate(['/movies']);
         })
       )

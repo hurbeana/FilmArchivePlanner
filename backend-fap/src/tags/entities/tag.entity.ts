@@ -23,11 +23,6 @@ export class Tag {
   last_updated: Date;
 
   @AutoMap()
-  /*@Column({
-    type: 'enum',
-    enum: TagType,
-    default: TagType.Keyword,
-  })*/
   @Column('text')
   type: TagType;
 

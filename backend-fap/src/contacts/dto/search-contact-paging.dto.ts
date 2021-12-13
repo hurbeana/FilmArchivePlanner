@@ -20,5 +20,5 @@ export class SearchContactPagingDto extends SearchContactDto {
 
   @IsOptional()
   @IsString()
-  searchstring: string;
+  searchString: string;
 }

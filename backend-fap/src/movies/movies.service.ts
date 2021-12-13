@@ -264,7 +264,7 @@ export class MoviesService {
    * @param search Search DTO for detailed search
    * @param orderBy field to order by
    * @param sortOrder sortorder, either ASC or DESC
-   * @param searchstring
+   * @param searchString
    * @returns {Promise<Pagination<MovieDto>>} The movies in a paginated form
    */
   async find(
@@ -272,14 +272,14 @@ export class MoviesService {
     search: SearchMovieDto,
     orderBy: string,
     sortOrder: 'ASC' | 'DESC' = 'DESC',
-    searchstring: string,
+    searchString: string,
   ): Promise<Pagination<MovieDto>> {
     let whereObj = [];
     let orderObj = {};
-    if (searchstring) {
-      // searchstring higher prio
+    if (searchString) {
+      // searchString higher prio
       whereObj = Object.keys(SearchMovieDto.getStringSearch()).map((k) => ({
-        [k]: ILike('%' + searchstring + '%'),
+        [k]: ILike('%' + searchString + '%'),
       }));
     } else if (search) {
       whereObj = Object.entries(search)
@@ -294,9 +294,14 @@ export class MoviesService {
           }
         });
     }
-    if (orderBy) {
-      orderObj = { [orderBy]: sortOrder };
+    if (sortOrder && orderBy) {
+      orderObj = { [orderBy]: sortOrder.toUpperCase() };
+    } else {
+      orderObj = { created_at: 'ASC' };
     }
+
+    console.log(orderObj);
+
     return paginate<Movie>(this.moviesRepository, options, {
       relations: [
         'directors',

@@ -211,22 +211,22 @@ export class DirectorsService {
    * @param search Search DTO for detailed search
    * @param orderBy field to order by
    * @param sortOrder sortorder, either ASC or DESC
-   * @param searchstring
+   * @param searchString
    * @returns {Promise<Pagination<DirectorDto>>} The directors in a paginated form
    */
   async find(
     options: IPaginationOptions,
     search: SearchDirectorDto,
     orderBy: string,
-    sortOrder: 'ASC' | 'DESC' = 'DESC',
-    searchstring: string,
+    sortOrder: string,
+    searchString: string,
   ): Promise<Pagination<DirectorDto>> {
     let whereObj = [];
     let orderObj = {};
-    if (searchstring) {
-      // searchstring higher prio
+    if (searchString) {
+      // searchString higher prio
       whereObj = Object.keys(SearchDirectorDto.getStringSearch()).map((k) => ({
-        [k]: ILike('%' + searchstring + '%'),
+        [k]: ILike('%' + searchString + '%'),
       }));
     } else if (search) {
       whereObj = Object.entries(search)
@@ -241,8 +241,10 @@ export class DirectorsService {
           }
         });
     }
-    if (orderBy) {
-      orderObj = { [orderBy]: sortOrder };
+    if (sortOrder && orderBy) {
+      orderObj = { [orderBy]: sortOrder.toUpperCase() };
+    } else {
+      orderObj = { created_at: 'ASC' };
     }
     return paginate<Director>(this.directorRepository, options, {
       relations: ['biographyEnglish', 'biographyGerman', 'filmography'],
@@ -299,7 +301,7 @@ export class DirectorsService {
     );
     directorParam.id = id;
     const updatedDirector = await this.directorRepository.save(directorParam);
-    return this.mapDirectorToDto(updatedDirector);
+    return this.findOne(updatedDirector.id);
   }
 
   /**

@@ -7,13 +7,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { YesNoLabelComponent } from './components/yes-no-label/yes-no-label.component';
-import { ResizableDirective } from './resizable.directive';
+import { ResizableDirective } from './directives/resizable.directive';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { NgbdSortableHeaderDirective } from './directives/sortable.directive';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
     ResizableDirective,
     FileUploadComponent,
     NotFoundComponent,
+    NgbdSortableHeaderDirective,
   ],
   imports: [
     CommonModule,
@@ -47,6 +49,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
     YesNoLabelComponent,
     ResizableDirective,
     FileUploadComponent,
+    NgbdSortableHeaderDirective,
   ],
 })
 /* The shared module contains components, which are shared and reused from the feature

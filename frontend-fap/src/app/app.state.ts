@@ -14,6 +14,9 @@ export interface PaginationState {
     totalPages: number;
     currentPage: number;
   };
+  searchString: string;
+  orderBy: string;
+  sortOrder: string;
 }
 
 export interface DirectorsPaginationState {
@@ -25,6 +28,9 @@ export interface DirectorsPaginationState {
     totalPages: number;
     currentPage: number;
   };
+  searchString: string;
+  orderBy: string;
+  sortOrder: string;
 }
 
 export interface ContactsPaginationState {
@@ -36,6 +42,9 @@ export interface ContactsPaginationState {
     totalPages: number;
     currentPage: number;
   };
+  searchString: string;
+  orderBy: string;
+  sortOrder: string;
 }
 
 export interface TagsPaginationState {
@@ -47,31 +56,30 @@ export interface TagsPaginationState {
     totalPages: number;
     currentPage: number;
   };
+  searchString: string;
+  orderBy: string;
+  sortOrder: string;
 }
 
 export interface AppState {
   // TODO rename to MoviesState
-  pagination: PaginationState; // TODO rename to moviesPagination : MoviesPaginationState
-  selectedMovie?: Movie;
+  pagination: PaginationState;
+  selectedMovie?: Movie | null;
   detailsMovie?: Movie; // movie which is loaded by id for fullscreen detailsview
-  searchTerm: string;
 }
 
 export interface DirectorsState {
   pagination: DirectorsPaginationState;
   selectedDirector?: Director | null;
   detailsDirector?: Director; // director which is loaded by id for fullscreen detailsview
-  searchTerm: string;
 }
 
 export interface ContactsState {
   pagination: ContactsPaginationState;
   selectedContact?: Contact | null;
-  searchTerm: string;
 }
 
 export interface TagsState {
   pagination: TagsPaginationState;
   selectedTag?: Tag | null;
-  searchTerm: string;
 }

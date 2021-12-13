@@ -1,5 +1,5 @@
 <div class="form-group form-inline input-group">
-  <input class="form-control ml-2 mb-2" type="text" name="searchTerm" [(ngModel)]="searchTerm" placeholder="Search..." #search>
+  <input class="form-control ml-2 mb-2" type="text" name="searchTerm" [(ngModel)]="searchTerm" placeholder="Search for name..." #search>
   <button class="btn btn-primary mb-2" [routerLink]="['create']">Add Director</button>
 </div>
 
@@ -8,39 +8,26 @@
   <table class="table">
     <thead>
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">
+      <th style="width: 25%" scope="col" sortable="firstName" (sort)="onSort($event)">
         <div class="header-value" i18n>First name
           <div class="arrow"></div>
         </div>
       </th>
-      <th scope="col">
+      <th style="width: 25%" scope="col" sortable="middleName" (sort)="onSort($event)">
         <div class="header-value" i18n>Middle name
           <div class="arrow"></div>
         </div>
       </th>
-      <th scope="col">
+      <th style="width: 25%" scope="col" sortable="lastName" (sort)="onSort($event)">
         <div class="header-value" i18n>Last Name
           <div class="arrow"></div>
         </div>
       </th>
-      <th scope="col">
-        <div class="header-value" i18n>English biography
+      <th style="width: 20%" scope="col" sortable="created_at" (sort)="onSort($event)">
+        <div class="header-value" i18n>Created at
           <div class="arrow"></div>
         </div>
       </th>
-      <th scope="col">
-        <div class="header-value" i18n>German biography
-          <div class="arrow"></div>
-        </div>
-      </th>
-      <!--
-      <th scope="col">
-        <div class="header-value" i18n>Filmography
-          <div class="arrow"></div>
-        </div>
-      </th>
-      -->
       <th scope="col" class="actions">
         <div class="header-value" i18n>Actions
         </div>
@@ -52,7 +39,6 @@
     <tr *ngFor="let director of directorList"
         (click)="selectDirector(director)"
     >
-      <td>{{ director.id }}</td>
       <td>
         <!--<img [src]="'https://picsum.photos/20/20'" class="mr-2" style="width: 20px">-->
         <ngb-highlight [result]="director.firstName" [term]="searchTerm"></ngb-highlight>
@@ -64,10 +50,7 @@
         <ngb-highlight [result]="director.lastName" [term]="searchTerm"></ngb-highlight>
       </td>
       <td>
-        <ngb-highlight [result]="director.biographyEnglish?.filename" [term]="searchTerm"></ngb-highlight>
-      </td>
-      <td>
-        <ngb-highlight [result]="director.biographyGerman?.filename" [term]="searchTerm"></ngb-highlight>
+        <ngb-highlight [result]="director.created_at"></ngb-highlight>
       </td>
       <!--
       <td>

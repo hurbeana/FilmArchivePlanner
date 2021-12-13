@@ -6,7 +6,13 @@ import { PaginationState } from '../../app.state';
 /* whenever this action is called, the 'getMovies$' effect in movies.effects.ts  is executed */
 export const getMovies = createAction(
   '[Movie List] Get Movies',
-  props<{ search: string; page: number; limit: number }>()
+  props<{
+    page: number;
+    limit: number;
+    orderBy?: string;
+    sortOrder?: string;
+    searchString?: string;
+  }>()
 );
 export const getMoviesSuccess = createAction(
   '[Movies List] Loaded Movies Success',
@@ -52,5 +58,25 @@ export const setSelectedMovie = createAction(
   props<{ selectedMovie: Movie }>()
 );
 
-export const deleteMovie = createAction('[Movie List] Delete Movie', props<{ movieToDelete: Movie, search: string, page: number, limit: number }>());
-export const deleteMovieSuccess = createAction('[Movie List] Delete Movie Success', props<{ movieToDelete: Movie, search: string, page: number, limit: number }>());
+export const deleteMovie = createAction(
+  '[Movie List] Delete Movie',
+  props<{
+    movieToDelete: Movie;
+    page: number;
+    limit: number;
+    orderBy: string;
+    sortOrder: string;
+    searchString: string;
+  }>()
+);
+export const deleteMovieSuccess = createAction(
+  '[Movie List] Delete Movie Success',
+  props<{
+    movieToDelete: Movie;
+    page: number;
+    limit: number;
+    orderBy: string;
+    sortOrder: string;
+    searchString: string;
+  }>()
+);

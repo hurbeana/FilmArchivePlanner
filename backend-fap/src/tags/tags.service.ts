@@ -54,22 +54,22 @@ export class TagsService {
    * @param search Search DTO for detailed search
    * @param orderBy field to order by
    * @param sortOrder sortorder, either ASC or DESC
-   * @param searchstring
+   * @param searchString
    * @returns {Promise<Pagination<TagDto>>} The tags in a paginated form
    */
   find(
     options: IPaginationOptions,
     search: SearchTagDto,
     orderBy: string,
-    sortOrder: 'ASC' | 'DESC' = 'ASC',
-    searchstring: string,
+    sortOrder: string,
+    searchString: string,
   ): Promise<Pagination<TagDto>> {
     let whereObj = [];
     let orderObj = {};
-    if (searchstring) {
-      // searchstring higher prio
+    if (searchString) {
+      // searchString higher prio
       whereObj = Object.keys(SearchTagDto.getStringSearch()).map((k) => ({
-        [k]: ILike('%' + searchstring + '%'),
+        [k]: ILike('%' + searchString + '%'),
       }));
     } else if (search) {
       whereObj = Object.entries(search)
@@ -84,8 +84,11 @@ export class TagsService {
           }
         });
     }
-    if (orderBy) {
-      orderObj = { [orderBy]: sortOrder };
+
+    if (sortOrder && orderBy) {
+      orderObj = { [orderBy]: sortOrder.toUpperCase() };
+    } else {
+      orderObj = { created_at: 'ASC' };
     }
     return paginate<Tag>(this.tagRepository, options, {
       relations: [],
@@ -160,8 +163,9 @@ export class TagsService {
 
     const tagParam = this.tagRepository.create(updateTagDto);
     tagParam.id = id;
+
     const updatedTag = await this.tagRepository.save(tagParam);
-    return this.mapTagToDto(updatedTag);
+    return this.findOne(updatedTag.id);
   }
 
   /**

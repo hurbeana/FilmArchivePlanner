@@ -12,20 +12,11 @@ import { ContactsState } from '../../../app.state';
 export class DetailsViewComponent implements OnInit {
   contact: Contact | null | undefined;
 
-  constructor(private store: Store<ContactsState>) {
+  constructor(private store: Store<ContactsState>) {}
+
+  ngOnInit(): void {
     this.store
       .select(ContactSelectors.selectSelectedContact)
       .subscribe((selectedContact) => (this.contact = selectedContact));
-  }
-
-  ngOnInit(): void { }
-
-  addTag(event: Event) {
-    console.log('addTag', event, this.contact?.id, this.contact?.type);
-    //this.selectValues.push(val);
-  }
-  removeTag(event: Event) {
-    console.log('removeTag', event, this.contact?.id);
-    //this.selectValues.push(val);
   }
 }

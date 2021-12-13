@@ -19,13 +19,15 @@ export class TagEffects {
   getTags$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TagActions.getTags),
-      switchMap(({ search, page, limit }) =>
-        this.tagsService.getTags(search, page, limit).pipe(
-          map((pagination) =>
-            TagActions.getTagsSuccess({ pagination: pagination })
-          ),
-          catchError(() => EMPTY) // TODO: error handling
-        )
+      switchMap(({ page, limit, orderBy, sortOrder, searchString }) =>
+        this.tagsService
+          .getTags(page, limit, orderBy, sortOrder, searchString)
+          .pipe(
+            map((pagination) =>
+              TagActions.getTagsSuccess({ pagination: pagination })
+            ),
+            catchError(() => EMPTY) // TODO: error handling
+          )
       )
     )
   );
@@ -74,18 +76,21 @@ export class TagEffects {
   deleteTag$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TagActions.deleteTag),
-      mergeMap(({ tagToDelete, search, page, limit }) =>
-        this.tagsService.deleteTag(tagToDelete).pipe(
-          map(() =>
-            TagActions.deleteTagSuccess({
-              tagToDelete: tagToDelete,
-              search: search,
-              page: page,
-              limit: limit,
-            })
-          ),
-          catchError(() => EMPTY) // TODO: error handling
-        )
+      mergeMap(
+        ({ tagToDelete, page, limit, orderBy, sortOrder, searchString }) =>
+          this.tagsService.deleteTag(tagToDelete).pipe(
+            map(() =>
+              TagActions.deleteTagSuccess({
+                tagToDelete: tagToDelete,
+                page: page,
+                limit: limit,
+                orderBy: orderBy,
+                sortOrder: sortOrder,
+                searchString: searchString,
+              })
+            ),
+            catchError(() => EMPTY) // TODO: error handling
+          )
       )
     )
   );
@@ -93,13 +98,16 @@ export class TagEffects {
   reloadAfterDelete$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TagActions.deleteTagSuccess),
-      mergeMap(({ tagToDelete, search, page, limit }) =>
-        this.tagsService.getTags(search, page, limit).pipe(
-          map((pagination) =>
-            TagActions.getTagsSuccess({ pagination: pagination })
-          ),
-          catchError(() => EMPTY) // TODO: error handling
-        )
+      mergeMap(
+        ({ tagToDelete, page, limit, orderBy, sortOrder, searchString }) =>
+          this.tagsService
+            .getTags(page, limit, orderBy, sortOrder, searchString)
+            .pipe(
+              map((pagination) =>
+                TagActions.getTagsSuccess({ pagination: pagination })
+              ),
+              catchError(() => EMPTY) // TODO: error handling
+            )
       )
     )
   );

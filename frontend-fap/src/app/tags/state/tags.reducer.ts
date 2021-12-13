@@ -12,9 +12,11 @@ export const initialState: TagsState = {
       totalPages: 0,
       currentPage: 1,
     },
+    searchString: '',
+    orderBy: '',
+    sortOrder: '',
   },
   selectedTag: null,
-  searchTerm: '',
 };
 
 export const tagsReducer = createReducer(
@@ -23,6 +25,7 @@ export const tagsReducer = createReducer(
   on(TagActions.getTagsSuccess, (state, { pagination }) => ({
     ...state,
     pagination: {
+      ...pagination,
       items: [...pagination.items],
       meta: { ...pagination.meta },
     },
@@ -62,6 +65,7 @@ export const tagsReducer = createReducer(
         ),
       ],
     },
+    selectedTag: tag,
   })),
 
   on(TagActions.deleteTagSuccess, (state, { tagToDelete }) => ({

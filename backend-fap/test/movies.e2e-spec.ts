@@ -67,8 +67,8 @@ describe('MoviesController (e2e)', () => {
     expect(response.body.items[0].originalTitle).toEqual('Sieben');
   });
 
-  test('/movies (GET) searchstring seven returns one movie', async () => {
-    const search = { limit: 10, page: 1, searchstring: 'seven' };
+  test('/movies (GET) searchString seven returns one movie', async () => {
+    const search = { limit: 10, page: 1, searchString: 'seven' };
     const response = await request(app.getHttpServer())
       .get('/movies')
       .query(querystring.stringify(search))

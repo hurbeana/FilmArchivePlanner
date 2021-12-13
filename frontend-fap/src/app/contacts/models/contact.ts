@@ -5,4 +5,5 @@ export interface Contact {
   email?: string;
   phone?: string;
   website?: string;
+  created_at: string;
 }

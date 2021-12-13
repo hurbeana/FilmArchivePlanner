@@ -35,13 +35,13 @@ export class TagsController {
   findAll(@Query() searchPaging: SearchTagPagingDto) {
     this.logger.log('Get tags called.');
     this.logger.log(searchPaging);
-    const { limit, page, orderBy, sortOrder, searchstring, ...search } =
+    const { page, limit, orderBy, sortOrder, searchString, ...search } =
       searchPaging;
     const p: IPaginationOptions = {
       page: page ?? 1,
       limit: limit ?? 10,
     };
-    return this.tagsService.find(p, search, orderBy, sortOrder, searchstring);
+    return this.tagsService.find(p, search, orderBy, sortOrder, searchString);
   }
 
   @Get(':id')

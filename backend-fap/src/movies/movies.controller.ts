@@ -34,13 +34,13 @@ export class MoviesController {
   find(@Query() searchPaging: SearchMoviePagingDto) {
     this.logger.log('Get movies called.');
     this.logger.log(searchPaging);
-    const { limit, page, orderBy, sortOrder, searchstring, ...search } =
+    const { page, limit, orderBy, sortOrder, searchString, ...search } =
       searchPaging;
     const p: IPaginationOptions = {
       page: page ?? 1,
       limit: limit ?? 10,
     };
-    return this.moviesService.find(p, search, orderBy, sortOrder, searchstring);
+    return this.moviesService.find(p, search, orderBy, sortOrder, searchString);
   }
 
   @Get(':id')

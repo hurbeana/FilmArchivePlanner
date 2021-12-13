@@ -23,10 +23,7 @@ import { MoviesRoutingModule } from './movies-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ContentComponent } from './components/content/content.component';
-import {
-  NgbdSortableHeader,
-  TableViewComponent,
-} from './components/table-view/table-view.component';
+import { TableViewComponent } from './components/table-view/table-view.component';
 import * as MovieActions from './state/movies.actions';
 import { EditViewComponent } from './components/edit-view/edit-view.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -37,23 +34,22 @@ import { environment } from '../../environments/environment';
 import { directorsReducer } from '../directors/state/directors.reducer';
 import { DirectorEffects } from '../directors/state/directors.effects';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { GalleryModule } from "ng-gallery";
-import { LightboxModule } from "ng-gallery/lightbox";
-import { contactsReducer } from "../contacts/state/contacts.reducer";
-import { tagsReducer } from "../tags/state/tags.reducer";
-import { TagsModule } from "../tags/tags.module";
-import { TagEffects } from "../tags/state/tags.effects";
-import { ContactEffects } from "../contacts/state/contacts.effects";
+import { GalleryModule } from 'ng-gallery';
+import { LightboxModule } from 'ng-gallery/lightbox';
+import { contactsReducer } from '../contacts/state/contacts.reducer';
+import { tagsReducer } from '../tags/state/tags.reducer';
+import { TagsModule } from '../tags/tags.module';
+import { TagEffects } from '../tags/state/tags.effects';
+import { ContactEffects } from '../contacts/state/contacts.effects';
 
 @NgModule({
   declarations: [
     DetailsViewComponent,
     TableViewComponent,
-    NgbdSortableHeader,
     ContentComponent,
     EditViewComponent,
     ContentComponent,
-    FullDetailViewComponent
+    FullDetailViewComponent,
   ],
   exports: [
     TableViewComponent,
@@ -63,7 +59,8 @@ import { ContactEffects } from "../contacts/state/contacts.effects";
   ],
   imports: [
     CommonModule,
-    NgSelectModule,FormsModule,
+    NgSelectModule,
+    FormsModule,
     ReactiveFormsModule,
     NgbModule,
     StoreModule.forRoot({
@@ -75,7 +72,7 @@ import { ContactEffects } from "../contacts/state/contacts.effects";
       searchTerm: moviesReducer,
     }),
     EffectsModule.forRoot([MovieEffects]),
-    EffectsModule.forFeature([DirectorEffects,ContactEffects,TagEffects]),
+    EffectsModule.forFeature([DirectorEffects, ContactEffects, TagEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode
@@ -94,13 +91,11 @@ import { ContactEffects } from "../contacts/state/contacts.effects";
     MatDividerModule,
     MatSelectModule,
     MatSnackBarModule,
-  ]
+  ],
 })
 /* Movie Module contains everything related to movies */
 export class MoviesModule {
   constructor(private store: Store) {
-    this.store.dispatch(
-      MovieActions.getMovies({ search: '', page: 1, limit: 16 })
-    );
+    this.store.dispatch(MovieActions.getMovies({ page: 1, limit: 16 }));
   }
 }

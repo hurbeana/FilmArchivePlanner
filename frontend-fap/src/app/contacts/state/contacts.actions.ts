@@ -6,7 +6,13 @@ import { ContactsPaginationState } from '../../app.state';
 /* whenever this action is called, the 'getContacts$' effect in contacts.effects.ts  is executed */
 export const getContacts = createAction(
   '[Contact List] Get Contacts',
-  props<{ search: string; page: number; limit: number }>()
+  props<{
+    page: number;
+    limit: number;
+    orderBy?: string;
+    sortOrder?: string;
+    searchString?: string;
+  }>()
 );
 export const getContactsSuccess = createAction(
   '[Contacts List] Loaded Contacts Success',
@@ -46,17 +52,21 @@ export const deleteContact = createAction(
   '[Contact List] Remove Contact',
   props<{
     contactToDelete: Contact;
-    search: string;
     page: number;
     limit: number;
+    orderBy: string;
+    sortOrder: string;
+    searchString: string;
   }>()
 );
 export const deleteContactSuccess = createAction(
   '[Contact List] Remove Contact Success',
   props<{
     contactToDelete: Contact;
-    search: string;
     page: number;
     limit: number;
+    orderBy: string;
+    sortOrder: string;
+    searchString: string;
   }>()
 );

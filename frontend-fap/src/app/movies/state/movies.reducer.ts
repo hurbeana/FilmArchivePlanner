@@ -12,8 +12,10 @@ export const initialState: AppState = {
       totalPages: 0,
       currentPage: 1,
     },
+    searchString: '',
+    orderBy: '',
+    sortOrder: '',
   },
-  searchTerm: '',
 };
 
 export const moviesReducer = createReducer(
@@ -38,13 +40,26 @@ export const moviesReducer = createReducer(
     ...state,
     pagination: {
       ...state.pagination,
-      items: [...state.pagination.items.filter(item => item.id !== movieToDelete.id)],
+      items: [
+        ...state.pagination.items.filter(
+          (item) => item.id !== movieToDelete.id
+        ),
+      ],
       meta: {
         ...state.pagination.meta,
-        totalItems: state.pagination.meta.totalItems === 0 ? 0 : state.pagination.meta.totalItems - 1,
-        totalPages: state.pagination.items.length === state.pagination.meta.itemsPerPage ? state.pagination.meta.totalPages + 1 : state.pagination.meta.totalPages,
-        currentPage: state.pagination.items.length === 1 ? state.pagination.meta.currentPage - 1 : state.pagination.meta.currentPage
-      }
-    }
+        totalItems:
+          state.pagination.meta.totalItems === 0
+            ? 0
+            : state.pagination.meta.totalItems - 1,
+        totalPages:
+          state.pagination.items.length === state.pagination.meta.itemsPerPage
+            ? state.pagination.meta.totalPages + 1
+            : state.pagination.meta.totalPages,
+        currentPage:
+          state.pagination.items.length === 1
+            ? state.pagination.meta.currentPage - 1
+            : state.pagination.meta.currentPage,
+      },
+    },
   }))
 );

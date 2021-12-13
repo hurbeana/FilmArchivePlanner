@@ -34,7 +34,7 @@ export class DirectorsController {
   findAll(@Query() searchPaging: SearchDirectorPagingDto) {
     this.logger.log('Get directors called.');
     this.logger.log(searchPaging);
-    const { limit, page, orderBy, sortOrder, searchstring, ...search } =
+    const { page, limit, orderBy, sortOrder, searchString, ...search } =
       searchPaging;
     const p: IPaginationOptions = {
       page: page ?? 1,
@@ -45,7 +45,7 @@ export class DirectorsController {
       search,
       orderBy,
       sortOrder,
-      searchstring,
+      searchString,
     );
   }
 

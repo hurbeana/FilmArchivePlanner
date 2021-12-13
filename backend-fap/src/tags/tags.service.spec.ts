@@ -9,6 +9,7 @@ import { CreateUpdateTagDto } from './dto/create-update-tag.dto';
 import { TagDto } from './dto/tag.dto';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { TagType } from './tagtype.enum';
+import { Movie } from '../movies/entities/movie.entity';
 
 const mockId = 1;
 const mockUpdatedAt = new Date();
@@ -127,6 +128,12 @@ describe('TagsService', () => {
     jest.spyOn(repo, 'findOneOrFail').mockImplementation(() => {
       return new Promise(function (resolve) {
         resolve(new Tag());
+      });
+    });
+
+    jest.spyOn(service, 'findOne').mockImplementation((): Promise<Tag> => {
+      return new Promise(function (resolve) {
+        resolve(mockRepoSave(mockRepoCreate(updateTagDto)));
       });
     });
 

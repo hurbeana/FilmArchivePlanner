@@ -22,10 +22,7 @@ import { TagsRoutingModule } from './tags-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ContentComponent } from './components/content/content.component';
-import {
-  NgbdSortableHeader,
-  TableViewComponent,
-} from './components/table-view/table-view.component';
+import { TableViewComponent } from './components/table-view/table-view.component';
 import * as TagActions from './state/tags.actions';
 import { ConfirmDeleteTagModal } from './components/table-view/confirm-delete-tag-modal.component';
 import { CreateTagModal } from './components/table-view/create-tag-modal.component';
@@ -35,7 +32,6 @@ import { EditTagModal } from './components/table-view/edit-tag-modal.component';
   declarations: [
     DetailsViewComponent,
     TableViewComponent,
-    NgbdSortableHeader,
     ContentComponent,
     ConfirmDeleteTagModal,
     CreateTagModal,
@@ -65,6 +61,6 @@ import { EditTagModal } from './components/table-view/edit-tag-modal.component';
 /* Tag Module contains everything related to Tags */
 export class TagsModule {
   constructor(private store: Store) {
-    this.store.dispatch(TagActions.getTags({ search: '', page: 1, limit: 16 }));
+    this.store.dispatch(TagActions.getTags({ page: 1, limit: 16 }));
   }
 }

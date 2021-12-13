@@ -10,7 +10,7 @@ const api: string = 'http://localhost:3000/movies'; //TODO: url to rest
 
 @Injectable({ providedIn: 'root' })
 export class MovieService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   createMovie(movie: CreateUpdateMovieDto): Observable<Movie> {
     console.log('[MovieService] - CREATE MOVIE');
@@ -23,24 +23,31 @@ export class MovieService {
   }
 
   getMovies(
-    search: string,
     page: number,
-    limit: number
+    limit: number,
+    orderBy: string | undefined,
+    sortOrder: string | undefined,
+    searchString: string | undefined
   ): Observable<PaginationState> {
     console.log(
-      '[MovieService] - GET MOVIES WITH SEARCH PAGE AND LIMIT',
-      "'" + search + "'",
+      '[MovieService] - GET MOVIES WITH page, limit, orderBy, sortOrder, searchString',
       page,
-      limit
+      limit,
+      orderBy,
+      sortOrder,
+      searchString
     );
-    let params;
-    if (search == '') {
-      params = new HttpParams({ fromObject: { page: page, limit: limit } });
-    } else {
-      params = new HttpParams({
-        fromObject: { searchstring: search, page: page, limit: limit },
-      });
-    }
+
+    let params = new HttpParams({
+      fromObject: {
+        page: page,
+        limit: limit,
+        ...(orderBy !== undefined && { orderBy: orderBy }),
+        ...(sortOrder !== undefined && { sortOrder: sortOrder }),
+        ...(searchString !== undefined && { searchString: searchString }),
+      },
+    });
+
     return this.http.get<PaginationState>(api, { params: params });
   }
 

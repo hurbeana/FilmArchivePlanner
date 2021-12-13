@@ -12,9 +12,11 @@ export const initialState: ContactsState = {
       totalPages: 0,
       currentPage: 1,
     },
+    searchString: '',
+    orderBy: '',
+    sortOrder: '',
   },
   selectedContact: null,
-  searchTerm: '',
 };
 
 export const contactsReducer = createReducer(
@@ -23,6 +25,7 @@ export const contactsReducer = createReducer(
   on(ContactActions.getContactsSuccess, (state, { pagination }) => ({
     ...state,
     pagination: {
+      ...pagination,
       items: [...pagination.items],
       meta: { ...pagination.meta },
     },

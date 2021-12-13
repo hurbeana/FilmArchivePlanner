@@ -14,6 +14,7 @@ import {
   FilmographyFile,
 } from './entities/directorfiles.entity';
 import { FILES_PERSISTENCY_PROVIDER } from '../files/files.constants';
+import { Tag } from '../tags/entities/tag.entity';
 
 const mockId = 1;
 const mockUpdatedAt = new Date();
@@ -125,6 +126,12 @@ describe('DirectorsService', () => {
     jest.spyOn(repo, 'findOneOrFail').mockImplementation(() => {
       return new Promise(function (resolve) {
         resolve(new Director());
+      });
+    });
+
+    jest.spyOn(service, 'findOne').mockImplementation((): Promise<Director> => {
+      return new Promise(function (resolve) {
+        resolve(mockRepoSave(mockRepoCreate(updateDirectorDto)));
       });
     });
 

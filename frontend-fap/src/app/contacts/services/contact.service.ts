@@ -18,24 +18,29 @@ export class ContactService {
   }
 
   getContacts(
-    search: string,
     page: number,
-    limit: number
+    limit: number,
+    orderBy: string | undefined,
+    sortOrder: string | undefined,
+    searchString: string | undefined
   ): Observable<ContactsPaginationState> {
     console.log(
-      '[ContactService] - GET CONTACTS WITH SEARCH PAGE AND LIMIT',
-      "'" + search + "'",
+      '[TagService] - GET CONTACTS WITH page, limit, orderBy, sortOrder, searchString',
       page,
-      limit
+      limit,
+      orderBy,
+      sortOrder,
+      searchString
     );
-    let params;
-    if (search == '') {
-      params = new HttpParams({ fromObject: { page: page, limit: limit } });
-    } else {
-      params = new HttpParams({
-        fromObject: { searchstring: search, page: page, limit: limit },
-      });
-    }
+    let params = new HttpParams({
+      fromObject: {
+        page: page,
+        limit: limit,
+        ...(orderBy !== undefined && { orderBy: orderBy }),
+        ...(sortOrder !== undefined && { sortOrder: sortOrder }),
+        ...(searchString !== undefined && { searchString: searchString }),
+      },
+    });
     return this.http.get<ContactsPaginationState>(api, { params: params });
   }
 

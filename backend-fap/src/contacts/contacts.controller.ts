@@ -34,7 +34,7 @@ export class ContactsController {
   findAll(@Query() searchPaging: SearchContactPagingDto) {
     this.logger.log('Get contacts called.');
     this.logger.log(searchPaging);
-    const { limit, page, orderBy, sortOrder, searchstring, ...search } =
+    const { page, limit, orderBy, sortOrder, searchString, ...search } =
       searchPaging;
     const p: IPaginationOptions = {
       page: page ?? 1,
@@ -45,7 +45,7 @@ export class ContactsController {
       search,
       orderBy,
       sortOrder,
-      searchstring,
+      searchString,
     );
   }
 

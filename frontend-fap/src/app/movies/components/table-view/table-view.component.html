@@ -10,30 +10,28 @@
   <table class="table">
     <thead>
       <tr>
-        <th scope="col">#</th>
-        <th scope="col">
+        <th style="width: 20%" scope="col" sortable="originalTitle" (sort)="onSort($event)">
           <div class="header-value" i18n>Original Title
             <div class="arrow"></div>
           </div>
         </th>
-        <th scope="col">
+        <th style="width: 20%" scope="col" sortable="englishTitle" (sort)="onSort($event)">
           <div class="header-value" i18n>English Title
             <div class="arrow"></div>
           </div>
         </th>
-        <th scope="col">
-          <div class="header-value" i18n>Movie File
-            <div class="arrow"></div>
-          </div>
-        </th>
-        <!--<th scope="col" sortable="stillFiles" (sort)="onSort($event)"><div class="header-value">Population<div class="arrow"></div></div></th>-->
-        <th scope="col">
+        <th style="width: 20%" scope="col" sortable="yearOfProduction" (sort)="onSort($event)">
           <div class="header-value" i18n>Year of Production
             <div class="arrow"></div>
           </div>
         </th>
-        <th scope="col">
-          <div class="header-value" i18n>Is Student Film
+        <th style="width: 20%" scope="col" sortable="duration" (sort)="onSort($event)">
+          <div class="header-value" i18n>Duration
+            <div class="arrow"></div>
+          </div>
+        </th>
+        <th style="width: 20%" scope="col" sortable="created_at" (sort)="onSort($event)">
+          <div class="header-value" i18n>Created at
             <div class="arrow"></div>
           </div>
         </th>
@@ -45,23 +43,20 @@
 
     <tbody *ngIf="movies | async as movieList">
       <tr *ngFor="let movie of movieList" (click)="selectMovie(movie)">
-        <td>{{ movie.id }}</td>
         <td>
-          <!--<img [src]="'https://picsum.photos/20/20'" class="mr-2" style="width: 20px">-->
           <ngb-highlight [result]="movie.originalTitle" [term]="searchTerm"></ngb-highlight>
         </td>
         <td>
           <ngb-highlight [result]="movie.englishTitle" [term]="searchTerm"></ngb-highlight>
         </td>
         <td>
-          <ngb-highlight [result]="movie.movieFiles?.join(', ')" [term]="searchTerm"></ngb-highlight>
-        </td>
-        <!--<td><ngb-highlight [result]="movie.stillFiles" [term]="searchTerm"></ngb-highlight></td>-->
-        <td>
-          <ngb-highlight [result]="movie.yearOfProduction?.toString()" [term]="searchTerm"></ngb-highlight>
+          <ngb-highlight [result]="movie.yearOfProduction?.toString()"></ngb-highlight>
         </td>
         <td>
-          <ngb-highlight [result]="movie.isStudentFilm ? 'True' : 'False'" [term]="searchTerm"></ngb-highlight>
+          <ngb-highlight [result]="movie.duration.toString()"></ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight [result]="movie.created_at.toString()"></ngb-highlight>
         </td>
         <td class="actions">
           <!-- view -->

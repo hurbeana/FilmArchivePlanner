@@ -26,17 +26,13 @@ import { ContactsRoutingModule } from './contacts-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ContentComponent } from './components/content/content.component';
-import {
-  NgbdSortableHeader,
-  TableViewComponent,
-} from './components/table-view/table-view.component';
+import { TableViewComponent } from './components/table-view/table-view.component';
 import * as ContactActions from './state/contacts.actions';
 
 @NgModule({
   declarations: [
     DetailsViewComponent,
     TableViewComponent,
-    NgbdSortableHeader,
     ContentComponent,
     ConfirmDeleteContactModal,
     CreateContactModal,
@@ -67,8 +63,6 @@ import * as ContactActions from './state/contacts.actions';
 /* Contact Module contains everything related to Contacts */
 export class ContactsModule {
   constructor(private store: Store) {
-    this.store.dispatch(
-      ContactActions.getContacts({ search: '', page: 1, limit: 16 })
-    );
+    this.store.dispatch(ContactActions.getContacts({ page: 1, limit: 16 }));
   }
 }

@@ -20,5 +20,5 @@ export class SearchDirectorPagingDto extends SearchDirectorDto {
 
   @IsOptional()
   @IsString()
-  searchstring: string;
+  searchString: string;
 }
