@@ -2,7 +2,7 @@ import {
   BiographyEnglishFile,
   BiographyGermanFile,
   FilmographyFile,
-} from './../directors/entities/directorfiles.entity';
+} from '../directors/entities/directorfiles.entity';
 import {
   DCPFile,
   MovieFile,
@@ -12,7 +12,7 @@ import {
   TrailerFile,
 } from './entities/moviefiles.entity';
 import { Movie } from './entities/movie.entity';
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { MoviesController } from './movies.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -20,8 +20,9 @@ import { DirectorsModule } from '../directors/directors.module';
 import { Director } from '../directors/entities/director.entity';
 import { ContactsModule } from '../contacts/contacts.module';
 import { Contact } from '../contacts/entities/contact.entity';
-import { Tag } from 'src/tags/entities/tag.entity';
+import { Tag } from '../tags/entities/tag.entity';
 
+@Global()
 @Module({
   imports: [
     TypeOrmModule.forFeature([
@@ -44,5 +45,6 @@ import { Tag } from 'src/tags/entities/tag.entity';
   ],
   controllers: [MoviesController],
   providers: [MoviesService],
+  exports: [MoviesService],
 })
 export class MoviesModule {}

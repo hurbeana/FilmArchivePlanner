@@ -359,6 +359,35 @@ export class MoviesService {
     return this.mapMovieToDto(movie);
   }
 
+  async findAll(): Promise<MovieDto> {
+    let movies;
+    try {
+      movies = await this.moviesRepository.find({
+        where: {},
+        relations: [
+          'directors',
+          'contact',
+          'countriesOfProduction',
+          'animationTechniques',
+          'softwareUsed',
+          'keywords',
+          'submissionCategories',
+          'dialogLanguages',
+          'movieFiles',
+          'dcpFiles',
+          'previewFile',
+          'trailerFile',
+          'stillFiles',
+          'subtitleFiles',
+        ],
+      });
+    } catch (e) {
+      this.logger.error(`Getting all movies failed.`, e.stack);
+      throw new NotFoundException();
+    }
+    return movies.map((movie) => this.mapMovieToDto(movie));
+  }
+
   /**
    * Updates the movie with the specified id
    * @param id the id of the movie to update

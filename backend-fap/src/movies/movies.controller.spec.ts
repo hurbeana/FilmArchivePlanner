@@ -86,14 +86,6 @@ describe('MoviesController', () => {
           useClass: Repository,
         },
         {
-          provide: FILES_PERSISTENCY_PROVIDER,
-          useValue: {},
-        },
-        {
-          provide: getRepositoryToken(Director),
-          useClass: Repository,
-        },
-        {
           provide: getRepositoryToken(BiographyEnglishFile),
           useClass: Repository,
         },

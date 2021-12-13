@@ -1,6 +1,7 @@
 <div class="form-group form-inline input-group">
   <input class="form-control ml-2 mb-2" type="text" name="searchTerm" [(ngModel)]="searchTerm" placeholder="Search..." #search />
   <button class="btn btn-primary mb-2" (click)="openCreateContactModal()">Add Contact</button>
+  <export-button downloadType="contacts"></export-button>
 </div>
 
 <!-- *** NEW *** -->

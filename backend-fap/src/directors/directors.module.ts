@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { DirectorsService } from './directors.service';
 import { DirectorsController } from './directors.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -9,6 +9,7 @@ import {
   FilmographyFile,
 } from './entities/directorfiles.entity';
 
+@Global()
 @Module({
   imports: [
     TypeOrmModule.forFeature([

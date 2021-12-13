@@ -13,6 +13,9 @@ import { DatabaseModule } from './database/database.module';
 import configuration from './config/configuration';
 import { TagsModule } from './tags/tags.module';
 import { createFilesOptions } from './config/files-config.functions';
+import { DirectorsModule } from './directors/directors.module';
+import { ContactsModule } from './contacts/contacts.module';
+import { ExportModule } from './export/export.module';
 
 @Module({
   imports: [
@@ -31,7 +34,10 @@ import { createFilesOptions } from './config/files-config.functions';
     }),
     DatabaseModule,
     MoviesModule,
+    DirectorsModule,
+    ContactsModule,
     TagsModule,
+    ExportModule,
     FilesModule.forRootAsync({
       imports: [],
       useFactory: createFilesOptions,

@@ -279,6 +279,20 @@ export class DirectorsService {
     return this.mapDirectorToDto(director);
   }
 
+  async findAll(): Promise<DirectorDto> {
+    let directors;
+    try {
+      directors = await this.directorRepository.find({
+        where: {},
+        relations: ['biographyEnglish', 'biographyGerman', 'filmography'],
+      });
+    } catch (e) {
+      this.logger.error(`Getting all tags failed.`, e.stack);
+      throw new NotFoundException();
+    }
+    return directors.map((director) => this.mapDirectorToDto(director));
+  }
+
   /**
    * Updates the director with the specified id
    * @param id the id of the director to update

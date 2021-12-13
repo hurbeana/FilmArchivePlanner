@@ -1,6 +1,7 @@
 <div class="form-group form-inline input-group">
   <input class="form-control ml-2 mb-2" type="text" name="searchTerm" [(ngModel)]="searchTerm" placeholder="Search for name..." #search />
   <button class="btn btn-primary mb-2" [routerLink]="['create']">Add Director</button>
+  <export-button downloadType="directors"></export-button>
 </div>
 
 <!-- *** NEW *** -->

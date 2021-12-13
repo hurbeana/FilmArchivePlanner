@@ -65,4 +65,11 @@ export class TagService {
     console.log('[TagService] - GET TAGS BY TYPE', tagType);
     return this.http.get<Tag[]>(`${api}/type/${tagType}`);
   }
+
+  downloadCSV() {
+    console.log('[TagService] - DOWNLOAD CSV');
+    return this.http.get(`http://localhost:3000/export/tags`, {
+      responseType: 'blob',
+    });
+  }
 }

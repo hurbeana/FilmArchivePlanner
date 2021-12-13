@@ -120,6 +120,20 @@ export class TagsService {
     return this.mapTagToDto(tag);
   }
 
+  async findAll(): Promise<TagDto> {
+    let tags;
+    try {
+      tags = await this.tagRepository.find({
+        where: {},
+        relations: [],
+      });
+    } catch (e) {
+      this.logger.error(`Getting all tags failed.`, e.stack);
+      throw new NotFoundException();
+    }
+    return tags.map((tag) => this.mapTagToDto(tag));
+  }
+
   /**
    * Returns all tags with specified tag type
    * @param tagType the type of the tags to return

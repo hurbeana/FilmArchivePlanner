@@ -15,6 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { NgbdSortableHeaderDirective } from './directives/sortable.directive';
+import { ExportButtonComponent } from './components/export-button/export-button.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { NgbdSortableHeaderDirective } from './directives/sortable.directive';
     FileUploadComponent,
     NotFoundComponent,
     NgbdSortableHeaderDirective,
+    ExportButtonComponent,
   ],
   imports: [
     CommonModule,
@@ -50,6 +52,7 @@ import { NgbdSortableHeaderDirective } from './directives/sortable.directive';
     ResizableDirective,
     FileUploadComponent,
     NgbdSortableHeaderDirective,
+    ExportButtonComponent,
   ],
 })
 /* The shared module contains components, which are shared and reused from the feature

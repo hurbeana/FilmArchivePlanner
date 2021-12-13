@@ -60,4 +60,11 @@ export class MovieService {
     console.log('[MovieService] - DELETE MOVIE', movie.id);
     return this.http.delete(`${api}/${movie.id}`);
   }
+
+  downloadCSV() {
+    console.log('[MovieService] - DOWNLOAD CSV');
+    return this.http.get(`http://localhost:3000/export/movies`, {
+      responseType: 'blob',
+    });
+  }
 }

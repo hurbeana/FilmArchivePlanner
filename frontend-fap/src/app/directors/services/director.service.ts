@@ -66,4 +66,11 @@ export class DirectorService {
     if (!file) return '';
     return `http://localhost:3000/files/${file.id}?fileType=${filetyp}`;
   }
+
+  downloadCSV() {
+    console.log('[DirectorService] - DOWNLOAD CSV');
+    return this.http.get(`http://localhost:3000/export/directors`, {
+      responseType: 'blob',
+    });
+  }
 }

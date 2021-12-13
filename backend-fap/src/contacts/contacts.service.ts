@@ -138,6 +138,20 @@ export class ContactsService {
     return this.mapContactToDto(contact);
   }
 
+  async findAll(): Promise<ContactDto> {
+    let contacts;
+    try {
+      contacts = await this.contactRepository.find({
+        where: {},
+        relations: ['type'],
+      });
+    } catch (e) {
+      this.logger.error(`Getting all contacts failed.`, e.stack);
+      throw new NotFoundException();
+    }
+    return contacts.map((contact) => this.mapContactToDto(contact));
+  }
+
   /**
    * Updates the contact with the specified id
    * @param id the id of the contact to update

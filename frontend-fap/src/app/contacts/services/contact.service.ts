@@ -58,4 +58,11 @@ export class ContactService {
     console.log('[TagService] - CHECK IF CONTACT IS IN USE', contact.id);
     return this.http.get<boolean>(`${api}/contactIdIsInUse/${contact.id}`);
   }
+
+  downloadCSV() {
+    console.log('[ContactService] - DOWNLOAD CSV');
+    return this.http.get('http://localhost:3000/export/contacts', {
+      responseType: 'blob',
+    });
+  }
 }
