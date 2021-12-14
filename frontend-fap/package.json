@@ -9,7 +9,7 @@
     "test": "ng test",
     "compodoc:build": "npx compodoc -p tsconfig.doc.json",
     "compodoc:serve": "npx compodoc -p tsconfig.doc.json -s",
-    "lint": "eslint \"src/**/{*.ts,*.html}\" --fix",
+    "lint": "eslint \"src/**/{*.ts,*.html}\"",
     "format": "prettier --write \"src/**/{*.ts,*.html}\""
   },
   "private": true,
