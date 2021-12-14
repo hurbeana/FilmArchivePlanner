@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Contact } from '../../models/contact';
 import { Tag } from '../../../tags/models/tag';
@@ -21,7 +21,7 @@ import { Tag } from '../../../tags/models/tag';
 
     <form
       #contactForm="ngForm"
-      (ngSubmit)="contactForm.form.valid && onSubmitContactModal(contactForm)"
+      (ngSubmit)="contactForm.form.valid && onSubmitContactModal()"
     >
       <div class="modal-body">
         <div class="form-group row">
@@ -158,19 +158,20 @@ import { Tag } from '../../../tags/models/tag';
     </form>
   `,
 })
-export class CreateContactModal {
+export class CreateContactModalComponent {
   constructor(public modal: NgbActiveModal) {}
   contactToCreate: Contact;
   usableTags: Tag[];
+  visible = true;
+
   createContact() {}
-  visible: boolean = true;
 
   onCancelContactModal() {
     this.visible = false;
     this.modal.dismiss('cancel click');
   }
 
-  onSubmitContactModal(form: any) {
+  onSubmitContactModal() {
     this.contactToCreate.type = { id: this.contactToCreate.type.id };
     this.modal.close(this.contactToCreate);
   }

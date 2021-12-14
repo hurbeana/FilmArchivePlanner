@@ -7,7 +7,7 @@ import { CreateUpdateDirectorDto } from '../models/create.director';
 import { DirectorsPaginationState } from '../../app.state';
 import { FileDto } from '../../shared/models/file';
 
-const api: string = 'http://localhost:3000/directors'; //TODO: url to rest
+const api = 'http://localhost:3000/directors'; //TODO: url to rest
 
 @Injectable({ providedIn: 'root' })
 export class DirectorService {
@@ -28,7 +28,7 @@ export class DirectorService {
     limit: number,
     orderBy: string | undefined,
     sortOrder: string | undefined,
-    searchString: string | undefined
+    searchString: string | undefined,
   ): Observable<DirectorsPaginationState> {
     console.log(
       '[DirectorService] - GET DIRECTORS WITH page, limit, orderBy, sortOrder, searchString',
@@ -36,10 +36,10 @@ export class DirectorService {
       limit,
       orderBy,
       sortOrder,
-      searchString
+      searchString,
     );
 
-    let params = new HttpParams({
+    const params = new HttpParams({
       fromObject: {
         page: page,
         limit: limit,

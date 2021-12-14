@@ -1,10 +1,7 @@
 import {
+  AfterViewInit,
   Component,
-  Directive,
   ElementRef,
-  EventEmitter,
-  Input,
-  Output,
   QueryList,
   ViewChild,
   ViewChildren,
@@ -13,7 +10,6 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../app.state';
 import { fromEvent, Observable } from 'rxjs';
 import { Movie } from '../../models/movie';
-import { CreateUpdateMovieDto } from '../../models/create.movie';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import * as MovieSelectors from '../../state/movies.selectors';
@@ -29,20 +25,20 @@ import {
   NgbdSortableHeaderDirective,
   SortEvent,
 } from '../../../shared/directives/sortable.directive';
-import * as TagActions from '../../../tags/state/tags.actions';
+
 @Component({
   selector: 'table-view',
   templateUrl: './table-view.component.html',
   styleUrls: ['./table-view.component.less'],
   providers: [],
 })
-export class TableViewComponent {
+export class TableViewComponent implements AfterViewInit {
   movies: Observable<Movie[]>;
   numberOfMovies: number;
   movieOnPageCount: number;
-  pageSize: number = 16;
-  totalPages: number = 0;
-  page: number = 1;
+  pageSize = 16;
+  totalPages = 0;
+  page = 1;
 
   searchTerm: string;
   selectedMovie: Movie;
@@ -53,10 +49,13 @@ export class TableViewComponent {
   @ViewChild('search', { static: true })
   search: ElementRef;
 
+  @ViewChildren(NgbdSortableHeaderDirective)
+  headers: QueryList<NgbdSortableHeaderDirective>;
+
   constructor(
     private store: Store<AppState>,
     private route: ActivatedRoute,
-    private modalService: NgbModal
+    private modalService: NgbModal,
   ) {
     this.movies = this.store.select(MovieSelectors.selectMovies);
     this.store
@@ -85,7 +84,7 @@ export class TableViewComponent {
         orderBy: this.orderBy,
         sortOrder: this.sortOrder,
         searchString: this.search.nativeElement.value,
-      })
+      }),
     );
   }
 
@@ -100,18 +99,17 @@ export class TableViewComponent {
         tap((event) => {
           this.loadMovies();
         }),
-        tap(() => this.loading.next(false))
+        tap(() => this.loading.next(false)),
       )
       .subscribe();
   }
 
   selectMovie(movie: Movie) {
     this.store.dispatch(
-      MovieActions.setSelectedMovie({ selectedMovie: movie })
+      MovieActions.setSelectedMovie({ selectedMovie: movie }),
     );
   }
 
-  @ViewChildren(NgbdSortableHeaderDirective) headers: QueryList<NgbdSortableHeaderDirective>;
   onSort({ column, direction }: SortEvent) {
     // resetting other headers
     this.headers.forEach((header) => {
@@ -144,12 +142,12 @@ export class TableViewComponent {
         orderBy: this.orderBy,
         sortOrder: this.sortOrder,
         searchString: this.search.nativeElement.value,
-      })
+      }),
     );
   }
 
   openConfirmDeleteMovieModal(movie: Movie) {
-    const modalRef = this.modalService.open(ConfirmDeleteMovieModal, {
+    const modalRef = this.modalService.open(ConfirmDeleteMovieModalComponent, {
       centered: true,
       keyboard: true,
       //backdrop: 'static' // won`t close on click outside when uncommented
@@ -163,7 +161,7 @@ export class TableViewComponent {
       },
       () => {
         console.log('Unconfirmed close');
-      } //gets called by modal.dismiss
+      }, //gets called by modal.dismiss
     );
   }
 }
@@ -215,7 +213,7 @@ export class TableViewComponent {
     </div>
   `,
 })
-export class ConfirmDeleteMovieModal {
+export class ConfirmDeleteMovieModalComponent {
   movieToDelete: Movie;
   constructor(public modal: NgbActiveModal) {}
 }

@@ -10,12 +10,11 @@
  * Do not edit the class manually.
  */
 
-
-export interface  CreateUpdateDirectorDto {
-  firstName:	string,
-  middleName?:	string,
-  lastName:	string,
-  biographyEnglish:	string,
-  biographyGerman?:	string,
-  filmography:	string,
+export interface CreateUpdateDirectorDto {
+  firstName: string;
+  middleName?: string;
+  lastName: string;
+  biographyEnglish: string;
+  biographyGerman?: string;
+  filmography: string;
 }

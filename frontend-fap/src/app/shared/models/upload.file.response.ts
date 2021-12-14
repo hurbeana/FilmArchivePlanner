@@ -1,13 +1,11 @@
-import { DirectorReference } from '../../directors/models/director-ref';
-
 export interface UploadFileResponseDto {
   destination: string;
-  encoding:  string;
-  fieldname:  string;
+  encoding: string;
+  fieldname: string;
   filename: string;
-  id:  string;
+  id: string;
   mimetype: string;
   originalname: string;
-  path:  string;
+  path: string;
   size: string;
 }

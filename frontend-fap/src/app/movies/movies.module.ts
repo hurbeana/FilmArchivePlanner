@@ -23,7 +23,10 @@ import { MoviesRoutingModule } from './movies-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ContentComponent } from './components/content/content.component';
-import { TableViewComponent } from './components/table-view/table-view.component';
+import {
+  ConfirmDeleteMovieModalComponent,
+  TableViewComponent,
+} from './components/table-view/table-view.component';
 import * as MovieActions from './state/movies.actions';
 import { EditViewComponent } from './components/edit-view/edit-view.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -38,7 +41,6 @@ import { GalleryModule } from 'ng-gallery';
 import { LightboxModule } from 'ng-gallery/lightbox';
 import { contactsReducer } from '../contacts/state/contacts.reducer';
 import { tagsReducer } from '../tags/state/tags.reducer';
-import { TagsModule } from '../tags/tags.module';
 import { TagEffects } from '../tags/state/tags.effects';
 import { ContactEffects } from '../contacts/state/contacts.effects';
 
@@ -50,6 +52,7 @@ import { ContactEffects } from '../contacts/state/contacts.effects';
     EditViewComponent,
     ContentComponent,
     FullDetailViewComponent,
+    ConfirmDeleteMovieModalComponent,
   ],
   exports: [
     TableViewComponent,

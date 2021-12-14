@@ -4,15 +4,13 @@
   </button>
   <span>Film Archive Planner</span>
   <span class="example-spacer"></span>
-  <div>
-
-  </div>
+  <div></div>
   <button mat-icon-button class="example-icon person-outline" aria-label="Example icon-button with person icon">
     <mat-icon>person_outline</mat-icon>
   </button>
 </mat-toolbar>
 <mat-sidenav-container class="main-content">
-  <mat-sidenav class="main-sidenav" position="start" mode="over" (click)='sidenav.close()'>
+  <mat-sidenav class="main-sidenav" position="start" mode="over" (click)="sidenav.close()">
     <mat-nav-list>
       <a mat-list-item [routerLink]="'/'" i18n>Home</a>
       <a mat-list-item [routerLink]="'/movies'" i18n>Movies</a>

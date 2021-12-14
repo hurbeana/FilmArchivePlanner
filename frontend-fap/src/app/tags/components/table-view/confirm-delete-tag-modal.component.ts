@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Tag } from '../../models/tag';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { TagService } from '../../services/tag.service';
 
 @Component({
   //selector: 'ngbd-modal-confirm-autofocus',
@@ -72,8 +71,8 @@ import { TagService } from '../../services/tag.service';
     </div>
   `,
 })
-export class ConfirmDeleteTagModal {
+export class ConfirmDeleteTagModalComponent {
   tagToDelete: Tag;
-  tagIsInUse: Boolean;
+  tagIsInUse: boolean;
   constructor(public modal: NgbActiveModal) {}
 }

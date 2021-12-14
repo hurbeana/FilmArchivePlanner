@@ -1,23 +1,19 @@
-import {Component, OnInit} from '@angular/core';
-import {Movie} from "../../models/movie";
-
+import { Component, OnInit } from '@angular/core';
+import { Movie } from '../../models/movie';
 
 @Component({
   selector: 'core-content',
   templateUrl: './content.component.html',
-  styleUrls: ['./content.component.less']
+  styleUrls: ['./content.component.less'],
 })
 export class ContentComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  selectedMovie:Movie|null = null;
+  selectedMovie: Movie | null = null;
 
   changeDetails(row: Movie) {
     this.selectedMovie = row;
   }
 
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

@@ -1,12 +1,8 @@
 import {
+  AfterViewInit,
   Component,
-  Directive,
   ElementRef,
-  EventEmitter,
-  Input,
-  Output,
   QueryList,
-  TemplateRef,
   ViewChild,
   ViewChildren,
 } from '@angular/core';
@@ -26,27 +22,28 @@ import {
   tap,
 } from 'rxjs/operators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { CreateTagModal } from './create-tag-modal.component';
-import { ConfirmDeleteTagModal } from './confirm-delete-tag-modal.component';
-import { EditTagModal } from './edit-tag-modal.component';
+import { CreateTagModalComponent } from './create-tag-modal.component';
+import { ConfirmDeleteTagModalComponent } from './confirm-delete-tag-modal.component';
+import { EditTagModalComponent } from './edit-tag-modal.component';
 import { TagService } from '../../services/tag.service';
 import {
   NgbdSortableHeaderDirective,
   SortEvent,
 } from '../../../shared/directives/sortable.directive';
+
 @Component({
   selector: 'table-view',
   templateUrl: './table-view.component.html',
   styleUrls: ['./table-view.component.less'],
   providers: [],
 })
-export class TableViewComponent {
+export class TableViewComponent implements AfterViewInit {
   tags: Observable<Tag[]>;
   numberOfTags: number;
   tagOnPageCount: number;
-  pageSize: number = 16;
-  totalPages: number = 0;
-  page: number = 1;
+  pageSize = 16;
+  totalPages = 0;
+  page = 1;
 
   searchTerm: string;
   orderBy: string;
@@ -56,11 +53,13 @@ export class TableViewComponent {
   @ViewChild('search', { static: true })
   search: ElementRef;
 
+  @ViewChildren(NgbdSortableHeaderDirective)
+  headers: QueryList<NgbdSortableHeaderDirective>;
   constructor(
     private store: Store<TagsState>,
     private route: ActivatedRoute,
     private modalService: NgbModal,
-    private tagService: TagService
+    private tagService: TagService,
   ) {
     this.tags = this.store.select(TagSelectors.selectTags);
     this.store
@@ -95,7 +94,7 @@ export class TableViewComponent {
         orderBy: this.orderBy,
         sortOrder: this.sortOrder,
         searchString: this.search.nativeElement.value,
-      })
+      }),
     );
   }
 
@@ -110,7 +109,7 @@ export class TableViewComponent {
         tap((event) => {
           this.loadTags();
         }),
-        tap(() => this.loading.next(false))
+        tap(() => this.loading.next(false)),
       )
       .subscribe();
   }
@@ -119,7 +118,6 @@ export class TableViewComponent {
     this.store.dispatch(TagActions.setSelectedTag({ selectedTag: tag }));
   }
 
-  @ViewChildren(NgbdSortableHeaderDirective) headers: QueryList<NgbdSortableHeaderDirective>;
   onSort({ column, direction }: SortEvent) {
     // resetting other headers
     this.headers.forEach((header) => {
@@ -142,6 +140,7 @@ export class TableViewComponent {
       tag_keyword: type === 'Keyword',
       tag_language: type === 'Language',
       tag_software: type === 'Software',
+      badge: true,
     };
   }
 
@@ -156,13 +155,13 @@ export class TableViewComponent {
   }
 
   openEditTagModal(tag: Tag) {
-    const modalRef = this.modalService.open(EditTagModal, {
+    const modalRef = this.modalService.open(EditTagModalComponent, {
       centered: true,
       keyboard: true,
       //backdrop: 'static' // won`t close on click outside when uncommented
     });
 
-    let tagToUpdate: CreateUpdateTagDto = {
+    const tagToUpdate: CreateUpdateTagDto = {
       value: tag.value,
       type: tag.type,
       user: tag.user,
@@ -177,7 +176,7 @@ export class TableViewComponent {
       },
       () => {
         console.log('Unconfirmed close');
-      }
+      },
     );
   }
   editTag(tag: CreateUpdateTagDto, id: number) {
@@ -185,12 +184,12 @@ export class TableViewComponent {
       TagActions.updateTag({
         tag: tag,
         id: id,
-      })
+      }),
     );
   }
 
   openConfirmDeleteTagModal(tag: Tag) {
-    const modalRef = this.modalService.open(ConfirmDeleteTagModal, {
+    const modalRef = this.modalService.open(ConfirmDeleteTagModalComponent, {
       centered: true,
       keyboard: true,
       //backdrop: 'static' // won`t close on click outside when uncommented
@@ -198,7 +197,7 @@ export class TableViewComponent {
     this.tagService
       .checkIfTagIsInUse(tag)
       .subscribe(
-        (isInUse) => (modalRef.componentInstance.tagIsInUse = isInUse)
+        (isInUse) => (modalRef.componentInstance.tagIsInUse = isInUse),
       );
     modalRef.componentInstance.tagToDelete = tag;
     modalRef.result.then(
@@ -207,7 +206,7 @@ export class TableViewComponent {
       },
       () => {
         console.log('Unconfirmed close');
-      }
+      },
     );
   }
   deleteTag(tag: Tag) {
@@ -220,17 +219,17 @@ export class TableViewComponent {
         orderBy: this.orderBy,
         sortOrder: this.sortOrder,
         searchString: this.search.nativeElement.value,
-      })
+      }),
     );
   }
 
   openCreateTagModal() {
-    const modalRef = this.modalService.open(CreateTagModal, {
+    const modalRef = this.modalService.open(CreateTagModalComponent, {
       centered: true,
       keyboard: true,
       //backdrop: 'static' // won`t close on click outside when uncommented
     });
-    let newTag: CreateUpdateTagDto = {
+    const newTag: CreateUpdateTagDto = {
       value: '',
       type: '',
       user: 'User',
@@ -244,7 +243,7 @@ export class TableViewComponent {
       },
       () => {
         console.log('Unconfirmed close');
-      }
+      },
     );
   }
   createTag(tag: Tag) {

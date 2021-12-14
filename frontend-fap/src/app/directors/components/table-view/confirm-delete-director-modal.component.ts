@@ -51,7 +51,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
     </div>
   `,
 })
-export class ConfirmDeleteDirectorModal {
+export class ConfirmDeleteDirectorModalComponent {
   directorToDelete: Director;
   constructor(public modal: NgbActiveModal) {}
 }

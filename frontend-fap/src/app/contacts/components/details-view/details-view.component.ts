@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Contact } from '../../models/contact';
 import * as ContactSelectors from '../../state/contacts.selectors';
 import { Store } from '@ngrx/store';

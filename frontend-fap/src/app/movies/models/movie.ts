@@ -1,10 +1,10 @@
 import { DirectorReference } from '../../directors/models/director-ref';
-import { FileDto } from "../../shared/models/file";
-import { Tag } from "../../tags/models/tag";
-import { Contact } from "../../contacts/models/contact";
+import { FileDto } from '../../shared/models/file';
+import { Tag } from '../../tags/models/tag';
+import { Contact } from '../../contacts/models/contact';
 
 export interface Movie {
-  id: Number;
+  id: number;
   originalTitle: string;
   englishTitle: string;
   movieFiles?: FileDto[];
@@ -18,8 +18,8 @@ export interface Movie {
   yearOfProduction?: number;
   duration: number; //Duration in minutes
   animationTechniques?: Tag[];
-  softwareUsed?:  Tag[];
-  keywords?:  Tag[];
+  softwareUsed?: Tag[];
+  keywords?: Tag[];
   germanSynopsis: string;
   englishSynopsis: string;
   submissionCategory: Tag[];

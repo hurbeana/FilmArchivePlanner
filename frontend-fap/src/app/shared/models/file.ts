@@ -1,5 +1,3 @@
-import { DirectorReference } from '../../directors/models/director-ref';
-
 export interface FileDto {
   id?: string;
   path?: string;
@@ -7,7 +5,7 @@ export interface FileDto {
   mimetype?: string;
 }
 
-export const fileTypes: { [key: string]: string; } = {
+export const fileTypes: { [key: string]: string } = {
   movieFiles: 'movie_file',
   dcpFiles: 'dcp_file',
   previewFile: 'preview_file',
@@ -17,4 +15,4 @@ export const fileTypes: { [key: string]: string; } = {
   biographyEnglish: 'biography_english_file',
   biographyGerman: 'biography_german_file',
   filmography: 'filmography_file',
-}
+};

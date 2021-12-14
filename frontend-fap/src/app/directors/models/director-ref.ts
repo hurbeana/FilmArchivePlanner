@@ -1,4 +1,4 @@
 export interface DirectorReference {
-  id: Number;
+  id: number;
   fullName: string;
 }

@@ -1,8 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Tag } from '../../models/tag';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../app.state';
-import { ActivatedRoute } from '@angular/router';
 import * as TagSelector from '../../state/tags.selectors';
 
 @Component({

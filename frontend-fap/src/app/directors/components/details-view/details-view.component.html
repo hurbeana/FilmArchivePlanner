@@ -1,24 +1,24 @@
 <div *ngIf="director" class="details-view">
   <div class="details-grid">
-      <span class="mat-primary label-colon" i18n>First name</span>
-      <input type="text" disabled value="{{director?.firstName}}">
-      <span class="mat-primary label-colon" i18n>Middle name</span>
-      <input type="text" disabled value="{{director?.middleName}}">
-      <span class="mat-primary label-colon" i18n>Last name</span>
-      <input type="text" disabled value="{{director?.lastName}}">
+    <span class="mat-primary label-colon" i18n>First name</span>
+    <input type="text" disabled value="{{ director?.firstName }}" />
+    <span class="mat-primary label-colon" i18n>Middle name</span>
+    <input type="text" disabled value="{{ director?.middleName }}" />
+    <span class="mat-primary label-colon" i18n>Last name</span>
+    <input type="text" disabled value="{{ director?.lastName }}" />
     <span class="mat-primary label-colon" i18n>Filmography</span>
     <span class="value-labels">
-      <a *ngIf="director?.filmography" [href]="getDownloadLink('filmography_file', director?.filmography)">{{printFile(director?.filmography)}}</a>
+      <a *ngIf="director?.filmography" [href]="getDownloadLink('filmography_file', director?.filmography)">{{ printFile(director?.filmography) }}</a>
       <span *ngIf="!director?.filmography" i18n>empty</span>
     </span>
     <span class="mat-primary label-colon" i18n>Biography English</span>
     <span class="value-labels">
-        <a *ngIf="director?.biographyEnglish" [href]="getDownloadLink('biography_english_file', director?.biographyEnglish)">{{printFile(director?.biographyEnglish)}}</a>
+      <a *ngIf="director?.biographyEnglish" [href]="getDownloadLink('biography_english_file', director?.biographyEnglish)">{{ printFile(director?.biographyEnglish) }}</a>
       <span *ngIf="!director?.biographyEnglish" i18n>empty</span>
     </span>
     <span class="mat-primary label-colon" i18n>Biography German</span>
     <span class="value-labels">
-      <a *ngIf="director?.biographyGerman" [href]="getDownloadLink('biography_german_file', director?.biographyGerman)">{{printFile(director?.biographyGerman)}}</a>
+      <a *ngIf="director?.biographyGerman" [href]="getDownloadLink('biography_german_file', director?.biographyGerman)">{{ printFile(director?.biographyGerman) }}</a>
       <span *ngIf="!director?.biographyGerman" i18n>empty</span>
     </span>
   </div>

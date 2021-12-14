@@ -12,50 +12,50 @@ export const getMovies = createAction(
     orderBy?: string;
     sortOrder?: string;
     searchString?: string;
-  }>()
+  }>(),
 );
 export const getMoviesSuccess = createAction(
   '[Movies List] Loaded Movies Success',
-  props<{ pagination: PaginationState }>()
+  props<{ pagination: PaginationState }>(),
 );
 
 export const getMovie = createAction(
   '[Movie List] Get Movie',
-  props<{ id: number }>()
+  props<{ id: number }>(),
 );
 export const getMovieSuccess = createAction(
   '[Movies List] Loaded Movie Success',
-  props<{ movie: Movie }>()
+  props<{ movie: Movie }>(),
 );
 
 /* whenever this action is called, the 'createMovie$' effect in movies.effects.ts  is executed */
 export const createMovie = createAction(
   '[Movie List] Create Movie',
-  props<{ movie: CreateUpdateMovieDto }>()
+  props<{ movie: CreateUpdateMovieDto }>(),
 );
 export const createdMovieSuccess = createAction(
   '[Movie List] Created Movie Success',
-  props<{ movie: Movie }>()
+  props<{ movie: Movie }>(),
 );
 export const createMovieFailed = createAction(
   '[Movie List] Created Movie Failed',
-  props<{ errormessage: string }>()
+  props<{ errormessage: string }>(),
 );
 export const updateMovie = createAction(
   '[Movie List] Update Movie',
-  props<{ id: number; movie: CreateUpdateMovieDto }>()
+  props<{ id: number; movie: CreateUpdateMovieDto }>(),
 );
 export const updatedMovieSuccess = createAction(
   '[Movie List] Updated Movie Success',
-  props<{ movie: Movie }>()
+  props<{ movie: Movie }>(),
 );
 export const updateMovieFailed = createAction(
   '[Movie List] Update Movie Failed',
-  props<{ errormessage: string }>()
+  props<{ errormessage: string }>(),
 );
 export const setSelectedMovie = createAction(
   '[Movie List] Set Selected Movie',
-  props<{ selectedMovie: Movie }>()
+  props<{ selectedMovie: Movie }>(),
 );
 
 export const deleteMovie = createAction(
@@ -67,7 +67,7 @@ export const deleteMovie = createAction(
     orderBy: string;
     sortOrder: string;
     searchString: string;
-  }>()
+  }>(),
 );
 export const deleteMovieSuccess = createAction(
   '[Movie List] Delete Movie Success',
@@ -78,5 +78,5 @@ export const deleteMovieSuccess = createAction(
     orderBy: string;
     sortOrder: string;
     searchString: string;
-  }>()
+  }>(),
 );

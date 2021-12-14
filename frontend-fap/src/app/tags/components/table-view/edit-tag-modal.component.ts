@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Tag } from '../../models/tag';
 
@@ -79,9 +79,9 @@ import { Tag } from '../../models/tag';
     </div>
   `,
 })
-export class EditTagModal {
+export class EditTagModalComponent {
   constructor(public modal: NgbActiveModal) {}
-  visible: boolean = true;
+  visible = true;
   tagToEdit: Tag;
   tagId: number;
   tagTypes: string[] = [

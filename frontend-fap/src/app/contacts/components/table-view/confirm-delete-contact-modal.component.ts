@@ -70,8 +70,8 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
     </div>
   `,
 })
-export class ConfirmDeleteContactModal {
+export class ConfirmDeleteContactModalComponent {
   contactToDelete: Contact;
-  contactIsInUse: Boolean;
+  contactIsInUse: boolean;
   constructor(public modal: NgbActiveModal) {}
 }

@@ -6,7 +6,7 @@ import { Tag } from '../models/tag';
 import { CreateUpdateTagDto } from '../models/create.tag';
 import { TagsPaginationState } from '../../app.state';
 
-const api: string = 'http://localhost:3000/tags'; //TODO: url to rest
+const api = 'http://localhost:3000/tags'; //TODO: url to rest
 
 @Injectable({ providedIn: 'root' })
 export class TagService {
@@ -22,7 +22,7 @@ export class TagService {
     limit: number,
     orderBy: string | undefined,
     sortOrder: string | undefined,
-    searchString: string | undefined
+    searchString: string | undefined,
   ): Observable<TagsPaginationState> {
     console.log(
       '[TagService] - GET TAGS WITH page, limit, orderBy, sortOrder, searchString',
@@ -30,10 +30,10 @@ export class TagService {
       limit,
       orderBy,
       sortOrder,
-      searchString
+      searchString,
     );
 
-    let params = new HttpParams({
+    const params = new HttpParams({
       fromObject: {
         page: page,
         limit: limit,
@@ -56,9 +56,9 @@ export class TagService {
     return this.http.delete(`${api}/${tag.id}`);
   }
 
-  checkIfTagIsInUse(tag: Tag): Observable<Boolean> {
+  checkIfTagIsInUse(tag: Tag): Observable<boolean> {
     console.log('[TagService] - CHECK IF TAG IS IN USE', tag.id);
-    return this.http.get<Boolean>(`${api}/tagIdIsInUse/${tag.id}`);
+    return this.http.get<boolean>(`${api}/tagIdIsInUse/${tag.id}`);
   }
 
   getTagsByType(tagType: string): Observable<Tag[]> {

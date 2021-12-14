@@ -6,7 +6,7 @@ import { Contact } from '../models/contact';
 import { CreateUpdateContactDto } from '../models/create.contact';
 import { ContactsPaginationState } from '../../app.state';
 
-const api: string = 'http://localhost:3000/contacts'; //TODO: url to rest
+const api = 'http://localhost:3000/contacts'; //TODO: url to rest
 
 @Injectable({ providedIn: 'root' })
 export class ContactService {
@@ -22,7 +22,7 @@ export class ContactService {
     limit: number,
     orderBy: string | undefined,
     sortOrder: string | undefined,
-    searchString: string | undefined
+    searchString: string | undefined,
   ): Observable<ContactsPaginationState> {
     console.log(
       '[TagService] - GET CONTACTS WITH page, limit, orderBy, sortOrder, searchString',
@@ -30,9 +30,9 @@ export class ContactService {
       limit,
       orderBy,
       sortOrder,
-      searchString
+      searchString,
     );
-    let params = new HttpParams({
+    const params = new HttpParams({
       fromObject: {
         page: page,
         limit: limit,
@@ -54,8 +54,8 @@ export class ContactService {
     return this.http.delete(`${api}/${contact.id}`);
   }
 
-  checkIfContactIsInUse(contact: Contact): Observable<Boolean> {
+  checkIfContactIsInUse(contact: Contact): Observable<boolean> {
     console.log('[TagService] - CHECK IF CONTACT IS IN USE', contact.id);
-    return this.http.get<Boolean>(`${api}/contactIdIsInUse/${contact.id}`);
+    return this.http.get<boolean>(`${api}/contactIdIsInUse/${contact.id}`);
   }
 }

@@ -4,72 +4,64 @@
       <legend i18n>General</legend>
       <mat-form-field appearance="standard">
         <mat-label i18n>Original Title</mat-label>
-        <input matInput formControlName="originalTitle">
+        <input matInput formControlName="originalTitle" />
         <mat-error *ngFor="let validation of validation_messages.originalTitle">
-          <mat-error *ngIf="moviesForm.controls['originalTitle']?.hasError(validation.type)"
-                     class="error-message">{{validation.message}}</mat-error>
+          <mat-error *ngIf="moviesForm.controls['originalTitle']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="standard">
         <mat-label class="mat-primary label-colon" i18n>English Title</mat-label>
-        <input matInput type="text" formControlName="englishTitle">
+        <input matInput type="text" formControlName="englishTitle" />
         <mat-error *ngFor="let validation of validation_messages.englishTitle">
-          <mat-error *ngIf="moviesForm.controls['englishTitle']?.hasError(validation.type)"
-                     class="error-message">{{validation.message}}</mat-error>
+          <mat-error *ngIf="moviesForm.controls['englishTitle']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="standard">
         <mat-label class="mat-primary label-colon" i18n>Directors</mat-label>
         <mat-select formControlName="directors" multiple [compareWith]="compareSelectObjects">
-          <mat-option *ngFor="let director of directors | async"
-                      [value]="{id: director.id}">{{director.firstName + " " + director.middleName + " " + director.lastName}}</mat-option>
+          <mat-option *ngFor="let director of directors | async" [value]="{ id: director.id }">{{
+            director.firstName + ' ' + director.middleName + ' ' + director.lastName
+          }}</mat-option>
         </mat-select>
         <mat-error *ngFor="let validation of validation_messages.directors">
-          <mat-error *ngIf="moviesForm.controls['directors']?.hasError(validation.type)"
-                     class="error-message">{{validation.message}}</mat-error>
+          <mat-error *ngIf="moviesForm.controls['directors']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="standard">
         <mat-label class="mat-primary label-colon" i18n>Countries of Production</mat-label>
         <mat-select formControlName="countriesOfProduction" multiple [compareWith]="compareSelectObjects">
-          <mat-option *ngFor="let tag of tagsCountry | async"
-                      [value]="{id: tag.id}">{{tag.value + " - " + tag.type}}</mat-option>
+          <mat-option *ngFor="let tag of tagsCountry | async" [value]="{ id: tag.id }">{{ tag.value + ' - ' + tag.type }}</mat-option>
         </mat-select>
         <mat-error *ngFor="let validation of validation_messages.countriesOfProduction">
-          <mat-error *ngIf="moviesForm.controls['countriesOfProduction']?.hasError(validation.type)"
-                     class="error-message">{{validation.message}}</mat-error>
+          <mat-error *ngIf="moviesForm.controls['countriesOfProduction']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="standard">
         <mat-label class="mat-primary label-colon" i18n>Year of Production</mat-label>
-        <input matInput type="number" formControlName="yearOfProduction">
+        <input matInput type="number" formControlName="yearOfProduction" />
         <mat-error *ngFor="let validation of validation_messages.yearOfProduction">
-          <mat-error *ngIf="moviesForm.controls['yearOfProduction']?.hasError(validation.type)"
-                     class="error-message">{{validation.message}}</mat-error>
+          <mat-error *ngIf="moviesForm.controls['yearOfProduction']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="standard">
         <mat-label class="mat-primary label-colon" i18n>Duration</mat-label>
-        <input matInput type="number" formControlName="duration">
+        <input matInput type="number" formControlName="duration" />
         <mat-error *ngFor="let validation of validation_messages.duration">
-          <mat-error *ngIf="moviesForm.controls['duration']?.hasError(validation.type)"
-                     class="error-message">{{validation.message}}</mat-error>
+          <mat-error *ngIf="moviesForm.controls['duration']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="standard">
         <mat-label class="mat-primary label-colon" i18n>German Synopsis</mat-label>
         <textarea matInput formControlName="germanSynopsis"></textarea>
         <mat-error *ngFor="let validation of validation_messages.germanSynopsis">
-          <mat-error *ngIf="moviesForm.controls['germanSynopsis']?.hasError(validation.type)"
-                     class="error-message">{{validation.message}}</mat-error>
+          <mat-error *ngIf="moviesForm.controls['germanSynopsis']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="standard">
         <mat-label class="mat-primary label-colon" i18n>English Synopsis</mat-label>
         <textarea matInput type="text" formControlName="englishSynopsis"></textarea>
         <mat-error *ngFor="let validation of validation_messages.englishSynopsis">
-          <mat-error *ngIf="moviesForm.controls['englishSynopsis']?.hasError(validation.type)"
-                     class="error-message">{{validation.message}}</mat-error>
+          <mat-error *ngIf="moviesForm.controls['englishSynopsis']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
         </mat-error>
       </mat-form-field>
     </fieldset>
@@ -86,23 +78,19 @@
       </div>
       <div>
         <mat-label class="mat-primary label-colon" i18n>Preview File</mat-label>
-        <shared-file-upload controlname="previewFile" requiredFileType="video/*"
-                            [multiple]="false"></shared-file-upload>
+        <shared-file-upload controlname="previewFile" requiredFileType="video/*" [multiple]="false"></shared-file-upload>
       </div>
       <div>
         <mat-label class="mat-primary label-colon" i18n>Trailer File</mat-label>
-        <shared-file-upload controlname="trailerFile" requiredFileType="video/*"
-                            [multiple]="false"></shared-file-upload>
+        <shared-file-upload controlname="trailerFile" requiredFileType="video/*" [multiple]="false"></shared-file-upload>
       </div>
       <div>
         <mat-label class="mat-primary label-colon" i18n>Still Files</mat-label>
         <shared-file-upload controlname="stillFiles" requiredFileType="image/*" [multiple]="true"></shared-file-upload>
-
       </div>
       <div>
         <mat-label class="mat-primary label-colon" i18n>Subtitle Files</mat-label>
-        <shared-file-upload controlname="subtitleFiles" requiredFileType="image/*"
-                            [multiple]="true"></shared-file-upload>
+        <shared-file-upload controlname="subtitleFiles" requiredFileType="image/*" [multiple]="true"></shared-file-upload>
       </div>
     </fieldset>
     <mat-divider></mat-divider>
@@ -112,80 +100,69 @@
         <mat-label class="mat-primary label-colon" i18n>Script</mat-label>
         <textarea matInput type="text" formControlName="script"></textarea>
         <mat-error *ngFor="let validation of validation_messages.script">
-          <mat-error *ngIf="moviesForm.controls['script']?.hasError(validation.type)"
-                     class="error-message">{{validation.message}}</mat-error>
+          <mat-error *ngIf="moviesForm.controls['script']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="standard">
         <mat-label class="mat-primary label-colon" i18n>Animation</mat-label>
-        <input matInput type="text" formControlName="animation">
+        <input matInput type="text" formControlName="animation" />
         <mat-error *ngFor="let validation of validation_messages.animation">
-          <mat-error *ngIf="moviesForm.controls['animation']?.hasError(validation.type)"
-                     class="error-message">{{validation.message}}</mat-error>
+          <mat-error *ngIf="moviesForm.controls['animation']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="standard">
         <mat-label class="mat-primary label-colon" i18n>Editing</mat-label>
-        <input matInput type="text" formControlName="editing">
+        <input matInput type="text" formControlName="editing" />
         <mat-error *ngFor="let validation of validation_messages.editing">
-          <mat-error *ngIf="moviesForm.controls['editing']?.hasError(validation.type)"
-                     class="error-message">{{validation.message}}</mat-error>
+          <mat-error *ngIf="moviesForm.controls['editing']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="standard">
         <mat-label class="mat-primary label-colon" i18n>Sound</mat-label>
-        <input matInput type="text" formControlName="sound">
+        <input matInput type="text" formControlName="sound" />
         <mat-error *ngFor="let validation of validation_messages.sound">
-          <mat-error *ngIf="moviesForm.controls['sound']?.hasError(validation.type)"
-                     class="error-message">{{validation.message}}</mat-error>
+          <mat-error *ngIf="moviesForm.controls['sound']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="standard">
         <mat-label class="mat-primary label-colon" i18n>Music</mat-label>
-        <input matInput type="text" formControlName="music">
+        <input matInput type="text" formControlName="music" />
         <mat-error *ngFor="let validation of validation_messages.music">
-          <mat-error *ngIf="moviesForm.controls['music']?.hasError(validation.type)"
-                     class="error-message">{{validation.message}}</mat-error>
+          <mat-error *ngIf="moviesForm.controls['music']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="standard">
         <mat-label class="mat-primary label-colon" i18n>Production Company</mat-label>
-        <input matInput type="text" formControlName="productionCompany">
+        <input matInput type="text" formControlName="productionCompany" />
         <mat-error *ngFor="let validation of validation_messages.productionCompany">
-          <mat-error *ngIf="moviesForm.controls['productionCompany']?.hasError(validation.type)"
-                     class="error-message">{{validation.message}}</mat-error>
+          <mat-error *ngIf="moviesForm.controls['productionCompany']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
         </mat-error>
       </mat-form-field>
       <mat-checkbox color="primary" formControlName="hasSubtitles" i18n>Has Subtitles</mat-checkbox>
       <mat-checkbox color="primary" formControlName="isStudentFilm" i18n>Is Student Film</mat-checkbox>
       <mat-form-field appearance="standard">
         <mat-label class="mat-primary label-colon" i18n>Film School</mat-label>
-        <input matInput type="text" formControlName="filmSchool">
+        <input matInput type="text" formControlName="filmSchool" />
         <mat-error *ngFor="let validation of validation_messages.originalTitle">
-          <mat-error *ngIf="moviesForm.controls['originalTitle']?.hasError(validation.type)"
-                     class="error-message">{{validation.message}}</mat-error>
+          <mat-error *ngIf="moviesForm.controls['originalTitle']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="standard">
         <mat-label class="mat-primary label-colon" i18n>Animation Technique</mat-label>
         <mat-select formControlName="animationTechniques" multiple [compareWith]="compareSelectObjects">
-          <mat-option *ngFor="let tag of tagsAnimation | async"
-                      [value]="{id: tag.id}">{{tag.value + " - " + tag.type}}</mat-option>
+          <mat-option *ngFor="let tag of tagsAnimation | async" [value]="{ id: tag.id }">{{ tag.value + ' - ' + tag.type }}</mat-option>
         </mat-select>
         <mat-error *ngFor="let validation of validation_messages.animationTechniques">
-          <mat-error *ngIf="moviesForm.controls['animationTechniques']?.hasError(validation.type)"
-                     class="error-message">{{validation.message}}</mat-error>
+          <mat-error *ngIf="moviesForm.controls['animationTechniques']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="standard">
         <mat-label class="mat-primary label-colon" i18n>Software Used</mat-label>
         <mat-select formControlName="softwareUsed" multiple [compareWith]="compareSelectObjects">
-          <mat-option *ngFor="let tag of tagsSoftware | async"
-                      [value]="{id: tag.id}">{{tag.value + " - " + tag.type}}</mat-option>
+          <mat-option *ngFor="let tag of tagsSoftware | async" [value]="{ id: tag.id }">{{ tag.value + ' - ' + tag.type }}</mat-option>
         </mat-select>
         <mat-error *ngFor="let validation of validation_messages.softwareUsed">
-          <mat-error *ngIf="moviesForm.controls['softwareUsed']?.hasError(validation.type)"
-                     class="error-message">{{validation.message}}</mat-error>
+          <mat-error *ngIf="moviesForm.controls['softwareUsed']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
         </mat-error>
       </mat-form-field>
     </fieldset>
@@ -195,50 +172,41 @@
       <mat-form-field appearance="standard">
         <mat-label class="mat-primary label-colon" i18n>Keywords</mat-label>
         <mat-select formControlName="keywords" multiple [compareWith]="compareSelectObjects">
-          <mat-option *ngFor="let tag of tagsKeyword | async"
-                      [value]="{id: tag.id}">{{tag.value + " - " + tag.type}}</mat-option>
+          <mat-option *ngFor="let tag of tagsKeyword | async" [value]="{ id: tag.id }">{{ tag.value + ' - ' + tag.type }}</mat-option>
         </mat-select>
         <mat-error *ngFor="let validation of validation_messages.keywords">
-          <mat-error *ngIf="moviesForm.controls['keywords']?.hasError(validation.type)"
-                     class="error-message">{{validation.message}}</mat-error>
+          <mat-error *ngIf="moviesForm.controls['keywords']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
         </mat-error>
       </mat-form-field>
 
-        <mat-form-field appearance="standard">
-          <mat-label class="mat-primary label-colon" i18n>Submission Categories</mat-label>
-          <mat-select formControlName="submissionCategories" multiple [compareWith]="compareSelectObjects">
-            <mat-option *ngFor="let tag of tagsCategory | async"
-                        [value]="{id: tag.id}">{{tag.value + " - " + tag.type}}</mat-option>
-          </mat-select>
-          <mat-error *ngFor="let validation of validation_messages.submissionCategories">
-            <mat-error *ngIf="moviesForm.controls['submissionCategories']?.hasError(validation.type)"
-                       class="error-message">{{validation.message}}</mat-error>
-          </mat-error>
-        </mat-form-field>
-
+      <mat-form-field appearance="standard">
+        <mat-label class="mat-primary label-colon" i18n>Submission Categories</mat-label>
+        <mat-select formControlName="submissionCategories" multiple [compareWith]="compareSelectObjects">
+          <mat-option *ngFor="let tag of tagsCategory | async" [value]="{ id: tag.id }">{{ tag.value + ' - ' + tag.type }}</mat-option>
+        </mat-select>
+        <mat-error *ngFor="let validation of validation_messages.submissionCategories">
+          <mat-error *ngIf="moviesForm.controls['submissionCategories']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
+        </mat-error>
+      </mat-form-field>
 
       <mat-checkbox color="primary" formControlName="hasDialog" i18n>Has Dialog</mat-checkbox>
       <mat-form-field appearance="standard">
         <mat-label class="mat-primary label-colon" i18n>Dialog Languages</mat-label>
         <mat-select formControlName="dialogLanguages" multiple [compareWith]="compareSelectObjects">
-          <mat-option *ngFor="let tag of tagsLanguage | async"
-                      [value]="{id: tag.id}">{{tag.value + " - " + tag.type}}</mat-option>
+          <mat-option *ngFor="let tag of tagsLanguage | async" [value]="{ id: tag.id }">{{ tag.value + ' - ' + tag.type }}</mat-option>
         </mat-select>
         <mat-error *ngFor="let validation of validation_messages.dialogLanguages">
-          <mat-error *ngIf="moviesForm.controls['dialogLanguages']?.hasError(validation.type)"
-                     class="error-message">{{validation.message}}</mat-error>
+          <mat-error *ngIf="moviesForm.controls['dialogLanguages']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="standard">
         <mat-label class="mat-primary label-colon" i18n>Contact</mat-label>
         <mat-select formControlName="contact" [compareWith]="compareSelectObjects">
           <mat-option [value]="{}"></mat-option>
-          <mat-option *ngFor="let contact of contacts | async"
-                      [value]="{id: contact.id}">{{contact.name}}</mat-option>
+          <mat-option *ngFor="let contact of contacts | async" [value]="{ id: contact.id }">{{ contact.name }}</mat-option>
         </mat-select>
         <mat-error *ngFor="let validation of validation_messages.contact">
-          <mat-error *ngIf="moviesForm.controls['contacts']?.hasError(validation.type)"
-                     class="error-message">{{validation.message}}</mat-error>
+          <mat-error *ngIf="moviesForm.controls['contacts']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
         </mat-error>
       </mat-form-field>
     </fieldset>
@@ -247,5 +215,4 @@
       <button mat-raised-button color="primary" type="submit" i18n>Submit</button>
     </div>
   </form>
-
 </div>

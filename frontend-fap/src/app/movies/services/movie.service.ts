@@ -6,7 +6,7 @@ import { Movie } from '../models/movie';
 import { CreateUpdateMovieDto } from '../models/create.movie';
 import { PaginationState } from '../../app.state';
 
-const api: string = 'http://localhost:3000/movies'; //TODO: url to rest
+const api = 'http://localhost:3000/movies'; //TODO: url to rest
 
 @Injectable({ providedIn: 'root' })
 export class MovieService {
@@ -27,7 +27,7 @@ export class MovieService {
     limit: number,
     orderBy: string | undefined,
     sortOrder: string | undefined,
-    searchString: string | undefined
+    searchString: string | undefined,
   ): Observable<PaginationState> {
     console.log(
       '[MovieService] - GET MOVIES WITH page, limit, orderBy, sortOrder, searchString',
@@ -35,10 +35,10 @@ export class MovieService {
       limit,
       orderBy,
       sortOrder,
-      searchString
+      searchString,
     );
 
-    let params = new HttpParams({
+    const params = new HttpParams({
       fromObject: {
         page: page,
         limit: limit,

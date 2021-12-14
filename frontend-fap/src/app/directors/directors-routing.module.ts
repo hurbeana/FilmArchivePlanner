@@ -1,9 +1,8 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {DetailsViewComponent} from "./components/details-view/details-view.component";
-import {ContentComponent} from "./components/content/content.component";
-import { EditViewComponent } from "./components/edit-view/edit-view.component";
-import { FullDetailViewComponent } from "./components/full-detail-view/full-detail-view.component";
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { ContentComponent } from './components/content/content.component';
+import { EditViewComponent } from './components/edit-view/edit-view.component';
+import { FullDetailViewComponent } from './components/full-detail-view/full-detail-view.component';
 
 const routes: Routes = [
   { path: '', component: ContentComponent },
@@ -14,6 +13,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class DirectorsRoutingModule { }
+export class DirectorsRoutingModule {}

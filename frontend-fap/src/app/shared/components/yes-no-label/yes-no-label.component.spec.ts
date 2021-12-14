@@ -1,6 +1,6 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {YesNoLabelComponent} from './yes-no-label.component';
+import { YesNoLabelComponent } from './yes-no-label.component';
 
 describe('YesNoLabelComponent', () => {
   let component: YesNoLabelComponent;
@@ -8,9 +8,8 @@ describe('YesNoLabelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ YesNoLabelComponent ]
-    })
-    .compileComponents();
+      declarations: [YesNoLabelComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

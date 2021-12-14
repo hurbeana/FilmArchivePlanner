@@ -1,30 +1,26 @@
 <mat-form-field class="tag-list" appearance="fill" floatLabel="never">
   <!--<mat-label>Select...</mat-label>-->
   <mat-chip-list #chipList aria-label="Movie selection">
-    <mat-chip
-      *ngFor="let tag of tags"
-      [selectable]="selectable"
-      [removable]="removable"
-      (removed)="remove(tag)">
-      {{tag}}
+    <mat-chip *ngFor="let tag of tags" [selectable]="selectable" [removable]="removable" (removed)="remove(tag)">
+      {{ tag }}
       <button matChipRemove *ngIf="removable">
         <mat-icon>cancel</mat-icon>
       </button>
     </mat-chip>
     <input
-      shrink={false}
+      shrink="{false}"
       placeholder="Add Tag"
       #tagInput
       [formControl]="tagCtrl"
       [matAutocomplete]="auto"
       [matChipInputFor]="chipList"
-      [matChipInputAddOnBlur]=false
+      [matChipInputAddOnBlur]="false"
       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-      (matChipInputTokenEnd)="add($event)">
+      (matChipInputTokenEnd)="add($event)" />
   </mat-chip-list>
   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
     <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
-      {{tag}}
+      {{ tag }}
     </mat-option>
   </mat-autocomplete>
 </mat-form-field>

@@ -1,6 +1,6 @@
-import {TestBed} from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
-import {DirectorService} from './director.service';
+import { DirectorService } from './director.service';
 
 describe('DirectorService', () => {
   let service: DirectorService;

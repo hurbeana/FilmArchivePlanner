@@ -4,7 +4,6 @@ import { EMPTY } from 'rxjs';
 import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
 import { TagService } from '../services/tag.service';
 import * as TagActions from './tags.actions';
-import { checkIfTagIsInUse } from './tags.actions';
 import { MovieService } from '../../movies/services/movie.service';
 
 @Injectable()
@@ -12,7 +11,7 @@ export class TagEffects {
   constructor(
     private actions$: Actions,
     private tagsService: TagService,
-    private moviesService: MovieService
+    private moviesService: MovieService,
   ) {}
 
   /* is called, whenever an action of type 'getTags' is called */
@@ -24,12 +23,12 @@ export class TagEffects {
           .getTags(page, limit, orderBy, sortOrder, searchString)
           .pipe(
             map((pagination) =>
-              TagActions.getTagsSuccess({ pagination: pagination })
+              TagActions.getTagsSuccess({ pagination: pagination }),
             ),
-            catchError(() => EMPTY) // TODO: error handling
-          )
-      )
-    )
+            catchError(() => EMPTY), // TODO: error handling
+          ),
+      ),
+    ),
   );
 
   /* is called, whenever an action of type 'createTag' is called */
@@ -39,10 +38,10 @@ export class TagEffects {
       switchMap(({ tag }) =>
         this.tagsService.createTag(tag).pipe(
           map((tag) => TagActions.createTagSuccess({ tag })),
-          catchError(() => EMPTY) // TODO: error handling
-        )
-      )
-    )
+          catchError(() => EMPTY), // TODO: error handling
+        ),
+      ),
+    ),
   );
 
   checkIfTagIsInUse$ = createEffect(() =>
@@ -50,13 +49,13 @@ export class TagEffects {
       ofType(TagActions.checkIfTagIsInUse),
       switchMap(({ tag }) =>
         this.tagsService.checkIfTagIsInUse(tag).pipe(
-          map((isInUse: Boolean) =>
-            TagActions.checkIfTagIsInUseSuccess({ isInUse })
+          map((isInUse: boolean) =>
+            TagActions.checkIfTagIsInUseSuccess({ isInUse }),
           ),
-          catchError(() => EMPTY) // TODO: error handling
-        )
-      )
-    )
+          catchError(() => EMPTY), // TODO: error handling
+        ),
+      ),
+    ),
   );
 
   /* is called, whenever an action of type 'createTag' is called */
@@ -66,10 +65,10 @@ export class TagEffects {
       switchMap(({ tag, id }) =>
         this.tagsService.updateTag(tag, id).pipe(
           map((tag) => TagActions.updateTagSuccess({ tag })),
-          catchError(() => EMPTY) // TODO: error handling
-        )
-      )
-    )
+          catchError(() => EMPTY), // TODO: error handling
+        ),
+      ),
+    ),
   );
 
   /* is called, whenever an action of type 'createMovie' is called */
@@ -87,12 +86,12 @@ export class TagEffects {
                 orderBy: orderBy,
                 sortOrder: sortOrder,
                 searchString: searchString,
-              })
+              }),
             ),
-            catchError(() => EMPTY) // TODO: error handling
-          )
-      )
-    )
+            catchError(() => EMPTY), // TODO: error handling
+          ),
+      ),
+    ),
   );
 
   reloadAfterDelete$ = createEffect(() =>
@@ -104,11 +103,11 @@ export class TagEffects {
             .getTags(page, limit, orderBy, sortOrder, searchString)
             .pipe(
               map((pagination) =>
-                TagActions.getTagsSuccess({ pagination: pagination })
+                TagActions.getTagsSuccess({ pagination: pagination }),
               ),
-              catchError(() => EMPTY) // TODO: error handling
-            )
-      )
-    )
+              catchError(() => EMPTY), // TODO: error handling
+            ),
+      ),
+    ),
   );
 }

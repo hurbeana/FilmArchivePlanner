@@ -1,12 +1,12 @@
-import { Component, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Director } from '../../models/director';
 import { getDirector } from '../../state/directors.actions';
 import { selectDetailsDirector } from '../../state/directors.selectors';
-import { DirectorsState } from "../../../app.state";
-import { FileDto } from "../../../shared/models/file";
-import { DirectorService } from "../../services/director.service";
+import { DirectorsState } from '../../../app.state';
+import { FileDto } from '../../../shared/models/file';
+import { DirectorService } from '../../services/director.service';
 
 @Component({
   selector: 'app-full-detail-view',
@@ -18,10 +18,13 @@ export class FullDetailViewComponent implements OnInit {
   id: number;
 
   //images: GalleryItem[];
-  @ViewChild("itemTemplate", { static: true }) itemTemplate: TemplateRef<any>;
+  @ViewChild('itemTemplate', { static: true }) itemTemplate: TemplateRef<any>;
 
-  constructor(private route: ActivatedRoute, private store: Store<DirectorsState>, private directorService: DirectorService) {
-  }
+  constructor(
+    private route: ActivatedRoute,
+    private store: Store<DirectorsState>,
+    private directorService: DirectorService,
+  ) {}
 
   ngOnInit(): void {
     this.store.select(selectDetailsDirector).subscribe((director) => {
@@ -37,14 +40,14 @@ export class FullDetailViewComponent implements OnInit {
     });
   }
 
-  printFile(file?: FileDto){
-    if(!file){
-      return "empty";
+  printFile(file?: FileDto) {
+    if (!file) {
+      return 'empty';
     }
-    return [file.filename].join("/");
+    return [file.filename].join('/');
   }
 
-  getDownloadLink(filetyp: string,file?: FileDto){
-    return this.directorService.getDownloadLink(filetyp,file);
+  getDownloadLink(filetyp: string, file?: FileDto) {
+    return this.directorService.getDownloadLink(filetyp, file);
   }
 }

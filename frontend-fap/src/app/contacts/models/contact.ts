@@ -1,5 +1,5 @@
 export interface Contact {
-  id: Number;
+  id: number;
   type: any; //TODO Replace this with "Tag"
   name: string;
   email?: string;

@@ -42,7 +42,7 @@ export const moviesReducer = createReducer(
       ...state.pagination,
       items: [
         ...state.pagination.items.filter(
-          (item) => item.id !== movieToDelete.id
+          (item) => item.id !== movieToDelete.id,
         ),
       ],
       meta: {
@@ -61,5 +61,5 @@ export const moviesReducer = createReducer(
             : state.pagination.meta.currentPage,
       },
     },
-  }))
+  })),
 );

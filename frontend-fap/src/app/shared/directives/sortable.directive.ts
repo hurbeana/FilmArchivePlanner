@@ -1,4 +1,11 @@
-import {Directive, EventEmitter, HostBinding, HostListener, Input, Output} from '@angular/core';
+import {
+  Directive,
+  EventEmitter,
+  HostBinding,
+  HostListener,
+  Input,
+  Output,
+} from '@angular/core';
 import { Tag } from '../../tags/models/tag';
 import { Movie } from '../../movies/models/movie';
 import { Contact } from '../../contacts/models/contact';
@@ -28,7 +35,8 @@ export interface SortEvent {
 export class NgbdSortableHeaderDirective {
   @Input() sortable: SortColumn = 'created_at';
   @HostBinding('class')
-  @Input() direction: SortDirection = '';
+  @Input()
+  direction: SortDirection = '';
   @Output() sort = new EventEmitter<SortEvent>();
 
   @HostListener('click')

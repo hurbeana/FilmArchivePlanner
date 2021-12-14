@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Tag } from '../../models/tag';
 
@@ -18,7 +18,10 @@ import { Tag } from '../../models/tag';
       </button>
     </div>
     <div class="modal-body">
-      <form #tagForm="ngForm" (ngSubmit)=" tagForm.form.valid && modal.close(tagToCreate)">
+      <form
+        #tagForm="ngForm"
+        (ngSubmit)="tagForm.form.valid && modal.close(tagToCreate)"
+      >
         <div class="form-group row">
           <label for="inputState" class="col-sm-2 col-form-label">Type</label>
           <div class="col-sm-10">
@@ -29,7 +32,9 @@ import { Tag } from '../../models/tag';
               (change)="changeTagType($event)"
               [(ngModel)]="tagToCreate.type"
               #type="ngModel"
-              [ngClass]="{ 'is-invalid': visible && tagForm.submitted && type.invalid }"
+              [ngClass]="{
+                'is-invalid': visible && tagForm.submitted && type.invalid
+              }"
               required
             >
               <option disabled selected value>Select...</option>
@@ -37,7 +42,10 @@ import { Tag } from '../../models/tag';
                 <span class="badge tag_category">{{ type }}</span>
               </option>
             </select>
-            <div class="invalid-feedback" *ngIf="tagForm.submitted && type.invalid">
+            <div
+              class="invalid-feedback"
+              *ngIf="tagForm.submitted && type.invalid"
+            >
               <p *ngIf="type.errors?.required">Type is required</p>
             </div>
           </div>
@@ -54,10 +62,15 @@ import { Tag } from '../../models/tag';
               name="tagValue"
               [(ngModel)]="tagToCreate.value"
               #value="ngModel"
-              [ngClass]="{ 'is-invalid': visible && tagForm.submitted && value.invalid }"
+              [ngClass]="{
+                'is-invalid': visible && tagForm.submitted && value.invalid
+              }"
               required
             />
-            <div class="invalid-feedback" *ngIf="tagForm.submitted && value.invalid">
+            <div
+              class="invalid-feedback"
+              *ngIf="tagForm.submitted && value.invalid"
+            >
               <p *ngIf="value.errors?.required">Value is required</p>
             </div>
           </div>
@@ -70,12 +83,7 @@ import { Tag } from '../../models/tag';
             >
               Cancel
             </button>
-            <button
-              type="submit"
-              class="btn btn-success"
-            >
-              Ok
-            </button>
+            <button type="submit" class="btn btn-success">Ok</button>
             <!-- autoFocus a button with ngbAutofocus as attribute-->
           </div>
         </div>
@@ -83,10 +91,10 @@ import { Tag } from '../../models/tag';
     </div>
   `,
 })
-export class CreateTagModal {
+export class CreateTagModalComponent {
   constructor(public modal: NgbActiveModal) {}
   tagToCreate: Tag;
-  visible: boolean = true;
+  visible = true;
   tagTypes: any = [
     'Animation',
     'Contact',

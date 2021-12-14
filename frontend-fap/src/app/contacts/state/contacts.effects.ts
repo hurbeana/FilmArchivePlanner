@@ -9,7 +9,7 @@ import * as ContactActions from './contacts.actions';
 export class ContactEffects {
   constructor(
     private actions$: Actions,
-    private contactsService: ContactService
+    private contactsService: ContactService,
   ) {}
 
   /* is called, whenever an action of type 'getContacts' is called */
@@ -21,12 +21,12 @@ export class ContactEffects {
           .getContacts(page, limit, orderBy, sortOrder, searchString)
           .pipe(
             map((pagination) =>
-              ContactActions.getContactsSuccess({ pagination: pagination })
+              ContactActions.getContactsSuccess({ pagination: pagination }),
             ),
-            catchError(() => EMPTY) // TODO: error handling
-          )
-      )
-    )
+            catchError(() => EMPTY), // TODO: error handling
+          ),
+      ),
+    ),
   );
 
   /* is called, whenever an action of type 'createContact' is called */
@@ -36,10 +36,10 @@ export class ContactEffects {
       switchMap(({ contact }) =>
         this.contactsService.createContact(contact).pipe(
           map((contact) => ContactActions.createContactSuccess({ contact })),
-          catchError(() => EMPTY) // TODO: error handling
-        )
-      )
-    )
+          catchError(() => EMPTY), // TODO: error handling
+        ),
+      ),
+    ),
   );
 
   /* is called, whenever an action of type 'createTag' is called */
@@ -49,10 +49,10 @@ export class ContactEffects {
       switchMap(({ contact, id }) =>
         this.contactsService.updateContact(contact, id).pipe(
           map((contact) => ContactActions.updateContactSuccess({ contact })),
-          catchError(() => EMPTY) // TODO: error handling
-        )
-      )
-    )
+          catchError(() => EMPTY), // TODO: error handling
+        ),
+      ),
+    ),
   );
 
   /* is called, whenever an action of type 'createMovie' is called */
@@ -70,12 +70,12 @@ export class ContactEffects {
                 orderBy: orderBy,
                 sortOrder: sortOrder,
                 searchString: searchString,
-              })
+              }),
             ),
-            catchError(() => EMPTY) // TODO: error handling
-          )
-      )
-    )
+            catchError(() => EMPTY), // TODO: error handling
+          ),
+      ),
+    ),
   );
 
   reloadAfterDelete$ = createEffect(() =>
@@ -87,11 +87,11 @@ export class ContactEffects {
             .getContacts(page, limit, orderBy, sortOrder, searchString)
             .pipe(
               map((pagination) =>
-                ContactActions.getContactsSuccess({ pagination: pagination })
+                ContactActions.getContactsSuccess({ pagination: pagination }),
               ),
-              catchError(() => EMPTY) // TODO: error handling
-            )
-      )
-    )
+              catchError(() => EMPTY), // TODO: error handling
+            ),
+      ),
+    ),
   );
 }

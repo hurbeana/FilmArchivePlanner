@@ -1,7 +1,7 @@
 import { FileDto } from '../../shared/models/file';
 
 export interface Director {
-  id: Number;
+  id: number;
   firstName: string;
   middleName?: string;
   lastName: string;

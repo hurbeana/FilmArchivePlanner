@@ -1,15 +1,18 @@
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {Component, ElementRef, Input, ViewChild} from '@angular/core';
-import {FormControl} from '@angular/forms';
-import {MatAutocomplete, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
-import {MatChipInputEvent} from '@angular/material/chips';
-import {Observable} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import {
+  MatAutocomplete,
+  MatAutocompleteSelectedEvent,
+} from '@angular/material/autocomplete';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'shared-tag-input',
   templateUrl: './tag-input.component.html',
-  styleUrls: ['./tag-input.component.less']
+  styleUrls: ['./tag-input.component.less'],
 })
 export class TagInputComponent {
   visible = true;
@@ -19,7 +22,13 @@ export class TagInputComponent {
   tagCtrl = new FormControl();
   filteredTags: Observable<string[]>;
   @Input() tags: string[] = [];
-  allTags: string[] = ['Die Verurteilten', 'Der Pate', 'Der Pate 2', 'The Dark Knight', 'Pineapple Express'];
+  allTags: string[] = [
+    'Die Verurteilten',
+    'Der Pate',
+    'Der Pate 2',
+    'The Dark Knight',
+    'Pineapple Express',
+  ];
 
   @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete!: MatAutocomplete;
@@ -27,7 +36,10 @@ export class TagInputComponent {
   constructor() {
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
       startWith(null),
-      map((tag: string | null) => tag ? this._filter(tag) : this.allTags.slice()));
+      map((tag: string | null) =>
+        tag ? this._filter(tag) : this.allTags.slice(),
+      ),
+    );
   }
 
   add(event: MatChipInputEvent): void {
@@ -36,7 +48,9 @@ export class TagInputComponent {
 
     // Add our tag
     if ((value || '').trim()) {
-      const isOptionSelected = this.matAutocomplete.options.some(option => option.selected);
+      const isOptionSelected = this.matAutocomplete.options.some(
+        (option) => option.selected,
+      );
       if (!isOptionSelected) {
         this.tags.push(value.trim());
       }
@@ -67,13 +81,18 @@ export class TagInputComponent {
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
 
-    return this.allTags.filter(tag => tag.toLowerCase().indexOf(filterValue) === 0);
+    return this.allTags.filter(
+      (tag) => tag.toLowerCase().indexOf(filterValue) === 0,
+    );
   }
 
   addOnBlur(event: FocusEvent) {
     const target: HTMLElement = event.relatedTarget as HTMLElement;
     if (!target || target.tagName !== 'MAT-OPTION') {
-      const matChipEvent: MatChipInputEvent = {input: this.tagInput.nativeElement, value : this.tagInput.nativeElement.value};
+      const matChipEvent: MatChipInputEvent = {
+        input: this.tagInput.nativeElement,
+        value: this.tagInput.nativeElement.value,
+      };
       this.add(matChipEvent);
     }
   }

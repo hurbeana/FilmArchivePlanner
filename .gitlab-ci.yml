@@ -44,3 +44,11 @@ lint_be:
     - npm ci --cache .npm --prefer-offline
   script:
     - npm run lint
+
+lint_fe:
+  stage: lint
+  before_script:
+    - cd ./frontend-fap
+    - npm ci --cache .npm --prefer-offline
+  script:
+    - npm run lint

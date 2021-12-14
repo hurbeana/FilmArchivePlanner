@@ -12,26 +12,26 @@ export const getContacts = createAction(
     orderBy?: string;
     sortOrder?: string;
     searchString?: string;
-  }>()
+  }>(),
 );
 export const getContactsSuccess = createAction(
   '[Contacts List] Loaded Contacts Success',
-  props<{ pagination: ContactsPaginationState }>()
+  props<{ pagination: ContactsPaginationState }>(),
 );
 
 /* whenever this action is called, the 'createContact$' effect in contacts.effects.ts  is executed */
 export const createContact = createAction(
   '[Contact List] Create Contact',
-  props<{ contact: CreateUpdateContactDto }>()
+  props<{ contact: CreateUpdateContactDto }>(),
 );
 export const createContactSuccess = createAction(
   '[Contact List] Created Contact Success',
-  props<{ contact: Contact }>()
+  props<{ contact: Contact }>(),
 );
 
 export const setSelectedContact = createAction(
   '[Contact List] Set Selected Contact',
-  props<{ selectedContact: Contact }>()
+  props<{ selectedContact: Contact }>(),
 );
 
 export const updateContact = createAction(
@@ -39,13 +39,13 @@ export const updateContact = createAction(
   props<{
     contact: CreateUpdateContactDto;
     id: number;
-  }>()
+  }>(),
 );
 export const updateContactSuccess = createAction(
   '[Contact List] Update Contact Success',
   props<{
     contact: Contact;
-  }>()
+  }>(),
 );
 
 export const deleteContact = createAction(
@@ -57,7 +57,7 @@ export const deleteContact = createAction(
     orderBy: string;
     sortOrder: string;
     searchString: string;
-  }>()
+  }>(),
 );
 export const deleteContactSuccess = createAction(
   '[Contact List] Remove Contact Success',
@@ -68,5 +68,5 @@ export const deleteContactSuccess = createAction(
     orderBy: string;
     sortOrder: string;
     searchString: string;
-  }>()
+  }>(),
 );

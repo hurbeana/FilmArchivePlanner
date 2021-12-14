@@ -16,7 +16,7 @@ export class DetailsViewComponent implements OnInit {
 
   constructor(
     private directorService: DirectorService,
-    private store: Store<AppState>
+    private store: Store<AppState>,
   ) {}
 
   ngOnInit(): void {

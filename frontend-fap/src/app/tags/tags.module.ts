@@ -24,18 +24,18 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ContentComponent } from './components/content/content.component';
 import { TableViewComponent } from './components/table-view/table-view.component';
 import * as TagActions from './state/tags.actions';
-import { ConfirmDeleteTagModal } from './components/table-view/confirm-delete-tag-modal.component';
-import { CreateTagModal } from './components/table-view/create-tag-modal.component';
-import { EditTagModal } from './components/table-view/edit-tag-modal.component';
+import { ConfirmDeleteTagModalComponent } from './components/table-view/confirm-delete-tag-modal.component';
+import { CreateTagModalComponent } from './components/table-view/create-tag-modal.component';
+import { EditTagModalComponent } from './components/table-view/edit-tag-modal.component';
 
 @NgModule({
   declarations: [
     DetailsViewComponent,
     TableViewComponent,
     ContentComponent,
-    ConfirmDeleteTagModal,
-    CreateTagModal,
-    EditTagModal,
+    ConfirmDeleteTagModalComponent,
+    CreateTagModalComponent,
+    EditTagModalComponent,
   ],
   exports: [TableViewComponent, DetailsViewComponent, ContentComponent],
   imports: [

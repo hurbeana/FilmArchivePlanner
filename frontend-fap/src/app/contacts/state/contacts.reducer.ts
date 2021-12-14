@@ -60,7 +60,7 @@ export const contactsReducer = createReducer(
       ...state.pagination,
       items: [
         ...state.pagination.items.map((stateContact) =>
-          stateContact.id === contact.id ? contact : stateContact
+          stateContact.id === contact.id ? contact : stateContact,
         ),
       ],
     },
@@ -73,7 +73,7 @@ export const contactsReducer = createReducer(
       ...state.pagination,
       items: [
         ...state.pagination.items.filter(
-          (item) => item.id !== contactToDelete.id
+          (item) => item.id !== contactToDelete.id,
         ),
       ],
       meta: {
@@ -92,5 +92,5 @@ export const contactsReducer = createReducer(
             : state.pagination.meta.currentPage,
       },
     },
-  }))
+  })),
 );

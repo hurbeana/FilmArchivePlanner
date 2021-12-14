@@ -9,7 +9,7 @@ import * as DirectorActions from './directors.actions';
 export class DirectorEffects {
   constructor(
     private actions$: Actions,
-    private directorsService: DirectorService
+    private directorsService: DirectorService,
   ) {}
 
   /* is called, whenever an action of type 'getDirectors' is called */
@@ -21,12 +21,12 @@ export class DirectorEffects {
           .getDirectors(page, limit, orderBy, sortOrder, searchString)
           .pipe(
             map((pagination) =>
-              DirectorActions.getDirectorsSuccess({ pagination: pagination })
+              DirectorActions.getDirectorsSuccess({ pagination: pagination }),
             ),
-            catchError(() => EMPTY) // TODO: error handling
-          )
-      )
-    )
+            catchError(() => EMPTY), // TODO: error handling
+          ),
+      ),
+    ),
   );
 
   getDirector$ = createEffect(() =>
@@ -43,12 +43,12 @@ export class DirectorEffects {
             of(
               DirectorActions.getDirectorFailed({
                 errormessage: this.getErrorMessage(error),
-              })
-            )
-          )
-        )
-      )
-    )
+              }),
+            ),
+          ),
+        ),
+      ),
+    ),
   );
 
   /* is called, whenever an action of type 'createDirector' is called */
@@ -58,18 +58,18 @@ export class DirectorEffects {
       switchMap(({ director }) =>
         this.directorsService.createDirector(director).pipe(
           map((director) =>
-            DirectorActions.createDirectorSuccess({ director })
+            DirectorActions.createDirectorSuccess({ director }),
           ),
           catchError((error) =>
             of(
               DirectorActions.createDirectorFailed({
                 errormessage: this.getErrorMessage(error),
-              })
-            )
-          )
-        )
-      )
-    )
+              }),
+            ),
+          ),
+        ),
+      ),
+    ),
   );
 
   updateDirector$ = createEffect(() =>
@@ -78,18 +78,20 @@ export class DirectorEffects {
       switchMap(({ id, director }) =>
         this.directorsService.updateDirector(id, director).pipe(
           map((directorUpdated) =>
-            DirectorActions.updateDirectorSuccess({ director: directorUpdated })
+            DirectorActions.updateDirectorSuccess({
+              director: directorUpdated,
+            }),
           ),
           catchError((error) =>
             of(
               DirectorActions.updateDirectorFailed({
                 errormessage: this.getErrorMessage(error),
-              })
-            )
-          )
-        )
-      )
-    )
+              }),
+            ),
+          ),
+        ),
+      ),
+    ),
   );
 
   /* is called, whenever an action of type 'createDirector' is called */
@@ -107,12 +109,12 @@ export class DirectorEffects {
                 orderBy: orderBy,
                 sortOrder: sortOrder,
                 searchString: searchString,
-              })
+              }),
             ),
-            catchError(() => EMPTY) // TODO: error handling
-          )
-      )
-    )
+            catchError(() => EMPTY), // TODO: error handling
+          ),
+      ),
+    ),
   );
 
   reloadAfterDelete$ = createEffect(() =>
@@ -124,12 +126,12 @@ export class DirectorEffects {
             .getDirectors(page, limit, orderBy, sortOrder, searchString)
             .pipe(
               map((pagination) =>
-                DirectorActions.getDirectorsSuccess({ pagination: pagination })
+                DirectorActions.getDirectorsSuccess({ pagination: pagination }),
               ),
-              catchError(() => EMPTY) // TODO: error handling
-            )
-      )
-    )
+              catchError(() => EMPTY), // TODO: error handling
+            ),
+      ),
+    ),
   );
 
   /*

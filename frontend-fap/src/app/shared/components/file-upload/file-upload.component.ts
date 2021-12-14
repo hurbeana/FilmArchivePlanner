@@ -1,17 +1,23 @@
-import { Component, Input } from "@angular/core";
-import { Subscription } from "rxjs";
-import { HttpClient, HttpEventType } from "@angular/common/http";
-import { finalize } from "rxjs/operators";
-import { AbstractControl, Form, FormArray, FormControl, FormGroup, FormGroupDirective } from "@angular/forms";
-import {  UploadFileResponseDto } from "../../models/upload.file.response";
-import { FileDto, fileTypes } from "../../models/file";
+import { Component, Input, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { HttpClient, HttpEventType } from '@angular/common/http';
+import { finalize } from 'rxjs/operators';
+import {
+  AbstractControl,
+  FormArray,
+  FormControl,
+  FormGroup,
+  FormGroupDirective,
+} from '@angular/forms';
+import { UploadFileResponseDto } from '../../models/upload.file.response';
+import { fileTypes } from '../../models/file';
 
 @Component({
   selector: 'shared-file-upload',
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.less'],
 })
-export class FileUploadComponent {
+export class FileUploadComponent implements OnInit {
   @Input()
   requiredFileType: string;
 
@@ -26,7 +32,7 @@ export class FileUploadComponent {
   fileGroup: FormGroup;
 
   //files: FileDto[] = [];
-  uploadProgress: number = 0;
+  uploadProgress = 0;
   uploadSub?: Subscription;
   canceled = false;
 
@@ -39,18 +45,18 @@ export class FileUploadComponent {
 
   ngOnInit(): void {
     this.form = this.rootFormGroup.control;
-    if(this.multiple){
+    if (this.multiple) {
       this.formFileArray = this.form.get(this.controlname) as FormArray; // has to be
-    }else{
+    } else {
       this.fileGroup = this.form.get(this.controlname) as FormGroup;
       console.log(this.fileGroup);
-      if(!this.fileGroup.contains('id')){
+      if (!this.fileGroup.contains('id')) {
         this.fileGroup.disable(); // disable -> no value
       }
     }
   }
 
-  getFormGroup(a: AbstractControl): FormGroup{
+  getFormGroup(a: AbstractControl): FormGroup {
     return a as FormGroup;
   }
 
@@ -63,16 +69,18 @@ export class FileUploadComponent {
 
     Array.from(element.files).forEach((file) => {
       if (file) {
-        let newfileGroup = new FormGroup({filename: new FormControl(file.name)});
-        if(this.multiple){
+        const newfileGroup = new FormGroup({
+          filename: new FormControl(file.name),
+        });
+        if (this.multiple) {
           this.formFileArray.push(newfileGroup);
-        }else{
-          if(this.fileGroup.contains('id')) {
+        } else {
+          if (this.fileGroup.contains('id')) {
             this.fileGroup.removeControl('id');
             this.fileGroup.removeControl('path');
             this.fileGroup.removeControl('mimetype');
             this.fileGroup.setControl('filename', new FormControl(file.name));
-          }else{
+          } else {
             this.fileGroup.setControl('filename', new FormControl(file.name));
           }
           //this.fileGroup = new FormGroup({'filename': new FormControl(file.name)});
@@ -81,27 +89,37 @@ export class FileUploadComponent {
         formData.append('file', file);
 
         const upload$ = this.http
-          .post<UploadFileResponseDto>('http://localhost:3000/files/cache', formData, {
-            reportProgress: true,
-            observe: 'events',
-          })
+          .post<UploadFileResponseDto>(
+            'http://localhost:3000/files/cache',
+            formData,
+            {
+              reportProgress: true,
+              observe: 'events',
+            },
+          )
           .pipe(finalize(() => this.finishedUpload()));
 
         this.uploadSub = upload$.subscribe((response) => {
           if (response?.type == HttpEventType.UploadProgress) {
             this.uploadProgress = Math.round(
-              100 * (response.loaded / (response.total ?? 0))
+              100 * (response.loaded / (response.total ?? 0)),
             );
-          }else if(response?.type == HttpEventType.Response && response?.body?.id){
+          } else if (
+            response?.type == HttpEventType.Response &&
+            response?.body?.id
+          ) {
             console.log(response);
             console.log(response.body.id);
 
-            if(this.multiple){
-              newfileGroup.addControl('id',new FormControl(response.body.id));
-            }else{
+            if (this.multiple) {
+              newfileGroup.addControl('id', new FormControl(response.body.id));
+            } else {
               //remove file
               this.fileGroup.enable(); // enable -> value
-              this.fileGroup.setControl('id',new FormControl(response.body.id));
+              this.fileGroup.setControl(
+                'id',
+                new FormControl(response.body.id),
+              );
             }
           }
         });
@@ -125,34 +143,41 @@ export class FileUploadComponent {
     this.uploadSub = undefined;
   }
 
-  removeCacheFile(id: string){
+  removeCacheFile(id: string) {
     console.log(id);
-    this.http.delete('http://localhost:3000/files/cache/'+id).subscribe(x => {
-      console.log(x);
-      if(this.multiple){
-        this.formFileArray.controls = this.formFileArray.controls.filter(c => c.get('id')?.value !== id);
-      }else{
-        this.resetFormGroup();
-        this.fileGroup.disable();
-      }
-    });
+    this.http
+      .delete('http://localhost:3000/files/cache/' + id)
+      .subscribe((x) => {
+        console.log(x);
+        if (this.multiple) {
+          this.formFileArray.controls = this.formFileArray.controls.filter(
+            (c) => c.get('id')?.value !== id,
+          );
+        } else {
+          this.resetFormGroup();
+          this.fileGroup.disable();
+        }
+      });
   }
-  removeFile(id: string){
+  removeFile(id: string) {
     console.log(id);
-    let filetype = fileTypes[this.controlname];
-    this.http.delete(`http://localhost:3000/files/${id}?fileType=${filetype}`).subscribe(x => {
-      console.log(x);
-      if(this.multiple){
-        this.formFileArray.controls = this.formFileArray.controls.filter(c => c.get('id')?.value !== id);
-      }else{
-        this.resetFormGroup();
-        this.fileGroup.disable();
-      }
-    });
+    const filetype = fileTypes[this.controlname];
+    this.http
+      .delete(`http://localhost:3000/files/${id}?fileType=${filetype}`)
+      .subscribe((x) => {
+        console.log(x);
+        if (this.multiple) {
+          this.formFileArray.controls = this.formFileArray.controls.filter(
+            (c) => c.get('id')?.value !== id,
+          );
+        } else {
+          this.resetFormGroup();
+          this.fileGroup.disable();
+        }
+      });
   }
 
-
-  resetFormGroup(){
+  resetFormGroup() {
     this.fileGroup.removeControl('id');
     this.fileGroup.removeControl('path');
     this.fileGroup.removeControl('mimetype');

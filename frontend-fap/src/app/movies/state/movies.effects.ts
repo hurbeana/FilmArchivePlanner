@@ -18,12 +18,12 @@ export class MovieEffects {
           .getMovies(page, limit, orderBy, sortOrder, searchString)
           .pipe(
             map((pagination) =>
-              MovieActions.getMoviesSuccess({ pagination: pagination })
+              MovieActions.getMoviesSuccess({ pagination: pagination }),
             ),
-            catchError(() => EMPTY) // TODO: error handling
-          )
-      )
-    )
+            catchError(() => EMPTY), // TODO: error handling
+          ),
+      ),
+    ),
   );
 
   getMovie$ = createEffect(() =>
@@ -32,10 +32,10 @@ export class MovieEffects {
       switchMap(({ id }) =>
         this.moviesService.getMovie(id).pipe(
           map((movie) => MovieActions.getMovieSuccess({ movie: movie })),
-          catchError(() => EMPTY) // TODO: error handling
-        )
-      )
-    )
+          catchError(() => EMPTY), // TODO: error handling
+        ),
+      ),
+    ),
   );
 
   /* is called, whenever an action of type 'createMovie' is called */
@@ -49,12 +49,12 @@ export class MovieEffects {
             of(
               MovieActions.createMovieFailed({
                 errormessage: this.getErrorMessage(error),
-              })
-            )
-          )
-        )
-      )
-    )
+              }),
+            ),
+          ),
+        ),
+      ),
+    ),
   );
 
   updateMovie$ = createEffect(() =>
@@ -67,12 +67,12 @@ export class MovieEffects {
             of(
               MovieActions.updateMovieFailed({
                 errormessage: this.getErrorMessage(error),
-              })
-            )
-          )
-        )
-      )
-    )
+              }),
+            ),
+          ),
+        ),
+      ),
+    ),
   );
 
   /* is called, whenever an action of type 'deleteMovie' is called */
@@ -90,12 +90,12 @@ export class MovieEffects {
                 orderBy,
                 sortOrder,
                 searchString,
-              })
+              }),
             ),
-            catchError(() => EMPTY) // TODO: error handling
-          )
-      )
-    )
+            catchError(() => EMPTY), // TODO: error handling
+          ),
+      ),
+    ),
   );
 
   reloadAfterDelete$ = createEffect(() =>
@@ -107,12 +107,12 @@ export class MovieEffects {
             .getMovies(page, limit, orderBy, sortOrder, searchString)
             .pipe(
               map((pagination) =>
-                MovieActions.getMoviesSuccess({ pagination: pagination })
+                MovieActions.getMoviesSuccess({ pagination: pagination }),
               ),
-              catchError(() => EMPTY) // TODO: error handling
-            )
-      )
-    )
+              catchError(() => EMPTY), // TODO: error handling
+            ),
+      ),
+    ),
   );
 
   /*

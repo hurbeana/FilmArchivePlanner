@@ -1,6 +1,6 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {TableViewComponent} from './table-view.component';
+import { TableViewComponent } from './table-view.component';
 
 describe('TableViewComponent', () => {
   let component: TableViewComponent;
@@ -8,9 +8,8 @@ describe('TableViewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TableViewComponent ]
-    })
-    .compileComponents();
+      declarations: [TableViewComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

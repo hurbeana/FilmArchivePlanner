@@ -30,6 +30,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ConfirmDeleteDirectorModalComponent } from './components/table-view/confirm-delete-director-modal.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     ContentComponent,
     FullDetailViewComponent,
     EditViewComponent,
+    ConfirmDeleteDirectorModalComponent,
   ],
   exports: [
     TableViewComponent,

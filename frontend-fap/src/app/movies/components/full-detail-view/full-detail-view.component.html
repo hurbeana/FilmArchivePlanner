@@ -1,26 +1,25 @@
 <div *ngIf="movie" class="details-view">
   <div class="header-flex">
     <div class="header-details">
-      <h1 class="mat-h1">{{movie?.originalTitle}}</h1>
+      <h1 class="mat-h1">{{ movie?.originalTitle }}</h1>
       <div>
-        <span class="mat-subheading-2">{{movie.yearOfProduction}}</span>
+        <span class="mat-subheading-2">{{ movie.yearOfProduction }}</span>
         <span class="mat-subheading-2 info-spacer"></span>
-        <span class="mat-subheading-2">{{movie.duration * 1000 * 60| date:'h \'h\' mm \'m\'':'UTC'}}</span>
+        <span class="mat-subheading-2">{{ movie.duration * 1000 * 60 | date: "h 'h' mm 'm'":'UTC' }}</span>
       </div>
       <div>
-        <span class="mat-subheading-2 " i18n>Directors: </span>
-        <span
-          *ngFor="let director of movie?.directors">{{director.fullName}}</span>
+        <span class="mat-subheading-2" i18n>Directors: </span>
+        <span *ngFor="let director of movie?.directors">{{ director.fullName }}</span>
       </div>
       <div style="margin: 10px"></div>
       <div class="mat-subheading-2 text-bold" i18n>German Synopsis</div>
-      <div class="text-container">{{movie?.germanSynopsis}}</div>
+      <div class="text-container">{{ movie?.germanSynopsis }}</div>
       <div style="margin: 10px"></div>
       <div class="mat-subheading-2 text-bold" i18n>English Synopsis</div>
-      <div class="text-container">{{movie?.englishSynopsis}}</div>
+      <div class="text-container">{{ movie?.englishSynopsis }}</div>
       <div style="margin: 10px"></div>
       <div class="mat-subheading-2 text-bold" i18n>Script</div>
-      <div class="text-container">{{movie?.script}}</div>
+      <div class="text-container">{{ movie?.script }}</div>
     </div>
     <gallery *ngIf="movie?.stillFiles?.length" class="still-gallery" [items]="images"></gallery>
   </div>
@@ -29,83 +28,112 @@
     <div class="details-grid">
       <div>
         <span class="mat-subheading-2 text-bold" i18n>Original Title</span>
-        <span>{{movie?.originalTitle ?? 'empty'}}</span>
+        <span>{{ movie?.originalTitle ?? 'empty' }}</span>
       </div>
       <div>
         <span class="mat-subheading-2 text-bold" i18n>English Title</span>
-        <span>{{movie?.englishTitle ?? 'empty'}}</span>
+        <span>{{ movie?.englishTitle ?? 'empty' }}</span>
       </div>
       <div>
         <span class="mat-subheading-2 text-bold" i18n>Movie Files</span>
-        <span *ngFor="let file of movie?.movieFiles">{{file.filename}}</span>
+        <span *ngFor="let file of movie?.movieFiles">{{ file.filename }}</span>
       </div>
       <div>
         <span class="mat-subheading-2 text-bold" i18n>DCP Files</span>
-        <span *ngFor="let file of movie?.dcpFiles">{{file.filename}}</span>
+        <span *ngFor="let file of movie?.dcpFiles">{{ file.filename }}</span>
       </div>
       <div>
         <span class="mat-subheading-2 text-bold" i18n>Preview File</span>
-        <span>{{movie?.previewFile?.filename}}</span>
+        <span>{{ movie?.previewFile?.filename }}</span>
       </div>
       <div>
         <span class="mat-subheading-2 text-bold" i18n>Trailer File</span>
-        <span>{{movie?.trailerFile?.filename}}</span>
+        <span>{{ movie?.trailerFile?.filename }}</span>
       </div>
       <div>
         <span class="mat-subheading-2 text-bold" i18n>Still File</span>
-        <span *ngFor="let file of movie?.stillFiles">{{file.filename}}</span>
+        <span *ngFor="let file of movie?.stillFiles">{{ file.filename }}</span>
       </div>
       <div>
         <span class="mat-subheading-2 text-bold" i18n>Subtitle Folder</span>
-        <span *ngFor="let file of movie?.subtitleFiles">{{file.filename}}</span>
+        <span *ngFor="let file of movie?.subtitleFiles">{{ file.filename }}</span>
       </div>
       <div>
         <span class="mat-subheading-2 text-bold" i18n>Directors</span>
-        <div
-          *ngFor="let director of movie?.directors">{{director.fullName}},
-        </div>
+        <div *ngFor="let director of movie?.directors">{{ director.fullName }},</div>
       </div>
-      <div><span class="mat-subheading-2 text-bold" i18n>Countries of Production</span>
-        <span>{{printTags(movie?.countriesOfProduction)}}</span></div>
-      <div><span class="mat-subheading-2 text-bold" i18n>Year of Production</span>
-        <span>{{movie?.yearOfProduction ?? 'empty'}}</span></div>
-      <div><span class="mat-subheading-2 text-bold" i18n>Duration</span>
-        <span>{{movie?.duration ?? 'empty'}}</span></div>
-      <div><span class="mat-subheading-2 text-bold" i18n>Animation Technique</span>
-        <span>{{printTags(movie?.animationTechniques)}}</span></div>
-      <div><span class="mat-subheading-2 text-bold" i18n>Software Used</span>
-        <span>{{printTags(movie?.softwareUsed)}}</span></div>
-      <div><span class="mat-subheading-2 text-bold" i18n>Keywords</span>
-        <span>{{printTags(movie?.keywords)}}</span></div>
-      <div>  <!--<span class="mat-subheading-2 " i18n>German Synopsis</span>-->
-        <!--<span>{{movie?.germanSynopsis}}</span>--></div>
-      <div> <!--<span class="mat-subheading-2 " i18n>English Synopsis</span>-->
-        <!--<span>{{movie?.englishSynopsis}}</span>--></div>
-      <div><span class="mat-subheading-2 text-bold" i18n>Submission Category</span>
-        <span>{{printTags(movie?.submissionCategory)}}</span></div>
-      <div><span class="mat-subheading-2 text-bold" i18n>Has Dialog</span>
-        <span><shared-yes-no-label>{{movie?.hasDialog}}</shared-yes-no-label></span></div>
-      <div><span class="mat-subheading-2 text-bold" i18n>Original Title</span>
-        <span>{{movie?.dialogLanguages ?? 'empty'}}</span></div>
-      <div><span class="mat-subheading-2 text-bold" i18n>Has Subtitles</span>
-        <span><shared-yes-no-label>{{movie?.hasSubtitles}}</shared-yes-no-label></span></div>
-      <div><span class="mat-subheading-2 text-bold" i18n>Is Student Film</span>
-        <span><shared-yes-no-label>{{movie?.isStudentFilm}}</shared-yes-no-label></span></div>
-      <div><span class="mat-subheading-2 text-bold" i18n>Film School</span>
-        <span>{{movie?.filmSchool ?? 'empty'}}</span></div>
-      <div><span class="mat-subheading-2 text-bold" i18n>Animation</span>
-        <span>{{movie?.animation ?? 'empty'}}</span></div>
-      <div><span class="mat-subheading-2 text-bold" i18n>Editing</span>
-        <span>{{movie?.editing ?? 'empty'}}</span></div>
-      <div><span class="mat-subheading-2 text-bold" i18n>Sound</span>
-        <span>{{movie?.sound ?? 'empty'}}</span></div>
-      <div><span class="mat-subheading-2 text-bold" i18n>Music</span>
-        <span>{{movie?.music ?? 'empty'}}</span></div>
-      <div><span class="mat-subheading-2 text-bold" i18n>Production Company</span>
-        <span>{{movie?.productionCompany ?? 'empty'}}</span></div>
+      <div>
+        <span class="mat-subheading-2 text-bold" i18n>Countries of Production</span> <span>{{ printTags(movie?.countriesOfProduction) }}</span>
+      </div>
+      <div>
+        <span class="mat-subheading-2 text-bold" i18n>Year of Production</span> <span>{{ movie?.yearOfProduction ?? 'empty' }}</span>
+      </div>
+      <div>
+        <span class="mat-subheading-2 text-bold" i18n>Duration</span> <span>{{ movie?.duration ?? 'empty' }}</span>
+      </div>
+      <div>
+        <span class="mat-subheading-2 text-bold" i18n>Animation Technique</span> <span>{{ printTags(movie?.animationTechniques) }}</span>
+      </div>
+      <div>
+        <span class="mat-subheading-2 text-bold" i18n>Software Used</span> <span>{{ printTags(movie?.softwareUsed) }}</span>
+      </div>
+      <div>
+        <span class="mat-subheading-2 text-bold" i18n>Keywords</span> <span>{{ printTags(movie?.keywords) }}</span>
+      </div>
+      <div>
+        <!--<span class="mat-subheading-2 " i18n>German Synopsis</span>-->
+        <!--<span>{{movie?.germanSynopsis}}</span>-->
+      </div>
+      <div>
+        <!--<span class="mat-subheading-2 " i18n>English Synopsis</span>-->
+        <!--<span>{{movie?.englishSynopsis}}</span>-->
+      </div>
+      <div>
+        <span class="mat-subheading-2 text-bold" i18n>Submission Category</span> <span>{{ printTags(movie?.submissionCategory) }}</span>
+      </div>
+      <div>
+        <span class="mat-subheading-2 text-bold" i18n>Has Dialog</span>
+        <span
+          ><shared-yes-no-label>{{ movie?.hasDialog }}</shared-yes-no-label></span
+        >
+      </div>
+      <div>
+        <span class="mat-subheading-2 text-bold" i18n>Original Title</span> <span>{{ movie?.dialogLanguages ?? 'empty' }}</span>
+      </div>
+      <div>
+        <span class="mat-subheading-2 text-bold" i18n>Has Subtitles</span>
+        <span
+          ><shared-yes-no-label>{{ movie?.hasSubtitles }}</shared-yes-no-label></span
+        >
+      </div>
+      <div>
+        <span class="mat-subheading-2 text-bold" i18n>Is Student Film</span>
+        <span
+          ><shared-yes-no-label>{{ movie?.isStudentFilm }}</shared-yes-no-label></span
+        >
+      </div>
+      <div>
+        <span class="mat-subheading-2 text-bold" i18n>Film School</span> <span>{{ movie?.filmSchool ?? 'empty' }}</span>
+      </div>
+      <div>
+        <span class="mat-subheading-2 text-bold" i18n>Animation</span> <span>{{ movie?.animation ?? 'empty' }}</span>
+      </div>
+      <div>
+        <span class="mat-subheading-2 text-bold" i18n>Editing</span> <span>{{ movie?.editing ?? 'empty' }}</span>
+      </div>
+      <div>
+        <span class="mat-subheading-2 text-bold" i18n>Sound</span> <span>{{ movie?.sound ?? 'empty' }}</span>
+      </div>
+      <div>
+        <span class="mat-subheading-2 text-bold" i18n>Music</span> <span>{{ movie?.music ?? 'empty' }}</span>
+      </div>
+      <div>
+        <span class="mat-subheading-2 text-bold" i18n>Production Company</span> <span>{{ movie?.productionCompany ?? 'empty' }}</span>
+      </div>
       <div>
         <span class="mat-subheading-2 text-bold" i18n>Contact</span>
-        <span>{{$any(movie?.contact).name ?? 'empty'}}</span></div>
+        <span>{{ $any(movie?.contact).name ?? 'empty' }}</span>
+      </div>
     </div>
   </div>
 </div>

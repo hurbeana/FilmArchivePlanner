@@ -1,6 +1,4 @@
-import { Component } from '@angular/core';
-import { Store } from '@ngrx/store';
-import * as MovieActions from './movies/state/movies.actions';
+import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
 @Component({
@@ -8,7 +6,7 @@ import { Title } from '@angular/platform-browser';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'Film Archive Planner';
 
   constructor(private titleService: Title) {}

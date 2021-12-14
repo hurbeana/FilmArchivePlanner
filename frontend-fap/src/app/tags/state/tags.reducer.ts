@@ -61,7 +61,7 @@ export const tagsReducer = createReducer(
       ...state.pagination,
       items: [
         ...state.pagination.items.map((stateTag) =>
-          stateTag.id === tag.id ? tag : stateTag
+          stateTag.id === tag.id ? tag : stateTag,
         ),
       ],
     },
@@ -91,5 +91,5 @@ export const tagsReducer = createReducer(
             : state.pagination.meta.currentPage,
       },
     },
-  }))
+  })),
 );

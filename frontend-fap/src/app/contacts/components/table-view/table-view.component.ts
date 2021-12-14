@@ -1,12 +1,8 @@
 import {
+  AfterViewInit,
   Component,
-  Directive,
   ElementRef,
-  EventEmitter,
-  Input,
-  Output,
   QueryList,
-  TemplateRef,
   ViewChild,
   ViewChildren,
 } from '@angular/core';
@@ -25,34 +21,30 @@ import {
   filter,
   tap,
 } from 'rxjs/operators';
-import {
-  NgbActiveModal,
-  NgbModal,
-  NgbModalConfig,
-} from '@ng-bootstrap/ng-bootstrap';
-import { CreateContactModal } from './create-contact-modal.component';
-import { EditContactModal } from './edit-contact-modal.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CreateContactModalComponent } from './create-contact-modal.component';
+import { EditContactModalComponent } from './edit-contact-modal.component';
 import { TagService } from '../../../tags/services/tag.service';
-import { ConfirmDeleteContactModal } from './confirm-delete-contact-modal.component';
+import { ConfirmDeleteContactModalComponent } from './confirm-delete-contact-modal.component';
 import { ContactService } from '../../services/contact.service';
 import {
   NgbdSortableHeaderDirective,
   SortEvent,
 } from '../../../shared/directives/sortable.directive';
-import * as TagActions from '../../../tags/state/tags.actions';
+
 @Component({
   selector: 'table-view',
   templateUrl: './table-view.component.html',
   styleUrls: ['./table-view.component.less'],
   providers: [],
 })
-export class TableViewComponent {
+export class TableViewComponent implements AfterViewInit {
   contacts: Observable<Contact[]>;
   numberOfContacts: number;
   contactOnPageCount: number;
-  pageSize: number = 16;
-  totalPages: number = 0;
-  page: number = 1;
+  pageSize = 16;
+  totalPages = 0;
+  page = 1;
 
   searchTerm: string;
   orderBy: string;
@@ -62,12 +54,15 @@ export class TableViewComponent {
   @ViewChild('search', { static: true })
   search: ElementRef;
 
+  @ViewChildren(NgbdSortableHeaderDirective)
+  headers: QueryList<NgbdSortableHeaderDirective>;
+
   constructor(
     private store: Store<ContactsState>,
     private route: ActivatedRoute,
     private modalService: NgbModal,
     private contactService: ContactService,
-    private tagService: TagService
+    private tagService: TagService,
   ) {
     this.contacts = this.store.select(ContactSelectors.selectContacts);
     this.store
@@ -96,7 +91,7 @@ export class TableViewComponent {
         orderBy: this.orderBy,
         sortOrder: this.sortOrder,
         searchString: this.search.nativeElement.value,
-      })
+      }),
     );
   }
 
@@ -111,18 +106,17 @@ export class TableViewComponent {
         tap((event) => {
           this.loadContacts();
         }),
-        tap(() => this.loading.next(false))
+        tap(() => this.loading.next(false)),
       )
       .subscribe();
   }
 
   selectContact(contact: Contact) {
     this.store.dispatch(
-      ContactActions.setSelectedContact({ selectedContact: contact })
+      ContactActions.setSelectedContact({ selectedContact: contact }),
     );
   }
 
-  @ViewChildren(NgbdSortableHeaderDirective) headers: QueryList<NgbdSortableHeaderDirective>;
   onSort({ column, direction }: SortEvent) {
     // resetting other headers
     this.headers.forEach((header) => {
@@ -147,12 +141,12 @@ export class TableViewComponent {
   }
 
   openCreateContactModal() {
-    const modalRef = this.modalService.open(CreateContactModal, {
+    const modalRef = this.modalService.open(CreateContactModalComponent, {
       centered: true,
       keyboard: true,
       //backdrop: 'static' // won`t close on click outside when uncommented
     });
-    let newContact: CreateUpdateContactDto = {
+    const newContact: CreateUpdateContactDto = {
       type: { id: '' },
       name: '',
       email: '',
@@ -163,7 +157,7 @@ export class TableViewComponent {
     this.tagService
       .getTagsByType('Contact')
       .subscribe(
-        (usableTags) => (modalRef.componentInstance.usableTags = usableTags)
+        (usableTags) => (modalRef.componentInstance.usableTags = usableTags),
       );
     modalRef.result.then(
       (contact) => {
@@ -172,7 +166,7 @@ export class TableViewComponent {
       },
       () => {
         console.log('Unconfirmed close');
-      }
+      },
     );
   }
   createContact(contact: Contact) {
@@ -180,13 +174,13 @@ export class TableViewComponent {
   }
 
   openEditContactModal(contact: Contact) {
-    const modalRef = this.modalService.open(EditContactModal, {
+    const modalRef = this.modalService.open(EditContactModalComponent, {
       centered: true,
       keyboard: true,
       //backdrop: 'static' // won`t close on click outside when uncommented
     });
 
-    let contactToUpdate: CreateUpdateContactDto = {
+    const contactToUpdate: CreateUpdateContactDto = {
       type: { id: contact.type.id },
       name: contact.name,
       email: contact.email,
@@ -199,7 +193,7 @@ export class TableViewComponent {
     this.tagService
       .getTagsByType('Contact')
       .subscribe(
-        (usableTags) => (modalRef.componentInstance.usableTags = usableTags)
+        (usableTags) => (modalRef.componentInstance.usableTags = usableTags),
       );
     modalRef.result.then(
       (result) => {
@@ -207,7 +201,7 @@ export class TableViewComponent {
       },
       () => {
         console.log('Unconfirmed close');
-      }
+      },
     );
   }
   editContact(contact: CreateUpdateContactDto, id: number) {
@@ -215,21 +209,24 @@ export class TableViewComponent {
       ContactActions.updateContact({
         contact: contact,
         id: id,
-      })
+      }),
     );
   }
 
   openConfirmDeleteContactModal(contact: Contact) {
-    const modalRef = this.modalService.open(ConfirmDeleteContactModal, {
-      centered: true,
-      keyboard: true,
-      //backdrop: 'static' // won`t close on click outside when uncommented
-    });
+    const modalRef = this.modalService.open(
+      ConfirmDeleteContactModalComponent,
+      {
+        centered: true,
+        keyboard: true,
+        //backdrop: 'static' // won`t close on click outside when uncommented
+      },
+    );
 
     this.contactService
       .checkIfContactIsInUse(contact)
       .subscribe(
-        (isInUse) => (modalRef.componentInstance.contactIsInUse = isInUse)
+        (isInUse) => (modalRef.componentInstance.contactIsInUse = isInUse),
       );
     modalRef.componentInstance.contactIsInUse = false;
     modalRef.componentInstance.contactToDelete = contact;
@@ -239,7 +236,7 @@ export class TableViewComponent {
       },
       () => {
         console.log('Unconfirmed close');
-      }
+      },
     );
   }
   deleteContact(contact: Contact) {
@@ -251,7 +248,7 @@ export class TableViewComponent {
         orderBy: this.orderBy,
         sortOrder: this.sortOrder,
         searchString: this.search.nativeElement.value,
-      })
+      }),
     );
   }
 }

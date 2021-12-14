@@ -38,7 +38,9 @@
           },
           "configurations": {
             "production": {
-              "localize": ["en"],
+              "localize": [
+                "en"
+              ],
               "budgets": [
                 {
                   "type": "initial",
@@ -60,7 +62,9 @@
               "outputHashing": "all"
             },
             "production-de": {
-              "localize": ["de"],
+              "localize": [
+                "de"
+              ],
               "budgets": [
                 {
                   "type": "initial",
@@ -82,7 +86,9 @@
               "outputHashing": "all"
             },
             "development": {
-              "localize": ["de"],
+              "localize": [
+                "de"
+              ],
               "buildOptimizer": false,
               "optimization": false,
               "extractCss": true,
@@ -130,6 +136,15 @@
             ],
             "scripts": []
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       },
       "i18n": {
@@ -140,5 +155,8 @@
       }
     }
   },
-  "defaultProject": "frontend-FAP"
+  "defaultProject": "frontend-FAP",
+  "cli": {
+    "defaultCollection": "@angular-eslint/schematics"
+  }
 }
