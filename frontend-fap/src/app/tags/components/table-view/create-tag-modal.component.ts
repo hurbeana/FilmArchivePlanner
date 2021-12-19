@@ -97,6 +97,7 @@ export class CreateTagModalComponent {
   visible = true;
   tagTypes: any = [
     'Animation',
+    'Category',
     'Contact',
     'Country',
     'Keyword',
