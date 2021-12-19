@@ -26,6 +26,18 @@ import { Tag } from '../../../tags/models/tag';
         <div class="form-group row">
           <label for="inputState" class="col-sm-2 col-form-label">Type</label>
           <div class="col-sm-10">
+            <shared-tag-input
+              [form]="contactForm"
+              [formCtrlName]="'contactType'"
+              [required]="true"
+              [(model)]="contactToEdit.type"
+              [tagType]="'Contact'"
+              [readonly]="false"
+              [multiple]="false"
+            ></shared-tag-input>
+          </div>
+
+          <!--<div class="col-sm-10">
             <select
               id="inputState"
               class="form-control form-control-sm"
@@ -38,7 +50,7 @@ import { Tag } from '../../../tags/models/tag';
                 <span class="badge tag_category">{{ tag.value }}</span>
               </option>
             </select>
-          </div>
+          </div>-->
         </div>
         <div class="form-group row">
           <label for="tagValue" class="col-sm-2 col-form-label">Name</label>
@@ -154,6 +166,8 @@ export class EditContactModalComponent {
   contactId: number;
   usableTags: Tag[];
   visible = true;
+
+  tagType = 'Contact';
 
   createContact() {}
 

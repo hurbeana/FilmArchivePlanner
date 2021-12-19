@@ -35,6 +35,7 @@ import * as ContactActions from 'src/app/contacts/state/contacts.actions';
 import * as TagActions from 'src/app/tags/state/tags.actions';
 import { Contact } from '../../../contacts/models/contact';
 import { Tag } from '../../../tags/models/tag';
+import { Movie } from '../../models/movie';
 
 @Component({
   selector: 'app-edit-view',
@@ -88,6 +89,8 @@ export class EditViewComponent implements OnInit, OnDestroy {
   tagsSoftware: Observable<Tag[]>;
 
   id: number;
+  movie: Movie;
+  softwareTagType = 'Software';
   // All Validation messages
   validation_messages = {
     username: [
@@ -241,7 +244,9 @@ export class EditViewComponent implements OnInit, OnDestroy {
 
     this.store.select(selectDetailsMovie).subscribe((movie) => {
       if (movie && this.id) {
-        console.log(movie);
+        console.log('MMMM', movie);
+        this.movie = movie;
+
         this.fillFilesFormGroup('movieFiles', movie.movieFiles);
         this.fillFilesFormGroup('dcpFiles', movie.dcpFiles);
         this.fillFilesFormGroup('subtitleFiles', movie.subtitleFiles);

@@ -1,13 +1,8 @@
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import {
-  MatAutocomplete,
-  MatAutocompleteSelectedEvent,
-} from '@angular/material/autocomplete';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormControl, NgForm, Validators } from '@angular/forms';
+import { TagService } from '../../../tags/services/tag.service';
+import { Tag } from '../../../tags/models/tag';
+import { CreateUpdateTagDto } from '../../../tags/models/create.tag';
 
 @Component({
   selector: 'shared-tag-input',
@@ -15,85 +10,143 @@ import { map, startWith } from 'rxjs/operators';
   styleUrls: ['./tag-input.component.less'],
 })
 export class TagInputComponent {
-  visible = true;
-  selectable = true;
-  removable = true;
-  separatorKeysCodes: number[] = [ENTER, COMMA];
-  tagCtrl = new FormControl();
-  filteredTags: Observable<string[]>;
-  @Input() tags: string[] = [];
-  allTags: string[] = [
-    'Die Verurteilten',
-    'Der Pate',
-    'Der Pate 2',
-    'The Dark Knight',
-    'Pineapple Express',
-  ];
+  @Input()
+  form: NgForm;
+  @Input()
+  model: Tag[] | Tag | null; // depending on multiple
+  @Output()
+  modelChange = new EventEmitter<Tag[] | Tag | null>();
+  @Input()
+  tagType: string;
+  @Input()
+  formCtrlName: string;
+  @Input()
+  readonly = false;
+  @Input()
+  multiple = true;
+  @Input()
+  required = false;
 
-  @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
-  @ViewChild('auto') matAutocomplete!: MatAutocomplete;
+  items: Tag[];
+  className: string;
+  addTagText: string;
+  loading = false;
 
-  constructor() {
-    this.filteredTags = this.tagCtrl.valueChanges.pipe(
-      startWith(null),
-      map((tag: string | null) =>
-        tag ? this._filter(tag) : this.allTags.slice(),
-      ),
-    );
-  }
+  constructor(private tagService: TagService) {}
 
-  add(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
-
-    // Add our tag
-    if ((value || '').trim()) {
-      const isOptionSelected = this.matAutocomplete.options.some(
-        (option) => option.selected,
-      );
-      if (!isOptionSelected) {
-        this.tags.push(value.trim());
-      }
-    }
-
-    // Reset the input value
-    if (input) {
-      input.value = '';
-    }
-
-    this.tagCtrl.setValue(null);
-  }
-
-  remove(tag: string): void {
-    const index = this.tags.indexOf(tag);
-    if (index >= 0) {
-      this.tags.splice(index, 1);
-    }
-  }
-
-  selected(event: MatAutocompleteSelectedEvent): void {
-    event.option.deselect();
-    this.tags.push(event.option.viewValue);
-    this.tagInput.nativeElement.value = '';
-    this.tagCtrl.setValue(null);
-  }
-
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.allTags.filter(
-      (tag) => tag.toLowerCase().indexOf(filterValue) === 0,
-    );
-  }
-
-  addOnBlur(event: FocusEvent) {
-    const target: HTMLElement = event.relatedTarget as HTMLElement;
-    if (!target || target.tagName !== 'MAT-OPTION') {
-      const matChipEvent: MatChipInputEvent = {
-        input: this.tagInput.nativeElement,
-        value: this.tagInput.nativeElement.value,
+  addTag(tag: Tag, model: Tag[] | Tag | null) {
+    /* Add a tag to the list of tags (Multiple Select) */
+    this.loading = true;
+    if (!tag.type) {
+      /* Tag is new and must be created first */
+      const newTag: CreateUpdateTagDto = {
+        type: this.tagType,
+        value: tag.value,
+        user: 'User',
+        public: true,
       };
-      this.add(matChipEvent);
+
+      this.tagService
+        .createTag(newTag)
+        .toPromise()
+        .then((result) => {
+          this.items = [...this.items, result];
+          this.loading = false;
+        });
+    } else {
+      /* Tag already existed in list --> Nothing to do here */
+      this.loading = false;
     }
+    this.resetFormControl();
+  }
+
+  setTag(tag: Tag, model: Tag[] | Tag | null) {
+    /* Set tag as selected (Single Select) */
+    this.loading = true;
+    const newTag: CreateUpdateTagDto = {
+      type: this.tagType,
+      value: tag.value,
+      user: 'User',
+      public: true,
+    };
+
+    this.tagService
+      .createTag(newTag)
+      .toPromise()
+      .then((result) => {
+        this.items = [...this.items, result];
+        this.loading = false;
+      });
+  }
+
+  removeTag(event: Event, model: Tag[] | Tag | null) {
+    console.log('removeTag', event, model);
+    if (model === null || (Array.isArray(model) && model.length === 0)) {
+      this.form.form.controls[this.formCtrlName].setErrors({
+        invalid: true,
+      });
+    }
+    this.form.form.updateValueAndValidity();
+  }
+
+  onChange(tag: Tag) {
+    if (this.multiple) {
+      /* if Multi-Select let the change Event be handled by addTagToItemsMultiple */
+      return;
+    }
+    if (tag === undefined || tag === null) {
+      this.form.form.controls[this.formCtrlName].setErrors({
+        invalid: true,
+      });
+    } else {
+      if (!tag.type) {
+        /* Tag is new and must be created */
+        /* TODO maybe add modal with confirmation? */
+
+        /* Set tag as selected (Single Select) */
+        this.setTag(tag, this.model);
+      }
+      this.resetFormControl();
+    }
+    this.form.form.updateValueAndValidity();
+    this.modelChange.emit(this.model);
+  }
+
+  resetFormControl() {
+    this.form.control.removeControl(this.formCtrlName);
+    this.form.control.addControl(
+      this.formCtrlName,
+      new FormControl('valid', Validators.required),
+    );
+  }
+
+  ngOnInit() {
+    if (!this.items) {
+      this.tagService.getTagsByType(this.tagType).subscribe((tags) => {
+        this.items = tags;
+      });
+    }
+
+    this.form.control.addControl(
+      this.formCtrlName,
+      new FormControl('valid', Validators.required),
+    );
+    this.form.form.updateValueAndValidity();
+
+    /* setting className to show proper tag colors */
+    this.className =
+      'custom-tag-select ' + 'tag-' + this.tagType.toLowerCase() + '-input';
+
+    /* setting responsible classes for validation */
+    this.form.ngSubmit.subscribe(() => {
+      if (this.form.submitted) {
+        this.className += ' required is-invalid';
+      }
+      if (this.required) {
+        this.className += ' required';
+      }
+    });
+
+    this.addTagText = 'Add ' + this.tagType;
   }
 }

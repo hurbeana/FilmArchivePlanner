@@ -181,7 +181,8 @@ export class TableViewComponent implements AfterViewInit {
     });
 
     const contactToUpdate: CreateUpdateContactDto = {
-      type: { id: contact.type.id },
+      //type: { id: contact.type.id },
+      type: contact.type,
       name: contact.name,
       email: contact.email,
       phone: contact.phone,

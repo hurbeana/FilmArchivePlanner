@@ -16,6 +16,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { NgbdSortableHeaderDirective } from './directives/sortable.directive';
 import { ExportButtonComponent } from './components/export-button/export-button.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { ExportButtonComponent } from './components/export-button/export-button.
     MatInputModule,
     MatButtonModule,
     MatProgressBarModule,
+    NgSelectModule,
   ],
   exports: [
     MatIconModule,
