@@ -17,6 +17,11 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { NgbdSortableHeaderDirective } from './directives/sortable.directive';
 import { ExportButtonComponent } from './components/export-button/export-button.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { DetailsViewComponent } from './details-view/details-view.component';
+import { DetailsViewTagComponent } from './details-view/details-view-tag.component';
+import { DetailsViewMovieComponent } from './details-view/details-view-movie.component';
+import { DetailsViewDirectorComponent } from './details-view/details-view-director.component';
+import { DetailsViewContactComponent } from './details-view/details-view-contact.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +32,11 @@ import { NgSelectModule } from '@ng-select/ng-select';
     NotFoundComponent,
     NgbdSortableHeaderDirective,
     ExportButtonComponent,
+    DetailsViewComponent,
+    DetailsViewMovieComponent,
+    DetailsViewDirectorComponent,
+    DetailsViewContactComponent,
+    DetailsViewTagComponent,
   ],
   imports: [
     CommonModule,
@@ -55,6 +65,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     FileUploadComponent,
     NgbdSortableHeaderDirective,
     ExportButtonComponent,
+    DetailsViewComponent,
   ],
 })
 /* The shared module contains components, which are shared and reused from the feature

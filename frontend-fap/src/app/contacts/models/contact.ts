@@ -1,6 +1,7 @@
+import { Tag } from '../../tags/models/tag';
 export interface Contact {
   id: number;
-  type: any; //TODO Replace this with "Tag"
+  type: Tag;
   name: string;
   email?: string;
   phone?: string;

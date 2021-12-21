@@ -22,7 +22,7 @@ export interface Movie {
   keywords?: Tag[];
   germanSynopsis: string;
   englishSynopsis: string;
-  submissionCategory: Tag[];
+  submissionCategories: Tag[];
   hasDialog?: boolean;
   dialogLanguages?: Tag[];
   hasSubtitles?: boolean;

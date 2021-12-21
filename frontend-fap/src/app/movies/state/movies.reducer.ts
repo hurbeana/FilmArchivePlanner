@@ -16,6 +16,7 @@ export const initialState: AppState = {
     orderBy: '',
     sortOrder: '',
   },
+  selectedMovie: null,
 };
 
 export const moviesReducer = createReducer(
@@ -33,7 +34,7 @@ export const moviesReducer = createReducer(
   on(MovieActions.createMovie, (state) => state),
   on(MovieActions.setSelectedMovie, (state, { selectedMovie }) => ({
     ...state,
-    selectedMovie,
+    selectedMovie: selectedMovie,
   })),
 
   on(MovieActions.deleteMovieSuccess, (state, { movieToDelete }) => ({

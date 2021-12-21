@@ -30,7 +30,7 @@ export interface CreateUpdateMovieDto {
   keywords?: Array<string>;
   germanSynopsis: string;
   englishSynopsis: string;
-  submissionCategory: string;
+  submissionCategories: Array<string>;
   hasDialog?: boolean;
   dialogLanguages?: Array<string>;
   hasSubtitles?: boolean;

@@ -13,7 +13,6 @@ import { EffectsModule } from '@ngrx/effects';
 import { SharedModule } from '../shared/shared.module';
 
 /* Components */
-import { DetailsViewComponent } from './components/details-view/details-view.component';
 import { CreateContactModalComponent } from './components/table-view/create-contact-modal.component';
 import { EditContactModalComponent } from './components/table-view/edit-contact-modal.component';
 import { ConfirmDeleteContactModalComponent } from './components/table-view/confirm-delete-contact-modal.component';
@@ -31,14 +30,13 @@ import * as ContactActions from './state/contacts.actions';
 
 @NgModule({
   declarations: [
-    DetailsViewComponent,
     TableViewComponent,
     ContentComponent,
     ConfirmDeleteContactModalComponent,
     CreateContactModalComponent,
     EditContactModalComponent,
   ],
-  exports: [TableViewComponent, DetailsViewComponent, ContentComponent],
+  exports: [TableViewComponent, ContentComponent],
   imports: [
     CommonModule,
     NgSelectModule,

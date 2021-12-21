@@ -4,13 +4,20 @@ import {
   ContactsState,
   DirectorsState,
   TagsState,
-} from '../../app.state'; //feature "movies" has to exist in app.state.ts
+} from '../../app.state';
 
 //feature "movies" has to exist in app.state.ts
 //export const movies = createFeatureSelector<AppState>('movies');
 
 export const pagination = createFeatureSelector<AppState>('pagination');
 export const selectedMovie = createFeatureSelector<AppState>('selectedMovie');
+
+export const selectSelectedMovie = createSelector(
+  selectedMovie,
+  (state: AppState) => {
+    return state.selectedMovie;
+  },
+);
 
 export const selectDirectorspagination = createFeatureSelector<DirectorsState>(
   'directorsPagination',

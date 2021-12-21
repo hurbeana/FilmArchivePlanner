@@ -1,3 +1,5 @@
+@marginBetweenFields: 10px;
+
 :host{
   width:100%;
   height: calc(100vh - 64px - 28px); // 100vh - 64px header - 30px footer + 2px border
@@ -10,7 +12,6 @@
 :host .details-view {
   width: 100%;
   margin: 1.5em;
-
 }
 
 :host .details-form {
@@ -18,23 +19,15 @@
 }
 
 .details-grid{
-  text-align: right;
-  display: grid;
   grid-template-columns: 1fr 1fr;
   row-gap: 0.1em;
 }
 
 .details-grid span{
   display: flex;
-  justify-content: flex-end;
   align-items: flex-end;
-  height:29px;
+  margin-top:3px;
   padding-right: 15px;
-}
-.details-grid input{
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  height:29px;
 }
 
 .label-colon:after{
@@ -56,5 +49,17 @@
 
 ::ng-deep .ng-clear-wrapper {
   display: none;
+}
+
+::ng-deep .disabled{
+  background-color: #e9ecef;
+}
+
+::ng-deep .form-control.form-control-sm{
+  margin-bottom: @marginBetweenFields;
+}
+
+::ng-deep .custom-tag-select{
+  margin-bottom: @marginBetweenFields;
 }
 

@@ -172,7 +172,14 @@ export class CreateContactModalComponent {
   }
 
   onSubmitContactModal() {
-    this.contactToCreate.type = { id: this.contactToCreate.type.id };
+    this.contactToCreate.type = this.contactToCreate.type = {
+      id: this.contactToCreate.type.id,
+      value: this.contactToCreate.type.value,
+      type: this.contactToCreate.type.type,
+      user: this.contactToCreate.type.user,
+      public: this.contactToCreate.type.public,
+      created_at: this.contactToCreate.type.created_at,
+    };
     this.modal.close(this.contactToCreate);
   }
 }

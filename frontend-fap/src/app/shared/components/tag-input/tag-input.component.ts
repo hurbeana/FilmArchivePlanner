@@ -13,9 +13,9 @@ export class TagInputComponent {
   @Input()
   form: NgForm;
   @Input()
-  model: Tag[] | Tag | null; // depending on multiple
+  model: Tag[] | Tag | null | undefined; // depending on multiple
   @Output()
-  modelChange = new EventEmitter<Tag[] | Tag | null>();
+  modelChange = new EventEmitter<any>();
   @Input()
   tagType: string;
   @Input()
@@ -26,6 +26,8 @@ export class TagInputComponent {
   multiple = true;
   @Input()
   required = false;
+  @Input()
+  bindLabel = 'value';
 
   items: Tag[];
   className: string;
@@ -34,7 +36,7 @@ export class TagInputComponent {
 
   constructor(private tagService: TagService) {}
 
-  addTag(tag: Tag, model: Tag[] | Tag | null) {
+  addTag(tag: Tag, model: Tag[] | Tag | null | undefined) {
     /* Add a tag to the list of tags (Multiple Select) */
     this.loading = true;
     if (!tag.type) {
@@ -60,7 +62,7 @@ export class TagInputComponent {
     this.resetFormControl();
   }
 
-  setTag(tag: Tag, model: Tag[] | Tag | null) {
+  setTag(tag: Tag, model: Tag[] | Tag | null | undefined) {
     /* Set tag as selected (Single Select) */
     this.loading = true;
     const newTag: CreateUpdateTagDto = {
@@ -79,7 +81,7 @@ export class TagInputComponent {
       });
   }
 
-  removeTag(event: Event, model: Tag[] | Tag | null) {
+  removeTag(event: Event, model: Tag[] | Tag | null | undefined) {
     console.log('removeTag', event, model);
     if (model === null || (Array.isArray(model) && model.length === 0)) {
       this.form.form.controls[this.formCtrlName].setErrors({
@@ -134,6 +136,7 @@ export class TagInputComponent {
     this.form.form.updateValueAndValidity();
 
     /* setting className to show proper tag colors */
+
     this.className =
       'custom-tag-select ' + 'tag-' + this.tagType.toLowerCase() + '-input';
 
@@ -148,5 +151,10 @@ export class TagInputComponent {
     });
 
     this.addTagText = 'Add ' + this.tagType;
+  }
+
+  ngOnChanges() {
+    this.className =
+      'custom-tag-select ' + 'tag-' + this.tagType.toLowerCase() + '-input';
   }
 }

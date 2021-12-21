@@ -177,7 +177,14 @@ export class EditContactModalComponent {
   }
 
   onSubmitContactModal() {
-    this.contactToEdit.type = { id: this.contactToEdit.type.id };
+    this.contactToEdit.type = {
+      id: this.contactToEdit.type.id,
+      value: this.contactToEdit.type.value,
+      type: this.contactToEdit.type.type,
+      user: this.contactToEdit.type.user,
+      public: this.contactToEdit.type.public,
+      created_at: this.contactToEdit.type.created_at,
+    };
     this.modal.close({ contact: this.contactToEdit, id: this.contactId });
   }
 }

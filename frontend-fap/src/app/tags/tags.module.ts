@@ -12,8 +12,6 @@ import { EffectsModule } from '@ngrx/effects';
 import { SharedModule } from '../shared/shared.module';
 
 /* Components */
-import { DetailsViewComponent } from './components/details-view/details-view.component';
-
 /* state management*/
 import { tagsReducer } from './state/tags.reducer';
 import { TagEffects } from './state/tags.effects';
@@ -30,14 +28,13 @@ import { EditTagModalComponent } from './components/table-view/edit-tag-modal.co
 
 @NgModule({
   declarations: [
-    DetailsViewComponent,
     TableViewComponent,
     ContentComponent,
     ConfirmDeleteTagModalComponent,
     CreateTagModalComponent,
     EditTagModalComponent,
   ],
-  exports: [TableViewComponent, DetailsViewComponent, ContentComponent],
+  exports: [TableViewComponent, ContentComponent],
   imports: [
     CommonModule,
     FormsModule,

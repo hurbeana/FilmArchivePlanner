@@ -1,7 +1,7 @@
 <ng-select
   [(ngModel)]="model"
   [items]="items"
-  bindLabel="value"
+  [bindLabel]="bindLabel"
   groupBy="type"
   [addTagText]="addTagText"
   [multiple]="multiple"
@@ -20,8 +20,6 @@
   [class.ng-select-multiple]="true"
   [class.ng-select-single]="false"
   [class.form-controll-sm]="true"
-  [style.display]="'block'"
-  [style.padding]="'0.25rem 0'"
   [class.ng-invalid]="form.submitted && form.form.invalid"
   required>
 </ng-select>

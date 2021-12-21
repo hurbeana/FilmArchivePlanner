@@ -13,7 +13,6 @@ import { EffectsModule } from '@ngrx/effects';
 import { SharedModule } from '../shared/shared.module';
 
 /* Components */
-import { DetailsViewComponent } from './components/details-view/details-view.component';
 import { FullDetailViewComponent } from './components/full-detail-view/full-detail-view.component';
 
 /* state management*/
@@ -46,7 +45,6 @@ import { ContactEffects } from '../contacts/state/contacts.effects';
 
 @NgModule({
   declarations: [
-    DetailsViewComponent,
     TableViewComponent,
     ContentComponent,
     EditViewComponent,
@@ -54,12 +52,7 @@ import { ContactEffects } from '../contacts/state/contacts.effects';
     FullDetailViewComponent,
     ConfirmDeleteMovieModalComponent,
   ],
-  exports: [
-    TableViewComponent,
-    DetailsViewComponent,
-    ContentComponent,
-    FullDetailViewComponent,
-  ],
+  exports: [TableViewComponent, ContentComponent, FullDetailViewComponent],
   imports: [
     CommonModule,
     NgSelectModule,
