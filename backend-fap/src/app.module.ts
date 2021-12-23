@@ -16,6 +16,8 @@ import { createFilesOptions } from './config/files-config.functions';
 import { DirectorsModule } from './directors/directors.module';
 import { ContactsModule } from './contacts/contacts.module';
 import { ExportModule } from './export/export.module';
+import { FestivalsModule } from './festivals/festivals.module';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -43,6 +45,8 @@ import { ExportModule } from './export/export.module';
       useFactory: createFilesOptions,
       inject: [ConfigService],
     }),
+    FestivalsModule,
+    EventsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
