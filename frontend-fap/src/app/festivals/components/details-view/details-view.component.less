@@ -1,0 +1,65 @@
+:host {
+  width: 100%;
+  height: calc(
+    100vh - 64px - 28px
+  ); // 100vh - 64px header - 30px footer + 2px border
+  position: relative;
+  display: flex;
+  overflow-y: scroll;
+  background-color: white;
+}
+
+:host .details-view {
+  width: 100%;
+  margin: 1.5em;
+}
+
+:host .details-form {
+  margin-top: 20px;
+}
+
+.details-grid {
+  text-align: right;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 0.1em;
+}
+
+.details-grid span {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 29px;
+  padding-right: 15px;
+}
+.details-grid input {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  height: 29px;
+}
+
+.label-colon:after {
+  content: ':';
+}
+
+::ng-deep .ng-select.ng-select-single .ng-select-container {
+  min-height: 29px;
+  height: 29px;
+}
+
+::ng-deep .ng-select.ng-select-single .ng-select-container .ng-value-container {
+  padding-left: 2px;
+}
+
+::ng-deep
+  .ng-select
+  .ng-select-container
+  .ng-value-container
+  .ng-input
+  > input {
+  caret-color: transparent;
+}
+
+::ng-deep .ng-clear-wrapper {
+  display: none;
+}

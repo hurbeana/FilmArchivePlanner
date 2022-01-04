@@ -1,11 +1,24 @@
 import { IsOptional, IsString, ValidateNested } from 'class-validator';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Event } from '../../events/entities/event.entity';
 
 @Entity()
 export class Festival {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  last_updated: Date;
 
   @IsString()
   @Column()

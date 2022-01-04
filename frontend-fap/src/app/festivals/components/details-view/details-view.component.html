@@ -1,0 +1,18 @@
+<div *ngIf="festival" class="details-view">
+  <!--
+  <div style="display:flex; align-items: center; justify-content: flex-end">
+    <img style="margin: 10px 0; padding: 0; max-width:200px; max-height:200px;" mat-card-image src="https://source.unsplash.com/random/300x300?sig={{festival?.id}}">
+  </div>
+  -->
+  <div class="details-grid">
+    <!-- mebe ID ? -->
+    <span class="mat-primary label-colon" i18n>Name</span>
+    <input type="text" disabled value="{{ festival?.name }}" />
+    <span class="mat-primary label-colon" i18n>Location</span>
+    <input type="text" disabled value="{{ festival?.location }}" />
+    <span class="mat-primary label-colon" i18n>Year</span>
+    <input type="text" disabled value="{{ festival?.year }}" />
+    <span class="mat-primary label-colon" i18n>Description</span>
+    <textarea type="text" disabled value="{{ festival?.description }}"></textarea>
+  </div>
+</div>

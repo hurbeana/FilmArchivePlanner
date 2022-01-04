@@ -4,6 +4,7 @@ import { MovieService } from '../../../movies/services/movie.service';
 import { DirectorService } from '../../../directors/services/director.service';
 import { ContactService } from '../../../contacts/services/contact.service';
 import { TagService } from '../../../tags/services/tag.service';
+import { FestivalService } from '../../../festivals/services/festival.service';
 
 @Component({
   selector: 'export-button',
@@ -11,7 +12,12 @@ import { TagService } from '../../../tags/services/tag.service';
   styleUrls: ['./export-button.component.less'],
 })
 export class ExportButtonComponent implements OnInit {
-  @Input() downloadType: 'movies' | 'directors' | 'contacts' | 'tags';
+  @Input() downloadType:
+    | 'movies'
+    | 'directors'
+    | 'contacts'
+    | 'tags'
+    | 'festivals';
 
   downloadLoading = new BehaviorSubject<boolean>(false);
 
@@ -20,6 +26,7 @@ export class ExportButtonComponent implements OnInit {
     private directorService: DirectorService,
     private contactService: ContactService,
     private tagService: TagService,
+    private festivalService: FestivalService,
   ) {}
 
   ngOnInit(): void {}
@@ -35,6 +42,8 @@ export class ExportButtonComponent implements OnInit {
       service = this.contactService;
     } else if (this.downloadType == 'tags') {
       service = this.tagService;
+    } else if (this.downloadType == 'festivals') {
+      service = this.festivalService;
     }
     if (service !== null) {
       service.downloadCSV().subscribe((results: any) => {

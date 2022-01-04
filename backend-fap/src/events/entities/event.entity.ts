@@ -5,10 +5,12 @@ import { Movie } from '../../movies/entities/movie.entity';
 import { Tag } from '../../tags/entities/tag.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { EventType } from '../event.enum';
 
@@ -16,6 +18,12 @@ import { EventType } from '../event.enum';
 export class Event {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  last_updated: Date;
 
   @IsEnum(EventType)
   @Column()
