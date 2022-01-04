@@ -140,6 +140,7 @@ export class TableViewComponent implements AfterViewInit {
       tag_keyword: type === 'Keyword',
       tag_language: type === 'Language',
       tag_software: type === 'Software',
+      tag_selection: type === 'Selection',
       badge: true,
     };
   }

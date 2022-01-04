@@ -28,6 +28,15 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="standard">
+        <mat-label class="mat-primary label-colon" i18n>Selection Tags</mat-label>
+        <mat-select formControlName="selectionTags" multiple [compareWith]="compareSelectObjects">
+          <mat-option *ngFor="let tag of tagsSelection | async" [value]="{ id: tag.id }">{{ tag.value + ' - ' + tag.type }}</mat-option>
+        </mat-select>
+        <mat-error *ngFor="let validation of validation_messages.selectionTags">
+          <mat-error *ngIf="moviesForm.controls['selectionTags']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="standard">
         <mat-label class="mat-primary label-colon" i18n>Countries of Production</mat-label>
         <mat-select formControlName="countriesOfProduction" multiple [compareWith]="compareSelectObjects">
           <mat-option *ngFor="let tag of tagsCountry | async" [value]="{ id: tag.id }">{{ tag.value + ' - ' + tag.type }}</mat-option>

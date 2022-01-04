@@ -103,6 +103,19 @@ import { DetailsViewComponent } from './details-view.component';
       </div>
     </div>
 
+    <span class="mat-primary label-colon" i18n>Selection Tags</span>
+    <form #dummyForm="ngForm" *ngIf="movie?.selectionTags; else emptyInput">
+      <shared-tag-input
+        [form]="dummyForm"
+        [formCtrlName]="'selectionTags'"
+        [required]="true"
+        [(model)]="movie.selectionTags"
+        [tagType]="'Selection'"
+        [readonly]="true"
+        [multiple]="true"
+      ></shared-tag-input>
+    </form>
+
     <span class="mat-primary label-colon" i18n>Countries of Production</span>
     <form
       #dummyForm="ngForm"

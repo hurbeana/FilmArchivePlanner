@@ -312,6 +312,7 @@ export class MoviesService {
         'keywords',
         'submissionCategories',
         'dialogLanguages',
+        'selectionTags',
       ],
       where: whereObj,
       order: orderObj,
@@ -350,6 +351,7 @@ export class MoviesService {
           'trailerFile',
           'stillFiles',
           'subtitleFiles',
+          'selectionTags',
         ],
       });
     } catch (e) {
@@ -379,6 +381,7 @@ export class MoviesService {
           'trailerFile',
           'stillFiles',
           'subtitleFiles',
+          'selectionTags',
         ],
       });
     } catch (e) {
@@ -486,6 +489,11 @@ export class MoviesService {
         tags: movieDto.softwareUsed,
         type: TagType.Software,
         name: 'softwareUsed',
+      },
+      {
+        tags: movieDto.selectionTags,
+        type: TagType.Selection,
+        name: 'selectionTags',
       },
     ];
     for (const obj of checkArray) {

@@ -91,6 +91,13 @@ export const selectTagsSoftwareItems = createSelector(
   },
 );
 
+export const selectTagsSelectionItems = createSelector(
+  selectTagspagination,
+  (state: TagsState) => {
+    return state.pagination.items.filter((t) => t.type === 'Selection');
+  },
+);
+
 export const selectMovies = createSelector(pagination, (state: AppState) => {
   return state.pagination.items;
 });

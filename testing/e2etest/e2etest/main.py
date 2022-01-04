@@ -69,6 +69,7 @@ def create_movies(client, times):
         countries = create_tags(client, random.randrange(0, 3), tag_type=Tag.COUNTRY)
         langs = create_tags(client, random.randrange(0, 3), tag_type=Tag.LANGUAGE)
         keywords = create_tags(client, random.randrange(0, 5), tag_type=Tag.KEYWORD)
+        selTags = create_tags(client, random.randrange(0, 3), tag_type=Tag.SELECTION)
         movies.append(
             client.create_movie(
                 random_movie(
@@ -80,6 +81,7 @@ def create_movies(client, times):
                     countries=countries,
                     dialogLanguages=langs,
                     keywords=keywords,
+                    selectionTags=selTags
                 )
             )
         )

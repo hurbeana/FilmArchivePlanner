@@ -188,4 +188,10 @@ export class CreateUpdateMovieDto {
   @AutoMap({ typeFn: () => ContactReferenceDto })
   @IsNotEmptyObject()
   contact: ContactReferenceDto;
+
+  @AutoMap({ typeFn: () => TagReferenceDto })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => TagReferenceDto)
+  selectionTags?: TagReferenceDto[];
 }

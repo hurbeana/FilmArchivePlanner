@@ -252,12 +252,16 @@ describe('MoviesService', () => {
     const softwareTag = new Tag();
     softwareTag.type = TagType.Software;
     softwareTag.id = 7;
+    const selectionTag = new Tag();
+    selectionTag.type = TagType.Selection;
+    selectionTag.id = 8;
     createUpdateMovieDto.animationTechniques = [animationTag1, animationTag2];
     createUpdateMovieDto.submissionCategories = [categoryTag];
     createUpdateMovieDto.countriesOfProduction = [countryTag];
     createUpdateMovieDto.keywords = [keywordTag];
     createUpdateMovieDto.dialogLanguages = [languageTag];
     createUpdateMovieDto.softwareUsed = [softwareTag];
+    createUpdateMovieDto.selectionTags = [selectionTag];
 
     return moviesService.update(1, createUpdateMovieDto).catch((error) => {
       console.log(error.stack);
@@ -423,12 +427,17 @@ function addMockTagsToMovie(movie) {
   const softwareTag = new Tag();
   softwareTag.type = TagType.Software;
   softwareTag.id = 7;
+  const selectionTag = new Tag();
+  selectionTag.type = TagType.Selection;
+  selectionTag.id = 8;
+
   movie.animationTechniques = [animationTag1, animationTag2];
   movie.submissionCategories = [categoryTag];
   movie.countriesOfProduction = [countryTag];
   movie.keywords = [keywordTag];
   movie.dialogLanguages = [languageTag];
   movie.softwareUsed = [softwareTag];
+  movie.selectionTags = [selectionTag];
   return movie;
 }
 
@@ -460,6 +469,10 @@ function setTagTypeById(tag, tagId) {
     }
     case 7: {
       tag.type = TagType.Software;
+      break;
+    }
+    case 8: {
+      tag.type = TagType.Selection;
       break;
     }
   }

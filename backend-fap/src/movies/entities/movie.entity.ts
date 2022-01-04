@@ -168,4 +168,9 @@ export class Movie {
   @AutoMap()
   @ManyToOne(() => Contact)
   contact: Contact;
+
+  @AutoMap({ typeFn: () => Tag })
+  @ManyToMany(() => Tag)
+  @JoinTable()
+  selectionTags?: Tag[];
 }

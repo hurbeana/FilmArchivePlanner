@@ -23,6 +23,7 @@ import {
   selectTagsKeywordItems,
   selectTagsLanguageItems,
   selectTagsSoftwareItems,
+  selectTagsSelectionItems,
 } from '../../state/movies.selectors';
 import { Director } from 'src/app/directors/models/director';
 import { Observable, Subject } from 'rxjs';
@@ -55,6 +56,7 @@ export class EditViewComponent implements OnInit, OnDestroy {
     stillFiles: new FormArray([]),
     subtitleFiles: new FormArray([]),
     directors: new FormControl('', [Validators.required]),
+    selectionTags: new FormControl([]), // TODO: tags
     countriesOfProduction: new FormControl([]), // TODO: tags
     yearOfProduction: new FormControl(),
     duration: new FormControl('', [Validators.required]),
@@ -87,6 +89,7 @@ export class EditViewComponent implements OnInit, OnDestroy {
   tagsKeyword: Observable<Tag[]>;
   tagsLanguage: Observable<Tag[]>;
   tagsSoftware: Observable<Tag[]>;
+  tagsSelection: Observable<Tag[]>;
 
   id: number;
   movie: Movie;
@@ -144,6 +147,7 @@ export class EditViewComponent implements OnInit, OnDestroy {
     script: undefined,
     yearOfProduction: undefined,
     countriesOfProduction: undefined,
+    selectionTags: undefined,
   };
 
   constructor(
@@ -241,6 +245,7 @@ export class EditViewComponent implements OnInit, OnDestroy {
     this.tagsKeyword = this.store.select(selectTagsKeywordItems);
     this.tagsLanguage = this.store.select(selectTagsLanguageItems);
     this.tagsSoftware = this.store.select(selectTagsSoftwareItems);
+    this.tagsSelection = this.store.select(selectTagsSelectionItems);
 
     this.store.select(selectDetailsMovie).subscribe((movie) => {
       if (movie && this.id) {

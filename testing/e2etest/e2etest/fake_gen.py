@@ -49,12 +49,17 @@ class TagSoftwareProvider(BaseProvider):
     def software(self):
         return random.choice(["Adobe Animate", "Toonmontion", "Generic"])
 
+class TagSelectionProvider(BaseProvider):
+    def selection(self):
+        return random.choice(["Selection Tag 1", "Selection Tag 2", "Selection Tag 3"])
+
 
 en_fake.add_provider(TagAnimationProvider)
 en_fake.add_provider(TagSubmissionCategoryProvider)
 en_fake.add_provider(TagContactProvider)
 en_fake.add_provider(TagLanguageProvider)
 en_fake.add_provider(TagSoftwareProvider)
+en_fake.add_provider(TagSelectionProvider)
 
 
 def random_director():
@@ -74,6 +79,7 @@ def random_movie(
     countries=[],
     dialogLanguages=[],
     keywords=[],
+    selectionTags=[],
 ):
     def cap(words):
         capitalized_words = list(map(lambda x: x.capitalize(), words))
@@ -105,6 +111,7 @@ def random_movie(
         "softwareUsed": [{"id": s["id"]} for s in software],
         "animationTechniques": [{"id": a["id"]} for a in animationTechniques],
         "contact": {"id": contact["id"]},
+        "selectionTags": [{"id": t["id"]} for t in selectionTags],
     }
 
 
@@ -126,6 +133,7 @@ class Tag(Enum):
     KEYWORD = "Keyword"
     LANGUAGE = "Language"
     SOFTWARE = "Software"
+    SELECTION = "Selection"
 
 
 def random_tag(tag_type: Tag):
@@ -137,6 +145,7 @@ def random_tag(tag_type: Tag):
         Tag.KEYWORD: en_fake.word,
         Tag.LANGUAGE: en_fake.language,
         Tag.SOFTWARE: en_fake.software,
+        Tag.SELECTION: en_fake.selection,
     }
     return {
         "type": tag_type.value,

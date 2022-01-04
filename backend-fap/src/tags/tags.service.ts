@@ -210,6 +210,7 @@ export class TagsService {
                 SELECT "tagId" FROM "movie_keywords_tag" UNION
                 SELECT "tagId" FROM "movie_software_used_tag" UNION
                 SELECT "tagId" FROM "movie_submission_categories_tag" UNION
+                SELECT "tagId" FROM "movie_selection_tags_tag" UNION
                 SELECT "typeId" as "tagId" FROM "contact"
               ) as joinedTags
               WHERE joinedTags."tagId" = $1`,

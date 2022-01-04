@@ -14,6 +14,7 @@ export interface Movie {
   stillFiles?: FileDto[];
   subtitleFiles?: FileDto[];
   directors: DirectorReference[];
+  selectionTags?: Tag[];
   countriesOfProduction?: Tag[];
   yearOfProduction?: number;
   duration: number; //Duration in minutes

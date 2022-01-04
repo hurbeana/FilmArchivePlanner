@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Tag } from '../../models/tag';
+import { tagTypes } from '../../models/tagtypes';
 
 @Component({
   selector: 'create-tag-modal',
@@ -95,15 +96,7 @@ export class CreateTagModalComponent {
   constructor(public modal: NgbActiveModal) {}
   tagToCreate: Tag;
   visible = true;
-  tagTypes: any = [
-    'Animation',
-    'Category',
-    'Contact',
-    'Country',
-    'Keyword',
-    'Language',
-    'Software',
-  ];
+  tagTypes = tagTypes;
   createTag() {}
 
   changeTagValue(event: any) {

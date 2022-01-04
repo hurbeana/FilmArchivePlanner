@@ -19,11 +19,9 @@ export interface CreateUpdateMovieDto {
   stillFiles: Array<string>;
   subtitleFiles?: Array<string>;
   directors: Array<number>;
+  selectionTags?: Array<string>;
   countriesOfProduction?: Array<string>;
   yearOfProduction?: number;
-  /**
-   * Duration in minutes
-   */
   duration: number;
   animationTechniques?: Array<string>;
   softwareUsed?: Array<string>;

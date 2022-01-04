@@ -6,4 +6,5 @@ export enum TagType {
   Keyword = 'Keyword',
   Language = 'Language',
   Software = 'Software',
+  Selection = 'Selection',
 }
