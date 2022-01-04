@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { Allow, IsDate, IsOptional, IsString } from 'class-validator';
+import { Allow, IsDate, IsEnum, IsOptional, IsString } from 'class-validator';
 import { Festival } from '../../festivals/entities/festival.entity';
 import { Movie } from '../../movies/entities/movie.entity';
 import { Tag } from '../../tags/entities/tag.entity';
@@ -10,16 +10,16 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { EventType } from '../event.enum';
 
 @Entity()
 export class Event {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Tag)
-  @Type(() => Tag)
-  @Allow()
-  type: Tag;
+  @IsEnum(EventType)
+  @Column()
+  type: EventType;
 
   @IsDate()
   @Column()

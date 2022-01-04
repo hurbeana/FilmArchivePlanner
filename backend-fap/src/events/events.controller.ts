@@ -1,7 +1,8 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { Crud, CrudController } from '@nestjsx/crud';
 import { EventsService } from './events.service';
 import { Event } from './entities/event.entity';
+import { EventType } from './event.enum';
 
 @Crud({
   model: {
@@ -18,4 +19,9 @@ import { Event } from './entities/event.entity';
 @Controller('events')
 export class EventsController implements CrudController<Event> {
   constructor(public service: EventsService) {}
+
+  @Get('types')
+  eventtypes() {
+    return Object.values(EventType);
+  }
 }
