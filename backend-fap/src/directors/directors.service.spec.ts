@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DirectorsService } from './directors.service';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { Director } from './entities/director.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { AutomapperModule } from '@automapper/nestjs';
@@ -53,6 +53,10 @@ describe('DirectorsService', () => {
         {
           provide: getRepositoryToken(FilmographyFile),
           useClass: Repository,
+        },
+        {
+          provide: EntityManager,
+          useValue: {},
         },
         {
           provide: FILES_PERSISTENCY_PROVIDER,

@@ -48,7 +48,7 @@ export class Director {
   @OneToOne(() => BiographyEnglishFile, (file) => file.director, {
     eager: true,
   })
-  biographyEnglish: BiographyEnglishFile;
+  biographyEnglish?: BiographyEnglishFile;
 
   @AutoMap({ typeFn: () => BiographyGermanFile })
   @OneToOne(() => BiographyGermanFile, (file) => file.director, { eager: true })

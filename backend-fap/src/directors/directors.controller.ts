@@ -69,4 +69,10 @@ export class DirectorsController {
     this.logger.log(`Delete director with id ${id} called.`);
     return this.directorsService.delete(id);
   }
+
+  @Get('/directorIdIsInUse/:id')
+  directorIsUsed(@Param('id') id: number) {
+    this.logger.log(`Get if director with id ${id} is in use.`);
+    return this.directorsService.directorIdIsInUse(id);
+  }
 }

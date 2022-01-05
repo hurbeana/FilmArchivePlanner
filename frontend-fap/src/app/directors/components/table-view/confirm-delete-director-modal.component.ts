@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Director } from '../../models/director';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -40,18 +40,55 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
       >
         Cancel
       </button>
-      <button
-        type="button"
-        class="btn btn-danger"
-        (click)="modal.close(directorToDelete)"
-      >
-        Ok
-      </button>
+
+      <div
+        *ngIf="
+          directorIsInUse || directorHasFiles;
+          then thenBlock;
+          else elseBlock
+        "
+      ></div>
+      <ng-template #thenBlock>
+        <span
+          ngbPopover="The director cannot be deleted because {{ errorReason }}."
+          [openDelay]="200"
+          [closeDelay]="400"
+          triggers="mouseenter:mouseleave"
+        >
+          <button disabled="true" type="button" class="btn btn-danger">
+            Ok
+          </button>
+        </span>
+      </ng-template>
+      <ng-template #elseBlock>
+        <button
+          type="button"
+          class="btn btn-danger"
+          (click)="modal.close(directorToDelete)"
+        >
+          Ok
+        </button>
+      </ng-template>
       <!-- autoFocus a button with ngbAutofocus as attribute-->
     </div>
   `,
 })
-export class ConfirmDeleteDirectorModalComponent {
+export class ConfirmDeleteDirectorModalComponent implements OnInit {
   directorToDelete: Director;
+  directorIsInUse: boolean;
+  directorHasFiles: boolean;
+  errorReason: string;
+
   constructor(public modal: NgbActiveModal) {}
+
+  ngOnInit() {
+    this.directorHasFiles = [
+      this.directorToDelete.biographyEnglish,
+      this.directorToDelete.biographyGerman,
+      this.directorToDelete.filmography,
+    ].some((f) => f !== null);
+    if (this.directorHasFiles)
+      this.errorReason = 'director has files left, remove them first';
+    else this.errorReason = 'director is in use';
+  }
 }

@@ -62,6 +62,11 @@ export class DirectorService {
     return this.http.delete(`${api}/${director.id}`);
   }
 
+  checkIfDirectorIsInUse(director: Director): Observable<boolean> {
+    console.log('[DirectorService] - CHECK IF DIRECTOR IS IN USE', director.id);
+    return this.http.get<boolean>(`${api}/directorIdIsInUse/${director.id}`);
+  }
+
   getDownloadLink(filetyp: string, file?: FileDto): string {
     if (!file) return '';
     return `http://localhost:3000/files/${file.id}?fileType=${filetyp}`;

@@ -24,8 +24,8 @@ export class CreateUpdateDirectorDto {
 
   @AutoMap({ typeFn: () => FileDto })
   @Type(() => FileDto)
-  @IsNotEmptyObject()
-  biographyEnglish: FileDto;
+  @IsOptional()
+  biographyEnglish?: FileDto;
 
   @AutoMap({ typeFn: () => FileDto })
   @IsOptional()

@@ -23,7 +23,7 @@ export class EditViewComponent implements OnInit, OnDestroy {
     firstName: new FormControl('', [Validators.required]),
     middleName: new FormControl(),
     lastName: new FormControl('', [Validators.required]),
-    biographyEnglish: new FormGroup({}, [Validators.required]),
+    biographyEnglish: new FormGroup({}),
     biographyGerman: new FormGroup({}),
     filmography: new FormGroup({}),
   });
@@ -31,14 +31,12 @@ export class EditViewComponent implements OnInit, OnDestroy {
   id: number;
   // All Validation messages
   validation_messages = {
-    firstName: [{ type: 'required', message: 'Original Title is required' }],
+    firstName: [{ type: 'required', message: 'First Name is required' }],
     middleName: undefined,
-    lastName: [{ type: 'required', message: 'Original Title is required' }],
-    biographyEnglish: [
-      { type: 'required', message: 'Original Title is required' },
-    ],
-    biographyGerman: undefined,
-    filmography: [{ type: 'required', message: 'Original Title is required' }],
+    lastName: [{ type: 'required', message: 'Last Name is required' }],
+    biographyEnglish: undefined,
+    biographyGermna: undefined,
+    filmography: undefined,
   };
 
   constructor(

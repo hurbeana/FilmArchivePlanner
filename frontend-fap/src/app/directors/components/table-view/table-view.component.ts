@@ -26,6 +26,7 @@ import {
   SortEvent,
 } from '../../../shared/directives/sortable.directive';
 import { ConfirmDeleteDirectorModalComponent } from './confirm-delete-director-modal.component';
+import { DirectorService } from '../../services/director.service';
 
 @Component({
   selector: 'table-view',
@@ -57,6 +58,7 @@ export class TableViewComponent implements AfterViewInit {
     private store: Store<DirectorsState>,
     private route: ActivatedRoute,
     private modalService: NgbModal,
+    private directorService: DirectorService,
   ) {
     this.directors = this.store.select(DirectorSelectors.selectDirectors);
     this.store
@@ -156,7 +158,13 @@ export class TableViewComponent implements AfterViewInit {
         //backdrop: 'static' // won`t close on click outside when uncommented
       },
     );
+    this.directorService
+      .checkIfDirectorIsInUse(director)
+      .subscribe(
+        (isInUse) => (modalRef.componentInstance.directorIsInUse = isInUse),
+      );
     modalRef.componentInstance.directorToDelete = director;
+    modalRef.componentInstance.directorIsInUse = false;
     modalRef.result.then(
       (director) => {
         this.deleteDirector(director);

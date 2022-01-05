@@ -12,12 +12,13 @@ import {
   HttpStatus,
   Inject,
   Injectable,
+  InternalServerErrorException,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { CreateUpdateDirectorDto } from './dto/create-update-director.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, Repository } from 'typeorm';
+import { EntityManager, ILike, Repository } from 'typeorm';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/types';
 import { Director } from './entities/director.entity';
@@ -51,6 +52,7 @@ export class DirectorsService {
     private mapper: Mapper,
     @Inject(FILES_PERSISTENCY_PROVIDER)
     private filesServices: IFsService,
+    private entityManager: EntityManager,
   ) {
     this.mapper.createMap(Director, DirectorDto);
     this.mapper.createMap(BiographyEnglishFile, FileDto);
@@ -329,7 +331,35 @@ export class DirectorsService {
       this.logger.error(`Deleting director with id ${id} failed.`, e.stack);
       throw new NotFoundException();
     }
-    await this.directorRepository.delete(id);
+    try {
+      await this.directorRepository.delete(id);
+    } catch (e) {
+      this.logger.error(
+        `Deleting director with id ${id} failed, since its in use.`,
+        e.stack,
+      );
+      throw new InternalServerErrorException('Failed removing director');
+    }
+  }
+
+  /**
+   * Checks if a Director is referenced in some other table
+   * @param directorId the id of the tag that we want to know if it is "used"
+   */
+  async directorIdIsInUse(directorId: number): Promise<boolean> {
+    try {
+      const result = await this.entityManager.query(
+        `SELECT "directorId" FROM  "movie_directors_director" WHERE "directorId" = $1`,
+        [directorId],
+      );
+      return result.length > 0;
+    } catch (e) {
+      this.logger.error(
+        `Checking if director with id ${directorId} is in use failed.`,
+        e.stack,
+      );
+      throw new NotFoundException();
+    }
   }
 
   private mapDirectorToDto(director: Director): DirectorDto {
