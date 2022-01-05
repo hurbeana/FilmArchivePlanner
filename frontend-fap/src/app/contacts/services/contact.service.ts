@@ -49,6 +49,11 @@ export class ContactService {
     return this.http.get<Contact>(api + '/' + id);
   }
 
+  getAllContacts(): Observable<Contact[]> {
+    console.log('[ContactService] - GET ALL CONTACTS WITHOUT PAGING');
+    return this.http.get<Contact[]>(`${api}/all`);
+  }
+
   updateContact(contact: CreateUpdateContactDto, id: number) {
     console.log('[ContactService] - UPDATE CONTACT');
     return this.http.put<Contact>(`${api}/${id}`, contact);

@@ -105,6 +105,31 @@ export class TagsService {
   }
 
   /**
+  Returns all tags in an array
+  @returns {Promise<TagDto[]>} Array of all tags
+  */
+  async findAllWOPaging(): Promise<TagDto[]> {
+    let tags: Tag[];
+    try {
+      tags = await this.tagRepository.find();
+    } catch (e) {
+      this.logger.error(`Getting all tags without paging failed.`, e.stack);
+      throw new NotFoundException(); //Is this the right exception for tagType not in Enum?
+    }
+    const dtos: TagDto[] = [];
+
+    if (tags.length > 0) {
+      tags.forEach((tag) => {
+        if (tag.type != 'Contact') {
+          //only include movie tags
+          dtos.push(this.mapTagToDto(tag));
+        }
+      });
+    }
+    return dtos;
+  }
+
+  /**
    * Returns the tag with the specified id
    * @param id the id of the tag to return
    * @returns {Promise<TagDto>} The tag with the specified id

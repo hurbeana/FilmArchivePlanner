@@ -13,6 +13,7 @@ import { MoviesService } from './movies.service';
 import { CreateUpdateMovieDto } from './dto/create-update-movie.dto';
 import { IPaginationOptions } from 'nestjs-typeorm-paginate';
 import { SearchMoviePagingDto } from './dto/search-movie-paging.dto';
+import { SearchMovieAdvancedPagingDto } from './dto/search-movie-advanced-paging.dto';
 
 /**
  * Controller for movies.
@@ -41,6 +42,69 @@ export class MoviesController {
       limit: limit ?? 10,
     };
     return this.moviesService.find(p, search, orderBy, sortOrder, searchString);
+  }
+
+  @Get('/advanced')
+  findAdvanced(@Query() params: SearchMovieAdvancedPagingDto) {
+    this.logger.log('Get movies advanced called.');
+    this.logger.log(params);
+    const {
+      page,
+      limit,
+      orderBy,
+      sortOrder,
+      query,
+      exactYear,
+      fromYear,
+      toYear,
+      exactLength,
+      fromLength,
+      toLength,
+      hasDialogue,
+      hasSubtitles_,
+      isStudentFilm_,
+      hasDCP,
+      ...search
+    } = params;
+    let selectedTagIDs: number[];
+    let negativeTagIDs: number[];
+    let selectedDirectorIDs: number[];
+    let selectedContactIDs: number[];
+    //convert arrays back to numbers (they get converted to strings during http request)
+    if (params.selectedTagIDs)
+      selectedTagIDs = params.selectedTagIDs.map((x) => Number(x));
+    if (params.negativeTagIDs)
+      negativeTagIDs = params.negativeTagIDs.map((x) => Number(x));
+    if (params.selectedDirectorIDs)
+      selectedDirectorIDs = params.selectedDirectorIDs.map((x) => Number(x));
+    if (params.selectedContactIDs)
+      selectedContactIDs = params.selectedContactIDs.map((x) => Number(x));
+
+    const p: IPaginationOptions = {
+      page: page ?? 1,
+      limit: limit ?? 10,
+    };
+    return this.moviesService.findAdvanced(
+      p,
+      search,
+      orderBy,
+      sortOrder,
+      query,
+      selectedTagIDs,
+      negativeTagIDs,
+      exactYear,
+      fromYear,
+      toYear,
+      exactLength,
+      fromLength,
+      toLength,
+      hasDialogue,
+      hasSubtitles_,
+      isStudentFilm_,
+      hasDCP,
+      selectedDirectorIDs,
+      selectedContactIDs,
+    );
   }
 
   @Get(':id')

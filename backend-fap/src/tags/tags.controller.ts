@@ -44,6 +44,12 @@ export class TagsController {
     return this.tagsService.find(p, search, orderBy, sortOrder, searchString);
   }
 
+  @Get('/all')
+  findAllWOPaging() {
+    this.logger.log(`Get all movie tags without paging called.`);
+    return this.tagsService.findAllWOPaging();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: number) {
     this.logger.log(`Get tag with id ${id} called.`);

@@ -34,6 +34,10 @@ export const selectDetailsMovie = createSelector(
   },
 );
 
+export const advancedSearchState = createFeatureSelector<MoviesState>(
+  'advancedSearchState',
+);
+
 /* pagination */
 export const selectMovies = createSelector(paginationState, (p: any) => {
   return p.items;
@@ -141,5 +145,12 @@ export const selectTagsSelectionItems = createSelector(
   tagsState,
   (state: TagsState) => {
     return state.pagination.items.filter((t) => t.type === 'Selection');
+  },
+);
+
+export const selectAdvancedSearchState = createSelector(
+  advancedSearchState,
+  (state: MoviesState) => {
+    return state.advancedSearchState;
   },
 );

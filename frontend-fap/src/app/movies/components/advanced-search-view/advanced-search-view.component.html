@@ -1,0 +1,160 @@
+<mat-card class="card">
+  <mat-card-title i18n>Advanced Search</mat-card-title>
+  <br />
+
+  <table>
+    <td>
+      <div class="row">
+        <p class="description" i18n>Title</p>
+        <input type="text" class="form-control form-control-sm search-field" [(ngModel)]="query" />
+      </div>
+      <div class="row">
+        <p class="description" i18n>Included Tags</p>
+        <ng-select
+          class="tag-field"
+          [items]="tags$ | async"
+          [multiple]="true"
+          [closeOnSelect]="false"
+          [searchable]="true"
+          groupBy="type"
+          bindLabel="value"
+          placeholder="Search for movies with specified tags"
+          [(ngModel)]="selectedTags"
+          (click)="removeContradictingTags(true)">
+        </ng-select>
+        <!--FIXME: When too many items are selected, box gets bigger (CSS doesn't work) -->
+        <button type="button" class="btn btn-primary btn-sm" (click)="clearTags(true)">
+          <p class="x">X</p>
+        </button>
+      </div>
+      <div class="row">
+        <p class="description" i18n>Excluded Tags</p>
+        <ng-select
+          class="tag-field"
+          [items]="tags$ | async"
+          [multiple]="true"
+          [closeOnSelect]="false"
+          [searchable]="true"
+          groupBy="type"
+          bindLabel="value"
+          placeholder="Exclude movies with specified tags"
+          [(ngModel)]="negativeTags"
+          (click)="removeContradictingTags(false)">
+        </ng-select>
+        <button type="button" class="btn btn-primary btn-sm" (click)="clearTags(false)">
+          <p class="x">X</p>
+        </button>
+      </div>
+      <div class="row">
+        <p class="description" i18n>Year of Production</p>
+        <input type="text" id="form12" class="form-control form-control-sm exact-field" [(ngModel)]="exactYear" placeholder="Exact year" (click)="removeContradictingYears(true)" />
+        <p class="year-text" i18n>or</p>
+        <input type="text" id="form12" class="form-control form-control-sm from-to-field" [(ngModel)]="fromYear" placeholder="From" (click)="removeContradictingYears(false)" />
+        <p class="year-text">-</p>
+        <input type="text" id="form12" class="form-control form-control-sm from-to-field" [(ngModel)]="toYear" placeholder="To" (click)="removeContradictingYears(false)" />
+      </div>
+      <div class="row">
+        <p class="description" i18n>Duration in Minutes</p>
+        <input
+          type="text"
+          id="form12"
+          class="form-control form-control-sm exact-field"
+          [(ngModel)]="exactLength"
+          placeholder="Exact length"
+          (click)="removeContradictingLengths(true)" />
+        <p class="year-text" i18n>or</p>
+        <input type="text" id="form12" class="form-control form-control-sm from-to-field" [(ngModel)]="fromLength" placeholder="From" (click)="removeContradictingLengths(false)" />
+        <p class="year-text">-</p>
+        <input type="text" id="form12" class="form-control form-control-sm from-to-field" [(ngModel)]="toLength" placeholder="To" (click)="removeContradictingLengths(false)" />
+      </div>
+      <div class="row">
+        <p class="description" i18n>Has Dialogue</p>
+        <div class="btn-group btn-group-toggle radio-field" data-toggle="buttons">
+          <label class="btn btn-light active btn-sm"> <input class="form-check-input" type="radio" name="dialogue" (click)="setHasDialogue(0)" checked i18n /> Any </label>
+          <label class="btn btn-light btn-sm"> <input class="form-check-input" type="radio" name="dialogue" (click)="setHasDialogue(1)" i18n /> Yes </label>
+          <label class="btn btn-light btn-sm"> <input class="form-check-input" type="radio" name="dialogue" (click)="setHasDialogue(2)" i18n /> No </label>
+        </div>
+      </div>
+      <div class="row">
+        <p class="description" i18n>Has Subtitles</p>
+        <div class="btn-group btn-group-toggle radio-field" data-toggle="buttons">
+          <label class="btn btn-light active btn-sm"> <input class="form-check-input" type="radio" name="subtitles" (click)="setHasSubtitles(0)" checked i18n /> Any </label>
+          <label class="btn btn-light btn-sm"> <input class="form-check-input" type="radio" name="subtitles" (click)="setHasSubtitles(1)" i18n /> Yes </label>
+          <label class="btn btn-light btn-sm"> <input class="form-check-input" type="radio" name="subtitles" (click)="setHasSubtitles(2)" i18n /> No </label>
+        </div>
+      </div>
+      <div class="row">
+        <p class="description" i18n>Is Student Film</p>
+        <div class="btn-group btn-group-toggle radio-field" data-toggle="buttons">
+          <label class="btn btn-light active btn-sm">
+            <input class="form-check-input" type="radio" name="student" id="any" autocomplete="off" (click)="setIsStudentFilm(0)" checked i18n /> Any
+          </label>
+          <label class="btn btn-light btn-sm">
+            <input class="form-check-input" type="radio" name="student" id="yes" autocomplete="off" (click)="setIsStudentFilm(1)" i18n /> Yes
+          </label>
+          <label class="btn btn-light btn-sm">
+            <input class="form-check-input" type="radio" name="student" id="no" autocomplete="off" (click)="setIsStudentFilm(2)" i18n /> No
+          </label>
+        </div>
+      </div>
+      <div class="row">
+        <p class="description" i18n>Is available as DCP</p>
+        <div class="btn-group btn-group-toggle radio-field" data-toggle="buttons">
+          <label class="btn btn-light active btn-sm">
+            <input class="form-check-input" type="radio" name="dcp" id="any" autocomplete="off" (click)="sethasDCP(0)" checked i18n /> Any
+          </label>
+          <label class="btn btn-light btn-sm"> <input class="form-check-input" type="radio" name="dcp" id="yes" autocomplete="off" (click)="sethasDCP(1)" i18n /> Yes </label>
+          <label class="btn btn-light btn-sm"> <input class="form-check-input" type="radio" name="dcp" id="no" autocomplete="off" (click)="sethasDCP(2)" i18n /> No </label>
+        </div>
+      </div>
+    </td>
+
+    <td>
+      <div class="divider"></div>
+    </td>
+
+    <td>
+      <div class="row">
+        <p class="description">Directors</p>
+        <ng-select
+          class="tag-field"
+          [items]="directors$ | async"
+          [multiple]="true"
+          [closeOnSelect]="false"
+          [searchable]="true"
+          bindLabel="lastName"
+          placeholder="Select Directors"
+          [(ngModel)]="selectedDirectors">
+          <ng-template ng-option-tmp let-item="item" let-search="searchTerm"> {{ item.firstName }} {{ item.lastName }} </ng-template>
+        </ng-select>
+        <button type="button" class="btn btn-primary btn-sm" (click)="clearDirectors()">
+          <p class="x">X</p>
+        </button>
+      </div>
+      <div class="row">
+        <p class="description">Contacts</p>
+        <ng-select
+          class="tag-field custom"
+          [items]="contacts$ | async"
+          [multiple]="true"
+          [closeOnSelect]="false"
+          [searchable]="true"
+          groupBy="type"
+          bindLabel="name"
+          placeholder="Select Contacts"
+          [(ngModel)]="selectedContacts">
+          <!--TODO: change groupBy to type.value -> needs type in contact.ts to be changed to Tag first -->
+        </ng-select>
+        <button type="button" class="btn btn-primary btn-sm" (click)="clearContacts()">
+          <p class="x">X</p>
+        </button>
+      </div>
+    </td>
+  </table>
+
+  <div class="bottom-elements">
+    <p class="movie-count" i18n>Found {{ movieCount }} movies</p>
+    <button (click)="clearAll()" class="btn btn-light bottom-btn" i18n>Clear All</button>
+    <button (click)="executeSearch()" class="btn btn-primary bottom-btn" i18n>Execute Search</button>
+  </div>
+</mat-card>

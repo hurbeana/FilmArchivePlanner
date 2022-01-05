@@ -31,6 +31,63 @@ export class MovieEffects {
     ),
   );
 
+  getMoviesAdvanced$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(MovieActions.getMoviesAdvanced),
+      switchMap(
+        ({
+          page,
+          limit,
+          orderBy,
+          sortOrder,
+          query,
+          selectedTagIDs,
+          negativeTagIDs,
+          exactYear,
+          fromYear,
+          toYear,
+          exactLength,
+          fromLength,
+          toLength,
+          hasDialogue,
+          hasSubtitles,
+          isStudentFilm,
+          hasDCP,
+          selectedDirectorIDs,
+          selectedContactIDs,
+        }) =>
+          this.moviesService
+            .getMoviesAdvanced(
+              page,
+              limit,
+              orderBy,
+              sortOrder,
+              query,
+              selectedTagIDs,
+              negativeTagIDs,
+              exactYear,
+              fromYear,
+              toYear,
+              exactLength,
+              fromLength,
+              toLength,
+              hasDialogue,
+              hasSubtitles,
+              isStudentFilm,
+              hasDCP,
+              selectedDirectorIDs,
+              selectedContactIDs,
+            )
+            .pipe(
+              map((pagination) =>
+                MovieActions.getMoviesSuccess({ pagination: pagination }),
+              ),
+              catchError(() => EMPTY), // TODO: error handling
+            ),
+      ),
+    ),
+  );
+
   getMovie$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MovieActions.getMovie),

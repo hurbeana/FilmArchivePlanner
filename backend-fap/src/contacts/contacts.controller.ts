@@ -49,6 +49,12 @@ export class ContactsController {
     );
   }
 
+  @Get('/all')
+  findAllWOPaging() {
+    this.logger.log(`Get all contacts without paging called.`);
+    return this.contactsService.findAllWOPaging();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: number) {
     this.logger.log(`Get contact with id ${id} called.`);

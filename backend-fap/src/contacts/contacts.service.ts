@@ -119,6 +119,28 @@ export class ContactsService {
   }
 
   /**
+  Returns all tags in an array
+  @returns {Promise<ContactDto[]>} Array of all tags
+  */
+  async findAllWOPaging(): Promise<ContactDto[]> {
+    let contacts: Contact[];
+    try {
+      contacts = await this.contactRepository.find();
+    } catch (e) {
+      this.logger.error(`Getting all contacts without paging failed.`, e.stack);
+      throw new NotFoundException();
+    }
+    const dtos: ContactDto[] = [];
+
+    if (contacts.length > 0) {
+      contacts.forEach((tag) => {
+        dtos.push(this.mapContactToDto(tag));
+      });
+    }
+    return dtos;
+  }
+
+  /**
    * Returns the contact with the specified id
    * @param id the id of the contact to return
    * @returns {Promise<ContactDto>} The contact with the specified id

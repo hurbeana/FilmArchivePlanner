@@ -1,0 +1,113 @@
+.card{
+    margin-top: 5px;
+    margin-bottom: 15px;
+    min-width: 1160px;
+}
+::placeholder {
+  color: #909090;
+}
+
+.row{
+    width: 100%;
+    min-width: 600px;
+    min-height: 35px;
+    display: flex;
+}
+
+.description{
+    margin-top: 5px;
+    height: min-content;
+    width: 150px;
+}
+.search-field{
+    margin-left: 5px;
+    height: 29px;
+    width: 400px;
+    border-color: #c8c8c8;
+}
+.tag-field{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 5px;
+    padding-right: 5px;
+    min-height: 29px;
+    width: 376px;
+}
+.radio-field{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 5px;
+    padding-right: 5px;
+    height: 29px;
+    width: 410px;
+}
+.btn-sm{
+    height: 29px;
+    width: 29px;
+    text-align: center;
+    background-color: #ffffff;
+    border-color: #c8c8c8;
+}
+.x{
+    color: #909090;
+}
+
+.exact-field{
+    margin-left: 5px;
+    margin-right: 5px;
+    height: 29px;
+    width: 134px;
+    border-color: #c8c8c8;
+}
+.from-to-field{
+    margin-left: 5px;
+    margin-right: 5px;
+    height: 29px;
+    width: 91px;
+    border-color: #c8c8c8;
+}
+.year-text{
+    margin-top: 5px;
+    height: min-content;
+    width: auto;
+}
+
+.divider{
+    height: 350px;
+    border-left: 1px solid #c8c8c8;
+    margin-top: -20px;
+    margin-left: -15px;
+    position: absolute;
+}
+
+.bottom-elements{
+    width: 100%;
+    text-align: right;
+}
+.movie-count{
+    float: left;
+    width: 146px;
+    text-align: center;
+    vertical-align: middle;
+    padding-top: 9px;
+    padding-bottom: 9px;
+    border-radius: 4px;
+}
+.bottom-btn{
+    margin-left: 10px;
+}
+
+@media screen and (max-width: 1600px) {
+    table, td {
+        display: block !important;
+    }
+    td {
+		position: relative;
+    }
+    .card{
+        min-width: 580px;
+    }
+    .divider{
+        height: 0px !important;
+    }
+}

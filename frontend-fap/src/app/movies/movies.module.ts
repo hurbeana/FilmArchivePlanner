@@ -39,9 +39,11 @@ import { environment } from '../../environments/environment';
 import { DirectorEffects } from '../directors/state/directors.effects';
 import { GalleryModule } from 'ng-gallery';
 import { LightboxModule } from 'ng-gallery/lightbox';
+import { TagsModule } from '../tags/tags.module';
 import { TagEffects } from '../tags/state/tags.effects';
 import { ContactEffects } from '../contacts/state/contacts.effects';
 import { VimeModule } from '@vime/angular';
+import { AdvancedSearchViewComponent } from './components/advanced-search-view/advanced-search-view.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +53,7 @@ import { VimeModule } from '@vime/angular';
     ContentComponent,
     FullDetailViewComponent,
     ConfirmDeleteMovieModalComponent,
+    AdvancedSearchViewComponent,
   ],
   exports: [TableViewComponent, ContentComponent, FullDetailViewComponent],
   imports: [
@@ -64,6 +67,7 @@ import { VimeModule } from '@vime/angular';
       directorsState: directorsReducer,
       contactsState: contactsReducer,
       tagsState: tagsReducer,
+      advancedSearchState: moviesReducer,
     }),
     EffectsModule.forRoot([MovieEffects]),
     EffectsModule.forFeature([DirectorEffects, ContactEffects, TagEffects]),

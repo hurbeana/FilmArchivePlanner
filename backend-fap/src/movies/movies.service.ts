@@ -11,12 +11,21 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUpdateMovieDto } from './dto/create-update-movie.dto';
-import { ILike, Repository } from 'typeorm';
+import {
+  Between,
+  ILike,
+  LessThanOrEqual,
+  Like,
+  MoreThan,
+  MoreThanOrEqual,
+  Repository,
+} from 'typeorm';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/types';
 import { MovieDto } from './dto/movie.dto';
 import { SearchMovieDto } from './dto/search-movie.dto';
 import {
+  IPaginationMeta,
   IPaginationOptions,
   paginate,
   Pagination,
@@ -286,6 +295,7 @@ export class MoviesService {
     orderBy: string,
     sortOrder: 'ASC' | 'DESC' = 'DESC',
     searchString: string,
+    whereDictAdvanced?: any,
   ): Promise<Pagination<MovieDto>> {
     let whereObj = [];
     let orderObj = {};
@@ -307,13 +317,22 @@ export class MoviesService {
           }
         });
     }
+
+    if (whereDictAdvanced) {
+      //combine advanced filter with simple string search
+      const whereObjAdvanced = [];
+      whereObj.forEach((x) =>
+        whereObjAdvanced.push(Object.assign({}, x, whereDictAdvanced)),
+      );
+      whereObj = whereObjAdvanced;
+      if (whereObj.length == 0) whereObj.push(whereDictAdvanced); //no query -> other filters still need to be added
+    }
+
     if (sortOrder && orderBy) {
       orderObj = { [orderBy]: sortOrder.toUpperCase() };
     } else {
       orderObj = { created_at: 'ASC' };
     }
-
-    console.log(orderObj);
 
     return paginate<Movie>(this.moviesRepository, options, {
       relations: [
@@ -329,14 +348,154 @@ export class MoviesService {
       ],
       where: whereObj,
       order: orderObj,
-    }).then(
-      (page) =>
-        new Pagination<MovieDto>(
-          page.items.map((entity) => this.mapMovieToDto(entity)),
-          page.meta,
-          page.links,
+    }).then((page) => {
+      return new Pagination<MovieDto>(
+        page.items.map((entity) => this.mapMovieToDto(entity)),
+        page.meta,
+        page.links,
+      );
+    });
+  }
+
+  async findAdvanced(
+    options: IPaginationOptions,
+    search: SearchMovieDto,
+    orderBy: string,
+    sortOrder: 'ASC' | 'DESC' = 'DESC',
+    query: string,
+    selectedTagIDs: number[],
+    negativeTagIDs: number[],
+    exactYear: number,
+    fromYear: number,
+    toYear: number,
+    exactLength: number,
+    fromLength: number,
+    toLength: number,
+    hasDialogue: number,
+    hasSubtitles: number,
+    isStudentFilm: number,
+    hasDCP: number,
+    selectedDirectorIDs: number[],
+    selectedContactIDs: number[],
+  ): Promise<Pagination<MovieDto>> {
+    const whereDict = {}; //contains filter criteria that are executed directly in DB -> performance improvement
+
+    if (exactYear != -1) whereDict['yearOfProduction'] = exactYear;
+    if (fromYear != -1)
+      whereDict['yearOfProduction'] = LessThanOrEqual(fromYear);
+    if (toYear != -1) whereDict['yearOfProduction'] = LessThanOrEqual(toYear);
+    if (fromYear != -1 && toYear != -1)
+      whereDict['yearOfProduction'] = Between(fromYear, toYear);
+    if (exactLength != -1) whereDict['duration'] = exactLength;
+    if (fromLength != -1) whereDict['duration'] = MoreThanOrEqual(fromLength);
+    if (toLength != -1) whereDict['duration'] = LessThanOrEqual(toLength);
+    if (fromLength != -1 && toLength != -1)
+      whereDict['duration'] = Between(fromLength, toLength);
+    if (hasDialogue == 1) whereDict['hasDialog'] = 1;
+    if (hasDialogue == 2) whereDict['hasDialog'] = 0;
+    if (hasSubtitles == 1) whereDict['hasSubtitles'] = 1;
+    if (hasSubtitles == 2) whereDict['hasSubtitles'] = 0;
+    if (isStudentFilm == 1) whereDict['isStudentFilm'] = 1;
+    if (isStudentFilm == 2) whereDict['isStudentFilm'] = 0;
+
+    //call find() with large limit to receive all movies at once (and not just first page)
+    const page = options.page;
+    options.page = 1;
+    const limit = options.limit;
+    options.limit = 1000000;
+
+    return this.find(
+      options,
+      search,
+      orderBy,
+      sortOrder,
+      query,
+      whereDict,
+    ).then((result) => {
+      const movies: MovieDto[] = [];
+
+      result.items.forEach((movie) => {
+        //filter each movie according to more complex criteria
+        const allTagIDs: number[] = []; //get all tag IDs associated to movie
+        movie.animationTechniques.forEach((tag) => allTagIDs.push(tag.id));
+        movie.submissionCategories.forEach((tag) => allTagIDs.push(tag.id));
+        movie.countriesOfProduction.forEach((tag) => allTagIDs.push(tag.id));
+        movie.dialogLanguages.forEach((tag) => allTagIDs.push(tag.id));
+        movie.keywords.forEach((tag) => allTagIDs.push(tag.id));
+        movie.softwareUsed.forEach((tag) => allTagIDs.push(tag.id));
+
+        let posTags = false;
+        let negTags = true;
+        allTagIDs.forEach((tag) => {
+          //check if at least one pos tag and no neg tags are in movie
+          if (selectedTagIDs && selectedTagIDs.includes(tag)) {
+            posTags = true;
+          }
+          if (negativeTagIDs && negativeTagIDs.includes(tag)) negTags = false;
+        });
+
+        const allDirectorIDs: number[] = []; //get all dir IDs associated to movie
+        movie.directors.forEach((dir) => allDirectorIDs.push(dir.id));
+        let director = false;
+        allDirectorIDs.forEach((dir) => {
+          if (
+            selectedDirectorIDs &&
+            dir != -1 &&
+            selectedDirectorIDs.includes(dir)
+          )
+            director = true;
+        });
+
+        //check for all filter criteria
+        if (selectedTagIDs && !posTags) return;
+        if (negativeTagIDs && !negTags) return;
+        //if (exactYear != -1 && movie.yearOfProduction != exactYear) return;
+        //if (fromYear != -1 && movie.yearOfProduction < fromYear) return;
+        //if (toYear != -1 && movie.yearOfProduction > toYear) return;
+        //if (exactLength != -1 && movie.duration != exactLength) return;
+        //if (fromLength != -1 && movie.duration < fromLength) return;
+        //if (toLength != -1 && movie.duration > toLength) return;
+        //if (hasDialogue == 1 && !movie.hasDialog) return;
+        //if (hasDialogue == 2 && movie.hasDialog) return;
+        //if (hasSubtitles == 1 && !movie.hasSubtitles) return;
+        //if (hasSubtitles == 2 && movie.hasSubtitles) return;
+        //if (isStudentFilm == 1 && !movie.isStudentFilm) return;
+        //if (isStudentFilm == 2 && movie.isStudentFilm) return;
+        if (hasDCP == 1 && !movie.dcpFiles) return;
+        if (hasDCP == 2 && movie.dcpFiles) return;
+        if (selectedDirectorIDs && !director) return;
+        if (
+          selectedContactIDs &&
+          !selectedContactIDs.includes(movie.contact.id)
+        )
+          return;
+
+        movies.push(movie); //all filters passed, movie gets added to result
+      });
+
+      options.page = page;
+      options.limit = limit; //set limit back to original value to restore paging
+      //calculate values for pagination
+      let pages = Math.floor(movies.length / Number(options.limit));
+      if (movies.length % Number(options.limit) != 0) ++pages;
+      let items = options.limit;
+      if (movies.length < options.limit) items = movies.length;
+
+      return new Pagination<MovieDto>(
+        movies.slice(
+          (Number(options.page) - 1) * Number(options.limit),
+          Number(options.page) * Number(options.limit),
         ),
-    );
+        {
+          totalItems: movies.length,
+          itemCount: items,
+          itemsPerPage: options.limit,
+          totalPages: pages,
+          currentPage: options.page,
+        } as IPaginationMeta,
+        undefined,
+      );
+    });
   }
 
   /**

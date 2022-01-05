@@ -49,6 +49,12 @@ export class DirectorsController {
     );
   }
 
+  @Get('/all')
+  findAllWOPaging() {
+    this.logger.log(`Get all directors without paging called.`);
+    return this.directorsService.findAllWOPaging();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: number) {
     this.logger.log(`Get director with id ${id} called.`);

@@ -3,6 +3,7 @@ import { Director } from './directors/models/director';
 import { Contact } from './contacts/models/contact';
 import { Tag } from './tags/models/tag';
 import { Festival } from './festivals/models/festival';
+import { NgModule } from '@angular/core';
 
 /* The state of the application*/
 export interface MoviesPaginationState {
@@ -61,6 +62,24 @@ export interface TagsPaginationState {
   sortOrder: string;
 }
 
+export interface AdvancedSearchState {
+  query: string;
+  selectedTagIDs: number[];
+  negativeTagIDs: number[];
+  exactYear: number;
+  fromYear: number;
+  toYear: number;
+  exactLength: number;
+  fromLength: number;
+  toLength: number;
+  hasDialogue: number;
+  hasSubtitles: number;
+  isStudentFilm: number;
+  hasDCP: number;
+  selectedDirectorIDs: number[];
+  selectedContactIDs: number[];
+}
+
 export interface FestivalsPaginationState {
   items: Festival[];
   meta: {
@@ -79,6 +98,7 @@ export interface MoviesState {
   pagination: MoviesPaginationState;
   selectedMovie?: Movie | null; // movie is loaded by id for details-view
   detailsMovie?: Movie; // movie is loaded by id for full-detail-view and edit-view
+  advancedSearchState?: AdvancedSearchState | null;
 }
 
 export interface DirectorsState {

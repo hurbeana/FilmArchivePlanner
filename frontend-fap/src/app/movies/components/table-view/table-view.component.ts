@@ -7,8 +7,8 @@ import {
   ViewChildren,
 } from '@angular/core';
 import { ActionsSubject, Store } from '@ngrx/store';
-import { MoviesState } from '../../../app.state';
 import { fromEvent, Observable, Subscription } from 'rxjs';
+import { AdvancedSearchState, MoviesState } from '../../../app.state';
 import { Movie } from '../../models/movie';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
@@ -50,6 +50,10 @@ export class TableViewComponent implements AfterViewInit {
   subscription = new Subscription();
   fullyLoaded = false;
 
+  advancedSearchState?: AdvancedSearchState | null;
+
+  showAdvanced = false;
+
   @ViewChild('search', { static: true })
   search: ElementRef;
 
@@ -79,18 +83,50 @@ export class TableViewComponent implements AfterViewInit {
       .select(MovieSelectors.selectCurrentPage)
       .subscribe((currentPage) => (this.page = currentPage));
     this.loading.next(false);
+    this.store
+      .select(MovieSelectors.selectAdvancedSearchState)
+      .subscribe((state) => (this.advancedSearchState = state));
   }
 
   loadMovies() {
-    this.store.dispatch(
-      MovieActions.getMovies({
-        page: this.page,
-        limit: this.pageSize,
-        orderBy: this.orderBy,
-        sortOrder: this.sortOrder,
-        searchString: this.search.nativeElement.value,
-      }),
-    );
+    //dispatch(Action) -> Effect -> Success Action -> Reducer (changes AppState)
+    if (this.showAdvanced && this.advancedSearchState) {
+      if (this.advancedSearchState) {
+        this.store.dispatch(
+          MovieActions.getMoviesAdvanced({
+            page: this.page,
+            limit: this.pageSize,
+            orderBy: this.orderBy,
+            sortOrder: this.sortOrder,
+            query: this.advancedSearchState.query,
+            selectedTagIDs: this.advancedSearchState.selectedTagIDs,
+            negativeTagIDs: this.advancedSearchState.negativeTagIDs,
+            exactYear: this.advancedSearchState.exactYear,
+            fromYear: this.advancedSearchState.fromYear,
+            toYear: this.advancedSearchState.toYear,
+            exactLength: this.advancedSearchState.exactLength,
+            fromLength: this.advancedSearchState.fromLength,
+            toLength: this.advancedSearchState.toLength,
+            hasDialogue: this.advancedSearchState.hasDialogue,
+            hasSubtitles: this.advancedSearchState.hasSubtitles,
+            isStudentFilm: this.advancedSearchState.isStudentFilm,
+            hasDCP: this.advancedSearchState.hasDCP,
+            selectedDirectorIDs: this.advancedSearchState.selectedDirectorIDs,
+            selectedContactIDs: this.advancedSearchState.selectedContactIDs,
+          }),
+        );
+      }
+    } else {
+      this.store.dispatch(
+        MovieActions.getMovies({
+          page: this.page,
+          limit: this.pageSize,
+          orderBy: this.orderBy,
+          sortOrder: this.sortOrder,
+          searchString: this.search.nativeElement.value,
+        }),
+      );
+    }
   }
 
   ngOnInit() {
@@ -189,6 +225,11 @@ export class TableViewComponent implements AfterViewInit {
         console.log('Unconfirmed close');
       }, //gets called by modal.dismiss
     );
+  }
+
+  //Advanced Search
+  openAdvancedSearch() {
+    this.showAdvanced = !this.showAdvanced;
   }
 }
 

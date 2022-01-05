@@ -52,6 +52,11 @@ export class DirectorService {
     return this.http.get<DirectorsPaginationState>(api, { params: params });
   }
 
+  getAllDirectors(): Observable<Director[]> {
+    console.log('[DirectorService] - GET ALL DIRECTORS WITHOUT PAGING');
+    return this.http.get<Director[]>(`${api}/all`);
+  }
+
   updateDirector(id: number, director: CreateUpdateDirectorDto) {
     console.log('[DirectorService] - UPDATE DIRECTOR');
     return this.http.put<Director>(`${api}/${id}`, director);

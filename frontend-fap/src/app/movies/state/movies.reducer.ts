@@ -1,6 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import * as MovieActions from './movies.actions';
 import { MoviesState } from '../../app.state';
+import { advancedSearchState } from './movies.selectors';
 
 export const initialState: MoviesState = {
   pagination: {
@@ -15,6 +16,23 @@ export const initialState: MoviesState = {
     searchString: '',
     orderBy: '',
     sortOrder: '',
+  },
+  advancedSearchState: {
+    query: '',
+    selectedTagIDs: [],
+    negativeTagIDs: [],
+    exactYear: -1,
+    fromYear: -1,
+    toYear: -1,
+    exactLength: -1,
+    fromLength: -1,
+    toLength: -1,
+    hasDialogue: 0,
+    hasSubtitles: 0,
+    isStudentFilm: 0,
+    hasDCP: 0,
+    selectedDirectorIDs: [],
+    selectedContactIDs: [],
   },
 };
 
@@ -46,6 +64,10 @@ export const moviesReducer = createReducer(
   on(MovieActions.setSelectedMovie, (state, { selectedMovie }) => ({
     ...state,
     selectedMovie: selectedMovie,
+  })),
+  on(MovieActions.setAdvancedSearchState, (state, { advancedSearchState }) => ({
+    ...state,
+    advancedSearchState,
   })),
   on(MovieActions.createMovie, (state) => state),
   on(MovieActions.deleteMovieSuccess, (state, { movieToDelete }) => ({

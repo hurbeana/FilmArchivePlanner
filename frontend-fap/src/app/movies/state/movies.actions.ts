@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Movie } from '../models/movie';
 import { CreateUpdateMovieDto } from '../models/create.movie';
-import { MoviesPaginationState } from '../../app.state';
+import { AdvancedSearchState, MoviesPaginationState } from '../../app.state';
 
 /* whenever this action is called, the 'getMovies$' effect in movies.effects.ts  is executed */
 export const getMovies = createAction(
@@ -12,6 +12,30 @@ export const getMovies = createAction(
     orderBy?: string;
     sortOrder?: string;
     searchString?: string;
+  }>(),
+);
+export const getMoviesAdvanced = createAction(
+  '[Movie List] Get Movies via Advanced Search',
+  props<{
+    page: number;
+    limit: number;
+    orderBy?: string;
+    sortOrder?: string;
+    query: string;
+    selectedTagIDs: number[];
+    negativeTagIDs: number[];
+    exactYear: number;
+    fromYear: number;
+    toYear: number;
+    exactLength: number;
+    fromLength: number;
+    toLength: number;
+    hasDialogue: number;
+    hasSubtitles: number;
+    isStudentFilm: number;
+    hasDCP: number;
+    selectedDirectorIDs: number[];
+    selectedContactIDs: number[];
   }>(),
 );
 export const getMoviesSuccess = createAction(
@@ -65,6 +89,11 @@ export const updateMovieFailed = createAction(
 export const setSelectedMovie = createAction(
   '[Movie List] Set Selected Movie',
   props<{ selectedMovie: Movie | null }>(),
+);
+
+export const setAdvancedSearchState = createAction(
+  '[Movie List] Set Advanced Search Params',
+  props<{ advancedSearchState: AdvancedSearchState }>(),
 );
 
 export const deleteMovie = createAction(

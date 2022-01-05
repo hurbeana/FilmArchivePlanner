@@ -268,6 +268,28 @@ export class DirectorsService {
   }
 
   /**
+  Returns all tags in an array
+  @returns {Promise<TagDto[]>} Array of all tags
+  */
+  async findAllWOPaging(): Promise<DirectorDto[]> {
+    let directors: Director[];
+    try {
+      directors = await this.directorRepository.find();
+    } catch (e) {
+      this.logger.error(`Getting all tags without paging failed.`, e.stack);
+      throw new NotFoundException(); //Is this the right exception for tagType not in Enum?
+    }
+    const dtos: DirectorDto[] = [];
+
+    if (directors.length > 0) {
+      directors.forEach((tag) => {
+        dtos.push(this.mapDirectorToDto(tag));
+      });
+    }
+    return dtos;
+  }
+
+  /**
    * Returns the director with the specified id
    * @param id the id of the director to return
    * @returns {Promise<DirectorDto>} The director with the specified id

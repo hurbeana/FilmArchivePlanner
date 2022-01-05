@@ -46,6 +46,11 @@ export class TagService {
     return this.http.get<TagsPaginationState>(api, { params: params });
   }
 
+  getAllTags(): Observable<Tag[]> {
+    console.log('[TagService] - GET ALL MOVIE TAGS WITHOUT PAGING');
+    return this.http.get<Tag[]>(`${api}/all`);
+  }
+
   updateTag(tag: CreateUpdateTagDto, id: number) {
     console.log('[TagService] - UPDATE TAG');
     return this.http.put<Tag>(`${api}/${id}`, tag);
