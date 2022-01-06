@@ -3,6 +3,7 @@ import * as MovieSelectors from '../../movies/state/movies.selectors';
 import * as DirectorSelectors from '../../directors/state/directors.selectors';
 import * as ContactSelectors from '../../contacts/state/contacts.selectors';
 import * as TagSelectors from '../../tags/state/tags.selectors';
+import * as FestivalSelectors from '../../festivals/state/festivals.selectors';
 import { Store } from '@ngrx/store';
 import { FileDto } from '../models/file';
 
@@ -13,7 +14,7 @@ import { FileDto } from '../models/file';
 })
 export class DetailsViewComponent implements OnInit {
   @Input()
-  type: 'Movie' | 'Director' | 'Contact' | 'Tag';
+  type: 'Movie' | 'Director' | 'Contact' | 'Tag' | 'Festival';
   object: any;
   renderObject: any;
   properties: any[];
@@ -47,6 +48,12 @@ export class DetailsViewComponent implements OnInit {
         .select(TagSelectors.selectSelectedTag)
         .subscribe((selectedTag) => {
           this.object = selectedTag;
+        });
+    } else if (this.type === 'Festival') {
+      this.store
+        .select(FestivalSelectors.selectSelectedFestival)
+        .subscribe((selectedFestival) => {
+          this.object = selectedFestival;
         });
     }
   }

@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { FestivalsRoutingModule } from './festivals-routing.module';
 import { TableViewComponent } from './components/table-view/table-view.component';
-import { DetailsViewComponent } from './components/details-view/details-view.component';
 import { ContentComponent } from './components/content/content.component';
 import { ConfirmDeleteFestivalModalComponent } from './components/table-view/confirm-delete-festival-modal.component';
 import { CreateFestivalModalComponent } from './components/table-view/create-festival-modal.component';
@@ -24,13 +23,12 @@ import * as FestivalActions from './state/festivals.actions';
 
 @NgModule({
   declarations: [
-    DetailsViewComponent,
     TableViewComponent,
     ContentComponent,
     ConfirmDeleteFestivalModalComponent,
     CreateFestivalModalComponent,
   ],
-  exports: [TableViewComponent, DetailsViewComponent, ContentComponent],
+  exports: [TableViewComponent, ContentComponent],
   imports: [
     CommonModule,
     NgSelectModule,

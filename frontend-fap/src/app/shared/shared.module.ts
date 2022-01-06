@@ -22,6 +22,7 @@ import { DetailsViewTagComponent } from './details-view/details-view-tag.compone
 import { DetailsViewMovieComponent } from './details-view/details-view-movie.component';
 import { DetailsViewDirectorComponent } from './details-view/details-view-director.component';
 import { DetailsViewContactComponent } from './details-view/details-view-contact.component';
+import { DetailsViewFestivalComponent } from './details-view/details-view-festival.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { DetailsViewContactComponent } from './details-view/details-view-contact
     DetailsViewDirectorComponent,
     DetailsViewContactComponent,
     DetailsViewTagComponent,
+    DetailsViewFestivalComponent,
   ],
   imports: [
     CommonModule,
