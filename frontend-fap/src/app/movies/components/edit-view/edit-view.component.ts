@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../app.state';
+import { MoviesState } from '../../../app.state';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as MovieActions from '../../state/movies.actions';
 import {
@@ -152,7 +152,7 @@ export class EditViewComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private store: Store<AppState>,
+    private store: Store<MoviesState>,
     private actions$: Actions,
     private _snackBar: MatSnackBar,
     private router: Router,

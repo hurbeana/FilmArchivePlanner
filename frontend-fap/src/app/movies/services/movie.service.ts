@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Movie } from '../models/movie';
 import { CreateUpdateMovieDto } from '../models/create.movie';
-import { PaginationState } from '../../app.state';
+import { MoviesPaginationState } from '../../app.state';
 
 const api = 'http://localhost:3000/movies'; //TODO: url to rest
 
@@ -28,7 +28,7 @@ export class MovieService {
     orderBy: string | undefined,
     sortOrder: string | undefined,
     searchString: string | undefined,
-  ): Observable<PaginationState> {
+  ): Observable<MoviesPaginationState> {
     console.log(
       '[MovieService] - GET MOVIES WITH page, limit, orderBy, sortOrder, searchString',
       page,
@@ -48,7 +48,7 @@ export class MovieService {
       },
     });
 
-    return this.http.get<PaginationState>(api, { params: params });
+    return this.http.get<MoviesPaginationState>(api, { params: params });
   }
 
   updateMovie(id: number, movie: CreateUpdateMovieDto) {

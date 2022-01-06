@@ -25,6 +25,8 @@ import * as TagActions from './state/tags.actions';
 import { ConfirmDeleteTagModalComponent } from './components/table-view/confirm-delete-tag-modal.component';
 import { CreateTagModalComponent } from './components/table-view/create-tag-modal.component';
 import { EditTagModalComponent } from './components/table-view/edit-tag-modal.component';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../../environments/environment';
 
 @NgModule({
   declarations: [
@@ -40,12 +42,13 @@ import { EditTagModalComponent } from './components/table-view/edit-tag-modal.co
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
-    StoreModule.forRoot({
-      pagination: tagsReducer,
-      selectedTag: tagsReducer,
-      searchTerm: tagsReducer,
-    }),
+    StoreModule.forRoot({ tagsState: tagsReducer }),
     EffectsModule.forRoot([TagEffects]),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25, // Retains last 25 states
+      logOnly: environment.production, // Restrict extension to log-only mode
+      autoPause: true, // Pauses recording actions and state changes when the extension window is not open
+    }),
     SharedModule,
     MatButtonModule,
     MatCardModule,

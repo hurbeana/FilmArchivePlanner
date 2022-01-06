@@ -43,11 +43,7 @@ import * as ContactActions from './state/contacts.actions';
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
-    StoreModule.forRoot({
-      pagination: contactsReducer,
-      selectedContact: contactsReducer,
-      searchTerm: contactsReducer,
-    }),
+    StoreModule.forRoot({ contactsState: contactsReducer }),
     EffectsModule.forRoot([ContactEffects]),
     SharedModule,
     MatButtonModule,

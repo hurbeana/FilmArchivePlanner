@@ -43,7 +43,6 @@ export class TableViewComponent implements AfterViewInit {
   page = 1;
 
   searchTerm: string;
-  selectedDirector: Director;
   orderBy: string;
   sortOrder: string;
   loading = new BehaviorSubject<boolean>(true);
@@ -76,6 +75,12 @@ export class TableViewComponent implements AfterViewInit {
     this.store
       .select(DirectorSelectors.selectCurrentPage)
       .subscribe((currentPage) => (this.page = currentPage));
+    this.store
+      .select(DirectorSelectors.selectOrderBy)
+      .subscribe((orderBy) => (this.orderBy = orderBy));
+    this.store
+      .select(DirectorSelectors.selectSortOrder)
+      .subscribe((sortOrder) => (this.sortOrder = sortOrder));
     this.loading.next(false);
   }
 

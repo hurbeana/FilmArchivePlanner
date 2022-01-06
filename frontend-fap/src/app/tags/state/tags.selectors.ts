@@ -1,64 +1,50 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { TagsState } from '../../app.state';
 
-//feature "tags" has to exist in app.state.ts
-export const tags = createFeatureSelector<TagsState>('tags');
+/* feature selector */
+/* corresponds to "StoreModule.forRoot({ tagsState: tagsReducer })" */
+const tagsState = createFeatureSelector<TagsState>('tagsState');
 
-export const pagination = createFeatureSelector<TagsState>('pagination');
-
-export const selectedTag = createFeatureSelector<TagsState>('selectedTag');
-
-export const selectTags = createSelector(pagination, (state: TagsState) => {
-  return state.pagination.items;
+/* helper selectors */
+const paginationState = createSelector(tagsState, (s: TagsState) => {
+  return s.pagination;
 });
-export const selectSelectedTag = createSelector(
-  selectedTag,
-  (state: TagsState) => {
-    return state.selectedTag;
-  },
-);
-export const selectTotalItems = createSelector(
-  pagination,
-  (state: TagsState) => {
-    return state.pagination.meta.totalItems;
-  },
-);
-export const selectItemCount = createSelector(
-  pagination,
-  (state: TagsState) => {
-    return state.pagination.meta.itemCount;
-  },
-);
-export const selectItemsPerPage = createSelector(
-  pagination,
-  (state: TagsState) => {
-    return state.pagination.meta.itemsPerPage;
-  },
-);
-export const selectTotalPages = createSelector(
-  pagination,
-  (state: TagsState) => {
-    return state.pagination.meta.totalPages;
-  },
-);
-export const selectCurrentPage = createSelector(
-  pagination,
-  (state: TagsState) => {
-    return state.pagination.meta.currentPage;
-  },
-);
-export const selectOrderBy = createSelector(pagination, (state: TagsState) => {
-  return state.pagination.orderBy;
+const metaState = createSelector(paginationState, (p: any) => {
+  return p.meta;
 });
-export const selectSortOrder = createSelector(
-  pagination,
-  (state: TagsState) => {
-    return state.pagination.sortOrder;
-  },
-);
-export const selectSearchString = createSelector(
-  pagination,
-  (state: TagsState) => {
-    return state.pagination.searchString;
-  },
-);
+
+/* selectedTag */
+export const selectSelectedTag = createSelector(tagsState, (s: TagsState) => {
+  return s.selectedTag;
+});
+
+/* pagination */
+export const selectTags = createSelector(paginationState, (p: any) => {
+  return p.items;
+});
+export const selectOrderBy = createSelector(paginationState, (p: any) => {
+  return p.orderBy;
+});
+export const selectSortOrder = createSelector(paginationState, (p: any) => {
+  return p.sortOrder;
+});
+export const selectSearchString = createSelector(paginationState, (p: any) => {
+  return p.searchString;
+});
+
+/* meta */
+export const selectTotalItems = createSelector(metaState, (m: any) => {
+  return m.totalItems;
+});
+export const selectItemCount = createSelector(metaState, (m: any) => {
+  return m.itemCount;
+});
+export const selectItemsPerPage = createSelector(metaState, (m: any) => {
+  return m.itemsPerPage;
+});
+export const selectTotalPages = createSelector(metaState, (m: any) => {
+  return m.totalPages;
+});
+export const selectCurrentPage = createSelector(metaState, (m: any) => {
+  return m.currentPage;
+});

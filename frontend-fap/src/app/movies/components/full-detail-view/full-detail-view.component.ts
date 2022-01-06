@@ -1,7 +1,7 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../app.state';
+import { MoviesState } from '../../../app.state';
 import { Movie } from '../../models/movie';
 import { getMovie } from '../../state/movies.actions';
 import { selectDetailsMovie } from '../../state/movies.selectors';
@@ -24,7 +24,7 @@ export class FullDetailViewComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private store: Store<AppState>,
+    private store: Store<MoviesState>,
     public gallery: Gallery,
     public lightbox: Lightbox,
   ) {}

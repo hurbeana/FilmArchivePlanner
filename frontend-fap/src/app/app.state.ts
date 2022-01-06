@@ -5,8 +5,7 @@ import { Tag } from './tags/models/tag';
 import { Festival } from './festivals/models/festival';
 
 /* The state of the application*/
-export interface PaginationState {
-  // TODO rename to MoviesPaginationState
+export interface MoviesPaginationState {
   items: Movie[];
   meta: {
     totalItems: number;
@@ -76,9 +75,8 @@ export interface FestivalsPaginationState {
   sortOrder: string;
 }
 
-export interface AppState {
-  // TODO rename to MoviesState
-  pagination: PaginationState;
+export interface MoviesState {
+  pagination: MoviesPaginationState;
   selectedMovie?: Movie | null;
   detailsMovie?: Movie; // movie which is loaded by id for fullscreen detailsview
 }

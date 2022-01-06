@@ -17,6 +17,9 @@ import { FullDetailViewComponent } from './components/full-detail-view/full-deta
 
 /* state management*/
 import { moviesReducer } from './state/movies.reducer';
+import { directorsReducer } from '../directors/state/directors.reducer';
+import { contactsReducer } from '../contacts/state/contacts.reducer';
+import { tagsReducer } from '../tags/state/tags.reducer';
 import { MovieEffects } from './state/movies.effects';
 import { MoviesRoutingModule } from './movies-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -33,13 +36,10 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSelectModule } from '@angular/material/select';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../../environments/environment';
-import { directorsReducer } from '../directors/state/directors.reducer';
 import { DirectorEffects } from '../directors/state/directors.effects';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { GalleryModule } from 'ng-gallery';
 import { LightboxModule } from 'ng-gallery/lightbox';
-import { contactsReducer } from '../contacts/state/contacts.reducer';
-import { tagsReducer } from '../tags/state/tags.reducer';
 import { TagEffects } from '../tags/state/tags.effects';
 import { ContactEffects } from '../contacts/state/contacts.effects';
 
@@ -60,12 +60,10 @@ import { ContactEffects } from '../contacts/state/contacts.effects';
     ReactiveFormsModule,
     NgbModule,
     StoreModule.forRoot({
-      directorsPagination: directorsReducer,
-      contactsPagination: contactsReducer,
-      tagsPagination: tagsReducer,
-      pagination: moviesReducer,
-      selectedMovie: moviesReducer,
-      searchTerm: moviesReducer,
+      moviesState: moviesReducer,
+      directorsState: directorsReducer,
+      contactsState: contactsReducer,
+      tagsState: tagsReducer,
     }),
     EffectsModule.forRoot([MovieEffects]),
     EffectsModule.forFeature([DirectorEffects, ContactEffects, TagEffects]),

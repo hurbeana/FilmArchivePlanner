@@ -54,6 +54,12 @@ export const directorsReducer = createReducer(
       },
     },
   })),
+
+  on(DirectorActions.setSelectedDirector, (state, { selectedDirector }) => ({
+    ...state,
+    selectedDirector: selectedDirector,
+  })),
+
   on(DirectorActions.updateDirectorSuccess, (state, { director }) => {
     return {
       ...state,
@@ -68,10 +74,6 @@ export const directorsReducer = createReducer(
       selectedDirector: director,
     };
   }),
-  on(DirectorActions.setSelectedDirector, (state, { selectedDirector }) => ({
-    ...state,
-    selectedDirector: selectedDirector,
-  })),
 
   on(DirectorActions.deleteDirectorSuccess, (state, { directorToDelete }) => ({
     ...state,

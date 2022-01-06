@@ -7,7 +7,7 @@ import {
   ViewChildren,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../app.state';
+import { MoviesState } from '../../../app.state';
 import { fromEvent, Observable } from 'rxjs';
 import { Movie } from '../../models/movie';
 import { ActivatedRoute } from '@angular/router';
@@ -53,7 +53,7 @@ export class TableViewComponent implements AfterViewInit {
   headers: QueryList<NgbdSortableHeaderDirective>;
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store<MoviesState>,
     private route: ActivatedRoute,
     private modalService: NgbModal,
   ) {

@@ -27,9 +27,6 @@ export class DetailsViewComponent implements OnInit {
         .select(MovieSelectors.selectSelectedMovie)
         .subscribe((selectedMovie) => {
           this.object = selectedMovie;
-
-          console.log('Selected Movie', selectedMovie);
-          console.log(selectedMovie?.directors);
         });
     } else if (this.type === 'Director') {
       this.store

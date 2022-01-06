@@ -30,6 +30,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ConfirmDeleteDirectorModalComponent } from './components/table-view/confirm-delete-director-modal.component';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../../environments/environment';
 
 @NgModule({
   declarations: [
@@ -50,12 +52,13 @@ import { ConfirmDeleteDirectorModalComponent } from './components/table-view/con
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
-    StoreModule.forRoot({
-      pagination: directorsReducer,
-      selectedDirector: directorsReducer,
-      searchTerm: directorsReducer,
-    }),
+    StoreModule.forRoot({ directorsState: directorsReducer }),
     EffectsModule.forRoot([DirectorEffects]),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25, // Retains last 25 states
+      logOnly: environment.production, // Restrict extension to log-only mode
+      autoPause: true, // Pauses recording actions and state changes when the extension window is not open
+    }),
     DirectorsRoutingModule,
     SharedModule,
     MatButtonModule,

@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Movie } from '../models/movie';
 import { CreateUpdateMovieDto } from '../models/create.movie';
-import { PaginationState } from '../../app.state';
+import { MoviesPaginationState } from '../../app.state';
 
 /* whenever this action is called, the 'getMovies$' effect in movies.effects.ts  is executed */
 export const getMovies = createAction(
@@ -16,7 +16,7 @@ export const getMovies = createAction(
 );
 export const getMoviesSuccess = createAction(
   '[Movies List] Loaded Movies Success',
-  props<{ pagination: PaginationState }>(),
+  props<{ pagination: MoviesPaginationState }>(),
 );
 
 export const getMovie = createAction(

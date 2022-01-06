@@ -1,8 +1,8 @@
 import { createReducer, on } from '@ngrx/store';
 import * as MovieActions from './movies.actions';
-import { AppState } from '../../app.state';
+import { MoviesState } from '../../app.state';
 
-export const initialState: AppState = {
+export const initialState: MoviesState = {
   pagination: {
     items: [],
     meta: {

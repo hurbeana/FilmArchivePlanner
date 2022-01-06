@@ -35,11 +35,7 @@ import * as FestivalActions from './state/festivals.actions';
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
-    StoreModule.forRoot({
-      pagination: festivalsReducer,
-      selectedFestival: festivalsReducer,
-      searchTerm: festivalsReducer,
-    }),
+    StoreModule.forRoot({ festivalsState: festivalsReducer }),
     EffectsModule.forRoot([FestivalEffects]),
     SharedModule,
     MatButtonModule,

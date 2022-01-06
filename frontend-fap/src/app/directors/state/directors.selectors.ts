@@ -1,61 +1,62 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { DirectorsState } from '../../app.state';
 
-//feature "directors" has to exist in app.state.ts
-export const directors = createFeatureSelector<DirectorsState>('directors');
+/* feature selector */
+/* corresponds to "StoreModule.forRoot({ directorsState: directorsReducer })" */
+export const directorsState =
+  createFeatureSelector<DirectorsState>('directorsState');
 
-export const pagination = createFeatureSelector<DirectorsState>('pagination');
-export const selectedDirector =
-  createFeatureSelector<DirectorsState>('selectedDirector');
+/* helper selectors */
+const paginationState = createSelector(directorsState, (s: DirectorsState) => {
+  return s.pagination;
+});
+const metaState = createSelector(paginationState, (p: any) => {
+  return p.meta;
+});
 
-export const selectDirectors = createSelector(
-  pagination,
-  (state: DirectorsState) => {
-    return state.pagination.items;
-  },
-);
-
+/* selectedDirector */
 export const selectSelectedDirector = createSelector(
-  selectedDirector,
-  (state: DirectorsState) => {
-    return state.selectedDirector;
+  directorsState,
+  (s: DirectorsState) => {
+    return s.selectedDirector;
   },
 );
-
+/* detailsDirector */
 export const selectDetailsDirector = createSelector(
-  selectedDirector,
-  (state: DirectorsState) => {
-    return state.detailsDirector;
+  directorsState,
+  (s: DirectorsState) => {
+    return s.detailsDirector;
   },
 );
 
-export const selectTotalItems = createSelector(
-  pagination,
-  (state: DirectorsState) => {
-    return state.pagination.meta.totalItems;
-  },
-);
-export const selectItemCount = createSelector(
-  pagination,
-  (state: DirectorsState) => {
-    return state.pagination.meta.itemCount;
-  },
-);
-export const selectItemsPerPage = createSelector(
-  pagination,
-  (state: DirectorsState) => {
-    return state.pagination.meta.itemsPerPage;
-  },
-);
-export const selectTotalPages = createSelector(
-  pagination,
-  (state: DirectorsState) => {
-    return state.pagination.meta.totalPages;
-  },
-);
-export const selectCurrentPage = createSelector(
-  pagination,
-  (state: DirectorsState) => {
-    return state.pagination.meta.currentPage;
-  },
-);
+/* pagination */
+export const selectDirectors = createSelector(paginationState, (p: any) => {
+  return p.items;
+});
+export const selectOrderBy = createSelector(paginationState, (p: any) => {
+  return p.orderBy;
+});
+export const selectSortOrder = createSelector(paginationState, (p: any) => {
+  return p.sortOrder;
+});
+export const selectSearchString = createSelector(paginationState, (p: any) => {
+  return p.searchString;
+});
+
+/* meta */
+/* meta */
+export const selectTotalItems = createSelector(metaState, (m: any) => {
+  return m.totalItems;
+});
+export const selectItemCount = createSelector(metaState, (m: any) => {
+  return m.itemCount;
+});
+export const selectItemsPerPage = createSelector(metaState, (m: any) => {
+  return m.itemsPerPage;
+});
+export const selectTotalPages = createSelector(metaState, (m: any) => {
+  return m.totalPages;
+});
+export const selectCurrentPage = createSelector(metaState, (m: any) => {
+  return m.currentPage;
+});
