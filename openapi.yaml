@@ -25,6 +25,10 @@ tags:
     description: Endpoints for user operations TODO
   - name: files
     description: Endpoints for file operations
+  - name: export
+    description: Endpoints for exporting data
+  - name: import
+    description: Endpoints for importing data
 paths:
   /movies:
     get:
@@ -801,6 +805,206 @@ paths:
         404:
           description: Movie not found
           content: {}
+  /export/movies:
+    get:
+      tags:
+        - export
+      summary: Export all movies
+      description: Exports all movie data from the database to a csv file
+      operationId: exportMovies
+      responses:
+        200:
+          description: Successful operation
+          content:
+            text/csv:
+              schema:
+                type: string
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+  /export/directors:
+    get:
+      tags:
+        - export
+      summary: Export all directors
+      description: Exports all director data from the database to a csv file
+      operationId: exportDirectors
+      responses:
+        200:
+          description: Successful operation
+          content:
+            text/csv:
+              schema:
+                type: string
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+  /export/contacts:
+    get:
+      tags:
+        - export
+      summary: Export all contacts
+      description: Exports all contact data from the database to a csv file
+      operationId: exportContacts
+      responses:
+        200:
+          description: Successful operation
+          content:
+            text/csv:
+              schema:
+                type: string
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+  /export/tags:
+    get:
+      tags:
+        - export
+      summary: Export all tags
+      description: Exports all tag data from the database to a csv file
+      operationId: exportTags
+      responses:
+        200:
+          description: Successful operation
+          content:
+            text/csv:
+              schema:
+                type: string
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+  /import/movies:
+    post:
+      tags:
+        - import
+      summary: Import movies
+      description: Imports all movie data from a csv file. Related entites are referenced via IDs and have to be imported beforehand.
+      operationId: importMovies
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                # 'file' will be the field name in this multipart request
+                file:
+                  type: string
+                  description: csv file, semicolon as field delimiter.
+        required: true
+      responses:
+        201:
+          description: Successful creation
+          content: { }
+        400:
+          description: Bad Request, e.g. because the referenced entities have not been imported yet.
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+  /import/directors:
+    post:
+      tags:
+        - import
+      summary: Import directors
+      description: Imports all director data from a csv file. Related entites are referenced via IDs and have to be imported beforehand.
+      operationId: importDirectors
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                # 'file' will be the field name in this multipart request
+                file:
+                  type: string
+                  description: csv file, semicolon as field delimiter.
+        required: true
+      responses:
+        201:
+          description: Successful creation
+          content: { }
+        400:
+          description: Bad Request, e.g. because the referenced entities have not been imported yet.
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+  /import/contacts:
+    post:
+      tags:
+        - import
+      summary: Import contacts
+      description: Imports all contact data from a csv file. Related entites are referenced via IDs and have to be imported beforehand.
+      operationId: importContacts
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                # 'file' will be the field name in this multipart request
+                file:
+                  type: string
+                  description: csv file, semicolon as field delimiter.
+        required: true
+      responses:
+        201:
+          description: Successful creation
+          content: { }
+        400:
+          description: Bad Request, e.g. because the referenced entities have not been imported yet.
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
+  /import/tags:
+    post:
+      tags:
+        - import
+      summary: Import all tags
+      description: Imports all tag data from a csv file
+      operationId: importTags
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                # 'file' will be the field name in this multipart request
+                file:
+                  type: string
+                  description: csv file, semicolon as field delimiter.
+        required: true
+      responses:
+        201:
+          description: Successful creation
+          content: { }
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Missing permission
+          content: { }
 
 components:
   parameters:

@@ -24,7 +24,7 @@ export class ExportService {
   ): Promise<string> {
     return await service
       .findAll()
-      .then(async (movies) => generateCSVFile(movies))
+      .then(async (objects) => generateCSVFile(objects))
       .catch((error) => Promise.reject(error));
   }
 
@@ -40,7 +40,7 @@ export class ExportService {
       throw new NotFoundException('Users export not found.');
     }
 
-    const csvText = (await getFile(filePath, 'utf8')).toString();
+    const csvText = (await getFile(filePath)).toString();
     await deleteFile(filePath);
     return csvText;
   }

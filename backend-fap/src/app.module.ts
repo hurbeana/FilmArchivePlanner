@@ -18,6 +18,7 @@ import { ContactsModule } from './contacts/contacts.module';
 import { ExportModule } from './export/export.module';
 import { FestivalsModule } from './festivals/festivals.module';
 import { EventsModule } from './events/events.module';
+import { ImportModule } from './import/import.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { EventsModule } from './events/events.module';
     }),
     FestivalsModule,
     EventsModule,
+    ImportModule,
   ],
   controllers: [AppController],
   providers: [AppService],

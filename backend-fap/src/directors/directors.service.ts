@@ -1,7 +1,7 @@
-import { IFsService } from './../files/interfaces/fs-service.interface';
-import { FILES_PERSISTENCY_PROVIDER } from './../files/files.constants';
+import { IFsService } from '../files/interfaces/fs-service.interface';
+import { FILES_PERSISTENCY_PROVIDER } from '../files/files.constants';
 import { DIRECTORROOTFOLDER } from './directors.constants';
-import { FileDto } from './../files/dto/file.dto';
+import { FileDto } from '../files/dto/file.dto';
 import {
   BiographyEnglishFile,
   BiographyGermanFile,
@@ -92,10 +92,6 @@ export class DirectorsService {
   private async createFiles(
     createUpdateDirectorDto: CreateUpdateDirectorDto,
   ): Promise<Director> {
-    // get or create folderId for unique folders
-    if (createUpdateDirectorDto.folderId === undefined) {
-      createUpdateDirectorDto.folderId = namor.generate();
-    }
     // generate basepath for this movie
     const basePath = join(
       DIRECTORROOTFOLDER,
@@ -198,13 +194,22 @@ export class DirectorsService {
   async create(
     createDirectorDto: CreateUpdateDirectorDto,
   ): Promise<DirectorDto> {
-    const savedDirector = await this.directorRepository.save(
-      await this.createFiles(createDirectorDto),
-    );
-    //const directorParam = this.directorRepository.create(createDirectorDto);
-    //const createdDirector = await this.directorRepository.save(directorParam);
-    //return this.mapDirectorToDto(createdDirector);
-    return this.findOne(savedDirector.id);
+    // create folderId for unique folders
+    createDirectorDto.folderId = namor.generate();
+    if (
+      createDirectorDto.biographyEnglish ||
+      createDirectorDto.biographyGerman ||
+      createDirectorDto.filmography
+    ) {
+      const savedDirector = await this.directorRepository.save(
+        await this.createFiles(createDirectorDto),
+      );
+      return this.findOne(savedDirector.id);
+    } else {
+      const directorParam = this.directorRepository.create(createDirectorDto);
+      const createdDirector = await this.directorRepository.save(directorParam);
+      return this.findOne(createdDirector.id);
+    }
   }
 
   /**

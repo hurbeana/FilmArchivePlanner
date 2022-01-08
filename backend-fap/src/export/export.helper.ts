@@ -15,21 +15,22 @@ export const generateCSVFile = async (
 
   if (object[0] === null || object[0] === undefined) {
     return Promise.reject(
-      'Unable to transform movie data to CSV file. There are no movies',
+      'Unable to transform data to CSV file. There are no objects.',
     );
   }
 
   const csvFields = Object.keys(object[0])
-    .filter((key) => key !== 'id') // dont export ids
+    .filter((key) => key !== 'created_at') // dont export created_at
+    .filter((key) => key !== 'last_updated') // dont export last_updated
     .filter((key) => key !== 'folderId') // dont export folderIds
     .map((key) => {
       return getCSVExportField(key);
     });
   if (!csvData || !csvFields) {
-    return Promise.reject('Unable to transform movie data to CSV file.');
+    return Promise.reject('Unable to transform data to CSV file.');
   }
 
-  const csv = parse(csvData, { fields: csvFields, delimiter: ';' });
+  const csv = parse(csvData, { fields: csvFields, delimiter: ';', quote: '' });
 
   const filePath = 'storage/app/exports';
   const fileName = 'export.csv';
@@ -51,33 +52,36 @@ export const getCSVExportField = (key: string): Record<string, unknown> => {
         return '';
       }
       // Output for Arrays
-      if (property instanceof Array) {
+      else if (property instanceof Array) {
+        if (property.length <= 0) {
+          return '';
+        }
         // Output for Directors
-        if (property.every((v) => v instanceof DirectorReferenceDto)) {
-          return property.map((director) => director.fullName).join(', ');
+        else if (property.every((v) => v instanceof DirectorReferenceDto)) {
+          return `*${property.map((director) => director.id).join()}*`;
         }
         // Output for Tags
-        if (property.every((v) => v instanceof TagReferenceDto)) {
-          return property.map((tag) => tag.value).join(', ');
+        else if (property.every((v) => v instanceof TagReferenceDto)) {
+          return `*${property.map((tag) => tag.id).join()}*`;
         }
         // Output for Files
-        if (property.every((v) => v instanceof FileDto)) {
+        else if (property.every((v) => v instanceof FileDto)) {
           return property
             .map((file) => file.path + '/' + file.filename)
             .join(', ');
         }
       }
       // Output for Contact
-      if (property instanceof ContactReferenceDto) {
-        return property.name;
+      else if (property instanceof ContactReferenceDto) {
+        return property.id;
       }
       // Output for File
-      if (property instanceof FileDto) {
+      else if (property instanceof FileDto) {
         return property ? property.path + '/' + property.filename : '';
       }
       // Output for Tag
-      if (property instanceof TagReferenceDto) {
-        return property.value;
+      else if (property instanceof TagReferenceDto) {
+        return property.id;
       }
       // Output for everything else
       return property;

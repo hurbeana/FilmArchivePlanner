@@ -20,7 +20,6 @@ import { SearchContactDto } from './dto/search-contact.dto';
 import { TagReferenceDto } from '../tags/dto/tag-reference.dto';
 import { TagsService } from '../tags/tags.service';
 import { TagType } from '../tags/tagtype.enum';
-import { Tag } from '../tags/entities/tag.entity';
 
 /**
  * Service for contacts CRUD

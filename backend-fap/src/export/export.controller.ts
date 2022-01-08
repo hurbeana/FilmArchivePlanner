@@ -1,4 +1,11 @@
-import { Controller, Get, Logger, Param, Response } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Logger,
+  NotFoundException,
+  Param,
+  Response,
+} from '@nestjs/common';
 import { Response as ExpressResponse } from 'express';
 import { ContactsService } from '../contacts/contacts.service';
 import { DirectorsService } from '../directors/directors.service';
@@ -35,6 +42,8 @@ export class ExportController {
       service = this.contactsService;
     } else if (type === 'tags') {
       service = this.tagsService;
+    } else {
+      throw new NotFoundException(`No export for ${type} defined.`);
     }
 
     return this.exportService.exportObjectsToCSV(service).then(

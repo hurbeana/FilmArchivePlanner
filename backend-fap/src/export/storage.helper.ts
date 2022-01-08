@@ -17,17 +17,13 @@ export const checkIfFileOrDirectoryExists = (path: string): boolean => {
  * Gets file data from a given path via a promise interface.
  *
  * @param {string} path
- * @param {string} encoding
  *
  * @returns {Promise<Buffer>}
  */
-export const getFile = async (
-  path: string,
-  encoding: string,
-): Promise<string | Buffer> => {
+export const getFile = async (path: string): Promise<string> => {
   const readFile = promisify(fs.readFile);
 
-  return readFile(path, {});
+  return readFile(path, 'utf8');
   //return encoding ? readFile(path, encoding) : readFile(path, {});
 };
 
@@ -43,7 +39,7 @@ export const getFile = async (
 export const createFile = async (
   path: string,
   fileName: string,
-  data: string,
+  data: string | Buffer,
 ): Promise<void> => {
   if (!checkIfFileOrDirectoryExists(path)) {
     fs.mkdirSync(path, { recursive: true });

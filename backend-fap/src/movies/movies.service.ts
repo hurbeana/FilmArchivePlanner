@@ -1,4 +1,4 @@
-import { IFsService } from './../files/interfaces/fs-service.interface';
+import { IFsService } from '../files/interfaces/fs-service.interface';
 import { Movie } from './entities/movie.entity';
 import {
   BadRequestException,
@@ -96,10 +96,6 @@ export class MoviesService {
   private async createFiles(
     createUpdateMovieDto: CreateUpdateMovieDto,
   ): Promise<Movie> {
-    // get or create folderId for unique folders
-    if (createUpdateMovieDto.folderId === undefined) {
-      createUpdateMovieDto.folderId = namor.generate();
-    }
     // generate basepath for this movie
     const basePath = join(
       MOVIEROOTFOLDER,
@@ -252,9 +248,26 @@ export class MoviesService {
     await this.checkIfReferencedDirectorsExist(createMovieDto.directors);
     await this.checkIfReferencedContactExists(createMovieDto.contact);
     await this.checkIfReferencedTagsExist(createMovieDto);
-    const createdMovie = await this.moviesRepository.save(
-      await this.createFiles(createMovieDto),
-    );
+
+    // create folderId for unique folders
+    createMovieDto.folderId = namor.generate();
+
+    let createdMovie: MovieDto;
+    if (
+      createMovieDto.movieFiles ||
+      createMovieDto.dcpFiles ||
+      createMovieDto.stillFiles ||
+      createMovieDto.subtitleFiles ||
+      createMovieDto.trailerFile ||
+      createMovieDto.previewFile
+    ) {
+      createdMovie = await this.moviesRepository.save(
+        await this.createFiles(createMovieDto),
+      );
+    } else {
+      const movieParam = this.moviesRepository.create(createMovieDto);
+      createdMovie = await this.moviesRepository.save(movieParam);
+    }
     return this.findOne(createdMovie.id);
   }
 
