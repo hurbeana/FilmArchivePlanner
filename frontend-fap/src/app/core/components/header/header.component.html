@@ -1,8 +1,8 @@
 <mat-toolbar color="primary" class="main-toolbar">
-  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
-    <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
+  <button mat-icon-button (click)="sidenav.toggle()" class="example-icon" aria-label="Example icon-button with menu icon">
+    <mat-icon>menu</mat-icon>
   </button>
-  <span>Film Archive Planner</span>
+  <span>Film Archive & Planner {{ currentRoute ? '- ' + currentRoute : '' }}</span>
   <span class="example-spacer"></span>
   <div></div>
   <button mat-icon-button class="example-icon person-outline" aria-label="Example icon-button with person icon">
@@ -12,12 +12,12 @@
 <mat-sidenav-container class="main-content">
   <mat-sidenav class="main-sidenav" position="start" mode="over" (click)="sidenav.close()">
     <mat-nav-list>
-      <a mat-list-item [routerLink]="'/'" i18n>Home</a>
-      <a mat-list-item [routerLink]="'/movies'" i18n>Movies</a>
-      <a mat-list-item [routerLink]="'/directors'" i18n>Directors</a>
-      <a mat-list-item [routerLink]="'/contacts'" i18n>Contacts</a>
-      <a mat-list-item [routerLink]="'/tags'" i18n>Tag Manager</a>
-      <a mat-list-item [routerLink]="'/festivals'" i18n>Festivals</a>
+      <a mat-list-item [routerLink]="'/'" i18n><mat-icon>home_outline</mat-icon> Home</a>
+      <a mat-list-item [routerLink]="'/festivals'" i18n><mat-icon>event_note</mat-icon> Festivals</a>
+      <a mat-list-item [routerLink]="'/movies'" i18n><mat-icon>movie_outline</mat-icon> Movies</a>
+      <a mat-list-item [routerLink]="'/directors'" i18n><mat-icon>people_outline</mat-icon> Directors</a>
+      <a mat-list-item [routerLink]="'/contacts'" i18n><mat-icon>person_outline</mat-icon> Contacts</a>
+      <a mat-list-item [routerLink]="'/tags'" i18n><mat-icon>label_outline</mat-icon> Tag Manager</a>
       <!--<a mat-list-item [routerLink]="'/planner'" i18n>Planner</a>-->
       <a mat-list-item (click)="sidenav.toggle()" i18n>Close</a>
     </mat-nav-list>

@@ -1,8 +1,46 @@
 <div class="home-center" style="display: flex; justify-content: center; flex-flow: column nowrap; height: 100%; background: linear-gradient(#7ee8fa, #eec0c6)">
   <div>
-    <h1 class="mat-h1" style="color: #3f51b5; font-size: 3em; padding-bottom: 30px" i18n>Welcome to Film Archive Planner!</h1>
+    <h1 class="mat-h1" style="color: #f4f4f4; font-size: 3em; padding-bottom: 30px" i18n>Welcome to Film Archive & Planner!</h1>
+  </div>
+  <div class="cards-list">
+    <div class="card 1" [routerLink]="'/festivals'">
+      <div class="card_image">
+        <img src="https://images.pexels.com/photos/1378866/pexels-photo-1378866.jpeg?cs=srgb&dl=pexels-brett-sayles-1378866.jpg&fm=jpg" />
+      </div>
+      <div class="card_title title-white">
+        <p>Festivals</p>
+      </div>
+    </div>
+
+    <div class="card 2" [routerLink]="'/movies'">
+      <div class="card_image"><img src="https://images.pexels.com/photos/33129/popcorn-movie-party-entertainment.jpg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" /></div>
+      <div class="card_title title-white">
+        <p>Movies</p>
+      </div>
+    </div>
+
+    <div class="card 3" [routerLink]="'/directors'">
+      <div class="card_image">
+        <img src="https://images.pexels.com/photos/5022806/pexels-photo-5022806.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" />
+      </div>
+      <div class="card_title">
+        <p style="color: white">Directors</p>
+      </div>
+    </div>
+
+    <div class="card 4" [routerLink]="'/contacts'">
+      <div class="card_image">
+        <img src="https://images.pexels.com/photos/323503/pexels-photo-323503.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" />
+      </div>
+      <div class="card_title">
+        <p style="color: white">Contacts</p>
+      </div>
+    </div>
+  </div>
+  <div style="padding-top: 60px">
+    <h1 class="mat-h2" style="color: #fdfdfd; font-size: 2.5em; padding-bottom: 30px" i18n>Manage Festivals, Movies, Directors and Contacts all in one...</h1>
   </div>
   <div>
-    <button class="btn btn-primary btn-lg" [routerLink]="'/movies'">Get Started!</button>
+    <button class="btn btn-primary btn-lg start-btn" [routerLink]="'/movies'">Get Started!</button>
   </div>
 </div>
