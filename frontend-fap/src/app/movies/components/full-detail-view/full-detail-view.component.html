@@ -5,7 +5,7 @@
       <div>
         <span class="mat-subheading-2">{{ movie.yearOfProduction }}</span>
         <span class="mat-subheading-2 info-spacer"></span>
-        <span class="mat-subheading-2">{{ movie.duration * 1000 * 60 | date: "h 'h' mm 'm'":'UTC' }}</span>
+        <span class="mat-subheading-2">{{ movie.duration | durationFormat }}</span>
       </div>
       <div>
         <span class="mat-subheading-2" i18n>Directors: </span>
@@ -67,9 +67,6 @@
       </div>
       <div>
         <span class="mat-subheading-2 text-bold" i18n>Year of Production</span> <span>{{ movie?.yearOfProduction ?? 'empty' }}</span>
-      </div>
-      <div>
-        <span class="mat-subheading-2 text-bold" i18n>Duration</span> <span>{{ movie?.duration ?? 'empty' }}</span>
       </div>
       <div>
         <span class="mat-subheading-2 text-bold" i18n>Animation Technique</span> <span>{{ printTags(movie?.animationTechniques) }}</span>

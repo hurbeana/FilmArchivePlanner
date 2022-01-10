@@ -58,7 +58,7 @@
           <ngb-highlight [result]="movie.yearOfProduction?.toString()"></ngb-highlight>
         </td>
         <td>
-          <ngb-highlight [result]="movie.duration.toString()"></ngb-highlight>
+          <ngb-highlight [result]="movie.duration | durationFormat"></ngb-highlight>
         </td>
         <td>
           <ngb-highlight [result]="movie.created_at.toString()"></ngb-highlight>

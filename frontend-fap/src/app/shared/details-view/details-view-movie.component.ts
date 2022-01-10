@@ -145,7 +145,7 @@ import { DetailsViewComponent } from './details-view.component';
       type="text"
       class="form-control form-control-sm"
       readonly
-      value="{{ movie?.duration }}"
+      value="{{ movie?.duration | durationFormat }}"
     />
 
     <span class="mat-primary label-colon" i18n>Animation Technique</span>

@@ -23,6 +23,7 @@ import { DetailsViewMovieComponent } from './details-view/details-view-movie.com
 import { DetailsViewDirectorComponent } from './details-view/details-view-director.component';
 import { DetailsViewContactComponent } from './details-view/details-view-contact.component';
 import { DetailsViewFestivalComponent } from './details-view/details-view-festival.component';
+import { DurationFormatPipe } from './pipes/duration-format.pipe';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { DetailsViewFestivalComponent } from './details-view/details-view-festiv
     DetailsViewContactComponent,
     DetailsViewTagComponent,
     DetailsViewFestivalComponent,
+    DurationFormatPipe,
   ],
   imports: [
     CommonModule,
@@ -68,6 +70,7 @@ import { DetailsViewFestivalComponent } from './details-view/details-view-festiv
     NgbdSortableHeaderDirective,
     ExportButtonComponent,
     DetailsViewComponent,
+    DurationFormatPipe,
   ],
 })
 /* The shared module contains components, which are shared and reused from the feature
