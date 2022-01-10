@@ -3,7 +3,7 @@ import { CACHE_MANAGER, Inject, Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { Cache } from 'cache-manager';
 import { FILES_MODULE_OPTIONS } from './files.constants';
-import * as fs from 'fs';
+import { readdir, unlink, access } from 'fs/promises';
 
 /**
  * Class to schedule cron jobs for different operations on files and/or directories.
@@ -30,18 +30,25 @@ export class FilesJobScheduler {
       cachedFileNames.push((await this.cacheManager.get(key))['filename']);
     }
 
-    fs.readdir(this.filesOptions.endpoint.dest, (err, files) => {
-      files.forEach((file) => {
-        if (cachedFileNames.indexOf(file) < 0) {
-          fs.unlink(join(this.filesOptions.endpoint.dest, file), (err) => {
-            if (err) {
-              this.logger.error(`Could not delete cached file! (${file})`, err);
-              return;
-            }
-            this.logger.log(`Successfully deleted cached file. (${file})`);
-          });
+    try {
+      await access(this.filesOptions.baseCachePath);
+    } catch (err) {
+      this.logger.warn(
+        `BaseCachePath <${this.filesOptions.baseCachePath} does not exist yet`,
+      );
+      return;
+    }
+    const files = await readdir(this.filesOptions.baseCachePath);
+    files.forEach(async (file) => {
+      if (cachedFileNames.indexOf(file) < 0) {
+        try {
+          await unlink(join(this.filesOptions.baseCachePath, file));
+        } catch (err) {
+          this.logger.error(`Could not delete cached file! (${file})`, err);
+          return;
         }
-      });
+        this.logger.log(`Successfully deleted cached file. (${file})`);
+      }
     });
   }
 }

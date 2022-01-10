@@ -76,7 +76,7 @@ export class FilesController {
   async uploadFile(
     @UploadedFile() file: Express.Multer.File,
   ): Promise<CachedFileDto> {
-    return this.filesService.cacheFile(file);
+    return await this.filesService.cacheFile(file);
   }
 
   /**
