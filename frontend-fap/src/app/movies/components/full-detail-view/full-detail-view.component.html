@@ -77,14 +77,16 @@
       <div>
         <span class="mat-subheading-2 text-bold" i18n>Keywords</span> <span>{{ printTags(movie?.keywords) }}</span>
       </div>
+      <!--
       <div>
-        <!--<span class="mat-subheading-2 " i18n>German Synopsis</span>-->
-        <!--<span>{{movie?.germanSynopsis}}</span>-->
+        <span class="mat-subheading-2 " i18n>German Synopsis</span>
+        <span>{{movie?.germanSynopsis}}</span>
       </div>
       <div>
-        <!--<span class="mat-subheading-2 " i18n>English Synopsis</span>-->
-        <!--<span>{{movie?.englishSynopsis}}</span>-->
+        <span class="mat-subheading-2 " i18n>English Synopsis</span>
+        <span>{{movie?.englishSynopsis}}</span>
       </div>
+      -->
       <div>
         <span class="mat-subheading-2 text-bold" i18n>Submission Category</span> <span>{{ printTags(movie?.submissionCategories) }}</span>
       </div>
@@ -93,9 +95,6 @@
         <span
           ><shared-yes-no-label>{{ movie?.hasDialog }}</shared-yes-no-label></span
         >
-      </div>
-      <div>
-        <span class="mat-subheading-2 text-bold" i18n>Original Title</span> <span>{{ movie?.dialogLanguages ?? 'empty' }}</span>
       </div>
       <div>
         <span class="mat-subheading-2 text-bold" i18n>Has Subtitles</span>
