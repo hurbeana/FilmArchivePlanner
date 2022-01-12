@@ -6,9 +6,9 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { ActionsSubject, Store } from '@ngrx/store';
 import { ContactsState } from '../../../app.state';
-import { fromEvent, Observable } from 'rxjs';
+import { fromEvent, Observable, Subscription } from 'rxjs';
 import { Contact } from '../../models/contact';
 import { CreateUpdateContactDto } from '../../models/create.contact';
 import { ActivatedRoute } from '@angular/router';
@@ -31,6 +31,7 @@ import {
   NgbdSortableHeaderDirective,
   SortEvent,
 } from '../../../shared/directives/sortable.directive';
+import { ofType } from '@ngrx/effects';
 
 @Component({
   selector: 'table-view',
@@ -51,6 +52,9 @@ export class TableViewComponent implements AfterViewInit {
   sortOrder: string;
   loading = new BehaviorSubject<boolean>(true);
 
+  subscription = new Subscription();
+  fullyLoaded = false;
+
   @ViewChild('search', { static: true })
   search: ElementRef;
 
@@ -63,6 +67,7 @@ export class TableViewComponent implements AfterViewInit {
     private modalService: NgbModal,
     private contactService: ContactService,
     private tagService: TagService,
+    private actionsSubject: ActionsSubject,
   ) {
     this.contacts = this.store.select(ContactSelectors.selectContacts);
     this.store
@@ -93,6 +98,24 @@ export class TableViewComponent implements AfterViewInit {
         searchString: this.search.nativeElement.value,
       }),
     );
+  }
+
+  ngOnInit() {
+    // executed on routing --> get rid of stale entries
+    this.store.dispatch(ContactActions.getContacts({ page: 1, limit: 16 }));
+    this.subscription = this.actionsSubject
+      .pipe(ofType(ContactActions.getContactsSuccess))
+      .subscribe((contacts) => {
+        this.fullyLoaded = true;
+      });
+  }
+
+  ngOnDestroy() {
+    // executed on routing --> get rid of stale entries
+    this.store.dispatch(
+      ContactActions.setSelectedContact({ selectedContact: null }),
+    );
+    this.subscription.unsubscribe();
   }
 
   ngAfterViewInit() {

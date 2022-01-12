@@ -29,6 +29,7 @@ export const tagsReducer = createReducer(
       items: [...pagination.items],
       meta: { ...pagination.meta },
     },
+    selectedTag: null,
   })),
   on(TagActions.createTag, (state) => state),
   on(TagActions.createTagSuccess, (state, { tag }) => ({

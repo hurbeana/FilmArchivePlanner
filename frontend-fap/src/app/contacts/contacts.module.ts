@@ -27,6 +27,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ContentComponent } from './components/content/content.component';
 import { TableViewComponent } from './components/table-view/table-view.component';
 import * as ContactActions from './state/contacts.actions';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../../environments/environment';
 
 @NgModule({
   declarations: [
@@ -45,6 +47,11 @@ import * as ContactActions from './state/contacts.actions';
     NgbModule,
     StoreModule.forRoot({ contactsState: contactsReducer }),
     EffectsModule.forRoot([ContactEffects]),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25, // Retains last 25 states
+      logOnly: environment.production, // Restrict extension to log-only mode
+      autoPause: true, // Pauses recording actions and state changes when the extension window is not open
+    }),
     SharedModule,
     MatButtonModule,
     MatCardModule,
@@ -56,7 +63,5 @@ import * as ContactActions from './state/contacts.actions';
 })
 /* Contact Module contains everything related to Contacts */
 export class ContactsModule {
-  constructor(private store: Store) {
-    this.store.dispatch(ContactActions.getContacts({ page: 1, limit: 16 }));
-  }
+  constructor(private store: Store) {}
 }

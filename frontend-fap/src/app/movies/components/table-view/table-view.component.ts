@@ -6,9 +6,9 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { ActionsSubject, Store } from '@ngrx/store';
 import { MoviesState } from '../../../app.state';
-import { fromEvent, Observable } from 'rxjs';
+import { fromEvent, Observable, Subscription } from 'rxjs';
 import { Movie } from '../../models/movie';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
@@ -25,6 +25,8 @@ import {
   NgbdSortableHeaderDirective,
   SortEvent,
 } from '../../../shared/directives/sortable.directive';
+import * as TagActions from '../../../tags/state/tags.actions';
+import { ofType } from '@ngrx/effects';
 
 @Component({
   selector: 'table-view',
@@ -41,10 +43,12 @@ export class TableViewComponent implements AfterViewInit {
   page = 1;
 
   searchTerm: string;
-  selectedMovie: Movie;
   orderBy: string;
   sortOrder: string;
   loading = new BehaviorSubject<boolean>(true);
+
+  subscription = new Subscription();
+  fullyLoaded = false;
 
   @ViewChild('search', { static: true })
   search: ElementRef;
@@ -56,6 +60,7 @@ export class TableViewComponent implements AfterViewInit {
     private store: Store<MoviesState>,
     private route: ActivatedRoute,
     private modalService: NgbModal,
+    private actionsSubject: ActionsSubject,
   ) {
     this.movies = this.store.select(MovieSelectors.selectMovies);
     this.store
@@ -86,6 +91,22 @@ export class TableViewComponent implements AfterViewInit {
         searchString: this.search.nativeElement.value,
       }),
     );
+  }
+
+  ngOnInit() {
+    // executed on routing --> get rid of stale entries
+    this.store.dispatch(MovieActions.getMovies({ page: 1, limit: 16 }));
+    this.subscription = this.actionsSubject
+      .pipe(ofType(MovieActions.getMoviesSuccess))
+      .subscribe((movies) => {
+        this.fullyLoaded = true;
+      });
+  }
+
+  ngOnDestroy() {
+    // executed on routing --> get rid of stale entries
+    this.store.dispatch(MovieActions.setSelectedMovie({ selectedMovie: null }));
+    this.subscription.unsubscribe();
   }
 
   ngAfterViewInit() {

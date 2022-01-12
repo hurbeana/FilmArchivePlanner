@@ -6,9 +6,9 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { ActionsSubject, Store } from '@ngrx/store';
 import { DirectorsState } from '../../../app.state';
-import { fromEvent, Observable } from 'rxjs';
+import { fromEvent, Observable, Subscription } from 'rxjs';
 import { Director } from '../../models/director';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
@@ -27,6 +27,7 @@ import {
 } from '../../../shared/directives/sortable.directive';
 import { ConfirmDeleteDirectorModalComponent } from './confirm-delete-director-modal.component';
 import { DirectorService } from '../../services/director.service';
+import { ofType } from '@ngrx/effects';
 
 @Component({
   selector: 'table-view',
@@ -47,6 +48,9 @@ export class TableViewComponent implements AfterViewInit {
   sortOrder: string;
   loading = new BehaviorSubject<boolean>(true);
 
+  subscription = new Subscription();
+  fullyLoaded = false;
+
   @ViewChild('search', { static: true })
   search: ElementRef;
 
@@ -58,6 +62,7 @@ export class TableViewComponent implements AfterViewInit {
     private route: ActivatedRoute,
     private modalService: NgbModal,
     private directorService: DirectorService,
+    private actionsSubject: ActionsSubject,
   ) {
     this.directors = this.store.select(DirectorSelectors.selectDirectors);
     this.store
@@ -94,6 +99,24 @@ export class TableViewComponent implements AfterViewInit {
         searchString: this.search.nativeElement.value,
       }),
     );
+  }
+
+  ngOnInit() {
+    // executed before routing to another page
+    this.store.dispatch(DirectorActions.getDirectors({ page: 1, limit: 16 }));
+    this.subscription = this.actionsSubject
+      .pipe(ofType(DirectorActions.getDirectorsSuccess))
+      .subscribe((directors) => {
+        this.fullyLoaded = true;
+      });
+  }
+
+  ngOnDestroy() {
+    // executed on routing --> get rid of stale entries
+    this.store.dispatch(
+      DirectorActions.setSelectedDirector({ selectedDirector: null }),
+    );
+    this.subscription.unsubscribe();
   }
 
   ngAfterViewInit() {

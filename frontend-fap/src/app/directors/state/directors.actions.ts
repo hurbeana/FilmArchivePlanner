@@ -63,7 +63,7 @@ export const updateDirectorFailed = createAction(
 /* set select director*/
 export const setSelectedDirector = createAction(
   '[Director List] Set Selected Director',
-  props<{ selectedDirector: Director }>(),
+  props<{ selectedDirector: Director | null }>(),
 );
 
 /* delete director */

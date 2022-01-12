@@ -31,7 +31,7 @@ export const createFestivalSuccess = createAction(
 
 export const setSelectedFestival = createAction(
   '[Festival List] Set Selected Festival',
-  props<{ selectedFestival: Festival }>(),
+  props<{ selectedFestival: Festival | null }>(),
 );
 
 export const updateFestival = createAction(

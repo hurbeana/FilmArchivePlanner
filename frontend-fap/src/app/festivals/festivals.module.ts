@@ -47,7 +47,5 @@ import * as FestivalActions from './state/festivals.actions';
   ],
 })
 export class FestivalsModule {
-  constructor(private store: Store) {
-    this.store.dispatch(FestivalActions.getFestivals({ page: 1, limit: 16 }));
-  }
+  constructor(private store: Store) {}
 }

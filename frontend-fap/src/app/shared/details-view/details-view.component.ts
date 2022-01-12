@@ -55,6 +55,11 @@ export class DetailsViewComponent implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    // executed on routing --> get rid of stale entries
+    this.object = null;
+  }
+
   getDownloadLink(filetyp: string, file?: FileDto): string {
     if (!file) return '';
     return `http://localhost:3000/files/${file.id}?fileType=${filetyp}`;

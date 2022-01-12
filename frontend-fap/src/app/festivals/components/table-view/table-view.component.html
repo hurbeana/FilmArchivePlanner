@@ -4,7 +4,7 @@
   <export-button downloadType="festivals"></export-button>
 </div>
 
-<div class="table-responsive bordered-box">
+<div class="table-responsive bordered-box" *ngIf="fullyLoaded; else loadingBlock">
   <table class="table">
     <thead>
       <tr>
@@ -98,3 +98,7 @@
     </div>
   </div>
 </div>
+
+<ng-template #loadingBlock>
+  <div style="width: 100%; height: 200px; display: flex; justify-content: center; align-items: center">Loading...</div>
+</ng-template>

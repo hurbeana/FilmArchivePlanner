@@ -74,7 +74,5 @@ import { environment } from '../../environments/environment';
 })
 /* Director Module contains everything related to Directors */
 export class DirectorsModule {
-  constructor(private store: Store) {
-    this.store.dispatch(DirectorActions.getDirectors({ page: 1, limit: 16 }));
-  }
+  constructor(private store: Store) {}
 }

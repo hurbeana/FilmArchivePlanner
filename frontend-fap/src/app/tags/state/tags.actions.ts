@@ -31,7 +31,7 @@ export const createTagSuccess = createAction(
 
 export const setSelectedTag = createAction(
   '[Tag List] Set Selected Tag',
-  props<{ selectedTag: Tag }>(),
+  props<{ selectedTag: Tag | null }>(),
 );
 
 export const checkIfTagIsInUse = createAction(

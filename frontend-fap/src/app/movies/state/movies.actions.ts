@@ -55,7 +55,7 @@ export const updateMovieFailed = createAction(
 );
 export const setSelectedMovie = createAction(
   '[Movie List] Set Selected Movie',
-  props<{ selectedMovie: Movie }>(),
+  props<{ selectedMovie: Movie | null }>(),
 );
 
 export const deleteMovie = createAction(

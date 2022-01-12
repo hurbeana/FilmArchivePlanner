@@ -89,7 +89,5 @@ import { ContactEffects } from '../contacts/state/contacts.effects';
 })
 /* Movie Module contains everything related to movies */
 export class MoviesModule {
-  constructor(private store: Store) {
-    this.store.dispatch(MovieActions.getMovies({ page: 1, limit: 16 }));
-  }
+  constructor(private store: Store) {}
 }

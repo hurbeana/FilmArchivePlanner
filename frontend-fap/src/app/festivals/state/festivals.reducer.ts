@@ -29,6 +29,7 @@ export const festivalsReducer = createReducer(
       items: [...pagination.items],
       meta: { ...pagination.meta },
     },
+    selectedFestival: null,
   })),
   on(FestivalActions.createFestival, (state) => state),
   on(FestivalActions.createFestivalSuccess, (state, { festival }) => ({

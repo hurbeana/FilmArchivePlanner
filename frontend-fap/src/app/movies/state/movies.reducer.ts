@@ -24,7 +24,12 @@ export const moviesReducer = createReducer(
   on(MovieActions.getMovies, (state) => state),
   on(MovieActions.getMoviesSuccess, (state, { pagination }) => ({
     ...state,
-    pagination: pagination,
+    pagination: {
+      ...pagination,
+      items: [...pagination.items],
+      meta: { ...pagination.meta },
+    },
+    selectedMovie: null,
   })),
   on(MovieActions.getMovie, (state) => state),
   on(MovieActions.getMovieSuccess, (state, { movie }) => ({

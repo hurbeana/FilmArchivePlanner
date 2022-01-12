@@ -60,7 +60,5 @@ import { environment } from '../../environments/environment';
 })
 /* Tag Module contains everything related to Tags */
 export class TagsModule {
-  constructor(private store: Store) {
-    this.store.dispatch(TagActions.getTags({ page: 1, limit: 16 }));
-  }
+  constructor(private store: Store) {}
 }

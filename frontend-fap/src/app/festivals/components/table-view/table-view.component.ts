@@ -6,9 +6,9 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { ActionsSubject, Store } from '@ngrx/store';
 import { FestivalsState } from '../../../app.state';
-import { fromEvent, Observable, of } from 'rxjs';
+import { fromEvent, Observable, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import * as FestivalSelectors from '../../state/festivals.selectors';
@@ -29,6 +29,7 @@ import {
 } from '../../../shared/directives/sortable.directive';
 import { Festival } from '../../models/festival';
 import { CreateUpdateFestivalDto } from '../../models/create.festival';
+import { ofType } from '@ngrx/effects';
 
 @Component({
   selector: 'table-view',
@@ -49,6 +50,9 @@ export class TableViewComponent implements AfterViewInit {
   sortOrder: string;
   loading = new BehaviorSubject<boolean>(true);
 
+  subscription = new Subscription();
+  fullyLoaded = false;
+
   @ViewChild('search', { static: true })
   search: ElementRef;
 
@@ -59,7 +63,7 @@ export class TableViewComponent implements AfterViewInit {
     private store: Store<FestivalsState>,
     private route: ActivatedRoute,
     private modalService: NgbModal,
-    private festivalService: FestivalService,
+    private actionsSubject: ActionsSubject,
   ) {
     this.festivals = this.store.select(FestivalSelectors.selectFestivals);
 
@@ -91,6 +95,24 @@ export class TableViewComponent implements AfterViewInit {
         searchString: this.search.nativeElement.value,
       }),
     );
+  }
+
+  ngOnInit() {
+    // executed on routing --> get rid of stale entries
+    this.store.dispatch(FestivalActions.getFestivals({ page: 1, limit: 16 }));
+    this.subscription = this.actionsSubject
+      .pipe(ofType(FestivalActions.getFestivalsSuccess))
+      .subscribe((festivals) => {
+        this.fullyLoaded = true;
+      });
+  }
+
+  ngOnDestroy() {
+    // executed on routing --> get rid of stale entries
+    this.store.dispatch(
+      FestivalActions.setSelectedFestival({ selectedFestival: null }),
+    );
+    this.subscription.unsubscribe();
   }
 
   ngAfterViewInit() {

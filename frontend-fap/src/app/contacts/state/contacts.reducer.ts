@@ -29,6 +29,7 @@ export const contactsReducer = createReducer(
       items: [...pagination.items],
       meta: { ...pagination.meta },
     },
+    selectedContact: null,
   })),
   on(ContactActions.createContact, (state) => state),
   on(ContactActions.createContactSuccess, (state, { contact }) => ({

@@ -6,9 +6,9 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { ActionsSubject, Store } from '@ngrx/store';
 import { TagsState } from '../../../app.state';
-import { fromEvent, Observable } from 'rxjs';
+import { fromEvent, Observable, Subscription } from 'rxjs';
 import { Tag } from '../../models/tag';
 import { CreateUpdateTagDto } from '../../models/create.tag';
 import { ActivatedRoute } from '@angular/router';
@@ -30,6 +30,7 @@ import {
   NgbdSortableHeaderDirective,
   SortEvent,
 } from '../../../shared/directives/sortable.directive';
+import { ofType } from '@ngrx/effects';
 
 @Component({
   selector: 'table-view',
@@ -38,7 +39,7 @@ import {
   providers: [],
 })
 export class TableViewComponent implements AfterViewInit {
-  tags: Observable<Tag[]>;
+  tags: Observable<Tag[]> | null;
   numberOfTags: number;
   tagOnPageCount: number;
   pageSize = 16;
@@ -50,16 +51,21 @@ export class TableViewComponent implements AfterViewInit {
   sortOrder: string;
   loading = new BehaviorSubject<boolean>(true);
 
+  subscription = new Subscription();
+  fullyLoaded = false;
+
   @ViewChild('search', { static: true })
   search: ElementRef;
 
   @ViewChildren(NgbdSortableHeaderDirective)
   headers: QueryList<NgbdSortableHeaderDirective>;
+
   constructor(
     private store: Store<TagsState>,
     private route: ActivatedRoute,
     private modalService: NgbModal,
     private tagService: TagService,
+    private actionsSubject: ActionsSubject,
   ) {
     this.tags = this.store.select(TagSelectors.selectTags);
     this.store
@@ -96,6 +102,22 @@ export class TableViewComponent implements AfterViewInit {
         searchString: this.search.nativeElement.value,
       }),
     );
+  }
+
+  ngOnInit() {
+    // executed on routing --> get rid of stale entries
+    this.store.dispatch(TagActions.getTags({ page: 1, limit: 16 }));
+    this.subscription = this.actionsSubject
+      .pipe(ofType(TagActions.getTagsSuccess))
+      .subscribe((tags) => {
+        this.fullyLoaded = true;
+      });
+  }
+
+  ngOnDestroy() {
+    // executed on routing --> get rid of stale entries
+    this.store.dispatch(TagActions.setSelectedTag({ selectedTag: null }));
+    this.subscription.unsubscribe();
   }
 
   ngAfterViewInit() {

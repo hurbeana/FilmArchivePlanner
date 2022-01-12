@@ -31,7 +31,7 @@ export const createContactSuccess = createAction(
 
 export const setSelectedContact = createAction(
   '[Contact List] Set Selected Contact',
-  props<{ selectedContact: Contact }>(),
+  props<{ selectedContact: Contact | null }>(),
 );
 
 export const updateContact = createAction(

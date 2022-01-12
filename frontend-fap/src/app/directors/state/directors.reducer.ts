@@ -29,6 +29,7 @@ export const directorsReducer = createReducer(
       items: [...pagination.items],
       meta: { ...pagination.meta },
     },
+    selectedDirector: null,
   })),
   on(DirectorActions.getDirector, (state) => state),
   on(DirectorActions.getDirectorSuccess, (state, { director }) => ({
