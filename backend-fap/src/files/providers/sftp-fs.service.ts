@@ -10,11 +10,8 @@ import { FileDto } from '../dto/file.dto';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { GetRemoveFileDto } from '../dto/get-remove-file.dto';
 import { File } from '../entities/file.entity';
-import * as fs from 'fs';
-import { promisify } from 'util';
-
-const mkdir = promisify(fs.mkdir);
-const rename = promisify(fs.rename);
+import { existsSync } from 'fs';
+import { mkdir, rename } from 'fs/promises';
 
 /**
  * An implementation of a IFsService using sftp
@@ -116,11 +113,16 @@ export class FtpFsService implements IFsService {
     /**
      * Connect sftp client and copy stored file to cache location.
      */
+    const downloadPath = path.join(
+      this.filesOptions.endpoint.dest,
+      cachedFile.filename,
+    );
     const client = await this.getClient();
     await client.connect(this.filesOptions.connectOptions);
-    await client.fastGet(path.join(file.path, file.filename), cachedFile.path);
+    await client.fastGet(path.join(file.path, file.filename), downloadPath);
     await client.end();
 
+    await this.moveToCache(downloadPath);
     /**
      * Save cache file entry in redis cache store.
      */
@@ -151,12 +153,24 @@ export class FtpFsService implements IFsService {
     // TODO: FIX RACE CONDITION WITH READY FLAG IN CACHEFILEDTO !
     await this.cacheManager.set<CachedFileDto>(id, cachedFile);
 
-    if (!fs.existsSync(this.filesOptions.baseCachePath)) {
+    await this.moveToCache(file.path);
+
+    return cachedFile;
+  }
+
+  private async moveToCache(absoluteFilePath: string) {
+    if (!existsSync(this.filesOptions.baseCachePath)) {
       await mkdir(this.filesOptions.baseCachePath);
     }
 
     try {
-      await rename(file.path, realCachePath);
+      await rename(
+        absoluteFilePath,
+        path.join(
+          this.filesOptions.baseCachePath,
+          path.basename(absoluteFilePath),
+        ),
+      );
     } catch (err) {
       console.error(err);
       throw new HttpException(
@@ -167,8 +181,6 @@ export class FtpFsService implements IFsService {
         HttpStatus.NOT_FOUND,
       );
     }
-
-    return cachedFile;
   }
 
   /**
