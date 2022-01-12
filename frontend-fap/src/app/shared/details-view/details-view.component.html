@@ -1,6 +1,6 @@
 <div *ngIf="object" class="details-view">
   <div class="details-grid">
-    <details-view-movie *ngIf="type === 'Movie'" [movie]="object"></details-view-movie>
+    <details-view-movie *ngIf="type === 'Movie'" [movieId]="object.id"></details-view-movie>
     <details-view-director *ngIf="type === 'Director'" [director]="object"></details-view-director>
     <details-view-contact *ngIf="type === 'Contact'" [contact]="object"></details-view-contact>
     <details-view-tag *ngIf="type === 'Tag'" [tag]="object"></details-view-tag>

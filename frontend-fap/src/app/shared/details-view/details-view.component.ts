@@ -19,7 +19,7 @@ export class DetailsViewComponent implements OnInit {
   renderObject: any;
   properties: any[];
 
-  constructor(private store: Store) {}
+  constructor(public store: Store) {}
 
   ngOnInit(): void {
     if (this.type === 'Movie') {

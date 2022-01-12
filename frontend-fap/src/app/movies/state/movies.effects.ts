@@ -38,6 +38,22 @@ export class MovieEffects {
     ),
   );
 
+  getMovieByIdAndSetAsSelectedMovie$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(MovieActions.getMovieByIdAndSetAsSelectedMovie),
+      switchMap(({ id }) =>
+        this.moviesService.getMovie(id).pipe(
+          map((movie) =>
+            MovieActions.getMovieByIdAndSetAsSelectedMovieSuccess({
+              movie: movie,
+            }),
+          ),
+          catchError(() => EMPTY), // TODO: error handling
+        ),
+      ),
+    ),
+  );
+
   /* is called, whenever an action of type 'createMovie' is called */
   createMovie$ = createEffect(() =>
     this.actions$.pipe(

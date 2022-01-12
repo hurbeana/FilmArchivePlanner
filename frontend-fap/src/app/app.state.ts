@@ -77,14 +77,14 @@ export interface FestivalsPaginationState {
 
 export interface MoviesState {
   pagination: MoviesPaginationState;
-  selectedMovie?: Movie | null;
-  detailsMovie?: Movie; // movie which is loaded by id for fullscreen detailsview
+  selectedMovie?: Movie | null; // movie is loaded by id for details-view
+  detailsMovie?: Movie; // movie is loaded by id for full-detail-view and edit-view
 }
 
 export interface DirectorsState {
   pagination: DirectorsPaginationState;
   selectedDirector?: Director | null;
-  detailsDirector?: Director; // director which is loaded by id for fullscreen detailsview
+  detailsDirector?: Director; // director is loaded by id for full-detail-view and edit-view
 }
 
 export interface ContactsState {

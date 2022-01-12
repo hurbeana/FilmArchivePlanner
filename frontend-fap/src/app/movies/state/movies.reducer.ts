@@ -16,7 +16,6 @@ export const initialState: MoviesState = {
     orderBy: '',
     sortOrder: '',
   },
-  selectedMovie: null,
 };
 
 export const moviesReducer = createReducer(
@@ -36,12 +35,15 @@ export const moviesReducer = createReducer(
     ...state,
     detailsMovie: movie,
   })),
+  on(MovieActions.getMovieByIdAndSetAsSelectedMovie, (state) => state),
+  on(
+    MovieActions.getMovieByIdAndSetAsSelectedMovieSuccess,
+    (state, { movie }) => ({
+      ...state,
+      selectedMovie: movie,
+    }),
+  ),
   on(MovieActions.createMovie, (state) => state),
-  on(MovieActions.setSelectedMovie, (state, { selectedMovie }) => ({
-    ...state,
-    selectedMovie: selectedMovie,
-  })),
-
   on(MovieActions.deleteMovieSuccess, (state, { movieToDelete }) => ({
     ...state,
     pagination: {

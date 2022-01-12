@@ -127,7 +127,7 @@ export class TableViewComponent implements AfterViewInit {
 
   selectMovie(movie: Movie) {
     this.store.dispatch(
-      MovieActions.setSelectedMovie({ selectedMovie: movie }),
+      MovieActions.getMovieByIdAndSetAsSelectedMovie({ id: movie.id }),
     );
   }
 
