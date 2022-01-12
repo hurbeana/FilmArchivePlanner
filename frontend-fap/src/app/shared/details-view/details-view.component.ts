@@ -6,6 +6,8 @@ import * as TagSelectors from '../../tags/state/tags.selectors';
 import * as FestivalSelectors from '../../festivals/state/festivals.selectors';
 import { Store } from '@ngrx/store';
 import { FileDto } from '../models/file';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { TagService } from '../../tags/services/tag.service';
 
 @Component({
   selector: 'details-view',
@@ -19,7 +21,11 @@ export class DetailsViewComponent implements OnInit {
   renderObject: any;
   properties: any[];
 
-  constructor(public store: Store) {}
+  constructor(
+    public store: Store,
+    public modalService: NgbModal,
+    public tagService: TagService,
+  ) {}
 
   ngOnInit(): void {
     if (this.type === 'Movie') {

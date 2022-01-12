@@ -128,7 +128,16 @@
       </div>
       <div>
         <span class="mat-subheading-2 text-bold" i18n>Contact</span>
-        <span>{{ $any(movie?.contact).name ?? 'empty' }}</span>
+        <span><b>Type: </b>{{ contact?.type?.value ?? 'empty' }}</span>
+        <span><b>Name: </b>{{ contact?.name ?? 'empty' }}</span>
+        <span><b>Email: </b>{{ contact?.email ?? 'empty' }}</span>
+        <span><b>Phone: </b>{{ contact?.phone ?? 'empty' }}</span>
+        <span
+          ><b>Website: </b><a *ngIf="contact?.website; else elseBlock" [href]="contact?.website">{{ contact?.website }}</a></span
+        >
+        <ng-template #elseBlock>
+          <p>Empty</p>
+        </ng-template>
       </div>
     </div>
   </div>

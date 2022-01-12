@@ -24,6 +24,8 @@ import { DetailsViewDirectorComponent } from './details-view/details-view-direct
 import { DetailsViewContactComponent } from './details-view/details-view-contact.component';
 import { DetailsViewFestivalComponent } from './details-view/details-view-festival.component';
 import { DurationFormatPipe } from './pipes/duration-format.pipe';
+import { RouterModule } from '@angular/router';
+import { ViewContactModalComponent } from './components/view-contact-modal/view-contact-modal.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +42,7 @@ import { DurationFormatPipe } from './pipes/duration-format.pipe';
     DetailsViewContactComponent,
     DetailsViewTagComponent,
     DetailsViewFestivalComponent,
+    ViewContactModalComponent,
     DurationFormatPipe,
   ],
   imports: [
@@ -55,6 +58,7 @@ import { DurationFormatPipe } from './pipes/duration-format.pipe';
     MatButtonModule,
     MatProgressBarModule,
     NgSelectModule,
+    RouterModule,
   ],
   exports: [
     MatIconModule,

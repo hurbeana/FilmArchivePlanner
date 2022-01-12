@@ -29,6 +29,22 @@ export class ContactEffects {
     ),
   );
 
+  getContactByIdAndSetAsSelectedContact$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ContactActions.getContactByIdAndSetAsSelectedContact),
+      switchMap(({ id }) =>
+        this.contactsService.getContact(id).pipe(
+          map((contact) =>
+            ContactActions.getContactByIdAndSetAsSelectedContactSuccess({
+              contact: contact,
+            }),
+          ),
+          catchError(() => EMPTY), // TODO: error handling
+        ),
+      ),
+    ),
+  );
+
   /* is called, whenever an action of type 'createContact' is called */
   createContact$ = createEffect(() =>
     this.actions$.pipe(

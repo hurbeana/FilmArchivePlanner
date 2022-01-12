@@ -16,7 +16,6 @@ export const initialState: ContactsState = {
     orderBy: '',
     sortOrder: '',
   },
-  selectedContact: null,
 };
 
 export const contactsReducer = createReducer(
@@ -31,6 +30,14 @@ export const contactsReducer = createReducer(
     },
     selectedContact: null,
   })),
+  on(ContactActions.getContactByIdAndSetAsSelectedContact, (state) => state),
+  on(
+    ContactActions.getContactByIdAndSetAsSelectedContactSuccess,
+    (state, { contact }) => ({
+      ...state,
+      selectedContact: contact,
+    }),
+  ),
   on(ContactActions.createContact, (state) => state),
   on(ContactActions.createContactSuccess, (state, { contact }) => ({
     ...state,

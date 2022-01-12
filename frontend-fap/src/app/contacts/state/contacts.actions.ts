@@ -19,6 +19,15 @@ export const getContactsSuccess = createAction(
   props<{ pagination: ContactsPaginationState }>(),
 );
 
+export const getContactByIdAndSetAsSelectedContact = createAction(
+  '[Contacts List] Load Contact by ID and set as Selected Contact',
+  props<{ id: number }>(),
+);
+export const getContactByIdAndSetAsSelectedContactSuccess = createAction(
+  '[Contacts List] Load Contact by ID and set as Selected Contact Success',
+  props<{ contact: Contact }>(),
+);
+
 /* whenever this action is called, the 'createContact$' effect in contacts.effects.ts  is executed */
 export const createContact = createAction(
   '[Contact List] Create Contact',

@@ -9,7 +9,10 @@ import { FileDto } from '../../../shared/models/file';
 import { Gallery, GalleryItem, ImageItem } from 'ng-gallery';
 import { Lightbox } from 'ng-gallery/lightbox';
 import { Tag } from '../../../tags/models/tag';
+import * as ContactSelectors from '../../../contacts/state/contacts.selectors';
+import * as ContactActions from '../../../contacts/state/contacts.actions';
 
+import { Contact } from '../../../contacts/models/contact';
 @Component({
   selector: 'app-full-detail-view',
   templateUrl: './full-detail-view.component.html',
@@ -17,6 +20,7 @@ import { Tag } from '../../../tags/models/tag';
 })
 export class FullDetailViewComponent implements OnInit {
   movie?: Movie;
+  contact?: Contact | null;
   id: number;
 
   images: GalleryItem[];
@@ -30,8 +34,21 @@ export class FullDetailViewComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.store
+      .select(ContactSelectors.selectSelectedContact)
+      .subscribe((contact) => {
+        this.contact = contact;
+        console.log('CONTACT', contact);
+      });
     this.store.select(selectDetailsMovie).subscribe((movie) => {
       this.movie = movie;
+      if (movie?.contact.id) {
+        this.store.dispatch(
+          ContactActions.getContactByIdAndSetAsSelectedContact({
+            id: movie.contact.id,
+          }),
+        );
+      }
       this.images =
         this.movie?.stillFiles?.map(
           (s) =>

@@ -43,6 +43,10 @@ export const moviesReducer = createReducer(
       selectedMovie: movie,
     }),
   ),
+  on(MovieActions.setSelectedMovie, (state, { selectedMovie }) => ({
+    ...state,
+    selectedMovie: selectedMovie,
+  })),
   on(MovieActions.createMovie, (state) => state),
   on(MovieActions.deleteMovieSuccess, (state, { movieToDelete }) => ({
     ...state,

@@ -18,7 +18,7 @@ export class MovieService {
   }
 
   getMovie(id: number) {
-    console.log('[MovieService] - GET MOVIES ID: ' + id);
+    console.log('[MovieService] - GET MOVIE BY ID: ' + id);
     return this.http.get<Movie>(api + '/' + id);
   }
 

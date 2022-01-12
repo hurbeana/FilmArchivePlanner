@@ -14,6 +14,7 @@ import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import * as MovieSelectors from '../../state/movies.selectors';
 import * as MovieActions from '../../state/movies.actions';
+import * as ContactActions from '../../../contacts/state/contacts.actions';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -25,9 +26,8 @@ import {
   NgbdSortableHeaderDirective,
   SortEvent,
 } from '../../../shared/directives/sortable.directive';
-import * as TagActions from '../../../tags/state/tags.actions';
-import { ofType } from '@ngrx/effects';
 
+import { ofType } from '@ngrx/effects';
 @Component({
   selector: 'table-view',
   templateUrl: './table-view.component.html',
@@ -128,6 +128,11 @@ export class TableViewComponent implements AfterViewInit {
   selectMovie(movie: Movie) {
     this.store.dispatch(
       MovieActions.getMovieByIdAndSetAsSelectedMovie({ id: movie.id }),
+    );
+    this.store.dispatch(
+      ContactActions.getContactByIdAndSetAsSelectedContact({
+        id: movie.contact.id,
+      }),
     );
   }
 

@@ -44,6 +44,11 @@ export class ContactService {
     return this.http.get<ContactsPaginationState>(api, { params: params });
   }
 
+  getContact(id: number) {
+    console.log('[ContactService] - GET CONTACT BY ID: ' + id);
+    return this.http.get<Contact>(api + '/' + id);
+  }
+
   updateContact(contact: CreateUpdateContactDto, id: number) {
     console.log('[ContactService] - UPDATE CONTACT');
     return this.http.put<Contact>(`${api}/${id}`, contact);

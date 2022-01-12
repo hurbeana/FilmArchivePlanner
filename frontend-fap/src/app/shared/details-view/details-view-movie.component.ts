@@ -3,6 +3,10 @@ import { Movie } from '../../movies/models/movie';
 import { DetailsViewComponent } from './details-view.component';
 import * as MovieActions from '../../movies/state/movies.actions';
 import * as MovieSelectors from '../../movies/state/movies.selectors';
+import { Contact } from '../../contacts/models/contact';
+import { ViewContactModalComponent } from '../components/view-contact-modal/view-contact-modal.component';
+import * as ContactSelectors from '../../contacts/state/contacts.selectors';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'details-view-movie',
@@ -312,14 +316,16 @@ import * as MovieSelectors from '../../movies/state/movies.selectors';
       />
 
       <span class="mat-primary label-colon" i18n>Contact</span>
-      <input
+      <div
+        *ngIf="movie.contact; else emptyInput"
         type="text"
-        class="form-control form-control-sm"
-        readonly
-        value="{{ movie?.contact?.name }}"
-      />
+        class="form-control form-control-sm disabled"
+      >
+        <a href="javascript:void(0)" (click)="openViewContactModal()">
+          {{ movie?.contact?.name }}
+        </a>
+      </div>
     </div>
-
     <ng-template #emptyInput>
       <input
         type="text"
@@ -335,11 +341,23 @@ export class DetailsViewMovieComponent extends DetailsViewComponent {
   movieId: number;
 
   movie: Movie | null | undefined;
+  contact: Contact | null | undefined;
+  subscription: Subscription;
 
   ngOnInit() {
     this.store.select(MovieSelectors.selectSelectedMovie).subscribe((movie) => {
       this.movie = movie;
     });
+
+    this.subscription = this.store
+      .select(ContactSelectors.selectSelectedContact)
+      .subscribe((contact) => {
+        this.contact = contact;
+      });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -351,5 +369,21 @@ export class DetailsViewMovieComponent extends DetailsViewComponent {
         }),
       );
     }
+  }
+
+  openViewContactModal() {
+    const modalRef = this.modalService.open(ViewContactModalComponent, {
+      centered: true,
+      keyboard: true,
+      //backdrop: 'static' // won`t close on click outside when uncommented
+    });
+    modalRef.componentInstance.contact = this.contact;
+    modalRef.componentInstance.contactId = this.contact?.id;
+
+    this.tagService
+      .getTagsByType('Contact')
+      .subscribe(
+        (usableTags) => (modalRef.componentInstance.usableTags = usableTags),
+      );
   }
 }
