@@ -20,7 +20,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "localize": true,
+            "localize": false,
             "outputPath": "dist/frontend-FAP",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -87,7 +87,7 @@
             },
             "development": {
               "localize": [
-                "de"
+                "en"
               ],
               "buildOptimizer": false,
               "optimization": false,
