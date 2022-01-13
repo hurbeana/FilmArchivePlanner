@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { EMPTY } from 'rxjs';
-import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { TagService } from '../services/tag.service';
 import * as TagActions from './tags.actions';
-import { MovieService } from '../../movies/services/movie.service';
+import { MessageService } from '../../core/services/message.service';
 
 @Injectable()
 export class TagEffects {
   constructor(
     private actions$: Actions,
     private tagsService: TagService,
-    private moviesService: MovieService,
+    private messageService: MessageService,
   ) {}
 
   /* is called, whenever an action of type 'getTags' is called */
@@ -38,7 +38,13 @@ export class TagEffects {
       switchMap(({ tag }) =>
         this.tagsService.createTag(tag).pipe(
           map((tag) => TagActions.createTagSuccess({ tag })),
-          catchError(() => EMPTY), // TODO: error handling
+          tap((_) =>
+            this.messageService.showSuccessSnackBar('Tag created successfully'),
+          ),
+          catchError((err) => {
+            this.messageService.showErrorSnackBar(err);
+            return EMPTY;
+          }),
         ),
       ),
     ),
@@ -65,7 +71,13 @@ export class TagEffects {
       switchMap(({ tag, id }) =>
         this.tagsService.updateTag(tag, id).pipe(
           map((tag) => TagActions.updateTagSuccess({ tag })),
-          catchError(() => EMPTY), // TODO: error handling
+          tap((_) =>
+            this.messageService.showSuccessSnackBar('Tag updated successfully'),
+          ),
+          catchError((err) => {
+            this.messageService.showErrorSnackBar(err);
+            return EMPTY;
+          }),
         ),
       ),
     ),
@@ -88,7 +100,15 @@ export class TagEffects {
                 searchString: searchString,
               }),
             ),
-            catchError(() => EMPTY), // TODO: error handling
+            tap((_) =>
+              this.messageService.showSuccessSnackBar(
+                'Tag deleted successfully',
+              ),
+            ),
+            catchError((err) => {
+              this.messageService.showErrorSnackBar(err);
+              return EMPTY;
+            }),
           ),
       ),
     ),

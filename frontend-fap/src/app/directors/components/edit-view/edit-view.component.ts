@@ -108,7 +108,7 @@ export class EditViewComponent implements OnInit, OnDestroy {
 
   openSnackBar(message: string, action: string, panelClass: string) {
     this._snackBar.open(message, action, {
-      duration: 3000,
+      duration: 8000,
       panelClass: [panelClass],
     });
   }

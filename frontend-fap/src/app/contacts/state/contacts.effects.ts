@@ -1,15 +1,17 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { EMPTY } from 'rxjs';
-import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
+import { EMPTY, of } from 'rxjs';
+import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { ContactService } from '../services/contact.service';
 import * as ContactActions from './contacts.actions';
+import { MessageService } from '../../core/services/message.service';
 
 @Injectable()
 export class ContactEffects {
   constructor(
     private actions$: Actions,
     private contactsService: ContactService,
+    private messageService: MessageService,
   ) {}
 
   /* is called, whenever an action of type 'getContacts' is called */
@@ -52,7 +54,15 @@ export class ContactEffects {
       switchMap(({ contact }) =>
         this.contactsService.createContact(contact).pipe(
           map((contact) => ContactActions.createContactSuccess({ contact })),
-          catchError(() => EMPTY), // TODO: error handling
+          tap((_) =>
+            this.messageService.showSuccessSnackBar(
+              'Contact created successfully',
+            ),
+          ),
+          catchError((err) => {
+            this.messageService.showErrorSnackBar(err);
+            return EMPTY;
+          }),
         ),
       ),
     ),
@@ -65,13 +75,21 @@ export class ContactEffects {
       switchMap(({ contact, id }) =>
         this.contactsService.updateContact(contact, id).pipe(
           map((contact) => ContactActions.updateContactSuccess({ contact })),
-          catchError(() => EMPTY), // TODO: error handling
+          tap((_) =>
+            this.messageService.showSuccessSnackBar(
+              'Contact updated successfully',
+            ),
+          ),
+          catchError((err) => {
+            this.messageService.showErrorSnackBar(err);
+            return EMPTY;
+          }),
         ),
       ),
     ),
   );
 
-  /* is called, whenever an action of type 'createMovie' is called */
+  /* is called, whenever an action of type 'createContact' is called */
   deleteContact$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ContactActions.deleteContact),
@@ -88,7 +106,15 @@ export class ContactEffects {
                 searchString: searchString,
               }),
             ),
-            catchError(() => EMPTY), // TODO: error handling
+            tap((_) =>
+              this.messageService.showSuccessSnackBar(
+                'Contact deleted successfully',
+              ),
+            ),
+            catchError((err) => {
+              this.messageService.showErrorSnackBar(err);
+              return EMPTY;
+            }),
           ),
       ),
     ),

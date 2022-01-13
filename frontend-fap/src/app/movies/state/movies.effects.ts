@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { EMPTY, of } from 'rxjs';
-import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { MovieService } from '../services/movie.service';
 import * as MovieActions from './movies.actions';
+import { MessageService } from '../../core/services/message.service';
 
 @Injectable()
 export class MovieEffects {
-  constructor(private actions$: Actions, private moviesService: MovieService) {}
+  constructor(
+    private actions$: Actions,
+    private moviesService: MovieService,
+    private messageService: MessageService,
+  ) {}
 
   /* is called, whenever an action of type 'getMovies' is called */
   getMovies$ = createEffect(() =>
@@ -64,7 +69,7 @@ export class MovieEffects {
           catchError((error) =>
             of(
               MovieActions.createMovieFailed({
-                errormessage: this.getErrorMessage(error),
+                errormessage: this.messageService.getErrorMessage(error),
               }),
             ),
           ),
@@ -82,7 +87,7 @@ export class MovieEffects {
           catchError((error) =>
             of(
               MovieActions.updateMovieFailed({
-                errormessage: this.getErrorMessage(error),
+                errormessage: this.messageService.getErrorMessage(error),
               }),
             ),
           ),
@@ -108,7 +113,15 @@ export class MovieEffects {
                 searchString,
               }),
             ),
-            catchError(() => EMPTY), // TODO: error handling
+            tap((_) =>
+              this.messageService.showSuccessSnackBar(
+                'Movie deleted successfully',
+              ),
+            ),
+            catchError((err) => {
+              this.messageService.showErrorSnackBar(err);
+              return EMPTY;
+            }),
           ),
       ),
     ),
@@ -130,22 +143,4 @@ export class MovieEffects {
       ),
     ),
   );
-
-  /*
-   * Returns User friendly error message
-   * TODO
-   * */
-  getErrorMessage(error: any): string {
-    console.log(error);
-    if (((error.status / 100) | 0) === 4) {
-      // validation error
-      return [].concat(error?.error?.message).join(', ');
-      return 'No Error Details!';
-    } else if (((error.status / 100) | 0) === 5) {
-      // other error
-      return 'Error with Server Connection!';
-    } else {
-      return 'Some other Error occurred!';
-    }
-  }
 }

@@ -24,11 +24,9 @@ import { DirectorsRoutingModule } from './directors-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TableViewComponent } from './components/table-view/table-view.component';
-import * as DirectorActions from './state/directors.actions';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ConfirmDeleteDirectorModalComponent } from './components/table-view/confirm-delete-director-modal.component';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../../environments/environment';
@@ -69,7 +67,6 @@ import { environment } from '../../environments/environment';
     MatCheckboxModule,
     MatDividerModule,
     MatSelectModule,
-    MatSnackBarModule,
   ],
 })
 /* Director Module contains everything related to Directors */

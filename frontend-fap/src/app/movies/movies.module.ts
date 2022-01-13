@@ -37,7 +37,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../../environments/environment';
 import { DirectorEffects } from '../directors/state/directors.effects';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { GalleryModule } from 'ng-gallery';
 import { LightboxModule } from 'ng-gallery/lightbox';
 import { TagEffects } from '../tags/state/tags.effects';
@@ -84,7 +83,6 @@ import { ContactEffects } from '../contacts/state/contacts.effects';
     MatCheckboxModule,
     MatDividerModule,
     MatSelectModule,
-    MatSnackBarModule,
   ],
 })
 /* Movie Module contains everything related to movies */

@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { EMPTY, of } from 'rxjs';
-import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { DirectorService } from '../services/director.service';
 import * as DirectorActions from './directors.actions';
+import { MessageService } from '../../core/services/message.service';
 
 @Injectable()
 export class DirectorEffects {
   constructor(
     private actions$: Actions,
     private directorsService: DirectorService,
+    private messageService: MessageService,
   ) {}
 
   /* is called, whenever an action of type 'getDirectors' is called */
@@ -42,7 +44,7 @@ export class DirectorEffects {
           catchError((error) =>
             of(
               DirectorActions.getDirectorFailed({
-                errormessage: this.getErrorMessage(error),
+                errormessage: this.messageService.getErrorMessage(error),
               }),
             ),
           ),
@@ -63,7 +65,7 @@ export class DirectorEffects {
           catchError((error) =>
             of(
               DirectorActions.createDirectorFailed({
-                errormessage: this.getErrorMessage(error),
+                errormessage: this.messageService.getErrorMessage(error),
               }),
             ),
           ),
@@ -85,7 +87,7 @@ export class DirectorEffects {
           catchError((error) =>
             of(
               DirectorActions.updateDirectorFailed({
-                errormessage: this.getErrorMessage(error),
+                errormessage: this.messageService.getErrorMessage(error),
               }),
             ),
           ),
@@ -111,7 +113,15 @@ export class DirectorEffects {
                 searchString: searchString,
               }),
             ),
-            catchError(() => EMPTY), // TODO: error handling
+            tap((_) =>
+              this.messageService.showSuccessSnackBar(
+                'Director deleted successfully',
+              ),
+            ),
+            catchError((err) => {
+              this.messageService.showErrorSnackBar(err);
+              return EMPTY;
+            }),
           ),
       ),
     ),
@@ -133,22 +143,4 @@ export class DirectorEffects {
       ),
     ),
   );
-
-  /*
-   * Returns User friendly error message
-   * TODO
-   * */
-  getErrorMessage(error: any): string {
-    console.log(error);
-    if (((error.status / 100) | 0) === 4) {
-      // validation error
-      return [].concat(error?.error?.message).join(', ');
-      return 'No Error Details!';
-    } else if (((error.status / 100) | 0) === 5) {
-      // other error
-      return 'Error with Server Connection!';
-    } else {
-      return 'Some other Error occurred!';
-    }
-  }
 }

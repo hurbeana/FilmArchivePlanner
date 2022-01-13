@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { EMPTY } from 'rxjs';
-import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { FestivalService } from '../services/festival.service';
 import * as FestivalActions from './festivals.actions';
+import { MessageService } from '../../core/services/message.service';
 
 @Injectable()
 export class FestivalEffects {
   constructor(
     private actions$: Actions,
     private festivalsService: FestivalService,
+    private messageService: MessageService,
   ) {}
 
   /* is called, whenever an action of type 'getFestivals' is called */
@@ -38,7 +40,15 @@ export class FestivalEffects {
           map((festival) =>
             FestivalActions.createFestivalSuccess({ festival }),
           ),
-          catchError(() => EMPTY), // TODO: error handling
+          tap((_) =>
+            this.messageService.showSuccessSnackBar(
+              'Festival created successfully',
+            ),
+          ),
+          catchError((err) => {
+            this.messageService.showErrorSnackBar(err);
+            return EMPTY;
+          }),
         ),
       ),
     ),
@@ -53,7 +63,15 @@ export class FestivalEffects {
           map((festival) =>
             FestivalActions.updateFestivalSuccess({ festival }),
           ),
-          catchError(() => EMPTY), // TODO: error handling
+          tap((_) =>
+            this.messageService.showSuccessSnackBar(
+              'Festival updated successfully',
+            ),
+          ),
+          catchError((err) => {
+            this.messageService.showErrorSnackBar(err);
+            return EMPTY;
+          }),
         ),
       ),
     ),
@@ -76,7 +94,15 @@ export class FestivalEffects {
                 searchString: searchString,
               }),
             ),
-            catchError(() => EMPTY), // TODO: error handling
+            tap((_) =>
+              this.messageService.showSuccessSnackBar(
+                'Festival deleted successfully',
+              ),
+            ),
+            catchError((err) => {
+              this.messageService.showErrorSnackBar(err);
+              return EMPTY;
+            }),
           ),
       ),
     ),
