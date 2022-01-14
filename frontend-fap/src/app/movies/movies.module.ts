@@ -41,6 +41,7 @@ import { GalleryModule } from 'ng-gallery';
 import { LightboxModule } from 'ng-gallery/lightbox';
 import { TagEffects } from '../tags/state/tags.effects';
 import { ContactEffects } from '../contacts/state/contacts.effects';
+import { VimeModule } from '@vime/angular';
 
 @NgModule({
   declarations: [
@@ -83,6 +84,7 @@ import { ContactEffects } from '../contacts/state/contacts.effects';
     MatCheckboxModule,
     MatDividerModule,
     MatSelectModule,
+    VimeModule,
   ],
 })
 /* Movie Module contains everything related to movies */

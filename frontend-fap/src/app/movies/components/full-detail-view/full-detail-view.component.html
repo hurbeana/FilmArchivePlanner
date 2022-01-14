@@ -36,27 +36,27 @@
       </div>
       <div>
         <span class="mat-subheading-2 text-bold" i18n>Movie Files</span>
-        <span *ngFor="let file of movie?.movieFiles">{{ file.filename }}</span>
+        <app-file-display [file]="file" [fileType]="fileTypes.movieFiles" (playClicked)="play($event)" *ngFor="let file of movie?.movieFiles"></app-file-display>
       </div>
       <div>
         <span class="mat-subheading-2 text-bold" i18n>DCP Files</span>
-        <span *ngFor="let file of movie?.dcpFiles">{{ file.filename }}</span>
+        <app-file-display [file]="file" [fileType]="fileTypes.dcpFiles" (playClicked)="play($event)" *ngFor="let file of movie?.dcpFiles"></app-file-display>
       </div>
       <div>
         <span class="mat-subheading-2 text-bold" i18n>Preview File</span>
-        <span>{{ movie?.previewFile?.filename }}</span>
+        <app-file-display [file]="movie.previewFile" [fileType]="fileTypes.previewFile" (playClicked)="play($event)" *ngIf="movie.previewFile"></app-file-display>
       </div>
       <div>
         <span class="mat-subheading-2 text-bold" i18n>Trailer File</span>
-        <span>{{ movie?.trailerFile?.filename }}</span>
+        <app-file-display [file]="movie.trailerFile" [fileType]="fileTypes.trailerFile" (playClicked)="play($event)" *ngIf="movie.trailerFile"></app-file-display>
       </div>
       <div>
         <span class="mat-subheading-2 text-bold" i18n>Still File</span>
-        <span *ngFor="let file of movie?.stillFiles">{{ file.filename }}</span>
+        <app-file-display [file]="file" [fileType]="fileTypes.stillFiles" *ngFor="let file of movie?.stillFiles"></app-file-display>
       </div>
       <div>
         <span class="mat-subheading-2 text-bold" i18n>Subtitle Folder</span>
-        <span *ngFor="let file of movie?.subtitleFiles">{{ file.filename }}</span>
+        <app-file-display [file]="file" [fileType]="fileTypes.subtitleFiles" *ngFor="let file of movie?.subtitleFiles"></app-file-display>
       </div>
       <div>
         <span class="mat-subheading-2 text-bold" i18n>Directors</span>
@@ -139,6 +139,20 @@
           <p>Empty</p>
         </ng-template>
       </div>
+    </div>
+  </div>
+  <div *ngIf="currentlyPlaying" class="player-container" (click)="shutdownPlayer()">
+    <div class="player" (click)="$event.stopPropagation()">
+      <vm-player #vmplayer>
+        <!-- Provider component is placed here. -->
+        <vm-video [poster]="getFirstStillfile()">
+          <!-- Why `data-src`? Lazy loading, you can always use `src` if you prefer.  -->
+          <source data-src="{{ currentlyPlaying }}" type="{{ playingMimeType }}" />
+          <!--       <track default kind="subtitles" src="https://media.vimejs.com/subs/english.vtt" srclang="en" label="English" /> -->
+        </vm-video>
+
+        <vm-default-ui> </vm-default-ui>
+      </vm-player>
     </div>
   </div>
 </div>

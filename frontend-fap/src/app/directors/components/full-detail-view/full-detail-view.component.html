@@ -22,17 +22,17 @@
       </div>
       <div>
         <span class="mat-subheading-2 text-bold" i18n>Filmography</span>
-        <a *ngIf="director?.filmography" [href]="getDownloadLink('filmography_file', director?.filmography)">{{ printFile(director?.filmography) }}</a>
+        <app-file-display [file]="director.filmography" [fileType]="fileTypes.filmography" *ngIf="director.filmography"></app-file-display>
         <span *ngIf="!director?.filmography" i18n>empty</span>
       </div>
       <div>
         <span class="mat-subheading-2 text-bold" i18n>Biography English</span>
-        <a *ngIf="director?.biographyEnglish" [href]="getDownloadLink('biography_english_file', director?.biographyEnglish)">{{ printFile(director?.biographyEnglish) }}</a>
+        <app-file-display [file]="director.biographyEnglish" [fileType]="fileTypes.biographyEnglish" *ngIf="director.biographyEnglish"></app-file-display>
         <span *ngIf="!director?.biographyEnglish" i18n>empty</span>
       </div>
       <div>
         <span class="mat-subheading-2 text-bold" i18n>Biography German</span>
-        <a *ngIf="director?.biographyGerman" [href]="getDownloadLink('biography_german_file', director?.biographyGerman)">{{ printFile(director?.biographyGerman) }}</a>
+        <app-file-display [file]="director.biographyGerman" [fileType]="fileTypes.biographyGerman" *ngIf="director.biographyGerman"></app-file-display>
         <span *ngIf="!director?.biographyGerman" i18n>empty</span>
       </div>
     </div>

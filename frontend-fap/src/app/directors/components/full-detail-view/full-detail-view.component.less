@@ -5,7 +5,6 @@
 :host .details-view {
   width: 100%;
   margin: 2em;
-
 }
 
 :host .details-form {
@@ -27,7 +26,7 @@
   margin: 0 2em 2em 0;
 }
 
-.still-gallery{
+.still-gallery {
   flex: 1 0 0;
   background: none;
 }
@@ -44,12 +43,12 @@
   display: flex;
   flex-flow: row;
   align-items: center;
-  justify-content: center;
+  justify-content: left;
 }
 
 .details-grid {
   max-height: 500px;
-  width: 100%;
+  width: fit-content;
   text-align: left;
   display: flex;
   flex-flow: column wrap;
@@ -58,10 +57,10 @@
   margin: 1em;
 }
 
-.details-grid span:nth-child(8n+1),
-.details-grid span:nth-child(8n+2),
-.details-grid span:nth-child(8n+3),
-.details-grid span:nth-child(8n+4) {
+.details-grid span:nth-child(8n + 1),
+.details-grid span:nth-child(8n + 2),
+.details-grid span:nth-child(8n + 3),
+.details-grid span:nth-child(8n + 4) {
 }
 
 .details-grid > div {
@@ -69,7 +68,6 @@
   flex-direction: column;
   margin: 0.5em;
 }
-
 
 .details-grid span {
   margin: 0;
@@ -82,5 +80,3 @@
 .text-bold {
   font-weight: 500;
 }
-
-

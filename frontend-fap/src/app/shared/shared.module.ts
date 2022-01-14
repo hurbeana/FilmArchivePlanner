@@ -27,12 +27,15 @@ import { DetailsViewFestivalComponent } from './details-view/details-view-festiv
 import { DurationFormatPipe } from './pipes/duration-format.pipe';
 import { RouterModule } from '@angular/router';
 import { ViewContactModalComponent } from './components/view-contact-modal/view-contact-modal.component';
+import { VimeModule } from '@vime/angular';
+import { FileDisplayComponent } from '../shared/components/file-display/file-display.component';
 
 @NgModule({
   declarations: [
     TagInputComponent,
     YesNoLabelComponent,
     ResizableDirective,
+    FileDisplayComponent,
     FileUploadComponent,
     NotFoundComponent,
     NgbdSortableHeaderDirective,
@@ -72,6 +75,7 @@ import { ViewContactModalComponent } from './components/view-contact-modal/view-
     TagInputComponent,
     YesNoLabelComponent,
     ResizableDirective,
+    FileDisplayComponent,
     FileUploadComponent,
     NgbdSortableHeaderDirective,
     ExportButtonComponent,

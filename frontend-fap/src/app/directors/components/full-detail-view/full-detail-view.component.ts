@@ -5,7 +5,7 @@ import { Director } from '../../models/director';
 import { getDirector } from '../../state/directors.actions';
 import { selectDetailsDirector } from '../../state/directors.selectors';
 import { DirectorsState } from '../../../app.state';
-import { FileDto } from '../../../shared/models/file';
+import { FileDto, fileTypes } from '../../../shared/models/file';
 import { DirectorService } from '../../services/director.service';
 
 @Component({
@@ -16,6 +16,7 @@ import { DirectorService } from '../../services/director.service';
 export class FullDetailViewComponent implements OnInit {
   director?: Director;
   id: number;
+  fileTypes = fileTypes;
 
   //images: GalleryItem[];
   @ViewChild('itemTemplate', { static: true }) itemTemplate: TemplateRef<any>;
@@ -38,16 +39,5 @@ export class FullDetailViewComponent implements OnInit {
         this.store.dispatch(getDirector({ id: id })); // load director by id
       }
     });
-  }
-
-  printFile(file?: FileDto) {
-    if (!file) {
-      return 'empty';
-    }
-    return [file.filename].join('/');
-  }
-
-  getDownloadLink(filetyp: string, file?: FileDto) {
-    return this.directorService.getDownloadLink(filetyp, file);
   }
 }

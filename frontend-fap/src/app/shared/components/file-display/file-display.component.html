@@ -1,0 +1,9 @@
+<div class="container">
+  <p>{{ file.filename }}</p>
+  <div *ngIf="fileType" class="buttons">
+    <button (click)="playClickedHandler()" *ngIf="file.mimetype?.includes('video')" mat-button><mat-icon>play_arrow</mat-icon></button>
+    <a [href]="this.filePath"
+      ><button mat-button><mat-icon>download</mat-icon></button></a
+    >
+  </div>
+</div>

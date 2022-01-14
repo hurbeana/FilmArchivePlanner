@@ -1,22 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body {
+html,
+body {
   height: 100%;
 }
 
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
 /* The global Material UI styles file */
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
 /* The global Bootstrap UI styles file */
 @import '~bootstrap/dist/css/bootstrap.css';
 
-@import "~@ng-select/ng-select/themes/default.theme.css";
+@import '~@ng-select/ng-select/themes/default.theme.css';
 
-
+/* Default vime theme. ~960B */
+@import '~@vime/core/themes/default.css';
 
 .success-snackbar {
   background: #3c763d;

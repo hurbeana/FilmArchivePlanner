@@ -5,12 +5,14 @@ import { MoviesState } from '../../../app.state';
 import { Movie } from '../../models/movie';
 import { getMovie } from '../../state/movies.actions';
 import { selectDetailsMovie } from '../../state/movies.selectors';
-import { FileDto } from '../../../shared/models/file';
+import { FileDto, fileTypes } from '../../../shared/models/file';
 import { Gallery, GalleryItem, ImageItem } from 'ng-gallery';
 import { Lightbox } from 'ng-gallery/lightbox';
 import { Tag } from '../../../tags/models/tag';
 import * as ContactSelectors from '../../../contacts/state/contacts.selectors';
 import * as ContactActions from '../../../contacts/state/contacts.actions';
+import { Player } from '@vime/angular';
+import { PlayEvent } from '../../../shared/components/file-display/file-display.component';
 
 import { Contact } from '../../../contacts/models/contact';
 @Component({
@@ -22,9 +24,13 @@ export class FullDetailViewComponent implements OnInit {
   movie?: Movie;
   contact?: Contact | null;
   id: number;
+  currentlyPlaying = '';
+  playingMimeType = '';
+  fileTypes = fileTypes;
 
   images: GalleryItem[];
   @ViewChild('itemTemplate', { static: true }) itemTemplate: TemplateRef<any>;
+  @ViewChild('vmplayer') player: Player;
 
   constructor(
     private route: ActivatedRoute,
@@ -81,6 +87,21 @@ export class FullDetailViewComponent implements OnInit {
     //lightboxRef.load(this.images);
   }
 
+  play(playEvent: PlayEvent) {
+    this.currentlyPlaying = playEvent.url;
+    this.playingMimeType = playEvent.mimetype;
+  }
+
+  getFirstStillfile() {
+    if (this.movie?.stillFiles && this.movie?.stillFiles[0])
+      return `http://localhost:3000/files/${this.movie.stillFiles[0].id}?fileType=still_file`;
+    else return '';
+  }
+
+  shutdownPlayer() {
+    this.currentlyPlaying = '';
+  }
+
   printFile(file?: FileDto) {
     if (!file) {
       return '';
@@ -93,7 +114,6 @@ export class FullDetailViewComponent implements OnInit {
     return `http://localhost:3000/files/${file.id}?fileType=${filetyp}`;
   }
   printTags(tags?: Tag[]) {
-    console.log(tags);
     if (!tags) {
       return '';
     }
