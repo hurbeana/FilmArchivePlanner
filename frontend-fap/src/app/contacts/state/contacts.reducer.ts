@@ -39,24 +39,7 @@ export const contactsReducer = createReducer(
     }),
   ),
   on(ContactActions.createContact, (state) => state),
-  on(ContactActions.createContactSuccess, (state, { contact }) => ({
-    ...state,
-    pagination: {
-      ...state.pagination,
-      items:
-        state.pagination.items.length === state.pagination.meta.itemsPerPage
-          ? [...state.pagination.items]
-          : [...state.pagination.items, contact],
-      meta: {
-        ...state.pagination.meta,
-        totalItems: state.pagination.meta.totalItems + 1,
-        totalPages:
-          state.pagination.items.length === state.pagination.meta.itemsPerPage
-            ? state.pagination.meta.totalPages + 1
-            : state.pagination.meta.totalPages,
-      },
-    },
-  })),
+  on(ContactActions.createContactSuccess, (state) => state),
   on(ContactActions.setSelectedContact, (state, { selectedContact }) => ({
     ...state,
     selectedContact: selectedContact,
@@ -75,30 +58,5 @@ export const contactsReducer = createReducer(
     selectedContact: contact,
   })),
 
-  on(ContactActions.deleteContactSuccess, (state, { contactToDelete }) => ({
-    ...state,
-    pagination: {
-      ...state.pagination,
-      items: [
-        ...state.pagination.items.filter(
-          (item) => item.id !== contactToDelete.id,
-        ),
-      ],
-      meta: {
-        ...state.pagination.meta,
-        totalItems:
-          state.pagination.meta.totalItems === 0
-            ? 0
-            : state.pagination.meta.totalItems - 1,
-        totalPages:
-          state.pagination.items.length === state.pagination.meta.itemsPerPage
-            ? state.pagination.meta.totalPages + 1
-            : state.pagination.meta.totalPages,
-        currentPage:
-          state.pagination.items.length === 1
-            ? state.pagination.meta.currentPage - 1
-            : state.pagination.meta.currentPage,
-      },
-    },
-  })),
+  on(ContactActions.deleteContactSuccess, (state) => state),
 );

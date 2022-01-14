@@ -63,7 +63,7 @@ export interface TagsPaginationState {
 }
 
 export interface AdvancedSearchState {
-  query: string;
+  loading: boolean;
   selectedTagIDs: number[];
   negativeTagIDs: number[];
   exactYear: number;
@@ -98,7 +98,7 @@ export interface MoviesState {
   pagination: MoviesPaginationState;
   selectedMovie?: Movie | null; // movie is loaded by id for details-view
   detailsMovie?: Movie; // movie is loaded by id for full-detail-view and edit-view
-  advancedSearchState?: AdvancedSearchState | null;
+  advancedSearchState: AdvancedSearchState;
 }
 
 export interface DirectorsState {

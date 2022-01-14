@@ -26,7 +26,7 @@ export class Contact {
   last_updated: Date;
 
   @AutoMap()
-  @ManyToOne(() => Tag)
+  @ManyToOne(() => Tag, { eager: true })
   type: Tag;
 
   @AutoMap()

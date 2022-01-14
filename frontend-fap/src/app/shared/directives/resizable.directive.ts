@@ -23,8 +23,8 @@ export class ResizableDirective implements OnInit, AfterViewInit {
   constructor(private el: ElementRef, private renderer: Renderer2) {}
 
   ngOnInit(): void {
-    this.el.nativeElement.style['border-left'] =
-      this.resizableGrabWidth + 'px solid darkgrey';
+    /*this.el.nativeElement.style['border-left'] =
+      this.resizableGrabWidth + 'px solid darkgrey';*/
   }
 
   ngAfterViewInit(): void {

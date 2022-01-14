@@ -31,11 +31,25 @@ export const getContactByIdAndSetAsSelectedContactSuccess = createAction(
 /* whenever this action is called, the 'createContact$' effect in contacts.effects.ts  is executed */
 export const createContact = createAction(
   '[Contact List] Create Contact',
-  props<{ contact: CreateUpdateContactDto }>(),
+  props<{
+    contactToCreate: Contact;
+    page: number;
+    limit: number;
+    orderBy: string;
+    sortOrder: string;
+    searchString: string;
+  }>(),
 );
 export const createContactSuccess = createAction(
   '[Contact List] Created Contact Success',
-  props<{ contact: Contact }>(),
+  props<{
+    createdContact: Contact;
+    page: number;
+    limit: number;
+    orderBy: string;
+    sortOrder: string;
+    searchString: string;
+  }>(),
 );
 
 export const setSelectedContact = createAction(

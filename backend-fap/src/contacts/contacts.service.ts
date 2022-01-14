@@ -11,21 +11,17 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/types';
 import { Contact } from './entities/contact.entity';
 import { ContactDto } from './dto/contact.dto';
-import {
-  IPaginationOptions,
-  paginate,
-  Pagination,
-} from 'nestjs-typeorm-paginate';
-import { SearchContactDto } from './dto/search-contact.dto';
+import { Pagination } from 'nestjs-typeorm-paginate';
 import { TagReferenceDto } from '../tags/dto/tag-reference.dto';
 import { TagsService } from '../tags/tags.service';
 import { TagType } from '../tags/tagtype.enum';
+import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 
 /**
  * Service for contacts CRUD
  */
 @Injectable()
-export class ContactsService {
+export class ContactsService extends TypeOrmCrudService<Contact> {
   constructor(
     @InjectRepository(Contact)
     private contactRepository: Repository<Contact>,
@@ -34,6 +30,7 @@ export class ContactsService {
     private readonly tagsService: TagsService,
     private entityManager: EntityManager,
   ) {
+    super(contactRepository);
     this.mapper.createMap(Contact, ContactDto);
   }
 
@@ -50,72 +47,6 @@ export class ContactsService {
     const contactParam = this.contactRepository.create(createContactDto);
     const createdContact = await this.contactRepository.save(contactParam);
     return this.findOne(createdContact.id);
-  }
-
-  /**
-   * Retrieve Contact List with pagination
-   * @param options Pagination options, such as pagenumber, pagesize, ...
-   * @param search Search DTO for detailed search
-   * @param orderBy field to order by
-   * @param sortOrder sortorder, either ASC or DESC
-   * @param searchString
-   * @returns {Promise<Pagination<ContactDto>>} The contacts in a paginated form
-   */
-  find(
-    options: IPaginationOptions,
-    search: SearchContactDto,
-    orderBy: string,
-    sortOrder: string,
-    searchString: string,
-  ): Promise<Pagination<ContactDto>> {
-    let whereObj = [];
-    let orderObj = {};
-    if (searchString) {
-      // searchString higher prio
-      whereObj = Object.keys(SearchContactDto.getStringSearch()).map((k) =>
-        k === 'type'
-          ? {
-              [k]: { value: ILike('%' + searchString + '%') },
-            }
-          : {
-              [k]: ILike('%' + searchString + '%'),
-            },
-      );
-    } else if (search) {
-      whereObj = Object.entries(search)
-        .filter(([, v]) => v) // filter empty properties
-        .map(([k, v]) => {
-          if (typeof v === 'number' || typeof v === 'boolean') {
-            return { [k]: v };
-          } else if (typeof v === 'string') {
-            return { [k]: ILike('%' + v + '%') };
-          } else {
-            //TODO: more types?
-          }
-        });
-    }
-    if (sortOrder && orderBy) {
-      if (orderBy === 'type') {
-        orderObj = { type: { value: sortOrder.toUpperCase() } };
-      } else {
-        orderObj = { [orderBy]: sortOrder.toUpperCase() };
-      }
-    } else {
-      orderObj = { created_at: 'ASC' };
-    }
-
-    return paginate<Contact>(this.contactRepository, options, {
-      relations: ['type'],
-      where: whereObj,
-      order: orderObj,
-    }).then(
-      (page) =>
-        new Pagination<ContactDto>(
-          page.items.map((entity) => this.mapContactToDto(entity)),
-          page.meta,
-          page.links,
-        ),
-    );
   }
 
   /**
@@ -138,25 +69,6 @@ export class ContactsService {
       });
     }
     return dtos;
-  }
-
-  /**
-   * Returns the contact with the specified id
-   * @param id the id of the contact to return
-   * @returns {Promise<ContactDto>} The contact with the specified id
-   */
-  async findOne(id: number): Promise<ContactDto> {
-    let contact: Contact;
-    try {
-      contact = await this.contactRepository.findOneOrFail({
-        where: { id },
-        relations: ['type'],
-      });
-    } catch (e) {
-      this.logger.error(`Getting contact with id ${id} failed.`, e.stack);
-      throw new NotFoundException();
-    }
-    return this.mapContactToDto(contact);
   }
 
   async findAll(): Promise<ContactDto> {

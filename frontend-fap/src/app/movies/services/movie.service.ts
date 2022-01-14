@@ -56,7 +56,7 @@ export class MovieService {
     limit: number,
     orderBy: string | undefined,
     sortOrder: string | undefined,
-    query: string,
+    searchString: string,
     selectedTagIDs: number[],
     negativeTagIDs: number[],
     exactYear: number,
@@ -71,14 +71,14 @@ export class MovieService {
     hasDCP: number,
     selectedDirectorIDs: number[],
     selectedContactIDs: number[],
-  ): Observable<PaginationState> {
+  ): Observable<MoviesPaginationState> {
     console.log(
-      '[MovieService] - GET MOVIES ADVANCED',
+      '[MovieService] - GET MOVIES ADVANCED WITH page, limit, orderBy, sortOrder, searchString',
       page,
       limit,
       orderBy,
       sortOrder,
-      query,
+      searchString,
     );
 
     const params = new HttpParams({
@@ -87,7 +87,7 @@ export class MovieService {
         limit: limit,
         ...(orderBy !== undefined && { orderBy: orderBy }),
         ...(sortOrder !== undefined && { sortOrder: sortOrder }),
-        query: query,
+        searchString: searchString,
         selectedTagIDs: selectedTagIDs,
         negativeTagIDs: negativeTagIDs,
         exactYear: exactYear,
@@ -104,7 +104,7 @@ export class MovieService {
         selectedContactIDs: selectedContactIDs,
       },
     });
-    return this.http.get<PaginationState>(`${api}/advanced`, {
+    return this.http.get<MoviesPaginationState>(`${api}/advanced`, {
       params: params,
     });
   }

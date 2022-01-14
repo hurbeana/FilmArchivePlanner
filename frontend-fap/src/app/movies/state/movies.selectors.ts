@@ -154,3 +154,10 @@ export const selectAdvancedSearchState = createSelector(
     return state.advancedSearchState;
   },
 );
+
+export const selectAdvancedSearchLoading = createSelector(
+  advancedSearchState,
+  (state: MoviesState) => {
+    return state.advancedSearchState.loading;
+  },
+);

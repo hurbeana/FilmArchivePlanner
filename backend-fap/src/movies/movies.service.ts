@@ -286,7 +286,9 @@ export class MoviesService {
    * @param search Search DTO for detailed search
    * @param orderBy field to order by
    * @param sortOrder sortorder, either ASC or DESC
-   * @param searchString
+   * @param searchString searchString
+   * @param whereDictAdvanced
+   * @param advanced: boolean = false
    * @returns {Promise<Pagination<MovieDto>>} The movies in a paginated form
    */
   async find(
@@ -296,6 +298,7 @@ export class MoviesService {
     sortOrder: 'ASC' | 'DESC' = 'DESC',
     searchString: string,
     whereDictAdvanced?: any,
+    advanced = false,
   ): Promise<Pagination<MovieDto>> {
     let whereObj = [];
     let orderObj = {};
@@ -334,27 +337,41 @@ export class MoviesService {
       orderObj = { created_at: 'ASC' };
     }
 
-    return paginate<Movie>(this.moviesRepository, options, {
-      relations: [
-        'directors',
-        'contact',
-        'countriesOfProduction',
-        'animationTechniques',
-        'softwareUsed',
-        'keywords',
-        'submissionCategories',
-        'dialogLanguages',
-        'selectionTags',
-      ],
-      where: whereObj,
-      order: orderObj,
-    }).then((page) => {
-      return new Pagination<MovieDto>(
-        page.items.map((entity) => this.mapMovieToDto(entity)),
-        page.meta,
-        page.links,
-      );
-    });
+    if (advanced) {
+      return paginate<Movie>(this.moviesRepository, options, {
+        relations: [
+          'directors',
+          'contact',
+          'countriesOfProduction',
+          'animationTechniques',
+          'softwareUsed',
+          'keywords',
+          'submissionCategories',
+          'dialogLanguages',
+          'selectionTags',
+        ],
+        where: whereObj,
+        order: orderObj,
+      }).then((page) => {
+        return new Pagination<MovieDto>(
+          page.items.map((entity) => this.mapMovieToDto(entity)),
+          page.meta,
+          page.links,
+        );
+      });
+    } else {
+      return paginate<Movie>(this.moviesRepository, options, {
+        relations: ['contact'],
+        where: whereObj,
+        order: orderObj,
+      }).then((page) => {
+        return new Pagination<MovieDto>(
+          page.items.map((entity) => this.mapMovieToDto(entity)),
+          page.meta,
+          page.links,
+        );
+      });
+    }
   }
 
   async findAdvanced(
@@ -362,7 +379,7 @@ export class MoviesService {
     search: SearchMovieDto,
     orderBy: string,
     sortOrder: 'ASC' | 'DESC' = 'DESC',
-    query: string,
+    searchString: string,
     selectedTagIDs: number[],
     negativeTagIDs: number[],
     exactYear: number,
@@ -382,7 +399,7 @@ export class MoviesService {
 
     if (exactYear != -1) whereDict['yearOfProduction'] = exactYear;
     if (fromYear != -1)
-      whereDict['yearOfProduction'] = LessThanOrEqual(fromYear);
+      whereDict['yearOfProduction'] = MoreThanOrEqual(fromYear);
     if (toYear != -1) whereDict['yearOfProduction'] = LessThanOrEqual(toYear);
     if (fromYear != -1 && toYear != -1)
       whereDict['yearOfProduction'] = Between(fromYear, toYear);
@@ -409,8 +426,9 @@ export class MoviesService {
       search,
       orderBy,
       sortOrder,
-      query,
+      searchString,
       whereDict,
+      true,
     ).then((result) => {
       const movies: MovieDto[] = [];
 
@@ -423,6 +441,7 @@ export class MoviesService {
         movie.dialogLanguages.forEach((tag) => allTagIDs.push(tag.id));
         movie.keywords.forEach((tag) => allTagIDs.push(tag.id));
         movie.softwareUsed.forEach((tag) => allTagIDs.push(tag.id));
+        movie.selectionTags.forEach((tag) => allTagIDs.push(tag.id));
 
         let posTags = false;
         let negTags = true;

@@ -40,7 +40,7 @@ export class MovieEffects {
           limit,
           orderBy,
           sortOrder,
-          query,
+          searchString,
           selectedTagIDs,
           negativeTagIDs,
           exactYear,
@@ -62,7 +62,7 @@ export class MovieEffects {
               limit,
               orderBy,
               sortOrder,
-              query,
+              searchString,
               selectedTagIDs,
               negativeTagIDs,
               exactYear,
@@ -120,9 +120,19 @@ export class MovieEffects {
   createMovie$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MovieActions.createMovie),
-      switchMap(({ movie }) =>
-        this.moviesService.createMovie(movie).pipe(
-          map((movie) => MovieActions.createdMovieSuccess({ movie })),
+      mergeMap(({ movieToCreate, searchOptions }) =>
+        this.moviesService.createMovie(movieToCreate).pipe(
+          map((createdMovie) =>
+            MovieActions.createMovieSuccess({
+              createdMovie: createdMovie,
+              searchOptions: searchOptions,
+            }),
+          ),
+          tap((_) =>
+            this.messageService.showSuccessSnackBar(
+              'Movie created successfully',
+            ),
+          ),
           catchError((error) =>
             of(
               MovieActions.createMovieFailed({
@@ -179,6 +189,29 @@ export class MovieEffects {
               this.messageService.showErrorSnackBar(err);
               return EMPTY;
             }),
+          ),
+      ),
+    ),
+  );
+
+  /* needed? edit view routes anyway and reload is triggered */
+  reloadAfterCreate$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(MovieActions.createMovieSuccess),
+      mergeMap(({ createdMovie, searchOptions }) =>
+        this.moviesService
+          .getMovies(
+            searchOptions.page,
+            searchOptions.limit,
+            searchOptions.orderBy,
+            searchOptions.sortOrder,
+            searchOptions.searchString,
+          )
+          .pipe(
+            map((pagination) =>
+              MovieActions.getMoviesSuccess({ pagination: pagination }),
+            ),
+            catchError(() => EMPTY), // TODO: error handling
           ),
       ),
     ),

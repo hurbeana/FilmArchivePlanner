@@ -11,12 +11,7 @@ import { Movie } from '../../movies/models/movie';
 import { Contact } from '../../contacts/models/contact';
 import { Director } from '../../directors/models/director';
 
-export type SortColumn =
-  | keyof Tag
-  | keyof Movie
-  | keyof Contact
-  | keyof Director
-  | '';
+export type SortColumn = string;
 export type SortDirection = 'asc' | 'desc' | '';
 const rotate: { [key: string]: SortDirection } = {
   asc: 'desc',

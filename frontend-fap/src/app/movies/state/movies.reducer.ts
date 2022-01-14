@@ -18,7 +18,7 @@ export const initialState: MoviesState = {
     sortOrder: '',
   },
   advancedSearchState: {
-    query: '',
+    loading: false,
     selectedTagIDs: [],
     negativeTagIDs: [],
     exactYear: -1,
@@ -52,6 +52,10 @@ export const moviesReducer = createReducer(
   on(MovieActions.getMovieSuccess, (state, { movie }) => ({
     ...state,
     detailsMovie: movie,
+    advancedSearchState: {
+      ...state.advancedSearchState,
+      loading: false,
+    },
   })),
   on(MovieActions.getMovieByIdAndSetAsSelectedMovie, (state) => state),
   on(

@@ -28,7 +28,7 @@ export class SearchMovieAdvancedPagingDto extends SearchMovieDto {
 
   @IsOptional()
   @IsString()
-  query: string;
+  searchString: string;
 
   @IsOptional()
   @IsArray()

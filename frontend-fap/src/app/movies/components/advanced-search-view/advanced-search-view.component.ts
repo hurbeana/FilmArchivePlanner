@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { AppState } from 'src/app/app.state';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActionsSubject, Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
 import { Contact } from 'src/app/contacts/models/contact';
 import { ContactService } from 'src/app/contacts/services/contact.service';
 import { Director } from 'src/app/directors/models/director';
@@ -10,6 +9,8 @@ import { Tag } from 'src/app/tags/models/tag';
 import { TagService } from 'src/app/tags/services/tag.service';
 import * as MovieActions from '../../state/movies.actions';
 import * as MovieSelectors from '../../state/movies.selectors';
+import { MoviesState } from '../../../app.state';
+import { ofType } from '@ngrx/effects';
 
 @Component({
   selector: 'app-advanced-search-view',
@@ -21,7 +22,6 @@ export class AdvancedSearchViewComponent implements OnInit {
   directors$ = new Observable<Director[]>();
   contacts$ = new Observable<Contact[]>();
 
-  query = '';
   selectedTags: Tag[] = [];
   negativeTags: Tag[] = [];
   exactYear: string;
@@ -39,32 +39,58 @@ export class AdvancedSearchViewComponent implements OnInit {
 
   movieCount: number;
 
+  @Input()
+  page: number;
+  @Input()
+  limit: number;
+  @Input()
+  orderBy: string;
+  @Input()
+  sortOrder: string;
+  @Input()
+  searchString: string;
+
+  loadingSubscription = new Subscription();
+  loading: boolean | undefined;
+
   constructor(
     private tagService: TagService,
     private directorsService: DirectorService,
     private contactService: ContactService,
-    private store: Store<AppState>,
+    private store: Store<MoviesState>,
+    private actionsSubject: ActionsSubject,
   ) {}
 
   ngOnInit(): void {
     this.tags$ = this.tagService.getAllTags(); //retrieve tags, contacts and directors from backend
     this.contacts$ = this.contactService.getAllContacts();
     this.directors$ = this.directorsService.getAllDirectors();
-    this.store.select(MovieSelectors.pagination).subscribe((m) => {
-      this.movieCount = m.pagination.meta.totalItems;
-      if (
-        this.movieCount > 0 &&
-        document.getElementsByClassName('movie-count').length > 0
-      ) {
-        document
-          .getElementsByClassName('movie-count')[0]
-          .setAttribute('style', 'color: #3d9e11; border: 1px solid #3d9e11');
-      } else {
-        document
-          .getElementsByClassName('movie-count')[0]
-          .setAttribute('style', 'color: #c94b1a; border: 1px solid #c94b1a');
-      }
-    });
+    this.store
+      .select(MovieSelectors.selectTotalItems)
+      .subscribe((itemCount) => {
+        this.movieCount = itemCount;
+        if (
+          this.movieCount > 0 &&
+          document.getElementsByClassName('movie-count').length > 0
+        ) {
+          document
+            .getElementsByClassName('movie-count')[0]
+            .setAttribute('style', 'color: #3d9e11; border: 1px solid #3d9e11');
+        } else {
+          document
+            .getElementsByClassName('movie-count')[0]
+            .setAttribute('style', 'color: #c94b1a; border: 1px solid #c94b1a');
+        }
+      });
+    this.loadingSubscription = this.actionsSubject
+      .pipe(ofType(MovieActions.getMoviesSuccess))
+      .subscribe((movies) => {
+        this.loading = false;
+      });
+  }
+
+  ngOnDestory() {
+    this.loadingSubscription.unsubscribe();
   }
 
   clearDirectors() {
@@ -135,7 +161,6 @@ export class AdvancedSearchViewComponent implements OnInit {
 
   clearAll() {
     //reset all values
-    this.query = '';
     this.clearTags(true);
     this.clearTags(false);
     this.exactYear = '';
@@ -196,7 +221,7 @@ export class AdvancedSearchViewComponent implements OnInit {
     this.store.dispatch(
       MovieActions.setAdvancedSearchState({
         advancedSearchState: {
-          query: this.query,
+          loading: true,
           selectedTagIDs: selectedTagIDs,
           negativeTagIDs: negativeTagIDs,
           exactYear: exactYearNum,
@@ -215,14 +240,13 @@ export class AdvancedSearchViewComponent implements OnInit {
       }),
     );
 
-    //TODO: movies.actions.ts setAdvancedSearch() -> have a look at
     this.store.dispatch(
       MovieActions.getMoviesAdvanced({
-        page: 1,
-        limit: 16,
-        orderBy: '',
-        sortOrder: '',
-        query: this.query,
+        page: this.page,
+        limit: this.limit,
+        orderBy: this.orderBy,
+        sortOrder: this.sortOrder,
+        searchString: this.searchString ?? '',
         selectedTagIDs: selectedTagIDs,
         negativeTagIDs: negativeTagIDs,
         exactYear: exactYearNum,
@@ -239,5 +263,6 @@ export class AdvancedSearchViewComponent implements OnInit {
         selectedContactIDs: selectedContactIDs,
       }),
     );
+    this.loading = true;
   }
 }

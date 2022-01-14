@@ -26,12 +26,11 @@
     border-color: #c8c8c8;
 }
 .tag-field{
-    padding-top: 0px;
-    padding-bottom: 0px;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding: 0;
     min-height: 29px;
-    width: 376px;
+    width: 366px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 .radio-field{
     padding-top: 0px;
@@ -102,7 +101,7 @@
         display: block !important;
     }
     td {
-		position: relative;
+    position: relative;
     }
     .card{
         min-width: 580px;
@@ -111,3 +110,15 @@
         height: 0px !important;
     }
 }
+
+
+/* select container höhe */
+::ng-deep .ng-select .ng-select-container{
+  min-height: auto;
+}
+
+::ng-deep .ng-dropdown-panel.ng-select-bottom{
+  margin-top: -7px;
+}
+
+

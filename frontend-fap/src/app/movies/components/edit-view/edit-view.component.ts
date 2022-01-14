@@ -5,7 +5,7 @@ import { MoviesState } from '../../../app.state';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as MovieActions from '../../state/movies.actions';
 import {
-  createdMovieSuccess,
+  createMovieSuccess,
   createMovie,
   createMovieFailed,
   getMovie,
@@ -166,7 +166,7 @@ export class EditViewComponent implements OnInit, OnDestroy {
 
     this.actions$
       .pipe(
-        ofType(createdMovieSuccess),
+        ofType(createMovieSuccess),
         takeUntil(this.destroy$),
         tap(() => {
           this.openSnackBar(
@@ -328,7 +328,15 @@ export class EditViewComponent implements OnInit, OnDestroy {
         );
       } else {
         // create
-        this.store.dispatch(createMovie({ movie: this.moviesForm.value }));
+        this.store.dispatch(
+          createMovie({
+            movieToCreate: this.moviesForm.value,
+            searchOptions: {
+              page: 1,
+              limit: 16,
+            },
+          }),
+        );
       }
     } else {
       this.openSnackBar('Validation Error!', 'OK', 'error-snackbar');

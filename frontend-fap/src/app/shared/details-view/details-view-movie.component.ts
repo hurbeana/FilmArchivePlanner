@@ -29,7 +29,15 @@ import { Subscription } from 'rxjs';
       />
 
       <span class="mat-primary label-colon" i18n>Movie Files</span>
-      <div *ngIf="movie?.movieFiles; else emptyInput">
+      <div
+        *ngIf="
+          movie &&
+            movie.movieFiles &&
+            movie.movieFiles.length &&
+            movie.movieFiles.length > 0;
+          else emptyInput
+        "
+      >
         <div
           *ngFor="let file of movie?.movieFiles"
           type="text"
@@ -43,7 +51,15 @@ import { Subscription } from 'rxjs';
 
       <span class="mat-primary label-colon" i18n>DCP Files</span>
       <!--<input type="text" disabled value="{{ printFiles(movie?.dcpFiles) }}" />-->
-      <div *ngIf="movie?.dcpFiles; else emptyInput">
+      <div
+        *ngIf="
+          movie &&
+            movie.dcpFiles &&
+            movie.dcpFiles.length &&
+            movie.dcpFiles.length > 0;
+          else emptyInput
+        "
+      >
         <div
           *ngFor="let file of movie?.dcpFiles"
           type="text"
@@ -74,7 +90,15 @@ import { Subscription } from 'rxjs';
       </div>
 
       <span class="mat-primary label-colon" i18n>Still Files</span>
-      <div *ngIf="movie?.stillFiles; else emptyInput">
+      <div
+        *ngIf="
+          movie &&
+            movie.stillFiles &&
+            movie.stillFiles.length &&
+            movie.stillFiles.length > 0;
+          else emptyInput
+        "
+      >
         <div
           *ngFor="let file of movie?.stillFiles"
           type="text"
@@ -87,7 +111,15 @@ import { Subscription } from 'rxjs';
       </div>
 
       <span class="mat-primary label-colon" i18n>Subtitle Files</span>
-      <div *ngIf="movie?.subtitleFiles; else emptyInput">
+      <div
+        *ngIf="
+          movie &&
+            movie.subtitleFiles &&
+            movie.subtitleFiles.length &&
+            movie.subtitleFiles.length > 0;
+          else emptyInput
+        "
+      >
         <div
           *ngFor="let file of movie?.subtitleFiles"
           type="text"
@@ -100,7 +132,15 @@ import { Subscription } from 'rxjs';
       </div>
 
       <span class="mat-primary label-colon" i18n>Directors</span>
-      <div *ngIf="movie?.directors; else emptyInput">
+      <div
+        *ngIf="
+          movie &&
+            movie.directors &&
+            movie.directors.length &&
+            movie.directors.length > 0;
+          else emptyInput
+        "
+      >
         <div
           *ngFor="let director of movie?.directors"
           type="text"

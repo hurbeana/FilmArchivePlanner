@@ -51,19 +51,29 @@ export class ContactEffects {
   createContact$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ContactActions.createContact),
-      switchMap(({ contact }) =>
-        this.contactsService.createContact(contact).pipe(
-          map((contact) => ContactActions.createContactSuccess({ contact })),
-          tap((_) =>
-            this.messageService.showSuccessSnackBar(
-              'Contact created successfully',
+      mergeMap(
+        ({ contactToCreate, page, limit, orderBy, sortOrder, searchString }) =>
+          this.contactsService.createContact(contactToCreate).pipe(
+            map((createdContact) =>
+              ContactActions.createContactSuccess({
+                createdContact: createdContact,
+                page: page,
+                limit: limit,
+                orderBy: orderBy,
+                sortOrder: sortOrder,
+                searchString: searchString,
+              }),
             ),
+            tap((_) =>
+              this.messageService.showSuccessSnackBar(
+                'Contact created successfully',
+              ),
+            ),
+            catchError((err) => {
+              this.messageService.showErrorSnackBar(err);
+              return EMPTY;
+            }),
           ),
-          catchError((err) => {
-            this.messageService.showErrorSnackBar(err);
-            return EMPTY;
-          }),
-        ),
       ),
     ),
   );
@@ -74,7 +84,11 @@ export class ContactEffects {
       ofType(ContactActions.updateContact),
       switchMap(({ contact, id }) =>
         this.contactsService.updateContact(contact, id).pipe(
-          map((contact) => ContactActions.updateContactSuccess({ contact })),
+          map((contact) =>
+            ContactActions.updateContactSuccess({
+              contact,
+            }),
+          ),
           tap((_) =>
             this.messageService.showSuccessSnackBar(
               'Contact updated successfully',
@@ -116,6 +130,23 @@ export class ContactEffects {
               return EMPTY;
             }),
           ),
+      ),
+    ),
+  );
+
+  reloadAfterCreate$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ContactActions.createContactSuccess),
+      mergeMap(
+        ({ createdContact, page, limit, orderBy, sortOrder, searchString }) =>
+          this.contactsService
+            .getContacts(page, limit, orderBy, sortOrder, searchString)
+            .pipe(
+              map((pagination) =>
+                ContactActions.getContactsSuccess({ pagination: pagination }),
+              ),
+              catchError(() => EMPTY), // TODO: error handling
+            ),
       ),
     ),
   );

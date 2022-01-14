@@ -41,8 +41,7 @@ export class TableViewComponent implements AfterViewInit {
   pageSize = 16;
   totalPages = 0;
   page = 1;
-
-  searchTerm: string;
+  searchString: '';
   orderBy: string;
   sortOrder: string;
   loading = new BehaviorSubject<boolean>(true);
@@ -82,6 +81,10 @@ export class TableViewComponent implements AfterViewInit {
     this.store
       .select(MovieSelectors.selectCurrentPage)
       .subscribe((currentPage) => (this.page = currentPage));
+    this.store
+      .select(MovieSelectors.selectSearchString)
+      .subscribe((searchString) => (this.searchString = searchString));
+
     this.loading.next(false);
     this.store
       .select(MovieSelectors.selectAdvancedSearchState)
@@ -98,7 +101,7 @@ export class TableViewComponent implements AfterViewInit {
             limit: this.pageSize,
             orderBy: this.orderBy,
             sortOrder: this.sortOrder,
-            query: this.advancedSearchState.query,
+            searchString: this.search.nativeElement.value,
             selectedTagIDs: this.advancedSearchState.selectedTagIDs,
             negativeTagIDs: this.advancedSearchState.negativeTagIDs,
             exactYear: this.advancedSearchState.exactYear,

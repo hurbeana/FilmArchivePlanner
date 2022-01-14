@@ -21,7 +21,7 @@ export const getMoviesAdvanced = createAction(
     limit: number;
     orderBy?: string;
     sortOrder?: string;
-    query: string;
+    searchString: string;
     selectedTagIDs: number[];
     negativeTagIDs: number[];
     exactYear: number;
@@ -64,11 +64,11 @@ export const getMovieByIdAndSetAsSelectedMovieSuccess = createAction(
 /* whenever this action is called, the 'createMovie$' effect in movies.effects.ts  is executed */
 export const createMovie = createAction(
   '[Movie List] Create Movie',
-  props<{ movie: CreateUpdateMovieDto }>(),
+  props<{ movieToCreate: CreateUpdateMovieDto; searchOptions: any }>(),
 );
-export const createdMovieSuccess = createAction(
+export const createMovieSuccess = createAction(
   '[Movie List] Created Movie Success',
-  props<{ movie: Movie }>(),
+  props<{ createdMovie: Movie; searchOptions: any }>(),
 );
 export const createMovieFailed = createAction(
   '[Movie List] Created Movie Failed',

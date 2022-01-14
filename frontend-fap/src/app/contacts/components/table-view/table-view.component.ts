@@ -193,7 +193,16 @@ export class TableViewComponent implements AfterViewInit {
     );
   }
   createContact(contact: Contact) {
-    this.store.dispatch(ContactActions.createContact({ contact: contact }));
+    this.store.dispatch(
+      ContactActions.createContact({
+        contactToCreate: contact,
+        page: this.page,
+        limit: this.pageSize,
+        orderBy: this.orderBy,
+        sortOrder: this.sortOrder,
+        searchString: this.search.nativeElement.value,
+      }),
+    );
   }
 
   openEditContactModal(contact: Contact) {
