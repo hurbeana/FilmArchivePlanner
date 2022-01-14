@@ -1,5 +1,6 @@
 import {
   Controller,
+  Delete,
   Logger,
   NotFoundException,
   Param,
@@ -31,5 +32,11 @@ export class ImportController {
     }
 
     return this.importService.importObjectsFromCSV(DomainType[type], file);
+  }
+
+  @Delete('cache')
+  clearCache() {
+    this.logger.log(`Clear cache called.`);
+    this.importService.clearCache();
   }
 }

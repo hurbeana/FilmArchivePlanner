@@ -29,6 +29,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('./festivals/festivals.module').then((m) => m.FestivalsModule),
   }, // lazy load module
+  {
+    path: 'import',
+    loadChildren: () =>
+      import('./import/import.module').then((m) => m.ImportModule),
+  }, // lazy load module
   { path: 'notfound', component: NotFoundComponent },
   { path: '**', component: NotFoundComponent },
 ];

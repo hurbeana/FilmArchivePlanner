@@ -29,6 +29,16 @@ export class ImportService {
   private readonly movieIds = new Map<number, number>();
 
   /**
+   * Clears the cached mapping of old (imported) to new (created) ids
+   */
+  clearCache() {
+    this.tagIds.clear();
+    this.contactIds.clear();
+    this.directorIds.clear();
+    this.movieIds.clear();
+  }
+
+  /**
    * Imports objects from a csv file
    * @param type type of domain object contained in the file
    * @param file File containing the csv data to import
@@ -52,8 +62,8 @@ export class ImportService {
       .formatValueByType()
       .generateJsonFileFromCsv(csvFilePath, jsonFilePath);
 
+    await this.sleep(100); // there seems to be some issue with the csvToJson library and waiting seems to fix it
     const json = await getFile(jsonFilePath);
-    this.logger.log('Imported data: ' + json);
     const objects: any[] = JSON.parse(json);
 
     try {
@@ -158,6 +168,7 @@ export class ImportService {
       );
       object.dialogLanguages = this.getNewTags(object.dialogLanguages);
       object.contact = this.getNewContact(object.contact);
+      object.selectionTags = this.getNewTags(object.selectionTags);
 
       if (object.yearOfProduction === '') {
         object.yearOfProduction = undefined;
@@ -260,5 +271,9 @@ export class ImportService {
   private static async cleanUp(jsonPath: string, csvPath: string) {
     await deleteFile(jsonPath);
     await deleteFile(csvPath);
+  }
+
+  private sleep(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }

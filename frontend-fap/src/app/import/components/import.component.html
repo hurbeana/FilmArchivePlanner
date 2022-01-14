@@ -1,0 +1,93 @@
+<div class="content-import">
+  <div class="container-fluid">
+    <label for="formFileDirectors" class="form-label">Directors</label>
+    <div class="row">
+      <div class="col-md-8">
+        <input
+          class="form-control form-control-sm hidden"
+          [ngClass]="{
+            'is-valid': isDirectorsValid && isDirectorsSubmitted,
+            'is-invalid': !isDirectorsValid && isDirectorsSubmitted
+          }"
+          id="formFileDirectors"
+          #formFileDirectors
+          type="file"
+          accept="text/csv,.csv"
+          (change)="onFileSelected($event, 'directors')" />
+        <div class="valid-feedback" i18n>Imported successfully</div>
+        <div class="invalid-feedback">{{ directorsErrorMessage }}</div>
+      </div>
+      <div class="col-md-4">
+        <button type="button" class="btn-close" aria-label="Clear" (click)="formFileDirectors.value = ''; isDirectorsSubmitted = false"></button>
+      </div>
+    </div>
+    <br />
+    <label for="formFileTags" class="form-label">Tags</label>
+    <div class="row">
+      <div class="col-md-8">
+        <input
+          class="form-control form-control-sm"
+          [ngClass]="{
+            'is-valid': isTagsValid && isTagsSubmitted,
+            'is-invalid': !isTagsValid && isTagsSubmitted
+          }"
+          id="formFileTags"
+          #formFileTags
+          type="file"
+          accept="text/csv,.csv"
+          (change)="onFileSelected($event, 'tags')" />
+        <div class="valid-feedback" i18n>Imported successfully</div>
+        <div class="invalid-feedback">{{ tagsErrorMessage }}</div>
+      </div>
+      <div class="col-md-4">
+        <button type="button" class="btn-close" aria-label="Clear" (click)="formFileTags.value = ''; isTagsSubmitted = false"></button>
+      </div>
+    </div>
+    <br />
+    <label for="formFileContacts" class="form-label">Contacts</label>
+    <div class="row">
+      <div class="col-md-8">
+        <input
+          class="form-control form-control-sm"
+          [ngClass]="{
+            'is-valid': isContactsValid && isContactsSubmitted,
+            'is-invalid': !isContactsValid && isContactsSubmitted
+          }"
+          id="formFileContacts"
+          #formFileContacts
+          type="file"
+          accept="text/csv,.csv"
+          (change)="onFileSelected($event, 'contacts')" />
+        <div class="valid-feedback" i18n>Imported successfully</div>
+        <div class="invalid-feedback">{{ contactsErrorMessage }}</div>
+      </div>
+      <div class="col-md-4">
+        <button type="button" class="btn-close" aria-label="Clear" (click)="formFileContacts.value = ''; isContactsSubmitted = false"></button>
+      </div>
+    </div>
+    <br />
+    <label for="formFileMovies" class="form-label">Movies</label>
+    <div class="row">
+      <div class="col-md-8">
+        <input
+          class="form-control form-control-sm"
+          [ngClass]="{
+            'is-valid': isMoviesValid && isMoviesSubmitted,
+            'is-invalid': !isMoviesValid && isMoviesSubmitted
+          }"
+          id="formFileMovies"
+          #formFileMovies
+          type="file"
+          accept="text/csv,.csv"
+          (change)="onFileSelected($event, 'movies')" />
+        <div class="valid-feedback" i18n>Imported successfully</div>
+        <div class="invalid-feedback">{{ moviesErrorMessage }}</div>
+      </div>
+      <div class="col-md-4">
+        <button type="button" class="btn-close" aria-label="Clear" (click)="formFileMovies.value = ''; isMoviesSubmitted = false"></button>
+      </div>
+    </div>
+    <br />
+    <button type="button" class="btn btn-primary" (click)="importSelectedFiles()" i18n>Import files</button>
+  </div>
+</div>
