@@ -2,6 +2,8 @@ import { createAction, props } from '@ngrx/store';
 import { Festival } from '../models/festival';
 import { CreateUpdateFestivalDto } from '../models/create.festival';
 import { FestivalsPaginationState } from '../../app.state';
+import { Movie } from '../../movies/models/movie';
+import { FestivalEvent } from '../models/event';
 
 /* whenever this action is called, the 'getFestivals$' effect in festivals.effects.ts  is executed */
 export const getFestivals = createAction(
@@ -17,6 +19,15 @@ export const getFestivals = createAction(
 export const getFestivalsSuccess = createAction(
   '[Festivals List] Loaded Festivals Success',
   props<{ pagination: FestivalsPaginationState }>(),
+);
+
+export const getFestival = createAction(
+  '[Festival List] Get Festival',
+  props<{ id: number }>(),
+);
+export const getFestivalSuccess = createAction(
+  '[Festivals List] Loaded Festival Success',
+  props<{ festival: Festival }>(),
 );
 
 /* whenever this action is called, the 'createFestival$' effect in festivals.effects.ts  is executed */
@@ -68,5 +79,39 @@ export const deleteFestivalSuccess = createAction(
     orderBy: string;
     sortOrder: string;
     searchString: string;
+  }>(),
+);
+
+/* Events of festival*/
+export const createFestivalEvent = createAction(
+  '[FestivalEvent List] Create FestivalEvent',
+  props<{ festivalEvent: FestivalEvent }>(),
+);
+export const createFestivalEventSuccess = createAction(
+  '[FestivalEvent List] Created FestivalEvent Success',
+  props<{ festivalEvent: FestivalEvent }>(),
+);
+export const updateFestivalEvent = createAction(
+  '[FestivalEvent List] Update FestivalEvent',
+  props<{
+    festivalEvent: FestivalEvent;
+  }>(),
+);
+export const updateFestivalEventSuccess = createAction(
+  '[FestivalEvent List] Update FestivalEvent Success',
+  props<{
+    festivalEvent: FestivalEvent;
+  }>(),
+);
+export const deleteFestivalEvent = createAction(
+  '[FestivalEvent List] Remove FestivalEvent',
+  props<{
+    festivalEventToDelete: FestivalEvent;
+  }>(),
+);
+export const deleteFestivalEventSuccess = createAction(
+  '[FestivalEvent List] Remove FestivalEvent Success',
+  props<{
+    festivalEventToDelete: FestivalEvent;
   }>(),
 );

@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Event } from '../../events/entities/event.entity';
+import { Expose } from 'class-transformer';
 
 @Entity()
 export class Festival {
@@ -37,4 +38,14 @@ export class Festival {
   @OneToMany(() => Event, (ev) => ev.festival, { eager: true })
   @IsOptional()
   events: Event[];
+
+  @Expose()
+  get firstDate(): Date {
+    if (!this.events || this.events.length === 0) {
+      return undefined;
+    }
+    return this.events.reduce(function (p, v) {
+      return p.startDate < v.startDate ? p : v;
+    }).startDate;
+  }
 }

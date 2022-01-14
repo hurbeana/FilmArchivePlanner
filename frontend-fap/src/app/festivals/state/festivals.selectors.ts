@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { FestivalsState, TagsState } from '../../app.state';
+import { FestivalsState } from '../../app.state';
 
 /* feature selector */
 /* corresponds to "StoreModule.forRoot({ festivalsState: festivalsReducer })" */
@@ -22,6 +22,14 @@ export const selectSelectedFestival = createSelector(
   festivalsState,
   (s: FestivalsState) => {
     return s.selectedFestival;
+  },
+);
+
+/* selectedFestival */
+export const selectDetailsFestival = createSelector(
+  festivalsState,
+  (s: FestivalsState) => {
+    return s.detailsFestival;
   },
 );
 

@@ -1,6 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import * as FestivalActions from './festivals.actions';
 import { FestivalsState } from '../../app.state';
+import * as MovieActions from '../../movies/state/movies.actions';
 
 export const initialState: FestivalsState = {
   pagination: {
@@ -31,6 +32,11 @@ export const festivalsReducer = createReducer(
     },
     selectedFestival: null,
   })),
+  on(FestivalActions.getFestival, (state) => state),
+  on(FestivalActions.getFestivalSuccess, (state, { festival }) => ({
+    ...state,
+    detailsFestival: festival,
+  })),
   on(FestivalActions.createFestival, (state) => state),
   on(FestivalActions.createFestivalSuccess, (state, { festival }) => ({
     ...state,
@@ -54,9 +60,9 @@ export const festivalsReducer = createReducer(
     ...state,
     selectedFestival: selectedFestival,
   })),
-
   on(FestivalActions.updateFestivalSuccess, (state, { festival }) => ({
     ...state,
+    detailsFestival: festival,
     pagination: {
       ...state.pagination,
       items: [
@@ -67,7 +73,6 @@ export const festivalsReducer = createReducer(
     },
     selectedFestival: festival,
   })),
-
   on(FestivalActions.deleteFestivalSuccess, (state, { festivalToDelete }) => ({
     ...state,
     pagination: {
@@ -94,4 +99,44 @@ export const festivalsReducer = createReducer(
       },
     },
   })),
+  on(
+    FestivalActions.createFestivalEventSuccess,
+    (state, { festivalEvent }) => ({
+      ...state,
+      ...(state.detailsFestival && {
+        detailsFestival: {
+          ...state.detailsFestival,
+          events: [...state.detailsFestival.events, festivalEvent],
+        },
+      }),
+    }),
+  ),
+  on(
+    FestivalActions.updateFestivalEventSuccess,
+    (state, { festivalEvent }) => ({
+      ...state,
+      ...(state.detailsFestival && {
+        detailsFestival: {
+          ...state.detailsFestival,
+          events: state.detailsFestival?.events.map((x) =>
+            x.id === festivalEvent.id ? festivalEvent : x,
+          ),
+        },
+      }),
+    }),
+  ),
+  on(
+    FestivalActions.deleteFestivalEventSuccess,
+    (state, { festivalEventToDelete }) => ({
+      ...state,
+      ...(state.detailsFestival && {
+        detailsFestival: {
+          ...state.detailsFestival,
+          events: state.detailsFestival?.events.filter(
+            (x) => x.id !== festivalEventToDelete.id, //update event
+          ),
+        },
+      }),
+    }),
+  ),
 );

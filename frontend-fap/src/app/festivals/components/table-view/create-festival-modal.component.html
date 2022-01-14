@@ -1,6 +1,6 @@
 <!-- HEADER -->
 <div class="modal-header">
-  <h4 class="modal-title" id="modal-title">Festival creation</h4>
+  <h4 class="modal-title" id="modal-title">{{ modalTitle }}</h4>
   <button type="button" class="btn btn-md close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -61,7 +61,7 @@
   <!-- FOOTER -->
   <div class="modal-footer">
     <button class="btn btn-outline-secondary close" (click)="onCancelFestivalModal()">Cancel</button>
-    <button type="submit" class="btn btn-success" i18n>Create Festival</button>
+    <button type="submit" class="btn btn-success" i18n>{{ modalSubmitText }}</button>
     <!-- autoFocus a button with ngbAutofocus as attribute-->
   </div>
 </form>

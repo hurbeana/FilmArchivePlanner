@@ -5,6 +5,7 @@ import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { FestivalService } from '../services/festival.service';
 import * as FestivalActions from './festivals.actions';
 import { MessageService } from '../../core/services/message.service';
+import { EventService } from '../services/event.service';
 
 @Injectable()
 export class FestivalEffects {
@@ -12,7 +13,22 @@ export class FestivalEffects {
     private actions$: Actions,
     private festivalsService: FestivalService,
     private messageService: MessageService,
+    private eventService: EventService,
   ) {}
+
+  getFestival$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(FestivalActions.getFestival),
+      switchMap(({ id }) =>
+        this.festivalsService.getFestival(id).pipe(
+          map((festival) =>
+            FestivalActions.getFestivalSuccess({ festival: festival }),
+          ),
+          catchError(() => EMPTY), // TODO: error handling
+        ),
+      ),
+    ),
+  );
 
   /* is called, whenever an action of type 'getFestivals' is called */
   getFestivals$ = createEffect(() =>
@@ -121,6 +137,54 @@ export class FestivalEffects {
               ),
               catchError(() => EMPTY), // TODO: error handling
             ),
+      ),
+    ),
+  );
+
+  /* Festival Events */
+  /* is called, whenever an action of type 'createFestivalEvent' is called */
+  createFestivalEvent$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(FestivalActions.createFestivalEvent),
+      switchMap(({ festivalEvent }) =>
+        this.eventService.createFestivalEvent(festivalEvent).pipe(
+          map((festivalEvent) =>
+            FestivalActions.createFestivalEventSuccess({ festivalEvent }),
+          ),
+          catchError(() => EMPTY), // TODO: error handling
+        ),
+      ),
+    ),
+  );
+
+  /* is called, whenever an action of type 'createTag' is called */
+  updateFestivalEvent$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(FestivalActions.updateFestivalEvent),
+      switchMap(({ festivalEvent }) =>
+        this.eventService.updateFestivalEvent(festivalEvent).pipe(
+          map((festivalEvent) =>
+            FestivalActions.updateFestivalEventSuccess({ festivalEvent }),
+          ),
+          catchError(() => EMPTY), // TODO: error handling
+        ),
+      ),
+    ),
+  );
+
+  /* is called, whenever an action of type 'createMovie' is called */
+  deleteFestivalEvent$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(FestivalActions.deleteFestivalEvent),
+      mergeMap(({ festivalEventToDelete }) =>
+        this.eventService.deleteFestivalEvent(festivalEventToDelete).pipe(
+          map(() =>
+            FestivalActions.deleteFestivalEventSuccess({
+              festivalEventToDelete: festivalEventToDelete,
+            }),
+          ),
+          catchError(() => EMPTY), // TODO: error handling
+        ),
       ),
     ),
   );

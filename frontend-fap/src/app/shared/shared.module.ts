@@ -22,6 +22,7 @@ import { DetailsViewTagComponent } from './details-view/details-view-tag.compone
 import { DetailsViewMovieComponent } from './details-view/details-view-movie.component';
 import { DetailsViewDirectorComponent } from './details-view/details-view-director.component';
 import { DetailsViewContactComponent } from './details-view/details-view-contact.component';
+import { WithLoadingPipe } from './pipes/with.loading.pipe';
 import { DetailsViewFestivalComponent } from './details-view/details-view-festival.component';
 import { DurationFormatPipe } from './pipes/duration-format.pipe';
 import { RouterModule } from '@angular/router';
@@ -36,6 +37,7 @@ import { ViewContactModalComponent } from './components/view-contact-modal/view-
     NotFoundComponent,
     NgbdSortableHeaderDirective,
     ExportButtonComponent,
+    WithLoadingPipe,
     DetailsViewComponent,
     DetailsViewMovieComponent,
     DetailsViewDirectorComponent,
@@ -73,6 +75,7 @@ import { ViewContactModalComponent } from './components/view-contact-modal/view-
     FileUploadComponent,
     NgbdSortableHeaderDirective,
     ExportButtonComponent,
+    WithLoadingPipe,
     DetailsViewComponent,
     DurationFormatPipe,
   ],

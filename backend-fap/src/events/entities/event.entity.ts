@@ -25,6 +25,10 @@ export class Event {
   @UpdateDateColumn()
   last_updated: Date;
 
+  @IsString()
+  @Column()
+  title: string;
+
   @IsEnum(EventType)
   @Column()
   type: EventType;

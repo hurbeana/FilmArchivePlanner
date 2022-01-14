@@ -1,0 +1,97 @@
+mat-drawer {
+  //width: 200px;
+  width: 16%;
+  min-width: 150px;
+}
+.planner-header {
+  display: flex;
+  flex-flow: row nowrap;
+  //justify-content: space-between;
+  align-items: center;
+  margin: 0.5rem;
+}
+
+/* make calendar scrollable*/
+::ng-deep .cal-week-view .cal-time-events {
+  max-height: calc(
+    100vh - 64px - 80px - 50px - 52px
+  ); //  - header - cal-header - cal-cells-header  - footer
+  overflow-y: auto;
+}
+
+::ng-deep .cal-day-headers {
+  margin-right: 14.5px;
+}
+
+::ng-deep .cal-day-columns {
+  height: 100%;
+}
+
+.cal-event-actions {
+  display: flex;
+  justify-content: end;
+}
+.cal-event-action {
+  margin-left: 5px;
+}
+
+.cal-event > div,
+.cal-event > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.movie-title-row {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.festival-edit-box {
+  margin: 0 0.5rem 0 0;
+}
+
+// header left part
+#FestivalInfoContainer {
+  //align-content: flex-start;
+  //justify-content: flex-start;
+  flex: 1;
+}
+
+// header middle part
+#calendarViewChangeContainer {
+  //align-content: center;
+  //justify-content: center;
+  flex: 1;
+  h2 {
+    margin-top: 0 !important;
+  }
+}
+
+// header right part
+#CalendarViewRangeChangeContainer {
+  //align-content: flex-end;
+  //justify-content: flex-end;
+  flex: 1;
+  display: block;
+}
+
+#CalendarViewRangeChangerHelper {
+  float: right;
+}
+
+#btnEditFestivalInfo {
+  align-self: center;
+}
+
+#calendarViewChangeContainer {
+  align-self: center; // does not put the middle div in the center of the screen
+}
+
+@media only screen and (max-width: 940px) {
+  .planner-header {
+    flex-flow: column;
+  }
+  .planner-header > #CalendarViewRangeChangeContainer {
+    margin-top: 0.5rem;
+  }
+}

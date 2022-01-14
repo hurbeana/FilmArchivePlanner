@@ -1,0 +1,46 @@
+<div class="movie-list-container">
+  <div class="movie-list-header">
+    <h2 id="movie-list-header-title" class="movie-list-header-element">Movies</h2>
+    <button id="movie-list-button-clear-search" class="btn btn-secondary no-wrap" (click)="clearSearchFields()">clear search</button>
+  </div>
+  <div class="movie-list-filter">
+    <div class="movie-list-filter-element">
+      <label>Selection tag:</label>
+      <!--input type="text" name="selectionTag" id="selectionTag" placeholder="PLACEHOLDER ELEMENT" /-->
+      <form id="movieSelectionForm" #movieSelectionForm="ngForm">
+        <shared-tag-input
+          id="movieSelectionTagField"
+          [form]="movieSelectionForm"
+          [formCtrlName]="'movieSelectionTag'"
+          [(model)]="movieSelectionTag"
+          (modelChange)="loadMovies()"
+          [tagType]="'Selection'"
+          [readonly]="false"
+          [multiple]="false"></shared-tag-input>
+      </form>
+    </div>
+    <div class="movie-list-filter-element">
+      <!--label>Search:</label-->
+      <input type="text" name="selectionTag" id="movieSearchString" class="form-control" placeholder="Search..." [(ngModel)]="movieSearchString" #searchStringField />
+    </div>
+  </div>
+  <div class="movie-list-content">
+    <div *ngIf="obs$ | withLoading | async as obs">
+      <ng-template [ngIf]="obs.loading">
+        <div class="d-flex justify-content-center mt-5">
+          <div class="spinner-grow" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+    <ul cdkDropList [cdkDropListConnectedTo]="['calendar-view']" class="list-group movie-list-content-list">
+      <li class="list-group-item" *ngFor="let event of events | async; index as i; trackBy: trackMovie">
+        <div class="movie-list-content-element" mwlDraggable [dropData]="{ event: event }" [touchStartLongPress]="{ delay: 300, delta: 30 }" dragActiveClass="drag-active">
+          <p>{{ event?.title }}</p>
+          <p>{{ event?.meta?.movie?.duration }} min</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

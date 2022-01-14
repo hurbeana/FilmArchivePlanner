@@ -100,4 +100,5 @@ export interface TagsState {
 export interface FestivalsState {
   pagination: FestivalsPaginationState;
   selectedFestival?: Festival | null;
+  detailsFestival?: Festival; // festival which is loaded by id for fullscreen detailsview
 }

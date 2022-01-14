@@ -32,6 +32,7 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/angular-calendar/css/angular-calendar.css",
               "src/styles.less"
             ],
             "scripts": []
@@ -132,6 +133,7 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/angular-calendar/css/angular-calendar.css",
               "src/styles.less"
             ],
             "scripts": []

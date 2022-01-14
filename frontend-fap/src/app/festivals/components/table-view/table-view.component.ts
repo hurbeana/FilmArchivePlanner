@@ -8,28 +8,32 @@ import {
 } from '@angular/core';
 import { ActionsSubject, Store } from '@ngrx/store';
 import { FestivalsState } from '../../../app.state';
-import { fromEvent, Observable, Subscription } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { fromEvent, Observable, Subject, Subscription } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import * as FestivalSelectors from '../../state/festivals.selectors';
 import * as FestivalActions from '../../state/festivals.actions';
 import {
+  createFestivalSuccess,
+  updateFestival,
+} from '../../state/festivals.actions';
+import {
   debounceTime,
   distinctUntilChanged,
   filter,
+  takeUntil,
   tap,
 } from 'rxjs/operators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateFestivalModalComponent } from './create-festival-modal.component';
 import { ConfirmDeleteFestivalModalComponent } from './confirm-delete-festival-modal.component';
-import { FestivalService } from '../../services/festival.service';
 import {
   NgbdSortableHeaderDirective,
   SortEvent,
 } from '../../../shared/directives/sortable.directive';
 import { Festival } from '../../models/festival';
 import { CreateUpdateFestivalDto } from '../../models/create.festival';
-import { ofType } from '@ngrx/effects';
+import { Actions, ofType } from '@ngrx/effects';
 
 @Component({
   selector: 'table-view',
@@ -38,6 +42,8 @@ import { ofType } from '@ngrx/effects';
   providers: [],
 })
 export class TableViewComponent implements AfterViewInit {
+  destroy$ = new Subject();
+
   festivals: Observable<Festival[]>;
   numberOfFestivals: number;
   festivalOnPageCount: number;
@@ -62,7 +68,9 @@ export class TableViewComponent implements AfterViewInit {
   constructor(
     private store: Store<FestivalsState>,
     private route: ActivatedRoute,
+    private router: Router,
     private modalService: NgbModal,
+    private actions$: Actions,
     private actionsSubject: ActionsSubject,
   ) {
     this.festivals = this.store.select(FestivalSelectors.selectFestivals);
@@ -173,7 +181,6 @@ export class TableViewComponent implements AfterViewInit {
     modalRef.componentInstance.festivalToCreate = newFestival;
     modalRef.result.then(
       (festival) => {
-        console.log(festival);
         this.createFestival(modalRef.componentInstance.festivalToCreate);
       },
       () => {
@@ -181,8 +188,43 @@ export class TableViewComponent implements AfterViewInit {
       },
     );
   }
+
+  openEditFestivalModal(festival: Festival) {
+    const modalRef = this.modalService.open(CreateFestivalModalComponent, {
+      centered: true,
+      keyboard: true,
+      //backdrop: 'static' // won`t close on click outside when uncommented
+    });
+    modalRef.componentInstance.festivalToCreate = {
+      name: festival.name,
+      location: festival.location,
+      description: festival.description,
+    };
+    modalRef.componentInstance.modalTitle = 'Festival edit';
+    modalRef.componentInstance.modalSubmitText = 'Save Festival';
+    modalRef.result.then(
+      (resfestival) => {
+        this.store.dispatch(
+          updateFestival({ festival: resfestival, id: festival.id }),
+        );
+      },
+      () => {
+        console.log('Unconfirmed close');
+      },
+    );
+  }
+
   createFestival(festival: Festival) {
     this.store.dispatch(FestivalActions.createFestival({ festival: festival }));
+    this.actions$
+      .pipe(
+        ofType(createFestivalSuccess),
+        takeUntil(this.destroy$),
+        tap((x) => {
+          this.router.navigate(['/festivals', 'edit', x.festival.id]);
+        }),
+      )
+      .subscribe();
   }
 
   openConfirmDeleteFestivalModal(festival: Festival) {

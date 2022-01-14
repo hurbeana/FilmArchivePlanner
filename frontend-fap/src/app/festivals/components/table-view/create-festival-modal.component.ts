@@ -14,6 +14,9 @@ export class CreateFestivalModalComponent {
   usableTags: Tag[];
   visible = true;
 
+  modalTitle = 'Festival creation';
+  modalSubmitText = 'Create Festival';
+
   createFestival() {}
 
   onCancelFestivalModal() {

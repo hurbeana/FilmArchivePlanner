@@ -15,7 +15,28 @@ import { HomeComponent } from './components/home/home.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import {
+  calendar,
+  listUl,
+  NgxBootstrapIconsModule,
+  pencil,
+  search,
+  trash,
+  filter,
+  arrowLeft,
+  arrowRight,
+} from 'ngx-bootstrap-icons';
 
+const icons = {
+  trash,
+  pencil,
+  listUl,
+  calendar,
+  search,
+  filter,
+  arrowLeft,
+  arrowRight,
+};
 @NgModule({
   declarations: [HeaderComponent, FooterComponent, HomeComponent],
   imports: [
@@ -31,6 +52,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatSidenavModule,
     MatListModule,
     MatSnackBarModule,
+    NgxBootstrapIconsModule.pick(icons),
   ],
   exports: [
     HeaderComponent,
@@ -43,6 +65,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatButtonModule,
     MatToolbarModule,
     MatTabsModule,
+    NgxBootstrapIconsModule,
   ],
 })
 

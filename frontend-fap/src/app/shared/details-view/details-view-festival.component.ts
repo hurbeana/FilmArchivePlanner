@@ -26,7 +26,7 @@ import { DetailsViewComponent } from './details-view.component';
       type="text"
       class="form-control form-control-sm"
       readonly
-      value="{{ festival?.year }}"
+      value="{{ festival?.firstDate?.getFullYear() }}"
     />
 
     <span class="mat-primary label-colon" i18n>Description</span>

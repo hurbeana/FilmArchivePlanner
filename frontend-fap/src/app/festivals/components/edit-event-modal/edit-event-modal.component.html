@@ -1,0 +1,97 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">Edit Event</h4>
+  <button type="button" class="btn btn-outline-secondary close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="eventForm" (keydown.enter)="saveModal()">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input id="title" class="form-control" formControlName="title" name="title" type="text" [ngClass]="{ 'is-invalid': fieldInvalid('title') }" />
+      <div class="invalid-feedback" *ngIf="eventForm.get('title')?.hasError('required')">
+        <p>Value is required</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="startDate">Start</label>
+      <div class="input-group">
+        <input
+          id="startDate"
+          class="form-control"
+          formControlName="startDate"
+          name="start-date"
+          placeholder="dd.mm.yyyy"
+          ngbDatepicker
+          #dpStart="ngbDatepicker"
+          [ngClass]="{ 'is-invalid': fieldInvalid('startDate') }" />
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" (click)="dpStart.toggle()" type="button"><i-bs name="calendar"></i-bs></button>
+        </div>
+      </div>
+      <div class="invalid-feedback" *ngIf="eventForm.get('startDate')?.hasError('required')">Startdate is required!</div>
+    </div>
+    <div class="form-group">
+      <ngb-timepicker formControlName="startTime" [ngClass]="{ 'is-invalid': fieldInvalid('startTime') }"></ngb-timepicker>
+      <div class="invalid-feedback" *ngIf="eventForm.get('startTime')?.hasError('required')">Starttime is required</div>
+    </div>
+    <div class="form-group">
+      <label for="endDate">End</label>
+      <div class="input-group">
+        <input
+          id="endDate"
+          class="form-control"
+          formControlName="endDate"
+          name="end-date"
+          placeholder="dd.mm.yyyy"
+          ngbDatepicker
+          #dpEnd="ngbDatepicker"
+          [ngClass]="{ 'is-invalid': fieldInvalid('endDate') }" />
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" (click)="dpEnd.toggle()" type="button"><i-bs name="calendar"></i-bs></button>
+        </div>
+      </div>
+      <div class="invalid-feedback" *ngIf="eventForm.get('endDate')?.hasError('required')">Enddate is required!</div>
+    </div>
+    <div class="form-group">
+      <ngb-timepicker formControlName="endTime" [ngClass]="{ 'is-invalid': fieldInvalid('endTime') || eventForm.errors?.startBeforeEnd }"></ngb-timepicker>
+      <div class="invalid-feedback" *ngIf="eventForm.errors?.startBeforeEnd">End date cannot be before start date!</div>
+      <div class="invalid-feedback" *ngIf="eventForm.get('endTime')?.hasError('required')">Endtime is required!</div>
+    </div>
+    <div class="form-group">
+      <label for="eventLocation">Event Location</label>
+      <input id="eventLocation" class="form-control" formControlName="eventLocation" name="eventLocation" type="text" [ngClass]="{ 'is-invalid': fieldInvalid('eventLocation') }" />
+      <div class="invalid-feedback" *ngIf="eventForm.get('eventLocation')?.hasError('required')">
+        <p>Value is required</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="type">Type</label>
+      <select id="type" class="form-control form-control-sm" name="type" formControlName="type" [ngClass]="{ 'is-invalid': fieldInvalid('type') }">
+        <option disabled selected value>Select...</option>
+        <option *ngFor="let type of eventTypes" [value]="type">
+          <span class="badge tag_category">{{ type }}</span>
+        </option>
+      </select>
+      <div class="invalid-feedback" *ngIf="eventForm.get('type')?.hasError('required')">Type is required!</div>
+    </div>
+    <div class="form-group" *ngIf="eventForm.get('type')?.value === 'Movie'">
+      <label for="movie">Movie</label>
+      <select id="movie" class="form-control form-control-sm" name="movie" formControlName="movie">
+        <option disabled selected value>Select...</option>
+        <option *ngFor="let movie of movies | async; trackBy: trackMovie" [value]="movie.id">
+          <span>{{ movie.originalTitle }}</span>
+        </option>
+      </select>
+    </div>
+    <div class="form-group" *ngIf="eventForm.get('type')?.value !== 'Movie'">
+      <label for="description">Description</label>
+      <textarea id="description" class="form-control" formControlName="description" name="description"></textarea>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button class="btn btn-outline-secondary close" (click)="onCancelModal()">Cancel</button>
+  <button ngbAutoFocus type="button" class="btn btn-success" (click)="saveModal()" i18n>Save</button>
+</div>
