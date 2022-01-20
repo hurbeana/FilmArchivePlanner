@@ -6,12 +6,11 @@ import {
 } from '@nestjs/common';
 import { CreateUpdateContactDto } from './dto/create-update-contact.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, ILike, Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/types';
 import { Contact } from './entities/contact.entity';
 import { ContactDto } from './dto/contact.dto';
-import { Pagination } from 'nestjs-typeorm-paginate';
 import { TagReferenceDto } from '../tags/dto/tag-reference.dto';
 import { TagsService } from '../tags/tags.service';
 import { TagType } from '../tags/tagtype.enum';

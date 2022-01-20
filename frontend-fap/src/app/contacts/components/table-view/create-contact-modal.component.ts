@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Contact } from '../../models/contact';
 import { Tag } from '../../../tags/models/tag';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'create-contact-modal',
@@ -22,6 +23,7 @@ import { Tag } from '../../../tags/models/tag';
     <form
       #contactForm="ngForm"
       (ngSubmit)="contactForm.form.valid && onSubmitContactModal()"
+      (keydown)="handleKeyUp($event, contactForm)"
     >
       <div class="modal-body">
         <div class="form-group row">
@@ -34,7 +36,10 @@ import { Tag } from '../../../tags/models/tag';
               [(ngModel)]="contactToCreate.type.id"
               #type="ngModel"
               [ngClass]="{
-                'is-invalid': visible && contactForm.submitted && type.invalid
+                'is-invalid':
+                  visible &&
+                  (contactForm.submitted || enterSubmit) &&
+                  type.invalid
               }"
               required
             >
@@ -45,7 +50,7 @@ import { Tag } from '../../../tags/models/tag';
             </select>
             <div
               class="invalid-feedback"
-              *ngIf="contactForm.submitted && type.invalid"
+              *ngIf="(contactForm.submitted || enterSubmit) && type.invalid"
             >
               <p *ngIf="visible && type.errors?.required">Type is required</p>
             </div>
@@ -61,13 +66,16 @@ import { Tag } from '../../../tags/models/tag';
               [(ngModel)]="contactToCreate.name"
               #name="ngModel"
               [ngClass]="{
-                'is-invalid': visible && contactForm.submitted && name.invalid
+                'is-invalid':
+                  visible &&
+                  (contactForm.submitted || enterSubmit) &&
+                  name.invalid
               }"
               required
             />
             <div
               class="invalid-feedback"
-              *ngIf="contactForm.submitted && name.invalid"
+              *ngIf="(contactForm.submitted || enterSubmit) && name.invalid"
             >
               <p *ngIf="visible && name.errors?.required">Name is required</p>
             </div>
@@ -81,17 +89,29 @@ import { Tag } from '../../../tags/models/tag';
               name="email"
               class="form-control form-control-sm"
               [(ngModel)]="contactToCreate.email"
+              (ngModelChange)="onEmailChange()"
               #mail="ngModel"
               [ngClass]="{
-                'is-invalid': visible && contactForm.submitted && mail.invalid
+                'is-invalid':
+                  visible &&
+                  (contactForm.submitted || enterSubmit) &&
+                  (mail.invalid || emailInvalid)
               }"
               required
             />
             <div
               class="invalid-feedback"
-              *ngIf="contactForm.submitted && mail.invalid"
+              *ngIf="(contactForm.submitted || enterSubmit) && mail.invalid"
             >
               <p *ngIf="visible && mail.errors?.required">E-mail is required</p>
+            </div>
+            <div
+              class="invalid-feedback"
+              *ngIf="(contactForm.submitted || enterSubmit) && emailInvalid"
+            >
+              <p *ngIf="visible && emailInvalid && !mail.invalid">
+                E-mail is not valid
+              </p>
             </div>
           </div>
         </div>
@@ -105,13 +125,16 @@ import { Tag } from '../../../tags/models/tag';
               [(ngModel)]="contactToCreate.phone"
               #phone="ngModel"
               [ngClass]="{
-                'is-invalid': visible && contactForm.submitted && phone.invalid
+                'is-invalid':
+                  visible &&
+                  (contactForm.submitted || enterSubmit) &&
+                  phone.invalid
               }"
               required
             />
             <div
               class="invalid-feedback"
-              *ngIf="contactForm.submitted && phone.invalid"
+              *ngIf="(contactForm.submitted || enterSubmit) && phone.invalid"
             >
               <p *ngIf="visible && phone.errors?.required">
                 Phonenumber is required
@@ -130,13 +153,15 @@ import { Tag } from '../../../tags/models/tag';
               #website="ngModel"
               [ngClass]="{
                 'is-invalid':
-                  visible && contactForm.submitted && website.invalid
+                  visible &&
+                  (contactForm.submitted || enterSubmit) &&
+                  website.invalid
               }"
               required
             />
             <div
               class="invalid-feedback"
-              *ngIf="contactForm.submitted && website.invalid"
+              *ngIf="(contactForm.submitted || enterSubmit) && website.invalid"
             >
               <p *ngIf="visible && website.errors?.required">
                 Website is required
@@ -163,8 +188,8 @@ export class CreateContactModalComponent {
   contactToCreate: Contact;
   usableTags: Tag[];
   visible = true;
-
-  createContact() {}
+  emailInvalid = false;
+  enterSubmit = false;
 
   onCancelContactModal() {
     this.visible = false;
@@ -172,6 +197,9 @@ export class CreateContactModalComponent {
   }
 
   onSubmitContactModal() {
+    if (this.emailInvalid) {
+      return;
+    }
     this.contactToCreate.type = this.contactToCreate.type = {
       id: this.contactToCreate.type.id,
       value: this.contactToCreate.type.value,
@@ -180,6 +208,26 @@ export class CreateContactModalComponent {
       public: this.contactToCreate.type.public,
       created_at: this.contactToCreate.type.created_at,
     };
+    console.log(this.contactToCreate);
     this.modal.close(this.contactToCreate);
+  }
+
+  onEmailChange() {
+    const re = new RegExp(
+      // eslint-disable-next-line no-useless-escape
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    );
+    this.emailInvalid = !re.test(this.contactToCreate.email?.toString() || '');
+  }
+
+  handleKeyUp(e: any, contactForm: NgForm) {
+    // only gets called once per form ??
+    // validation is not displayed at 'Enter' input
+    if (e.keyCode === 13) {
+      console.log(e.keyCode);
+      e.preventDefault();
+      this.enterSubmit = true;
+      contactForm.ngSubmit.emit();
+    }
   }
 }

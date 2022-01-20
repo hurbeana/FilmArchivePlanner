@@ -1,14 +1,9 @@
 import { AutoMap } from '@automapper/classes';
 import {
-  IsEmail,
-  IsMobilePhone,
   IsNotEmpty,
   IsNotEmptyObject,
   IsOptional,
-  IsPhoneNumber,
   IsString,
-  IsUrl,
-  Matches,
 } from 'class-validator';
 import { TagReferenceDto } from '../../tags/dto/tag-reference.dto';
 
@@ -23,7 +18,7 @@ export class CreateUpdateContactDto {
   name: string;
 
   @AutoMap()
-  @IsEmail()
+  @IsString()
   @IsOptional()
   email?: string;
 
@@ -33,7 +28,7 @@ export class CreateUpdateContactDto {
   phone?: string;
 
   @AutoMap()
-  @IsUrl()
+  @IsString()
   @IsOptional()
   website?: string;
 }
