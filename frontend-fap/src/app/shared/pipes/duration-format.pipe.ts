@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
  *   value | durationFormat
  * Example:
  *   {{ movie.length | durationFormat:'default' }}
- *   formats to: 1024
+ *   {{ movie.length | durationFormat }}
  */
 @Pipe({ name: 'durationFormat' })
 export class DurationFormatPipe implements PipeTransform {
@@ -14,7 +14,9 @@ export class DurationFormatPipe implements PipeTransform {
       return '';
     }
     if (format === 'default') {
-      return Math.floor(value / 60) + 'h ' + (value % 60) + 'min';
+      const h = Math.floor(value / 60);
+      const min = value % 60;
+      return h === 0 ? min + 'min' : h + 'h ' + min + 'min';
     } else {
       // other formats
       return value.toString();

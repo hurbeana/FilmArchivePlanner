@@ -52,6 +52,7 @@ export const moviesReducer = createReducer(
   on(MovieActions.getMovieSuccess, (state, { movie }) => ({
     ...state,
     detailsMovie: movie,
+    selectedMovie: movie,
     advancedSearchState: {
       ...state.advancedSearchState,
       loading: false,

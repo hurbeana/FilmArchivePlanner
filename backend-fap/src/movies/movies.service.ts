@@ -614,13 +614,39 @@ export class MoviesService {
    * @param id the id of the movie to delete
    */
   async delete(id: number): Promise<void> {
+    let movie;
     try {
-      await this.moviesRepository.findOneOrFail({ where: { id } });
+      movie = await this.moviesRepository.findOneOrFail({
+        where: { id },
+        relations: [
+          'movieFiles',
+          'dcpFiles',
+          'previewFile',
+          'stillFiles',
+          'subtitleFiles',
+        ],
+      });
     } catch (e) {
       this.logger.error(`Deleting movie with id ${id} failed.`, e.stack);
       throw new NotFoundException();
     }
+    if (this.movieHasFiles(movie)) {
+      const msg = `Movie with id ${movie.id} failed deletion due to existing files`;
+      this.logger.error(msg);
+      throw new BadRequestException(msg);
+    }
     await this.moviesRepository.delete(id);
+  }
+
+  private movieHasFiles(movie: Movie) {
+    return (
+      movie.movieFiles.length > 0 ||
+      movie.dcpFiles.length > 0 ||
+      movie.previewFile != null ||
+      movie.trailerFile != null ||
+      movie.stillFiles.length > 0 ||
+      movie.subtitleFiles.length > 0
+    );
   }
 
   private mapMovieToDto(movie: Movie): MovieDto {

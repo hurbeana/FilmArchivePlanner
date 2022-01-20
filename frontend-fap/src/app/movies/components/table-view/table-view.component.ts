@@ -28,6 +28,8 @@ import {
 } from '../../../shared/directives/sortable.directive';
 
 import { ofType } from '@ngrx/effects';
+import { ConfirmDeleteMovieModalComponent } from './confirm-delete-movie-modal.component';
+
 @Component({
   selector: 'table-view',
   templateUrl: './table-view.component.html',
@@ -234,56 +236,4 @@ export class TableViewComponent implements AfterViewInit {
   openAdvancedSearch() {
     this.showAdvanced = !this.showAdvanced;
   }
-}
-
-@Component({
-  //selector: 'ngbd-modal-confirm-autofocus',
-  template: `
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-title">Movie deletion</h4>
-      <button
-        type="button"
-        class="btn btn-md close"
-        aria-label="Close button"
-        aria-describedby="modal-title"
-        (click)="modal.dismiss('Cross click')"
-      >
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <p>
-        <strong
-          >Are you sure you want to delete movie
-          <span class="text-primary">{{ movieToDelete.englishTitle }}</span
-          >?</strong
-        >
-      </p>
-      <p>
-        All information associated to this movie will be permanently removed.<br />
-        <span class="text-danger">This action cannot be undone.</span>
-      </p>
-    </div>
-    <div class="modal-footer">
-      <button
-        type="button"
-        class="btn btn-outline-secondary"
-        (click)="modal.dismiss('cancel click')"
-      >
-        Cancel
-      </button>
-      <button
-        type="button"
-        class="btn btn-danger"
-        (click)="modal.close(movieToDelete)"
-      >
-        Ok
-      </button>
-      <!-- autoFocus a button with ngbAutofocus as attribute-->
-    </div>
-  `,
-})
-export class ConfirmDeleteMovieModalComponent {
-  movieToDelete: Movie;
-  constructor(public modal: NgbActiveModal) {}
 }

@@ -25,10 +25,7 @@ import { MoviesRoutingModule } from './movies-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ContentComponent } from './components/content/content.component';
-import {
-  ConfirmDeleteMovieModalComponent,
-  TableViewComponent,
-} from './components/table-view/table-view.component';
+import { TableViewComponent } from './components/table-view/table-view.component';
 import * as MovieActions from './state/movies.actions';
 import { EditViewComponent } from './components/edit-view/edit-view.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -44,10 +41,12 @@ import { TagEffects } from '../tags/state/tags.effects';
 import { ContactEffects } from '../contacts/state/contacts.effects';
 import { VimeModule } from '@vime/angular';
 import { AdvancedSearchViewComponent } from './components/advanced-search-view/advanced-search-view.component';
+import { ConfirmDeleteMovieModalComponent } from './components/table-view/confirm-delete-movie-modal.component';
 
 @NgModule({
   declarations: [
     TableViewComponent,
+    ConfirmDeleteMovieModalComponent,
     ContentComponent,
     EditViewComponent,
     ContentComponent,
@@ -67,7 +66,7 @@ import { AdvancedSearchViewComponent } from './components/advanced-search-view/a
       directorsState: directorsReducer,
       contactsState: contactsReducer,
       tagsState: tagsReducer,
-      advancedSearchState: moviesReducer,
+      advancedSearchState: moviesReducer, // <-- this works but is wrong
     }),
     EffectsModule.forRoot([MovieEffects]),
     EffectsModule.forFeature([DirectorEffects, ContactEffects, TagEffects]),
