@@ -35,7 +35,7 @@ export class EditViewComponent implements OnInit, OnDestroy {
     middleName: undefined,
     lastName: [{ type: 'required', message: 'Last Name is required' }],
     biographyEnglish: undefined,
-    biographyGermna: undefined,
+    biographyGerman: undefined,
     filmography: undefined,
   };
 

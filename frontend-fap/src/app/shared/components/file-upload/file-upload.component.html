@@ -2,45 +2,43 @@
   <input type="file" class="file-input" [accept]="requiredFileType" [multiple]="multiple" (change)="onFileSelected($event)" #fileUpload />
 
   <div class="file-upload">
-    <span *ngIf="formFileArray?.length === 0 || fileGroup?.disabled">{{ 'No file(s) uploaded yet.' }}</span>
+    <button *ngIf="multiple || !getFormGroup(fileGroup)?.contains('filename')" class="btn btn-primary btn-sm btn-plus" type="button" (click)="fileUpload.click()">+</button>
+    <span *ngIf="formFileArray?.length === 0 || fileGroup?.disabled">{{ 'No file uploaded.' }}</span>
     <div *ngFor="let fileForm of formFileArray?.controls || [fileGroup]">
       <ng-container *ngIf="fileForm && fileForm.enabled" [formGroup]="$any(fileForm)">
         <input *ngIf="getFormGroup(fileForm)?.contains('id')" [formControl]="$any(fileForm.get('id'))" type="hidden" />
-        <div *ngIf="getFormGroup(fileForm)?.contains('filename')">
-          <span class="uploaded-file-name">{{ $any(fileForm.get('filename')?.value) }}</span>
-          <button
-            *ngIf="!getFormGroup(fileForm)?.contains('path')"
-            mat-icon-button
-            color="primary"
-            type="button"
-            class="delete-file mini"
-            (click)="removeCacheFile($any(fileForm.get('id')?.value))">
-            <mat-icon>delete_forever</mat-icon>
-          </button>
+        <div *ngIf="getFormGroup(fileForm)?.contains('filename')" class="d-flex">
           <button
             *ngIf="getFormGroup(fileForm)?.contains('path')"
-            mat-icon-button
-            color="primary"
             type="button"
-            class="delete-file mini"
-            (click)="removeFile($any(fileForm.get('id')?.value))">
-            <mat-icon>delete_forever</mat-icon>
+            class="btn btn-primary btn-sm btn-x"
+            (click)="uploadProgress === 0 ? removeFile($any(fileForm.get('id')?.value)) : cancelUpload()">
+            <p class="x">X</p>
           </button>
+          <button
+            *ngIf="!getFormGroup(fileForm)?.contains('path')"
+            type="button"
+            class="btn btn-primary btn-sm btn-x"
+            (click)="uploadProgress === 0 ? removeCacheFile($any(fileForm.get('id')?.value)) : cancelUpload()">
+            <p class="x">X</p>
+          </button>
+
+          <div class="form-group">
+            <input type="text" class="form-control form-control-sm text-field" value="{{ $any(fileForm.get('filename')?.value) }}" disabled />
+          </div>
         </div>
-        <div class="progress-container">
-          <mat-progress-bar class="progress-bar" mode="determinate" [value]="uploadProgress" *ngIf="uploadProgress"></mat-progress-bar>
-          <button mat-icon-button color="primary" type="button" class="cancel-upload mini" *ngIf="uploadProgress" (click)="cancelUpload()">
-            <mat-icon>delete_forever</mat-icon>
-          </button>
+
+        <div class="progress-container" *ngIf="uploadProgress">
+          <div class="progress">
+            <div class="progress-bar" id="progress-bar" role="progressbar" [style.width]="uploadProgress + '%'" aria-valuemin="0" aria-valuemax="100" *ngIf="uploadProgress"></div>
+          </div>
           <mat-error *ngIf="canceled" i18n>File upload canceled!</mat-error>
+          <!--FIXME: When upload is canceled, text box with file name doesn't go away-->
         </div>
       </ng-container>
     </div>
-    <button *ngIf="multiple || !getFormGroup(fileGroup)?.contains('filename')" mat-mini-fab color="primary" class="upload-btn" type="button" (click)="fileUpload.click()">
-      <mat-icon>attach_file</mat-icon>
-    </button>
   </div>
 </div>
 <mat-error *ngIf="form.controls[controlname].hasError('required') && (form.controls[controlname].dirty || form.controls[controlname].touched)" class="error-message"
-  >Field Required
+  >Field Required!
 </mat-error>
