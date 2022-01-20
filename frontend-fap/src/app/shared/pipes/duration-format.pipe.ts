@@ -14,7 +14,7 @@ export class DurationFormatPipe implements PipeTransform {
       return '';
     }
     if (format === 'default') {
-      return (value / 60).toFixed() + 'h ' + (value % 60) + 'min';
+      return Math.floor(value / 60) + 'h ' + (value % 60) + 'min';
     } else {
       // other formats
       return value.toString();
