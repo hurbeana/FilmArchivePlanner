@@ -83,6 +83,10 @@ export const getCSVExportField = (key: string): Record<string, unknown> => {
       else if (property instanceof TagReferenceDto) {
         return property.id;
       }
+      // Strings must not contain newlines or semicolons, otherwise they cannot be imported
+      else if (typeof property === 'string') {
+        return property.replace(/(\r\n|\n|\r|;)/gm, '');
+      }
       // Output for everything else
       return property;
     },
