@@ -6,6 +6,7 @@ import { MoviesService } from '../movies/movies.service';
 import { TagsService } from '../tags/tags.service';
 import { ExportController } from './export.controller';
 import { ExportService } from './export.service';
+import { FestivalsService } from '../festivals/festivals.service';
 
 describe('ExportController', () => {
   let controller: ExportController;
@@ -32,6 +33,10 @@ describe('ExportController', () => {
         },
         {
           provide: ExportService,
+          useValue: {},
+        },
+        {
+          provide: FestivalsService,
           useValue: {},
         },
       ],

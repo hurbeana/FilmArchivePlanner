@@ -5,6 +5,7 @@ import {
   NotFoundException,
   Param,
   Response,
+  StreamableFile,
 } from '@nestjs/common';
 import { Response as ExpressResponse } from 'express';
 import { ContactsService } from '../contacts/contacts.service';
@@ -12,6 +13,7 @@ import { DirectorsService } from '../directors/directors.service';
 import { MoviesService } from '../movies/movies.service';
 import { TagsService } from '../tags/tags.service';
 import { ExportService } from './export.service';
+import { FestivalsService } from '../festivals/festivals.service';
 
 @Controller('export')
 export class ExportController {
@@ -22,6 +24,7 @@ export class ExportController {
     private readonly directorsService: DirectorsService,
     private readonly contactsService: ContactsService,
     private readonly tagsService: TagsService,
+    private readonly festivalService: FestivalsService,
     private exportService: ExportService,
   ) {}
 
@@ -56,5 +59,25 @@ export class ExportController {
             return res.send(csvData);
           }),
     );
+  }
+
+  @Get('festival/:id')
+  exportIcal(
+    @Param('id') id: number,
+    @Response({ passthrough: true }) res,
+  ): Promise<StreamableFile | void> {
+    return this.festivalService
+      .exportFestivalToIcal(id)
+      .then((file) => {
+        res.set({
+          'Content-Type': 'text/calendar',
+          'Content-Disposition': `attachment; filename="calendar_${id}.ics"`,
+        });
+        return file;
+      })
+      .catch((e) => {
+        console.log('error reading file');
+        console.log(e);
+      });
   }
 }

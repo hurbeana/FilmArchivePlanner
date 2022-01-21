@@ -25,6 +25,7 @@ import {
   filter,
   arrowLeft,
   arrowRight,
+  download,
   x,
 } from 'ngx-bootstrap-icons';
 import { StoreModule } from '@ngrx/store';
@@ -40,6 +41,7 @@ const icons = {
   filter,
   arrowLeft,
   arrowRight,
+  download,
   x,
 };
 @NgModule({
