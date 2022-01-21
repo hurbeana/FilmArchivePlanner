@@ -2,7 +2,9 @@
   <button mat-icon-button (click)="sidenav.toggle()" class="example-icon" aria-label="Example icon-button with menu icon">
     <mat-icon>menu</mat-icon>
   </button>
-  <img src="assets/img/logo.png" class="header-logo-img" [routerLink]="'/'" height="50" style="margin: 0 10px" />
+  <a [routerLink]="'/'">
+    <img src="assets/img/logo.png" class="header-logo-img" height="50" style="margin: 0 10px" />
+  </a>
   <span class="toolbar-title">Film Archive & Planner {{ currentRoute ? '- ' + currentRoute : '' }}</span>
   <span class="example-spacer"></span>
   <div></div>
