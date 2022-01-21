@@ -1,7 +1,14 @@
 .movie-list-container {
   display: flex;
   flex-direction: column;
-  margin: 0.5rem;
+  height: 100%;
+  padding: 0.5rem;
+}
+
+.movie-list-content{
+  flex-grow: 1;
+  overflow-y: scroll;
+
 }
 
 .movie-list-header {
@@ -64,3 +71,8 @@ mat-sidenav {
 .no-wrap {
   white-space: nowrap;
 }
+
+.loading-container{
+  flex:  0 0 50px;
+}
+

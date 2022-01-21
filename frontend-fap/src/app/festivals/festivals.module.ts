@@ -42,6 +42,7 @@ import { MovieEffects } from '../movies/state/movies.effects';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { EditEventModalComponent } from './components/edit-event-modal/edit-event-modal.component';
 import { NgxBootstrapIconsModule } from 'ngx-bootstrap-icons';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -98,6 +99,7 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
     NgxBootstrapIconsModule,
     NgbTimepickerModule,
     NgSelectModule,
+    ScrollingModule,
   ],
   providers: [
     {

@@ -2,10 +2,11 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  NgZone,
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { fromEvent, Observable, Subject } from 'rxjs';
+import { fromEvent, Observable, of, Subject } from 'rxjs';
 import { Movie } from '../../../movies/models/movie';
 import * as MovieSelectors from '../../../movies/state/movies.selectors';
 import { Store } from '@ngrx/store';
@@ -16,14 +17,23 @@ import {
   distinctUntilChanged,
   filter,
   map,
+  pairwise,
   takeUntil,
   tap,
+  throttleTime,
 } from 'rxjs/operators';
 import { Actions, ofType } from '@ngrx/effects';
-import { getMoviesSuccess } from '../../../movies/state/movies.actions';
+import {
+  createMovieFailed,
+  getMoviesAdvanced,
+  getMoviesSuccess,
+  updateMovieFailed,
+} from '../../../movies/state/movies.actions';
 import { MoviesState } from '../../../app.state';
 import { Tag } from 'src/app/tags/models/tag';
 import { CalendarEvent } from 'angular-calendar';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
 @Component({
   selector: 'app-planner-movie-list',
@@ -31,25 +41,34 @@ import { CalendarEvent } from 'angular-calendar';
   styleUrls: ['./planner-movie-list.component.less'],
 })
 export class PlannerMovieListComponent implements OnInit, AfterViewInit {
-  constructor(private store: Store<MoviesState>, private actions$: Actions) {
+  //loading: Observable<boolean>;
+  loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+
+  constructor(
+    private store: Store<MoviesState>,
+    private actions$: Actions,
+    private ngZone: NgZone,
+  ) {
     this.events = this.store
       .select(MovieSelectors.selectMovies)
       .pipe(
         map((s) => s.map((f: Movie) => this.mapEventFestivalToCalendar(f))),
       );
-
-    this.obs$ = this.actions$.pipe(
-      ofType(getMoviesSuccess),
-      takeUntil(this.destroy$),
-    );
+    this.actions$
+      .pipe(
+        ofType(getMoviesSuccess),
+        tap(() => {
+          this.loading.next(false);
+        }),
+      )
+      .subscribe();
   }
 
-  destroy$ = new Subject();
-  obs$: Observable<any>;
-  // movies: Observable<Movie[]>;
   events: Observable<CalendarEvent[]>;
   @ViewChild('searchStringField', { static: true })
   searchStringField: ElementRef;
+
+  @ViewChild('scroller') scroller: CdkVirtualScrollViewport;
 
   @ViewChild('movieSelectionTagInput', { static: true })
   movieSelectionTagInput: ElementRef;
@@ -57,36 +76,13 @@ export class PlannerMovieListComponent implements OnInit, AfterViewInit {
   movieSelectionTag: Tag | null;
   movieSearchString: string;
 
-  externalEvents: CalendarEvent[] = [
-    {
-      title: 'Event 1',
-      color: {
-        primary: '#eddf1d',
-        secondary: '#fbf8cc',
-      },
-      start: new Date(),
-      draggable: true,
-      meta: {
-        dropped: true,
-      },
-    },
-    {
-      title: 'Event 2',
-      color: {
-        primary: '#eddf1d',
-        secondary: '#fbf8cc',
-      },
-      start: new Date(),
-      draggable: true,
-      meta: {
-        dropped: true,
-      },
-    },
-  ];
+  page = 1;
+  limit = 10;
 
-  ngOnInit() {
-    this.loadMovies();
-  }
+  itemsPerPage = 10;
+  itemSize = 50;
+
+  ngOnInit() {}
 
   mapEventFestivalToCalendar(movie: Movie): CalendarEvent {
     return {
@@ -109,42 +105,88 @@ export class PlannerMovieListComponent implements OnInit, AfterViewInit {
     };
   }
 
-  loadMovies() {
-    this.store.dispatch(
-      MovieActions.getMovies({
-        page: 1,
-        limit: 0,
-        orderBy: 'originalTitle',
-        sortOrder: 'ASC',
-        searchString: this.movieSearchString || '',
-      }),
-    );
-    console.log(
-      `selection tag: ${this.movieSelectionTag?.value.toString()}, search string: ${this.movieSearchString?.toString()}`,
-    );
-  }
-
   ngAfterViewInit() {
-    // server-side search
+    this.scroller
+      .elementScrolled()
+      .pipe(
+        map(() => this.scroller.measureScrollOffset('bottom')),
+        pairwise(),
+        filter(([y1, y2]) => y2 < y1 && y2 < 140),
+        throttleTime(200),
+      )
+      .subscribe(() => {
+        this.ngZone.run(() => {
+          if (!this.loading.value) {
+            //we have to lock this function until the last load is executed compleltly
+            this.limit += this.itemsPerPage;
+            this.loadMovies();
+          }
+        });
+      });
     fromEvent(this.searchStringField.nativeElement, 'keyup')
       .pipe(
         filter((value) => !!value),
         debounceTime(200),
         distinctUntilChanged(),
         tap(() => {
+          this.limit = this.itemsPerPage;
+          this.scroller.scrollToIndex(0, 'smooth');
           this.loadMovies();
         }),
       )
       .subscribe();
+    setTimeout(() => {
+      this.itemsPerPage = Math.ceil(
+        this.scroller.getViewportSize() / this.itemSize,
+      );
+      this.limit = this.itemsPerPage;
+      this.loadMovies();
+    }, 100);
+  }
+
+  tagsChange() {
+    this.scroller.scrollToIndex(0, 'smooth');
+    this.limit = this.itemsPerPage;
+    this.loadMovies();
   }
 
   trackMovie(index: number, item: CalendarEvent) {
     return item.id;
   }
 
+  loadMovies() {
+    this.loading.next(true);
+    this.store.dispatch(
+      MovieActions.getMoviesAdvanced({
+        page: this.page,
+        limit: this.limit,
+        orderBy: 'originalTitle',
+        sortOrder: 'ASC',
+        searchString: this.movieSearchString || '',
+        selectedTagIDs: this.movieSelectionTag?.id
+          ? [this.movieSelectionTag?.id]
+          : [],
+        negativeTagIDs: [-1],
+        exactYear: -1,
+        fromYear: -1,
+        toYear: -1,
+        exactLength: -1,
+        fromLength: -1,
+        toLength: -1,
+        hasDialogue: -1,
+        hasSubtitles: -1,
+        isStudentFilm: -1,
+        hasDCP: -1,
+        selectedDirectorIDs: [],
+        selectedContactIDs: [],
+      }),
+    );
+  }
+
   clearSearchFields() {
     this.movieSearchString = '';
     this.movieSelectionTag = null;
+    this.limit = this.itemsPerPage;
     this.loadMovies();
   }
 }

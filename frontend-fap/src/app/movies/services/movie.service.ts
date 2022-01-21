@@ -82,14 +82,15 @@ export class MovieService {
     );
 
     const params = new HttpParams({
+      // pass arrays with [] -> also single values are arrays
       fromObject: {
         page: page,
         limit: limit,
         ...(orderBy !== undefined && { orderBy: orderBy }),
         ...(sortOrder !== undefined && { sortOrder: sortOrder }),
         searchString: searchString,
-        selectedTagIDs: selectedTagIDs,
-        negativeTagIDs: negativeTagIDs,
+        'selectedTagIDs[]': selectedTagIDs,
+        'negativeTagIDs[]': negativeTagIDs,
         exactYear: exactYear,
         fromYear: fromYear,
         toYear: toYear,
@@ -100,8 +101,8 @@ export class MovieService {
         hasSubtitles_: hasSubtitles,
         isStudentFilm_: isStudentFilm,
         hasDCP: hasDCP,
-        selectedDirectorIDs: selectedDirectorIDs,
-        selectedContactIDs: selectedContactIDs,
+        'selectedDirectorIDs[]': selectedDirectorIDs,
+        'selectedContactIDs[]': selectedContactIDs,
       },
     });
     return this.http.get<MoviesPaginationState>(`${api}/advanced`, {
