@@ -25,6 +25,7 @@ import {
   filter,
   arrowLeft,
   arrowRight,
+  x,
 } from 'ngx-bootstrap-icons';
 
 const icons = {
@@ -36,6 +37,7 @@ const icons = {
   filter,
   arrowLeft,
   arrowRight,
+  x,
 };
 @NgModule({
   declarations: [HeaderComponent, FooterComponent, HomeComponent],
