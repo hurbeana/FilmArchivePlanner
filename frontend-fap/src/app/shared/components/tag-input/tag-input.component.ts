@@ -33,6 +33,7 @@ export class TagInputComponent {
   className: string;
   addTagText: string;
   loading = false;
+  invalid = false;
 
   constructor(private tagService: TagService) {}
 
@@ -40,6 +41,7 @@ export class TagInputComponent {
     /* Add a tag to the list of tags (Multiple Select) */
     this.loading = true;
     if (!tag.type) {
+      console.log('add');
       /* Tag is new and must be created first */
       const newTag: CreateUpdateTagDto = {
         type: this.tagType,
@@ -56,10 +58,10 @@ export class TagInputComponent {
           this.loading = false;
         });
     } else {
+      console.log('add-existed');
       /* Tag already existed in list --> Nothing to do here */
       this.loading = false;
     }
-    this.resetFormControl();
   }
 
   setTag(tag: Tag, model: Tag[] | Tag | null | undefined) {
@@ -82,13 +84,10 @@ export class TagInputComponent {
   }
 
   removeTag(event: Event, model: Tag[] | Tag | null | undefined) {
-    console.log('removeTag', event, model);
     if (model === null || (Array.isArray(model) && model.length === 0)) {
-      this.form.form.controls[this.formCtrlName].setErrors({
-        invalid: true,
-      });
+      console.log('remove', model);
+      this.setInvalid(true);
     }
-    this.form.form.updateValueAndValidity();
   }
 
   onChange(tag: Tag) {
@@ -97,29 +96,24 @@ export class TagInputComponent {
       return;
     }
     if (tag === undefined || tag === null) {
-      this.form.form.controls[this.formCtrlName].setErrors({
-        invalid: true,
-      });
+      console.log('change-remove');
+      //this.setInvalid(true);
     } else {
+      console.log('change-addnewtag');
       if (!tag.type) {
         /* Tag is new and must be created */
         /* TODO maybe add modal with confirmation? */
-
         /* Set tag as selected (Single Select) */
         this.setTag(tag, this.model);
       }
-      this.resetFormControl();
+      this.setInvalid(false);
     }
-    this.form.form.updateValueAndValidity();
+    if (this.form.submitted && this.invalid) {
+      this.setInvalid(true);
+    } else {
+      this.setInvalid(false);
+    }
     this.modelChange.emit(this.model);
-  }
-
-  resetFormControl() {
-    this.form.control.removeControl(this.formCtrlName);
-    this.form.control.addControl(
-      this.formCtrlName,
-      new FormControl('valid', Validators.required),
-    );
   }
 
   ngOnInit() {
@@ -133,7 +127,6 @@ export class TagInputComponent {
       this.formCtrlName,
       new FormControl('valid', Validators.required),
     );
-    this.form.form.updateValueAndValidity();
 
     /* setting className to show proper tag colors */
 
@@ -142,19 +135,31 @@ export class TagInputComponent {
 
     /* setting responsible classes for validation */
     this.form.ngSubmit.subscribe(() => {
-      if (this.form.submitted) {
-        this.className += ' required is-invalid';
-      }
-      if (this.required) {
-        this.className += ' required';
+      console.log('subsc', this.invalid);
+      if (this.form.submitted && this.invalid) {
+        this.setInvalid(true);
+      } else {
+        this.setInvalid(false);
       }
     });
 
     this.addTagText = 'Add ' + this.tagType;
   }
 
-  ngOnChanges() {
-    this.className =
-      'custom-tag-select ' + 'tag-' + this.tagType.toLowerCase() + '-input';
+  setInvalid(value: boolean) {
+    console.log('setInvalid', value);
+    this.invalid = value;
+    this.form.form.controls[this.formCtrlName].setErrors({
+      invalid: value,
+    });
+    if (value) {
+      console.log('setClass');
+      this.className += ' required is-invalid';
+    } else {
+      console.log('removeClass');
+      this.className.replace(/required/g, '');
+      this.className.replace(/is-invalid/g, '');
+    }
+    this.form.form.updateValueAndValidity();
   }
 }

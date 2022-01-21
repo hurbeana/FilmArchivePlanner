@@ -23,7 +23,6 @@ import {
 } from 'rxjs/operators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateContactModalComponent } from './create-contact-modal.component';
-import { EditContactModalComponent } from './edit-contact-modal.component';
 import { TagService } from '../../../tags/services/tag.service';
 import { ConfirmDeleteContactModalComponent } from './confirm-delete-contact-modal.component';
 import { ContactService } from '../../services/contact.service';
@@ -169,14 +168,14 @@ export class TableViewComponent implements AfterViewInit {
       keyboard: true,
       //backdrop: 'static' // won`t close on click outside when uncommented
     });
-    const newContact: CreateUpdateContactDto = {
+    const contactToCreate: CreateUpdateContactDto = {
       type: { id: '' },
       name: '',
       email: '',
       phone: '',
       website: '',
     };
-    modalRef.componentInstance.contactToCreate = newContact;
+    modalRef.componentInstance.contact = contactToCreate;
     this.tagService
       .getTagsByType('Contact')
       .subscribe(
@@ -206,13 +205,13 @@ export class TableViewComponent implements AfterViewInit {
   }
 
   openEditContactModal(contact: Contact) {
-    const modalRef = this.modalService.open(EditContactModalComponent, {
+    const modalRef = this.modalService.open(CreateContactModalComponent, {
       centered: true,
       keyboard: true,
       //backdrop: 'static' // won`t close on click outside when uncommented
     });
 
-    const contactToUpdate: CreateUpdateContactDto = {
+    const contactToEdit: CreateUpdateContactDto = {
       //type: { id: contact.type.id },
       type: contact.type,
       name: contact.name,
@@ -221,16 +220,21 @@ export class TableViewComponent implements AfterViewInit {
       website: contact.website,
     };
 
-    modalRef.componentInstance.contactToEdit = contactToUpdate;
+    modalRef.componentInstance.contact = contactToEdit;
     modalRef.componentInstance.contactId = contact.id;
+    modalRef.componentInstance.modalTitle = 'Edit Contact';
+    modalRef.componentInstance.modalSubmitText = 'Save';
+
     this.tagService
       .getTagsByType('Contact')
       .subscribe(
         (usableTags) => (modalRef.componentInstance.usableTags = usableTags),
       );
     modalRef.result.then(
-      (result) => {
-        this.editContact(result.contact, result.id);
+      (rescontact) => {
+        console.log('result', rescontact);
+
+        this.editContact(rescontact, contact.id);
       },
       () => {
         console.log('Unconfirmed close');

@@ -14,7 +14,6 @@ import { SharedModule } from '../shared/shared.module';
 
 /* Components */
 import { CreateContactModalComponent } from './components/table-view/create-contact-modal.component';
-import { EditContactModalComponent } from './components/table-view/edit-contact-modal.component';
 import { ConfirmDeleteContactModalComponent } from './components/table-view/confirm-delete-contact-modal.component';
 
 /* state management*/
@@ -36,7 +35,6 @@ import { environment } from '../../environments/environment';
     ContentComponent,
     ConfirmDeleteContactModalComponent,
     CreateContactModalComponent,
-    EditContactModalComponent,
   ],
   exports: [TableViewComponent, ContentComponent],
   imports: [

@@ -20,7 +20,8 @@
   [class.ng-select-multiple]="true"
   [class.ng-select-single]="false"
   [class.form-controll-sm]="true"
-  [class.ng-invalid]="form.submitted && form.form.invalid"
   required>
 </ng-select>
-<div *ngIf="form.submitted && form.form.invalid" style="margin-top: 0" class="invalid-feedback"><p>Type is required</p></div>
+<div *ngIf="form.submitted && form.form.invalid && invalid" class="invalid-feedback">
+  <p>Type is required</p>
+</div>
