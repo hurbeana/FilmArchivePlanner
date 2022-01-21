@@ -1,5 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
+@import "styles.config";
+
 html,
 body {
   height: 100%;
@@ -7,7 +9,17 @@ body {
 
 body {
   margin: 0;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+html,body,
+.mat-typography, .mat-toolbar,
+.mat-display-1,.mat-display-2, .mat-display-3, .mat-display-4,
+.mat-h1 ,.mat-h2 ,.mat-h3 ,.mat-h4, .mat-h5, .mat-h6,
+.mat-headline, .mat-title, .mat-subheading-2, .mat-subheading-1,
+.mat-body, .mat-body-1, .mat-body-strong, .mat-body-2, .mat-small, .mat-caption,
+.mat-input-element
+{
+  font-family: @font !important;
 }
 
 /* The global Material UI styles file */
@@ -19,6 +31,43 @@ body {
 
 /* Default vime theme. ~960B */
 @import '~@vime/core/themes/default.css';
+
+.btn-primary{
+  background-color: @accent-color;
+  border-color: @accent-color;
+}
+
+.btn-primary:focus{
+  color: #fff;
+  background-color: @main-color;
+  border-color: @main-color;
+  box-shadow: none;
+}
+
+.btn-primary:hover, .btn-primary:active, .btn-primary:focus  {
+  color: #fff;
+  background-color: @accent-color;
+  border-color: @accent-color;
+  filter: brightness(80%);
+  box-shadow: none;
+}
+
+.btn-primary:active:focus{
+  color: #fff;
+  background-color: @accent-color;
+  border-color: @accent-color;
+  box-shadow: 0 0 0 0.25rem @main-color;
+}
+
+ ngb-pagination{
+   .page-item.active > .page-link{
+     background-color: @accent-color !important;
+     border-color: @accent-color !important;
+   }
+   .page-item:not(.active) > .page-link{
+     color: @accent-color !important;
+   }
+ }
 
 .success-snackbar {
   background: #3c763d;
@@ -39,3 +88,8 @@ body {
 .sr-only{
   display: none;
 }
+
+#dragbar{
+  background-color: @accent-color !important;
+}
+

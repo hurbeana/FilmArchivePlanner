@@ -2,7 +2,8 @@
   <button mat-icon-button (click)="sidenav.toggle()" class="example-icon" aria-label="Example icon-button with menu icon">
     <mat-icon>menu</mat-icon>
   </button>
-  <span>Film Archive & Planner {{ currentRoute ? '- ' + currentRoute : '' }}</span>
+  <img src="assets/img/logo.png" class="header-logo-img" [routerLink]="'/'" height="50" style="margin: 0 10px" />
+  <span class="toolbar-title">Film Archive & Planner {{ currentRoute ? '- ' + currentRoute : '' }}</span>
   <span class="example-spacer"></span>
   <div></div>
 </mat-toolbar>
@@ -15,7 +16,7 @@
       <a mat-list-item [routerLink]="'/directors'" i18n><mat-icon>people_outline</mat-icon> Directors</a>
       <a mat-list-item [routerLink]="'/contacts'" i18n><mat-icon>person_outline</mat-icon> Contacts</a>
       <a mat-list-item [routerLink]="'/tags'" i18n><mat-icon>label_outline</mat-icon> Tag Manager</a>
-      <a mat-list-item [routerLink]="'/import'" i18n><mat-icon>backup</mat-icon>Import</a>
+      <a mat-list-item [routerLink]="'/import'" i18n><mat-icon>backup</mat-icon> Import</a>
       <a mat-list-item (click)="sidenav.toggle()" i18n>Close</a>
     </mat-nav-list>
   </mat-sidenav>

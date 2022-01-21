@@ -1,26 +1,33 @@
+@import 'src/styles.config';
+
 core-header:host {
   display: flex;
   flex-flow: column;
 }
 
-core-header:host .main-toolbar{
+core-header:host .main-toolbar {
   //background-color: #0a58ca;
   //color: white;
-  background-color:rgba(13, 110, 253, 0.25);
-  color: #0a58ca;
-  border-bottom: 2px solid #0a58ca;
+  background-color: @main-color;
+
+  color: @accent-color;
+  border-bottom: 2px solid @accent-color;
   flex: 0 0 auto; /* apply height set by material toolbar*/
 }
 
-core-header:host .main-content{
+core-header:host .main-content {
   flex: 1 1 auto; /* take up remaining space */
 }
 
-
-core-header:host .main-sidenav{
+core-header:host .main-sidenav {
   width: 200px;
 }
-
+core-header:host .main-sidenav {
+}
 .example-spacer {
   flex: 1 1 auto;
+}
+
+.header-logo-img:hover {
+  cursor: pointer;
 }
