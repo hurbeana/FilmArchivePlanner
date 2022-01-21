@@ -8,6 +8,7 @@ import {
   FilmographyFile,
 } from './entities/directorfiles.entity';
 import {
+  BadRequestException,
   HttpException,
   HttpStatus,
   Inject,
@@ -119,9 +120,14 @@ export class DirectorsService {
     for (const file of allFiles) {
       if (file !== undefined) {
         if (file.path === undefined) {
-          const cachedFileName = (
-            await this.filesServices.getCachedInfo(file.id)
-          ).originalname;
+          const cachedFileInfo = await this.filesServices.getCachedInfo(
+            file.id,
+          );
+          if (cachedFileInfo == null) {
+            this.logger.error(`Cached file with id <${file.id}> not found`);
+            throw new BadRequestException(`Failed uploading files`);
+          }
+          const cachedFileName = cachedFileInfo.originalname;
           allFileNames.push(cachedFileName);
         } else {
           allFileNames.push(file.filename);
