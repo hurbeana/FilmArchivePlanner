@@ -34,6 +34,7 @@ import {
 import { Festival } from '../../models/festival';
 import { CreateUpdateFestivalDto } from '../../models/create.festival';
 import { Actions, ofType } from '@ngrx/effects';
+import { FestivalService } from '../../services/festival.service';
 
 @Component({
   selector: 'table-view',
@@ -72,6 +73,7 @@ export class TableViewComponent implements AfterViewInit {
     private modalService: NgbModal,
     private actions$: Actions,
     private actionsSubject: ActionsSubject,
+    private festivalService: FestivalService,
   ) {
     this.festivals = this.store.select(FestivalSelectors.selectFestivals);
 
@@ -237,7 +239,12 @@ export class TableViewComponent implements AfterViewInit {
       },
     );
 
-    modalRef.componentInstance.festivalIsInUse = false;
+    this.festivalService
+      .checkHasEvents(festival)
+      .subscribe(
+        (isInUse) => (modalRef.componentInstance.festivalIsInUse = isInUse),
+      );
+
     modalRef.componentInstance.festivalToDelete = festival;
     modalRef.result.then(
       (festival) => {

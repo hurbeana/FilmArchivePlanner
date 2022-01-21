@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Logger, Param } from '@nestjs/common';
 import { FestivalsService } from './festivals.service';
 import { Crud, CrudController } from '@nestjsx/crud';
 import { Festival } from './entities/festival.entity';
@@ -21,4 +21,12 @@ import { Festival } from './entities/festival.entity';
 @Controller('festivals')
 export class FestivalsController implements CrudController<Festival> {
   constructor(public service: FestivalsService) {}
+
+  private readonly logger = new Logger(FestivalsController.name);
+
+  @Get('/hasEvents/:id')
+  tagIsUsed(@Param('id') id: number) {
+    this.logger.log(`Get if festival with id ${id} has events.`);
+    return this.service.hasEvents(id);
+  }
 }

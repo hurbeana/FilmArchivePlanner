@@ -12,6 +12,7 @@ import {
 } from '@nestjsx/crud-request';
 import { map } from 'rxjs/operators';
 import { Movie } from '../../movies/models/movie';
+import { Contact } from '../../contacts/models/contact';
 
 const api = 'http://localhost:3000/festivals';
 
@@ -129,6 +130,14 @@ export class FestivalService {
       return e;
     });
     return f;
+  }
+
+  checkHasEvents(festival: Festival): Observable<boolean> {
+    console.log(
+      '[FestivalService] - CHECK IF festival HAS EVENTS',
+      festival.id,
+    );
+    return this.http.get<boolean>(`${api}/hasEvents/${festival.id}`);
   }
 
   downloadCSV() {

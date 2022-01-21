@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Festival } from '../../models/festival';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { FestivalService } from '../../services/festival.service';
+import { Observable } from 'rxjs';
 
 @Component({
   //selector: 'ngbd-modal-confirm-autofocus',
@@ -42,7 +44,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
       <div *ngIf="festivalIsInUse; then thenBlock; else elseBlock"></div>
       <ng-template #thenBlock>
         <span
-          ngbPopover="The festival cannot be deleted because it is in use."
+          ngbPopover="The festival cannot be deleted because it still contains events."
           [openDelay]="200"
           [closeDelay]="400"
           triggers="mouseenter:mouseleave"
