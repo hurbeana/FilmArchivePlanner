@@ -15,8 +15,8 @@
         type="file"
         accept="text/csv,.csv"
         (change)="onFileSelected($event, 'directors')" />
-      <div class="valid-feedback" i18n>Imported successfully</div>
-      <div class="invalid-feedback">{{ directorsErrorMessage }}</div>
+      <div class="feedback valid-feedback" i18n>Imported successfully</div>
+      <div class="feedback invalid-feedback">{{ directorsErrorMessage }}</div>
     </div>
     <div class="col-md-4">
       <button type="button" class="btn btn-primary btn-sm" (click)="formFileDirectors.value = ''; isDirectorsSubmitted = false">
@@ -39,8 +39,8 @@
         type="file"
         accept="text/csv,.csv"
         (change)="onFileSelected($event, 'tags')" />
-      <div class="valid-feedback" i18n>Imported successfully</div>
-      <div class="invalid-feedback">{{ tagsErrorMessage }}</div>
+      <div class="feedback valid-feedback" i18n>Imported successfully</div>
+      <div class="feedback invalid-feedback">{{ tagsErrorMessage }}</div>
     </div>
     <div class="col-md-4">
       <button type="button" class="btn btn-primary btn-sm" (click)="formFileTags.value = ''; isTagsSubmitted = false">
@@ -63,8 +63,8 @@
         type="file"
         accept="text/csv,.csv"
         (change)="onFileSelected($event, 'contacts')" />
-      <div class="valid-feedback" i18n>Imported successfully</div>
-      <div class="invalid-feedback">{{ contactsErrorMessage }}</div>
+      <div class="feedback valid-feedback" i18n>Imported successfully</div>
+      <div class="feedback invalid-feedback">{{ contactsErrorMessage }}</div>
     </div>
     <div class="col-md-4">
       <button type="button" class="btn btn-primary btn-sm" (click)="formFileContacts.value = ''; isContactsSubmitted = false">
@@ -88,8 +88,8 @@
         type="file"
         accept="text/csv,.csv"
         (change)="onFileSelected($event, 'movies')" />
-      <div class="valid-feedback" i18n>Imported successfully</div>
-      <div class="invalid-feedback">{{ moviesErrorMessage }}</div>
+      <div class="feedback valid-feedback" i18n>Imported successfully</div>
+      <div class="feedback invalid-feedback">{{ moviesErrorMessage }}</div>
     </div>
     <div class="col-md-4">
       <button type="button" class="btn btn-primary btn-sm" (click)="formFileMovies.value = ''; isMoviesSubmitted = false">
