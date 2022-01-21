@@ -25,10 +25,15 @@ export class CreateContactModalComponent {
   }
 
   onSubmitContactModal() {
+    if (Array.isArray(this.contact.type)) {
+      this.contact.type = this.contact.type[0];
+    }
+    console.log('- SUBMIT -');
+    console.log(`Contact type: ${this.contact.type?.toString()}`);
     if (this.emailInvalid) {
       return;
     }
-    this.contact.type = this.contact.type = {
+    this.contact.type = {
       id: this.contact.type.id,
       value: this.contact.type.value,
       type: this.contact.type.type,
@@ -48,11 +53,10 @@ export class CreateContactModalComponent {
     this.emailInvalid = !re.test(this.contact.email?.toString() || '');
   }
 
-  handleKeyUp(e: any, contactForm: NgForm) {
+  handleKeyDown(e: any, contactForm: NgForm) {
     // only gets called once per form ??
     // validation is not displayed at 'Enter' input
     if (e.keyCode === 13) {
-      console.log(e.keyCode);
       e.preventDefault();
       this.enterSubmit = true;
       contactForm.ngSubmit.emit();

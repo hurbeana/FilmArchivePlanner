@@ -169,13 +169,17 @@ export class TableViewComponent implements AfterViewInit {
       //backdrop: 'static' // won`t close on click outside when uncommented
     });
     const contactToCreate: CreateUpdateContactDto = {
-      type: { id: '' },
+      type: null,
       name: '',
       email: '',
       phone: '',
       website: '',
     };
+
     modalRef.componentInstance.contact = contactToCreate;
+    modalRef.componentInstance.modalTitle = 'Create Contact';
+    modalRef.componentInstance.modalSubmitText = 'Create';
+
     this.tagService
       .getTagsByType('Contact')
       .subscribe(
@@ -184,7 +188,7 @@ export class TableViewComponent implements AfterViewInit {
     modalRef.result.then(
       (contact) => {
         console.log(contact);
-        this.createContact(modalRef.componentInstance.contactToCreate);
+        this.createContact(contact);
       },
       () => {
         console.log('Unconfirmed close');
@@ -221,7 +225,6 @@ export class TableViewComponent implements AfterViewInit {
     };
 
     modalRef.componentInstance.contact = contactToEdit;
-    modalRef.componentInstance.contactId = contact.id;
     modalRef.componentInstance.modalTitle = 'Edit Contact';
     modalRef.componentInstance.modalSubmitText = 'Save';
 

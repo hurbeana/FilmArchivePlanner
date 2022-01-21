@@ -1,19 +1,10 @@
 <div class="modal-header">
-  <h4 class="modal-title" id="modal-title">Edit contact</h4>
-  <button
-    type="button"
-    class="btn btn-md close"
-    aria-label="Close button"
-    aria-describedby="modal-title"
-    (click)="modal.dismiss('Cross click')"
-  >
+  <h4 class="modal-title" id="modal-title">{{ modalTitle }}</h4>
+  <button type="button" class="btn btn-md close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
-<form
-  #contactForm="ngForm"
-  (ngSubmit)="contactForm.form.valid && onSubmitContactModal()"
->
+<form #contactForm="ngForm" (ngSubmit)="contactForm.form.valid && onSubmitContactModal()">
   <div class="modal-body">
     <div class="form-group row">
       <label for="inputState" class="col-sm-2 col-form-label">Type</label>
@@ -24,9 +15,10 @@
           [required]="true"
           [(model)]="contact.type"
           [tagType]="'Contact'"
+          [className]="'tag-contact-input'"
           [readonly]="false"
           [multiple]="false"
-        ></shared-tag-input>
+          [enterSubmit]="enterSubmit"></shared-tag-input>
       </div>
 
       <!--<div class="col-sm-10">
@@ -48,20 +40,17 @@
       <label for="tagValue" class="col-sm-2 col-form-label">Name</label>
       <div class="col-sm-10">
         <input
+          (keydown)="handleKeyDown($event, contactForm)"
           type="text"
           name="name"
           class="form-control form-control-sm"
           [(ngModel)]="contact.name"
           #name="ngModel"
           [ngClass]="{
-            'is-invalid': visible && contactForm.submitted && name.invalid
+            'is-invalid': visible && (contactForm.submitted || enterSubmit) && name.invalid
           }"
-          required
-        />
-        <div
-          class="invalid-feedback"
-          *ngIf="contactForm.submitted && name.invalid"
-        >
+          required />
+        <div class="invalid-feedback" *ngIf="(contactForm.submitted || enterSubmit) && name.invalid">
           <p *ngIf="visible && name.errors?.required">Name is required</p>
         </div>
       </div>
@@ -70,21 +59,22 @@
       <label for="tagValue" class="col-sm-2 col-form-label">E-Mail</label>
       <div class="col-sm-10">
         <input
+          (keydown)="handleKeyDown($event, contactForm)"
           type="email"
           name="email"
           class="form-control form-control-sm"
           [(ngModel)]="contact.email"
+          (ngModelChange)="onEmailChange()"
           #mail="ngModel"
           [ngClass]="{
-            'is-invalid': visible && contactForm.submitted && mail.invalid
+            'is-invalid': visible && (contactForm.submitted || enterSubmit) && (mail.invalid || emailInvalid)
           }"
-          required
-        />
-        <div
-          class="invalid-feedback"
-          *ngIf="contactForm.submitted && mail.invalid"
-        >
+          required />
+        <div class="invalid-feedback" *ngIf="(contactForm.submitted || enterSubmit) && mail.invalid">
           <p *ngIf="visible && mail.errors?.required">E-mail is required</p>
+        </div>
+        <div class="invalid-feedback" *ngIf="(contactForm.submitted || enterSubmit) && emailInvalid">
+          <p *ngIf="visible && emailInvalid && !mail.invalid">E-mail is not valid</p>
         </div>
       </div>
     </div>
@@ -92,23 +82,18 @@
       <label for="tagValue" class="col-sm-2 col-form-label">Phone</label>
       <div class="col-sm-10">
         <input
+          (keydown)="handleKeyDown($event, contactForm)"
           type="tel"
           name="phone"
           class="form-control form-control-sm"
           [(ngModel)]="contact.phone"
           #phone="ngModel"
           [ngClass]="{
-            'is-invalid': visible && contactForm.submitted && phone.invalid
+            'is-invalid': visible && (contactForm.submitted || enterSubmit) && phone.invalid
           }"
-          required
-        />
-        <div
-          class="invalid-feedback"
-          *ngIf="contactForm.submitted && phone.invalid"
-        >
-          <p *ngIf="visible && phone.errors?.required">
-            Phonenumber is required
-          </p>
+          required />
+        <div class="invalid-feedback" *ngIf="(contactForm.submitted || enterSubmit) && phone.invalid">
+          <p *ngIf="visible && phone.errors?.required">Phonenumber is required</p>
         </div>
       </div>
     </div>
@@ -116,37 +101,25 @@
       <label for="tagValue" class="col-sm-2 col-form-label">Website</label>
       <div class="col-sm-10">
         <input
+          (keydown)="handleKeyDown($event, contactForm)"
           type="text"
           name="website"
           class="form-control form-control-sm"
           [(ngModel)]="contact.website"
           #website="ngModel"
           [ngClass]="{
-            'is-invalid':
-              visible && contactForm.submitted && website.invalid
+            'is-invalid': visible && (contactForm.submitted || enterSubmit) && website.invalid
           }"
-          required
-        />
-        <div
-          class="invalid-feedback"
-          *ngIf="contactForm.submitted && website.invalid"
-        >
-          <p *ngIf="visible && website.errors?.required">
-            Website is required
-          </p>
+          required />
+        <div class="invalid-feedback" *ngIf="(contactForm.submitted || enterSubmit) && website.invalid">
+          <p *ngIf="visible && website.errors?.required">Website is required</p>
         </div>
       </div>
     </div>
   </div>
   <div class="modal-footer">
-    <button
-      type="submit"
-      class="btn btn-outline-secondary"
-      (click)="onCancelContactModal()"
-    >
-      Cancel
-    </button>
-    <button type="submit" class="btn btn-success">Ok</button>
+    <button type="submit" class="btn btn-outline-secondary" (click)="onCancelContactModal()">Cancel</button>
+    <button type="submit" class="btn btn-success">{{ modalSubmitText }}</button>
     <!-- autoFocus a button with ngbAutofocus as attribute-->
   </div>
 </form>

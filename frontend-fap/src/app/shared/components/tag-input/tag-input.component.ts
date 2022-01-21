@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormControl, NgForm, Validators } from '@angular/forms';
+import { NgForm } from '@angular/forms';
 import { TagService } from '../../../tags/services/tag.service';
 import { Tag } from '../../../tags/models/tag';
 import { CreateUpdateTagDto } from '../../../tags/models/create.tag';
@@ -8,6 +8,7 @@ import { CreateUpdateTagDto } from '../../../tags/models/create.tag';
   selector: 'shared-tag-input',
   templateUrl: './tag-input.component.html',
   styleUrls: ['./tag-input.component.less'],
+  //viewProviders: [{ provide: ControlContainer, useExisting: NgForm }],
 })
 export class TagInputComponent {
   @Input()
@@ -28,20 +29,24 @@ export class TagInputComponent {
   required = false;
   @Input()
   bindLabel = 'value';
+  @Input()
+  enterSubmit = false;
 
   items: Tag[];
   className: string;
+  isRequired: boolean;
   addTagText: string;
   loading = false;
-  invalid = false;
+  invalid = true;
 
+  //private control: NgForm
   constructor(private tagService: TagService) {}
 
-  addTag(tag: Tag, model: Tag[] | Tag | null | undefined) {
+  async addTag(tag: Tag, model: Tag[] | Tag | null | undefined) {
     /* Add a tag to the list of tags (Multiple Select) */
     this.loading = true;
     if (!tag.type) {
-      console.log('add');
+      console.log('creating new tag');
       /* Tag is new and must be created first */
       const newTag: CreateUpdateTagDto = {
         type: this.tagType,
@@ -50,21 +55,27 @@ export class TagInputComponent {
         public: true,
       };
 
-      this.tagService
-        .createTag(newTag)
-        .toPromise()
-        .then((result) => {
-          this.items = [...this.items, result];
-          this.loading = false;
+      const result = await this.tagService.createTag(newTag).toPromise();
+      this.items = [...this.items, result];
+
+      if (Array.isArray(this.model)) {
+        this.model = this.model.filter((item) => {
+          return item.value !== tag.value;
         });
+        this.model.push(result);
+      }
+      this.modelChange.emit(this.model);
+
+      this.loading = false;
     } else {
       console.log('add-existed');
       /* Tag already existed in list --> Nothing to do here */
       this.loading = false;
     }
+    this.checkIsValid();
   }
 
-  setTag(tag: Tag, model: Tag[] | Tag | null | undefined) {
+  async setTag(tag: Tag, model: Tag[] | Tag | null | undefined) {
     /* Set tag as selected (Single Select) */
     this.loading = true;
     const newTag: CreateUpdateTagDto = {
@@ -74,46 +85,37 @@ export class TagInputComponent {
       public: true,
     };
 
-    this.tagService
-      .createTag(newTag)
-      .toPromise()
-      .then((result) => {
-        this.items = [...this.items, result];
-        this.loading = false;
-      });
+    console.log('Creating new tag');
+    const result = await this.tagService.createTag(newTag).toPromise();
+    this.items = [...this.items, result];
+    this.model = result;
+    this.loading = false;
   }
 
-  removeTag(event: Event, model: Tag[] | Tag | null | undefined) {
-    if (model === null || (Array.isArray(model) && model.length === 0)) {
-      console.log('remove', model);
-      this.setInvalid(true);
-    }
+  removeTag() {
+    this.checkIsValid();
   }
 
-  onChange(tag: Tag) {
+  async onChange(tag: Tag) {
+    console.log('ON CHANGE');
+    console.log(this.model);
     if (this.multiple) {
       /* if Multi-Select let the change Event be handled by addTagToItemsMultiple */
       return;
     }
     if (tag === undefined || tag === null) {
       console.log('change-remove');
-      //this.setInvalid(true);
     } else {
       console.log('change-addnewtag');
       if (!tag.type) {
         /* Tag is new and must be created */
         /* TODO maybe add modal with confirmation? */
         /* Set tag as selected (Single Select) */
-        this.setTag(tag, this.model);
+        await this.setTag(tag, this.model);
       }
-      this.setInvalid(false);
-    }
-    if (this.form.submitted && this.invalid) {
-      this.setInvalid(true);
-    } else {
-      this.setInvalid(false);
     }
     this.modelChange.emit(this.model);
+    this.checkIsValid();
   }
 
   ngOnInit() {
@@ -123,43 +125,24 @@ export class TagInputComponent {
       });
     }
 
-    this.form.control.addControl(
-      this.formCtrlName,
-      new FormControl('valid', Validators.required),
-    );
+    console.log('EEEEEEEEEEE', this.model);
 
-    /* setting className to show proper tag colors */
-
+    // weird, without 'className' set from outside class value is correct but tags have wrong style
     this.className =
       'custom-tag-select ' + 'tag-' + this.tagType.toLowerCase() + '-input';
-
-    /* setting responsible classes for validation */
-    this.form.ngSubmit.subscribe(() => {
-      console.log('subsc', this.invalid);
-      if (this.form.submitted && this.invalid) {
-        this.setInvalid(true);
-      } else {
-        this.setInvalid(false);
-      }
-    });
 
     this.addTagText = 'Add ' + this.tagType;
   }
 
-  setInvalid(value: boolean) {
-    console.log('setInvalid', value);
-    this.invalid = value;
-    this.form.form.controls[this.formCtrlName].setErrors({
-      invalid: value,
-    });
-    if (value) {
-      console.log('setClass');
-      this.className += ' required is-invalid';
-    } else {
-      console.log('removeClass');
-      this.className.replace(/required/g, '');
-      this.className.replace(/is-invalid/g, '');
+  checkIsValid() {
+    if (!this.required) {
+      this.invalid = false;
+      return;
     }
-    this.form.form.updateValueAndValidity();
+    this.invalid =
+      !this.model || this.model === null || this.model === undefined;
+    if (Array.isArray(this.model)) {
+      this.invalid = this.invalid || this.model.length === 0;
+    }
   }
 }

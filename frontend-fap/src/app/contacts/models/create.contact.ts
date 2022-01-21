@@ -10,8 +10,10 @@
  * Do not edit the class manually.
  */
 
+import { Tag } from '../../tags/models/tag';
+
 export interface CreateUpdateContactDto {
-  type: any;
+  type: Tag | null;
   name: string;
   email?: string;
   phone?: string;

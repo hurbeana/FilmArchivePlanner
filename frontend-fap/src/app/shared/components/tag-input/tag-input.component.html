@@ -1,4 +1,5 @@
 <ng-select
+  [name]="formCtrlName"
   [(ngModel)]="model"
   [items]="items"
   [bindLabel]="bindLabel"
@@ -7,21 +8,24 @@
   [multiple]="multiple"
   [addTag]="true"
   (add)="addTag($event, model)"
-  (remove)="removeTag($event, model)"
+  (remove)="removeTag()"
   (change)="onChange($event)"
   [loading]="loading"
   [clearable]="!readonly"
   [searchable]="!readonly"
   [disabled]="readonly"
-  [ngClass]="className"
+  [ngClass]="{
+    className,
+    'is-invalid': (form.submitted || enterSubmit) && invalid,
+    'required': required
+  }"
   [class.hide-arrow]="readonly"
   [class.hide-clear]="readonly"
   [class.readonly]="readonly"
   [class.ng-select-multiple]="true"
   [class.ng-select-single]="false"
-  [class.form-controll-sm]="true"
-  required>
+  [class.form-controll-sm]="true">
 </ng-select>
-<div *ngIf="form.submitted && form.form.invalid && invalid" class="invalid-feedback">
+<div *ngIf="(form.submitted || enterSubmit) && required && invalid" class="invalid-feedback">
   <p>Type is required</p>
 </div>

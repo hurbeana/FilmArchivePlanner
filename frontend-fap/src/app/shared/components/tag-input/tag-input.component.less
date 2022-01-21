@@ -1,13 +1,17 @@
-:host.is-invalid ng-select .ng-select-container{
+:host.is-invalid ng-select .ng-select-container {
   border-color: #dc3545 !important;
 }
 
-::ng-deep .ng-select .ng-select-container{
+::ng-deep .ng-select .ng-select-container {
   min-height: auto;
 }
 
-::ng-deep .ng-select.ng-select-multiple.ng-select-disabled > .ng-select-container .ng-value-container .ng-value{
-  border:none;
+::ng-deep
+  .ng-select.ng-select-multiple.ng-select-disabled
+  > .ng-select-container
+  .ng-value-container
+  .ng-value {
+  border: none;
 }
 
 ::ng-deep ng-select.ng-select-disabled > .ng-select-container {
@@ -19,7 +23,11 @@
 }
 
 ::ng-deep .readonly {
-  ::ng-deep .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-input{
+  ::ng-deep
+    .ng-select.ng-select-multiple
+    .ng-select-container
+    .ng-value-container
+    .ng-input {
     display: none;
   }
 }
@@ -30,34 +38,30 @@
   }
 }
 
-::ng-deep .hide-clear{
+::ng-deep .hide-clear {
   .ng-clear-wrapper {
     display: none;
   }
 }
 
 /* Validation Style */
-::ng-deep .ng-select.required.ng-invalid.ng-touched {
-  .ng-select-container{
+::ng-deep ng-select.required.is-invalid {
+  .ng-select-container {
     border-color: #dc3545;
-  }
-}
-
-::ng-deep .ng-select-focused.required.ng-invalid.ng-touched {
-  .ng-select-container{
-    border-color: #dc3545;
-    box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25); // maybe?
   }
 }
 /* Validation Style End */
 
-
 /* Tag Styles for different Categories */
-@tagClasses: tag_animation, tag_category, tag_contact, tag_country, tag_keyword, tag_language, tag_software, tag_selection;
-@tagInputClasses: tag-animation-input, tag-category-input, tag-contact-input, tag-country-input, tag-keyword-input, tag-language-input, tag-software-input, tag-selection-input;
+@tagClasses: tag_animation, tag_category, tag_contact, tag_country, tag_keyword,
+  tag_language, tag_software, tag_selection;
+@tagInputClasses: tag-animation-input, tag-category-input, tag-contact-input,
+  tag-country-input, tag-keyword-input, tag-language-input, tag-software-input,
+  tag-selection-input;
 
 @tagColors: white, white, white, white, black, white, white, white;
-@tagBackgroundColors: #007bff, #6c757d, #28a745, #dc3545, #ffc107, #17a2b8, #343a40, #7537b378;
+@tagBackgroundColors: #007bff, #6c757d, #28a745, #dc3545, #ffc107, #17a2b8,
+  #343a40, #7537b378;
 
 /* Read-Only Tag Display */
 each(@tagClasses, {
@@ -69,7 +73,11 @@ each(@tagClasses, {
 });
 
 /* Edit Tag Display */
-::ng-deep .ng-select.custom-tag-select .ng-select-container .ng-value-container .ng-value{
+::ng-deep
+  .ng-select.custom-tag-select
+  .ng-select-container
+  .ng-value-container
+  .ng-value {
   border-radius: 0.25rem;
   font-size: 0.8rem;
   padding: 0 5px 0 0;
@@ -77,7 +85,12 @@ each(@tagClasses, {
   white-space: nowrap;
 }
 
-::ng-deep .ng-select.custom-tag-select .ng-select-container .ng-value-container .ng-value .ng-value-icon.left{
+::ng-deep
+  .ng-select.custom-tag-select
+  .ng-select-container
+  .ng-value-container
+  .ng-value
+  .ng-value-icon.left {
   border-radius: 0.25rem 0 0 0.25rem;
   padding: 0 6px 0 7px;
 }
@@ -97,6 +110,14 @@ each(@tagInputClasses, {
     background-color:  darken(extract(@tagBackgroundColors, @index), 5%) !important
   }
 });
+
+.ng-select {
+  margin-bottom: 10px;
+}
+
+::ng-deep .ng-select-container {
+  height: 32px;
+}
 
 /* Overflow Fix */
 ::ng-deep .ng-select {
