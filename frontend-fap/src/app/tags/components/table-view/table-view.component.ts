@@ -24,7 +24,6 @@ import {
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateTagModalComponent } from './create-tag-modal.component';
 import { ConfirmDeleteTagModalComponent } from './confirm-delete-tag-modal.component';
-import { EditTagModalComponent } from './edit-tag-modal.component';
 import { TagService } from '../../services/tag.service';
 import {
   NgbdSortableHeaderDirective,
@@ -178,7 +177,7 @@ export class TableViewComponent implements AfterViewInit {
   }
 
   openEditTagModal(tag: Tag) {
-    const modalRef = this.modalService.open(EditTagModalComponent, {
+    const modalRef = this.modalService.open(CreateTagModalComponent, {
       centered: true,
       keyboard: true,
       //backdrop: 'static' // won`t close on click outside when uncommented
@@ -191,11 +190,15 @@ export class TableViewComponent implements AfterViewInit {
       public: tag.public,
     };
 
-    modalRef.componentInstance.tagToEdit = tagToUpdate;
-    modalRef.componentInstance.tagId = tag.id;
+    modalRef.componentInstance.tagToCreateEdit = tagToUpdate;
+
+    modalRef.componentInstance.modalTitle = 'Edit Tag';
+    modalRef.componentInstance.modalSubmitText = 'Save';
+    modalRef.componentInstance.isEditModal = true;
+
     modalRef.result.then(
       (result) => {
-        this.editTag(result.tag, result.id);
+        this.editTag(result, tag.id);
       },
       () => {
         console.log('Unconfirmed close');
@@ -263,11 +266,15 @@ export class TableViewComponent implements AfterViewInit {
       user: 'User',
       public: true,
     };
-    modalRef.componentInstance.tagToCreate = newTag;
+    modalRef.componentInstance.tagToCreateEdit = newTag;
+
+    modalRef.componentInstance.modalTitle = 'Create Tag';
+    modalRef.componentInstance.modalSubmitText = 'Create';
+
     modalRef.result.then(
       (tag) => {
         console.log(tag);
-        this.createTag(modalRef.componentInstance.tagToCreate);
+        this.createTag(tag);
       },
       () => {
         console.log('Unconfirmed close');

@@ -21,10 +21,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ContentComponent } from './components/content/content.component';
 import { TableViewComponent } from './components/table-view/table-view.component';
-import * as TagActions from './state/tags.actions';
 import { ConfirmDeleteTagModalComponent } from './components/table-view/confirm-delete-tag-modal.component';
 import { CreateTagModalComponent } from './components/table-view/create-tag-modal.component';
-import { EditTagModalComponent } from './components/table-view/edit-tag-modal.component';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../../environments/environment';
 
@@ -34,7 +32,6 @@ import { environment } from '../../environments/environment';
     ContentComponent,
     ConfirmDeleteTagModalComponent,
     CreateTagModalComponent,
-    EditTagModalComponent,
   ],
   exports: [TableViewComponent, ContentComponent],
   imports: [

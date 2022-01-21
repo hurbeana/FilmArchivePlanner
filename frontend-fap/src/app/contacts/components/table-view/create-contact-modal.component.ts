@@ -28,8 +28,6 @@ export class CreateContactModalComponent {
     if (Array.isArray(this.contact.type)) {
       this.contact.type = this.contact.type[0];
     }
-    console.log('- SUBMIT -');
-    console.log(`Contact type: ${this.contact.type?.toString()}`);
     if (this.emailInvalid) {
       return;
     }
@@ -41,7 +39,6 @@ export class CreateContactModalComponent {
       public: this.contact.type.public,
       created_at: this.contact.type.created_at,
     };
-    console.log(this.contact);
     this.modal.close(this.contact);
   }
 

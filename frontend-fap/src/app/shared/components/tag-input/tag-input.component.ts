@@ -97,8 +97,6 @@ export class TagInputComponent {
   }
 
   async onChange(tag: Tag) {
-    console.log('ON CHANGE');
-    console.log(this.model);
     if (this.multiple) {
       /* if Multi-Select let the change Event be handled by addTagToItemsMultiple */
       return;
@@ -124,8 +122,6 @@ export class TagInputComponent {
         this.items = tags;
       });
     }
-
-    console.log('EEEEEEEEEEE', this.model);
 
     // weird, without 'className' set from outside class value is correct but tags have wrong style
     this.className =
