@@ -35,17 +35,29 @@ export class TagEffects {
   createTag$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TagActions.createTag),
-      switchMap(({ tag }) =>
-        this.tagsService.createTag(tag).pipe(
-          map((tag) => TagActions.createTagSuccess({ tag })),
-          tap((_) =>
-            this.messageService.showSuccessSnackBar('Tag created successfully'),
+      switchMap(
+        ({ tagToCreate, page, limit, orderBy, sortOrder, searchString }) =>
+          this.tagsService.createTag(tagToCreate).pipe(
+            map((createdTag) =>
+              TagActions.createTagSuccess({
+                createdTag,
+                page: page,
+                limit: limit,
+                orderBy: orderBy,
+                sortOrder: sortOrder,
+                searchString: searchString,
+              }),
+            ),
+            tap((_) =>
+              this.messageService.showSuccessSnackBar(
+                'Tag created successfully',
+              ),
+            ),
+            catchError((err) => {
+              this.messageService.showErrorSnackBar(err);
+              return EMPTY;
+            }),
           ),
-          catchError((err) => {
-            this.messageService.showErrorSnackBar(err);
-            return EMPTY;
-          }),
-        ),
       ),
     ),
   );
@@ -68,17 +80,29 @@ export class TagEffects {
   updateTag$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TagActions.updateTag),
-      switchMap(({ tag, id }) =>
-        this.tagsService.updateTag(tag, id).pipe(
-          map((tag) => TagActions.updateTagSuccess({ tag })),
-          tap((_) =>
-            this.messageService.showSuccessSnackBar('Tag updated successfully'),
+      switchMap(
+        ({ id, tagToUpdate, page, limit, orderBy, sortOrder, searchString }) =>
+          this.tagsService.updateTag(id, tagToUpdate).pipe(
+            map((tag) =>
+              TagActions.updateTagSuccess({
+                updatedTag: tag,
+                page: page,
+                limit: limit,
+                orderBy: orderBy,
+                sortOrder: sortOrder,
+                searchString: searchString,
+              }),
+            ),
+            tap((_) =>
+              this.messageService.showSuccessSnackBar(
+                'Tag updated successfully',
+              ),
+            ),
+            catchError((err) => {
+              this.messageService.showErrorSnackBar(err);
+              return EMPTY;
+            }),
           ),
-          catchError((err) => {
-            this.messageService.showErrorSnackBar(err);
-            return EMPTY;
-          }),
-        ),
       ),
     ),
   );
@@ -92,7 +116,7 @@ export class TagEffects {
           this.tagsService.deleteTag(tagToDelete).pipe(
             map(() =>
               TagActions.deleteTagSuccess({
-                tagToDelete: tagToDelete,
+                deletedTag: tagToDelete,
                 page: page,
                 limit: limit,
                 orderBy: orderBy,
@@ -114,11 +138,45 @@ export class TagEffects {
     ),
   );
 
+  reloadAfterCreate$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TagActions.createTagSuccess),
+      mergeMap(
+        ({ createdTag, page, limit, orderBy, sortOrder, searchString }) =>
+          this.tagsService
+            .getTags(page, limit, orderBy, sortOrder, searchString)
+            .pipe(
+              map((pagination) =>
+                TagActions.getTagsSuccess({ pagination: pagination }),
+              ),
+              catchError(() => EMPTY), // TODO: error handling
+            ),
+      ),
+    ),
+  );
+
+  reloadAfterUpdate$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TagActions.updateTagSuccess),
+      mergeMap(
+        ({ updatedTag, page, limit, orderBy, sortOrder, searchString }) =>
+          this.tagsService
+            .getTags(page, limit, orderBy, sortOrder, searchString)
+            .pipe(
+              map((pagination) =>
+                TagActions.getTagsSuccess({ pagination: pagination }),
+              ),
+              catchError(() => EMPTY), // TODO: error handling
+            ),
+      ),
+    ),
+  );
+
   reloadAfterDelete$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TagActions.deleteTagSuccess),
       mergeMap(
-        ({ tagToDelete, page, limit, orderBy, sortOrder, searchString }) =>
+        ({ deletedTag, page, limit, orderBy, sortOrder, searchString }) =>
           this.tagsService
             .getTags(page, limit, orderBy, sortOrder, searchString)
             .pipe(

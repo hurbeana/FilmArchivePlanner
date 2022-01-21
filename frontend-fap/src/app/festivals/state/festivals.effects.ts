@@ -51,21 +51,29 @@ export class FestivalEffects {
   createFestival$ = createEffect(() =>
     this.actions$.pipe(
       ofType(FestivalActions.createFestival),
-      switchMap(({ festival }) =>
-        this.festivalsService.createFestival(festival).pipe(
-          map((festival) =>
-            FestivalActions.createFestivalSuccess({ festival }),
-          ),
-          tap((_) =>
-            this.messageService.showSuccessSnackBar(
-              'Festival created successfully',
+      switchMap(
+        ({ festivalToCreate, page, limit, orderBy, sortOrder, searchString }) =>
+          this.festivalsService.createFestival(festivalToCreate).pipe(
+            map((festival) =>
+              FestivalActions.createFestivalSuccess({
+                createdFestival: festival,
+                page: page,
+                limit: limit,
+                orderBy: orderBy,
+                sortOrder: sortOrder,
+                searchString: searchString,
+              }),
             ),
+            tap((_) =>
+              this.messageService.showSuccessSnackBar(
+                'Festival created successfully',
+              ),
+            ),
+            catchError((err) => {
+              this.messageService.showErrorSnackBar(err);
+              return EMPTY;
+            }),
           ),
-          catchError((err) => {
-            this.messageService.showErrorSnackBar(err);
-            return EMPTY;
-          }),
-        ),
       ),
     ),
   );
@@ -74,21 +82,29 @@ export class FestivalEffects {
   updateFestival$ = createEffect(() =>
     this.actions$.pipe(
       ofType(FestivalActions.updateFestival),
-      switchMap(({ festival, id }) =>
-        this.festivalsService.updateFestival(festival, id).pipe(
-          map((festival) =>
-            FestivalActions.updateFestivalSuccess({ festival }),
-          ),
-          tap((_) =>
-            this.messageService.showSuccessSnackBar(
-              'Festival updated successfully',
+      switchMap(
+        ({ id, newFestival, page, limit, orderBy, sortOrder, searchString }) =>
+          this.festivalsService.updateFestival(id, newFestival).pipe(
+            map((festival) =>
+              FestivalActions.updateFestivalSuccess({
+                updatedFestival: festival,
+                page: page,
+                limit: limit,
+                orderBy: orderBy,
+                sortOrder: sortOrder,
+                searchString: searchString,
+              }),
             ),
+            tap((_) =>
+              this.messageService.showSuccessSnackBar(
+                'Festival updated successfully',
+              ),
+            ),
+            catchError((err) => {
+              this.messageService.showErrorSnackBar(err);
+              return EMPTY;
+            }),
           ),
-          catchError((err) => {
-            this.messageService.showErrorSnackBar(err);
-            return EMPTY;
-          }),
-        ),
       ),
     ),
   );
@@ -102,7 +118,7 @@ export class FestivalEffects {
           this.festivalsService.deleteFestival(festivalToDelete).pipe(
             map(() =>
               FestivalActions.deleteFestivalSuccess({
-                festivalToDelete: festivalToDelete,
+                deletedFestival: festivalToDelete,
                 page: page,
                 limit: limit,
                 orderBy: orderBy,
@@ -124,11 +140,45 @@ export class FestivalEffects {
     ),
   );
 
+  reloadAfterCreate$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(FestivalActions.createFestivalSuccess),
+      mergeMap(
+        ({ createdFestival, page, limit, orderBy, sortOrder, searchString }) =>
+          this.festivalsService
+            .getFestivals(page, limit, orderBy, sortOrder, searchString)
+            .pipe(
+              map((pagination) =>
+                FestivalActions.getFestivalsSuccess({ pagination: pagination }),
+              ),
+              catchError(() => EMPTY), // TODO: error handling
+            ),
+      ),
+    ),
+  );
+
+  reloadAfterUpdate$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(FestivalActions.updateFestivalSuccess),
+      mergeMap(
+        ({ updatedFestival, page, limit, orderBy, sortOrder, searchString }) =>
+          this.festivalsService
+            .getFestivals(page, limit, orderBy, sortOrder, searchString)
+            .pipe(
+              map((pagination) =>
+                FestivalActions.getFestivalsSuccess({ pagination: pagination }),
+              ),
+              catchError(() => EMPTY), // TODO: error handling
+            ),
+      ),
+    ),
+  );
+
   reloadAfterDelete$ = createEffect(() =>
     this.actions$.pipe(
       ofType(FestivalActions.deleteFestivalSuccess),
       mergeMap(
-        ({ festivalToDelete, page, limit, orderBy, sortOrder, searchString }) =>
+        ({ deletedFestival, page, limit, orderBy, sortOrder, searchString }) =>
           this.festivalsService
             .getFestivals(page, limit, orderBy, sortOrder, searchString)
             .pipe(
@@ -157,7 +207,7 @@ export class FestivalEffects {
     ),
   );
 
-  /* is called, whenever an action of type 'createTag' is called */
+  /* is called, whenever an action of type 'updateFestivalEvent' is called */
   updateFestivalEvent$ = createEffect(() =>
     this.actions$.pipe(
       ofType(FestivalActions.updateFestivalEvent),
@@ -172,7 +222,7 @@ export class FestivalEffects {
     ),
   );
 
-  /* is called, whenever an action of type 'createMovie' is called */
+  /* is called, whenever an action of type 'deleteFestivalEvent' is called */
   deleteFestivalEvent$ = createEffect(() =>
     this.actions$.pipe(
       ofType(FestivalActions.deleteFestivalEvent),

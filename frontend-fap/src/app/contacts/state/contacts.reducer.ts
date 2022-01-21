@@ -28,7 +28,14 @@ export const contactsReducer = createReducer(
       items: [...pagination.items],
       meta: { ...pagination.meta },
     },
-    selectedContact: null,
+    selectedContact:
+      pagination.items.filter(
+        (item) => item.id == state?.selectedContact?.id,
+      )[0] ?? null,
+  })),
+  on(ContactActions.setSelectedContact, (state, { selectedContact }) => ({
+    ...state,
+    selectedContact: selectedContact,
   })),
   on(ContactActions.getContactByIdAndSetAsSelectedContact, (state) => state),
   on(
@@ -38,25 +45,4 @@ export const contactsReducer = createReducer(
       selectedContact: contact,
     }),
   ),
-  on(ContactActions.createContact, (state) => state),
-  on(ContactActions.createContactSuccess, (state) => state),
-  on(ContactActions.setSelectedContact, (state, { selectedContact }) => ({
-    ...state,
-    selectedContact: selectedContact,
-  })),
-
-  on(ContactActions.updateContactSuccess, (state, { contact }) => ({
-    ...state,
-    pagination: {
-      ...state.pagination,
-      items: [
-        ...state.pagination.items.map((stateContact) =>
-          stateContact.id === contact.id ? contact : stateContact,
-        ),
-      ],
-    },
-    selectedContact: contact,
-  })),
-
-  on(ContactActions.deleteContactSuccess, (state) => state),
 );

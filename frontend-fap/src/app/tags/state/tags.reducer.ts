@@ -29,68 +29,14 @@ export const tagsReducer = createReducer(
       items: [...pagination.items],
       meta: { ...pagination.meta },
     },
-    selectedTag: null,
+    selectedTag:
+      pagination.items.filter((item) => item.id == state?.selectedTag?.id)[0] ??
+      null,
   })),
   on(TagActions.createTag, (state) => state),
-  on(TagActions.createTagSuccess, (state, { tag }) => ({
-    ...state,
-    pagination: {
-      ...state.pagination,
-      items:
-        state.pagination.items.length === state.pagination.meta.itemsPerPage
-          ? [...state.pagination.items]
-          : [...state.pagination.items, tag],
-      meta: {
-        ...state.pagination.meta,
-        totalItems: state.pagination.meta.totalItems + 1,
-        totalPages:
-          state.pagination.items.length === state.pagination.meta.itemsPerPage
-            ? state.pagination.meta.totalPages + 1
-            : state.pagination.meta.totalPages,
-      },
-    },
-  })),
 
   on(TagActions.setSelectedTag, (state, { selectedTag }) => ({
     ...state,
     selectedTag: selectedTag,
-  })),
-
-  on(TagActions.updateTagSuccess, (state, { tag }) => ({
-    ...state,
-    pagination: {
-      ...state.pagination,
-      items: [
-        ...state.pagination.items.map((stateTag) =>
-          stateTag.id === tag.id ? tag : stateTag,
-        ),
-      ],
-    },
-    selectedTag: tag,
-  })),
-
-  on(TagActions.deleteTagSuccess, (state, { tagToDelete }) => ({
-    ...state,
-    pagination: {
-      ...state.pagination,
-      items: [
-        ...state.pagination.items.filter((item) => item.id !== tagToDelete.id),
-      ],
-      meta: {
-        ...state.pagination.meta,
-        totalItems:
-          state.pagination.meta.totalItems === 0
-            ? 0
-            : state.pagination.meta.totalItems - 1,
-        totalPages:
-          state.pagination.items.length === state.pagination.meta.itemsPerPage
-            ? state.pagination.meta.totalPages + 1
-            : state.pagination.meta.totalPages,
-        currentPage:
-          state.pagination.items.length === 1
-            ? state.pagination.meta.currentPage - 1
-            : state.pagination.meta.currentPage,
-      },
-    },
   })),
 );

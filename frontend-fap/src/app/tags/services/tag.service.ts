@@ -51,7 +51,7 @@ export class TagService {
     return this.http.get<Tag[]>(`${api}/all`);
   }
 
-  updateTag(tag: CreateUpdateTagDto, id: number) {
+  updateTag(id: number, tag: CreateUpdateTagDto) {
     console.log('[TagService] - UPDATE TAG');
     return this.http.put<Tag>(`${api}/${id}`, tag);
   }

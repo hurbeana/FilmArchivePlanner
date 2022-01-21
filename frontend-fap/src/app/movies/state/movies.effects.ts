@@ -148,24 +148,6 @@ export class MovieEffects {
     ),
   );
 
-  deleteLoadinItemMovieSucess$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(
-        MovieActions.createMovieSuccess,
-        MovieActions.createMovieFailed,
-        MovieActions.updatedMovieSuccess,
-        MovieActions.updateMovieFailed,
-      ),
-      map((movie) =>
-        LoadingItemsActions.deleteLoadingItem({
-          loadingItemToDelete: {
-            title: movie.movie.originalTitle,
-          },
-        }),
-      ),
-    ),
-  );
-
   updateMovie$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MovieActions.updateMovie),
@@ -252,6 +234,24 @@ export class MovieEffects {
               ),
               catchError(() => EMPTY), // TODO: error handling
             ),
+      ),
+    ),
+  );
+
+  deleteLoadingItemMovieSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        MovieActions.createMovieSuccess,
+        MovieActions.createMovieFailed,
+        MovieActions.updatedMovieSuccess,
+        MovieActions.updateMovieFailed,
+      ),
+      map((result) =>
+        LoadingItemsActions.deleteLoadingItem({
+          loadingItemToDelete: {
+            title: result.movie.originalTitle,
+          },
+        }),
       ),
     ),
   );

@@ -257,7 +257,7 @@ export class DirectorsService {
     if (sortOrder && orderBy) {
       orderObj = { [orderBy]: sortOrder.toUpperCase() };
     } else {
-      orderObj = { created_at: 'ASC' };
+      orderObj = { created_at: 'DESC' };
     }
     return paginate<Director>(this.directorRepository, options, {
       relations: ['biographyEnglish', 'biographyGerman', 'filmography'],

@@ -5,6 +5,7 @@ import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { ContactService } from '../services/contact.service';
 import * as ContactActions from './contacts.actions';
 import { MessageService } from '../../core/services/message.service';
+import { Contact } from '../models/contact';
 
 @Injectable()
 export class ContactEffects {
@@ -82,23 +83,29 @@ export class ContactEffects {
   updateContact$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ContactActions.updateContact),
-      switchMap(({ contact, id }) =>
-        this.contactsService.updateContact(contact, id).pipe(
-          map((contact) =>
-            ContactActions.updateContactSuccess({
-              contact,
+      switchMap(
+        ({ id, newContact, page, limit, orderBy, sortOrder, searchString }) =>
+          this.contactsService.updateContact(id, newContact).pipe(
+            map((contact) =>
+              ContactActions.updateContactSuccess({
+                updatedContact: contact,
+                page: page,
+                limit: limit,
+                orderBy: orderBy,
+                sortOrder: sortOrder,
+                searchString: searchString,
+              }),
+            ),
+            tap((_) =>
+              this.messageService.showSuccessSnackBar(
+                'Contact updated successfully',
+              ),
+            ),
+            catchError((err) => {
+              this.messageService.showErrorSnackBar(err);
+              return EMPTY;
             }),
           ),
-          tap((_) =>
-            this.messageService.showSuccessSnackBar(
-              'Contact updated successfully',
-            ),
-          ),
-          catchError((err) => {
-            this.messageService.showErrorSnackBar(err);
-            return EMPTY;
-          }),
-        ),
       ),
     ),
   );
@@ -112,7 +119,7 @@ export class ContactEffects {
           this.contactsService.deleteContact(contactToDelete).pipe(
             map(() =>
               ContactActions.deleteContactSuccess({
-                contactToDelete: contactToDelete,
+                deletedContact: contactToDelete,
                 page: page,
                 limit: limit,
                 orderBy: orderBy,
@@ -151,11 +158,28 @@ export class ContactEffects {
     ),
   );
 
+  reloadAfterUpdate$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ContactActions.updateContactSuccess),
+      mergeMap(
+        ({ updatedContact, page, limit, orderBy, sortOrder, searchString }) =>
+          this.contactsService
+            .getContacts(page, limit, orderBy, sortOrder, searchString)
+            .pipe(
+              map((pagination) =>
+                ContactActions.getContactsSuccess({ pagination: pagination }),
+              ),
+              catchError(() => EMPTY), // TODO: error handling
+            ),
+      ),
+    ),
+  );
+
   reloadAfterDelete$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ContactActions.deleteContactSuccess),
       mergeMap(
-        ({ contactToDelete, page, limit, orderBy, sortOrder, searchString }) =>
+        ({ deletedContact, page, limit, orderBy, sortOrder, searchString }) =>
           this.contactsService
             .getContacts(page, limit, orderBy, sortOrder, searchString)
             .pipe(

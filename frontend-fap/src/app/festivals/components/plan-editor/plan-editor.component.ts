@@ -250,7 +250,15 @@ export class PlanEditorComponent implements OnInit {
           !this.readonly
         ) {
           this.store.dispatch(
-            updateFestival({ festival: festival, id: this.festivalID }),
+            updateFestival({
+              id: this.festivalID,
+              newFestival: festival,
+              page: 1,
+              limit: 16,
+              orderBy: '',
+              sortOrder: '',
+              searchString: '',
+            }),
           );
         }
       },

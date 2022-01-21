@@ -30,74 +30,18 @@ export const festivalsReducer = createReducer(
       items: [...pagination.items],
       meta: { ...pagination.meta },
     },
-    selectedFestival: null,
+    selectedFestival:
+      pagination.items.filter(
+        (item) => item.id == state?.selectedFestival?.id,
+      )[0] ?? null,
   })),
-  on(FestivalActions.getFestival, (state) => state),
   on(FestivalActions.getFestivalSuccess, (state, { festival }) => ({
     ...state,
     detailsFestival: festival,
   })),
-  on(FestivalActions.createFestival, (state) => state),
-  on(FestivalActions.createFestivalSuccess, (state, { festival }) => ({
-    ...state,
-    pagination: {
-      ...state.pagination,
-      items:
-        state.pagination.items.length === state.pagination.meta.itemsPerPage
-          ? [...state.pagination.items]
-          : [...state.pagination.items, festival],
-      meta: {
-        ...state.pagination.meta,
-        totalItems: state.pagination.meta.totalItems + 1,
-        totalPages:
-          state.pagination.items.length === state.pagination.meta.itemsPerPage
-            ? state.pagination.meta.totalPages + 1
-            : state.pagination.meta.totalPages,
-      },
-    },
-  })),
   on(FestivalActions.setSelectedFestival, (state, { selectedFestival }) => ({
     ...state,
     selectedFestival: selectedFestival,
-  })),
-  on(FestivalActions.updateFestivalSuccess, (state, { festival }) => ({
-    ...state,
-    detailsFestival: festival,
-    pagination: {
-      ...state.pagination,
-      items: [
-        ...state.pagination.items.map((stateFestival) =>
-          stateFestival.id === festival.id ? festival : stateFestival,
-        ),
-      ],
-    },
-    selectedFestival: festival,
-  })),
-  on(FestivalActions.deleteFestivalSuccess, (state, { festivalToDelete }) => ({
-    ...state,
-    pagination: {
-      ...state.pagination,
-      items: [
-        ...state.pagination.items.filter(
-          (item) => item.id !== festivalToDelete.id,
-        ),
-      ],
-      meta: {
-        ...state.pagination.meta,
-        totalItems:
-          state.pagination.meta.totalItems === 0
-            ? 0
-            : state.pagination.meta.totalItems - 1,
-        totalPages:
-          state.pagination.items.length === state.pagination.meta.itemsPerPage
-            ? state.pagination.meta.totalPages + 1
-            : state.pagination.meta.totalPages,
-        currentPage:
-          state.pagination.items.length === 1
-            ? state.pagination.meta.currentPage - 1
-            : state.pagination.meta.currentPage,
-      },
-    },
   })),
   on(
     FestivalActions.createFestivalEventSuccess,

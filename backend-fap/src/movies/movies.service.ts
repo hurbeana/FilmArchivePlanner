@@ -339,7 +339,7 @@ export class MoviesService {
     if (sortOrder && orderBy) {
       orderObj = { [orderBy]: sortOrder.toUpperCase() };
     } else {
-      orderObj = { created_at: 'ASC' };
+      orderObj = { created_at: 'DESC' };
     }
 
     if (advanced) {

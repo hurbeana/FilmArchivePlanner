@@ -128,7 +128,7 @@ export class ContactService {
     return this.http.get<Contact[]>(`${api}`);
   }
 
-  updateContact(contact: CreateUpdateContactDto, id: number) {
+  updateContact(id: number, contact: CreateUpdateContactDto) {
     console.log('[ContactService] - UPDATE CONTACT');
     const rb = RequestQueryBuilder.create({
       join: [{ field: 'type' }],

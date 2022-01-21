@@ -33,11 +33,25 @@ export const getFestivalSuccess = createAction(
 /* whenever this action is called, the 'createFestival$' effect in festivals.effects.ts  is executed */
 export const createFestival = createAction(
   '[Festival List] Create Festival',
-  props<{ festival: CreateUpdateFestivalDto }>(),
+  props<{
+    festivalToCreate: CreateUpdateFestivalDto;
+    page: number;
+    limit: number;
+    orderBy: string;
+    sortOrder: string;
+    searchString: string;
+  }>(),
 );
 export const createFestivalSuccess = createAction(
   '[Festival List] Created Festival Success',
-  props<{ festival: Festival }>(),
+  props<{
+    createdFestival: Festival;
+    page: number;
+    limit: number;
+    orderBy: string;
+    sortOrder: string;
+    searchString: string;
+  }>(),
 );
 
 export const setSelectedFestival = createAction(
@@ -48,14 +62,24 @@ export const setSelectedFestival = createAction(
 export const updateFestival = createAction(
   '[Festival List] Update Festival',
   props<{
-    festival: CreateUpdateFestivalDto;
     id: number;
+    newFestival: CreateUpdateFestivalDto;
+    page: number;
+    limit: number;
+    orderBy: string;
+    sortOrder: string;
+    searchString: string;
   }>(),
 );
 export const updateFestivalSuccess = createAction(
   '[Festival List] Update Festival Success',
   props<{
-    festival: Festival;
+    updatedFestival: Festival;
+    page: number;
+    limit: number;
+    orderBy: string;
+    sortOrder: string;
+    searchString: string;
   }>(),
 );
 
@@ -73,7 +97,7 @@ export const deleteFestival = createAction(
 export const deleteFestivalSuccess = createAction(
   '[Festival List] Remove Festival Success',
   props<{
-    festivalToDelete: Festival;
+    deletedFestival: Festival;
     page: number;
     limit: number;
     orderBy: string;

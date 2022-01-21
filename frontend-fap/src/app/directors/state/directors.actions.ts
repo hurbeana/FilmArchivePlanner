@@ -35,11 +35,25 @@ export const getDirectorsSuccess = createAction(
 /* whenever this action is called, the 'createDirector$' effect in directors.effects.ts  is executed */
 export const createDirector = createAction(
   '[Director List] Create Director',
-  props<{ director: CreateUpdateDirectorDto }>(),
+  props<{
+    director: CreateUpdateDirectorDto;
+    page: number;
+    limit: number;
+    orderBy: string;
+    sortOrder: string;
+    searchString: string;
+  }>(),
 );
 export const createDirectorSuccess = createAction(
   '[Director List] Created Director Success',
-  props<{ director: Director }>(),
+  props<{
+    director: Director;
+    page: number;
+    limit: number;
+    orderBy: string;
+    sortOrder: string;
+    searchString: string;
+  }>(),
 );
 export const createDirectorFailed = createAction(
   '[Director List] Created Director Failed',
@@ -49,11 +63,26 @@ export const createDirectorFailed = createAction(
 /*update director by id*/
 export const updateDirector = createAction(
   '[Director List] Update Director',
-  props<{ id: number; director: CreateUpdateDirectorDto }>(),
+  props<{
+    id: number;
+    director: CreateUpdateDirectorDto;
+    page: number;
+    limit: number;
+    orderBy: string;
+    sortOrder: string;
+    searchString: string;
+  }>(),
 );
 export const updateDirectorSuccess = createAction(
   '[Director List] Updated Director Success',
-  props<{ director: Director }>(),
+  props<{
+    director: Director;
+    page: number;
+    limit: number;
+    orderBy: string;
+    sortOrder: string;
+    searchString: string;
+  }>(),
 );
 export const updateDirectorFailed = createAction(
   '[Director List] Update Director Failed',
@@ -70,7 +99,7 @@ export const setSelectedDirector = createAction(
 export const deleteDirector = createAction(
   '[Director List] Remove Director',
   props<{
-    directorToDelete: Director;
+    director: Director;
     page: number;
     limit: number;
     orderBy: string;
@@ -81,7 +110,7 @@ export const deleteDirector = createAction(
 export const deleteDirectorSuccess = createAction(
   '[Director List] Remove Director Success',
   props<{
-    directorToDelete: Director;
+    deletedDirector: Director;
     page: number;
     limit: number;
     orderBy: string;

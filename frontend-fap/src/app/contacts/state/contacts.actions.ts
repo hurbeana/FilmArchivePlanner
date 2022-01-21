@@ -60,14 +60,24 @@ export const setSelectedContact = createAction(
 export const updateContact = createAction(
   '[Contact List] Update Contact',
   props<{
-    contact: CreateUpdateContactDto;
     id: number;
+    newContact: CreateUpdateContactDto;
+    page: number;
+    limit: number;
+    orderBy: string;
+    sortOrder: string;
+    searchString: string;
   }>(),
 );
 export const updateContactSuccess = createAction(
   '[Contact List] Update Contact Success',
   props<{
-    contact: Contact;
+    updatedContact: Contact;
+    page: number;
+    limit: number;
+    orderBy: string;
+    sortOrder: string;
+    searchString: string;
   }>(),
 );
 
@@ -85,7 +95,7 @@ export const deleteContact = createAction(
 export const deleteContactSuccess = createAction(
   '[Contact List] Remove Contact Success',
   props<{
-    contactToDelete: Contact;
+    deletedContact: Contact;
     page: number;
     limit: number;
     orderBy: string;

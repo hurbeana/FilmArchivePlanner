@@ -58,15 +58,22 @@ export class DirectorEffects {
   createDirector$ = createEffect(() =>
     this.actions$.pipe(
       ofType(DirectorActions.createDirector),
-      switchMap(({ director }) =>
+      switchMap(({ director, page, limit, orderBy, sortOrder, searchString }) =>
         this.directorsService.createDirector(director).pipe(
-          map((director) =>
-            DirectorActions.createDirectorSuccess({ director }),
+          map((createdDirector) =>
+            DirectorActions.createDirectorSuccess({
+              director: createdDirector,
+              page: page,
+              limit: limit,
+              orderBy: orderBy,
+              sortOrder: sortOrder,
+              searchString: searchString,
+            }),
           ),
           catchError((error) =>
             of(
               DirectorActions.createDirectorFailed({
-                director,
+                director: director,
                 errormessage: this.messageService.getErrorMessage(error),
               }),
             ),
@@ -79,22 +86,28 @@ export class DirectorEffects {
   updateDirector$ = createEffect(() =>
     this.actions$.pipe(
       ofType(DirectorActions.updateDirector),
-      switchMap(({ id, director }) =>
-        this.directorsService.updateDirector(id, director).pipe(
-          map((directorUpdated) =>
-            DirectorActions.updateDirectorSuccess({
-              director: directorUpdated,
-            }),
-          ),
-          catchError((error) =>
-            of(
-              DirectorActions.updateDirectorFailed({
-                director,
-                errormessage: this.messageService.getErrorMessage(error),
+      switchMap(
+        ({ id, director, page, limit, orderBy, sortOrder, searchString }) =>
+          this.directorsService.updateDirector(id, director).pipe(
+            map((updatedDirector) =>
+              DirectorActions.updateDirectorSuccess({
+                director: updatedDirector,
+                page: page,
+                limit: limit,
+                orderBy: orderBy,
+                sortOrder: sortOrder,
+                searchString: searchString,
               }),
             ),
+            catchError((error) =>
+              of(
+                DirectorActions.updateDirectorFailed({
+                  director: director,
+                  errormessage: this.messageService.getErrorMessage(error),
+                }),
+              ),
+            ),
           ),
-        ),
       ),
     ),
   );
@@ -103,28 +116,59 @@ export class DirectorEffects {
   deleteDirector$ = createEffect(() =>
     this.actions$.pipe(
       ofType(DirectorActions.deleteDirector),
-      mergeMap(
-        ({ directorToDelete, page, limit, orderBy, sortOrder, searchString }) =>
-          this.directorsService.deleteDirector(directorToDelete).pipe(
-            map(() =>
-              DirectorActions.deleteDirectorSuccess({
-                directorToDelete: directorToDelete,
-                page: page,
-                limit: limit,
-                orderBy: orderBy,
-                sortOrder: sortOrder,
-                searchString: searchString,
-              }),
-            ),
-            tap((_) =>
-              this.messageService.showSuccessSnackBar(
-                'Director deleted successfully',
-              ),
-            ),
-            catchError((err) => {
-              this.messageService.showErrorSnackBar(err);
-              return EMPTY;
+      mergeMap(({ director, page, limit, orderBy, sortOrder, searchString }) =>
+        this.directorsService.deleteDirector(director).pipe(
+          map(() =>
+            DirectorActions.deleteDirectorSuccess({
+              deletedDirector: director,
+              page: page,
+              limit: limit,
+              orderBy: orderBy,
+              sortOrder: sortOrder,
+              searchString: searchString,
             }),
+          ),
+          tap((_) =>
+            this.messageService.showSuccessSnackBar(
+              'Director deleted successfully',
+            ),
+          ),
+          catchError((err) => {
+            this.messageService.showErrorSnackBar(err);
+            return EMPTY;
+          }),
+        ),
+      ),
+    ),
+  );
+
+  reloadAfterCreate$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(DirectorActions.createDirectorSuccess),
+      mergeMap(({ director, page, limit, orderBy, sortOrder, searchString }) =>
+        this.directorsService
+          .getDirectors(page, limit, orderBy, sortOrder, searchString)
+          .pipe(
+            map((pagination) =>
+              DirectorActions.getDirectorsSuccess({ pagination: pagination }),
+            ),
+            catchError(() => EMPTY), // TODO: error handling
+          ),
+      ),
+    ),
+  );
+
+  reloadAfterUpdate$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(DirectorActions.updateDirectorSuccess),
+      mergeMap(({ director, page, limit, orderBy, sortOrder, searchString }) =>
+        this.directorsService
+          .getDirectors(page, limit, orderBy, sortOrder, searchString)
+          .pipe(
+            map((pagination) =>
+              DirectorActions.getDirectorsSuccess({ pagination: pagination }),
+            ),
+            catchError(() => EMPTY), // TODO: error handling
           ),
       ),
     ),
@@ -134,7 +178,7 @@ export class DirectorEffects {
     this.actions$.pipe(
       ofType(DirectorActions.deleteDirectorSuccess),
       mergeMap(
-        ({ directorToDelete, page, limit, orderBy, sortOrder, searchString }) =>
+        ({ deletedDirector, page, limit, orderBy, sortOrder, searchString }) =>
           this.directorsService
             .getDirectors(page, limit, orderBy, sortOrder, searchString)
             .pipe(
@@ -147,7 +191,7 @@ export class DirectorEffects {
     ),
   );
 
-  deleteLoadinItemDirectorSucess$ = createEffect(() =>
+  deleteLoadingItemDirectorSuccess$ = createEffect(() =>
     this.actions$.pipe(
       ofType(
         DirectorActions.createDirectorSuccess,
@@ -155,11 +199,10 @@ export class DirectorEffects {
         DirectorActions.updateDirectorSuccess,
         DirectorActions.updateDirectorFailed,
       ),
-      map((director) =>
+      map((result) =>
         LoadingItemsActions.deleteLoadingItem({
           loadingItemToDelete: {
-            title:
-              director.director.firstName + ' ' + director.director.lastName,
+            title: result.director.firstName + ' ' + result.director.lastName,
           },
         }),
       ),

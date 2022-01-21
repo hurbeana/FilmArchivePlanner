@@ -167,7 +167,7 @@ export class TableViewComponent implements AfterViewInit {
   deleteDirector(director: Director) {
     this.store.dispatch(
       DirectorActions.deleteDirector({
-        directorToDelete: director,
+        director: director,
         page: this.page,
         limit: this.pageSize,
         orderBy: this.orderBy,

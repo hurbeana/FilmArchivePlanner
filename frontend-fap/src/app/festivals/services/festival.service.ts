@@ -80,6 +80,9 @@ export class FestivalService {
         { field: orderBy, order: sortOrder.toUpperCase() } as QuerySort,
       ]);
     }
+    if (sortOrder === undefined && orderBy === undefined) {
+      rb.sortBy([{ field: 'created_at', order: 'DESC' } as QuerySort]);
+    }
 
     return this.http
       .get<GetManyDefaultResponse<Festival>>(api, { params: rb.queryObject })
@@ -104,7 +107,7 @@ export class FestivalService {
       );
   }
 
-  updateFestival(festival: CreateUpdateFestivalDto, id: number) {
+  updateFestival(id: number, festival: CreateUpdateFestivalDto) {
     console.log('[FestivalService] - UPDATE FESTIVAL');
     const rb = RequestQueryBuilder.create({
       join: [{ field: 'events' }, { field: 'events.movie' }],

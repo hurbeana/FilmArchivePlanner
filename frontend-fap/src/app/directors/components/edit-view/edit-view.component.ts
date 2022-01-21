@@ -197,6 +197,11 @@ export class EditViewComponent implements OnInit {
           DirectorActions.updateDirector({
             id: this.id,
             director: director,
+            page: 1,
+            limit: 16,
+            orderBy: '',
+            sortOrder: '',
+            searchString: '',
           }),
         );
       } else {
@@ -204,6 +209,11 @@ export class EditViewComponent implements OnInit {
         this.store.dispatch(
           DirectorActions.createDirector({
             director: director,
+            page: 1,
+            limit: 16,
+            orderBy: '',
+            sortOrder: '',
+            searchString: '',
           }),
         );
       }

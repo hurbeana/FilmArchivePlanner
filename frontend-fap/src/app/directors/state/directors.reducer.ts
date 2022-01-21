@@ -29,77 +29,19 @@ export const directorsReducer = createReducer(
       items: [...pagination.items],
       meta: { ...pagination.meta },
     },
-    selectedDirector: null,
+    selectedDirector:
+      pagination.items.filter(
+        (item) => item.id == state?.selectedDirector?.id,
+      )[0] ?? null,
   })),
   on(DirectorActions.getDirector, (state) => state),
   on(DirectorActions.getDirectorSuccess, (state, { director }) => ({
     ...state,
     detailsDirector: director,
   })),
-  on(DirectorActions.createDirector, (state) => state),
-  on(DirectorActions.createDirectorSuccess, (state, { director }) => ({
-    ...state,
-    pagination: {
-      ...state.pagination,
-      items:
-        state.pagination.items.length === state.pagination.meta.itemsPerPage
-          ? [...state.pagination.items]
-          : [...state.pagination.items, director],
-      meta: {
-        ...state.pagination.meta,
-        totalItems: state.pagination.meta.totalItems + 1,
-        totalPages:
-          state.pagination.items.length === state.pagination.meta.itemsPerPage
-            ? state.pagination.meta.totalPages + 1
-            : state.pagination.meta.totalPages,
-      },
-    },
-  })),
 
   on(DirectorActions.setSelectedDirector, (state, { selectedDirector }) => ({
     ...state,
     selectedDirector: selectedDirector,
-  })),
-
-  on(DirectorActions.updateDirectorSuccess, (state, { director }) => {
-    return {
-      ...state,
-      pagination: {
-        ...state.pagination,
-        items: [
-          ...state.pagination.items.map((stateDirector) =>
-            stateDirector.id === director.id ? director : stateDirector,
-          ),
-        ],
-      },
-      selectedDirector: director,
-    };
-  }),
-
-  on(DirectorActions.deleteDirectorSuccess, (state, { directorToDelete }) => ({
-    ...state,
-    pagination: {
-      ...state.pagination,
-      items: [
-        ...state.pagination.items.filter(
-          (item) => item.id !== directorToDelete.id,
-        ),
-      ],
-      meta: {
-        ...state.pagination.meta,
-        totalItems:
-          state.pagination.meta.totalItems === 0
-            ? 0
-            : state.pagination.meta.totalItems - 1,
-        totalPages:
-          state.pagination.items.length === state.pagination.meta.itemsPerPage
-            ? state.pagination.meta.totalPages + 1
-            : state.pagination.meta.totalPages,
-        currentPage:
-          state.pagination.items.length === 1
-            ? state.pagination.meta.currentPage - 1
-            : state.pagination.meta.currentPage,
-      },
-    },
   })),
 );

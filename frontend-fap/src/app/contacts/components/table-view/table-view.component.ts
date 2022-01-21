@@ -240,8 +240,13 @@ export class TableViewComponent implements AfterViewInit {
   editContact(contact: CreateUpdateContactDto, id: number) {
     this.store.dispatch(
       ContactActions.updateContact({
-        contact: contact,
         id: id,
+        newContact: contact,
+        page: this.page,
+        limit: this.pageSize,
+        orderBy: this.orderBy,
+        sortOrder: this.sortOrder,
+        searchString: this.search.nativeElement.value,
       }),
     );
   }

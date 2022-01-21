@@ -22,11 +22,25 @@ export const getTagsSuccess = createAction(
 /* whenever this action is called, the 'createTag$' effect in tags.effects.ts  is executed */
 export const createTag = createAction(
   '[Tag List] Create Tag',
-  props<{ tag: CreateUpdateTagDto }>(),
+  props<{
+    tagToCreate: CreateUpdateTagDto;
+    page: number;
+    limit: number;
+    orderBy: string;
+    sortOrder: string;
+    searchString: string;
+  }>(),
 );
 export const createTagSuccess = createAction(
   '[Tag List] Created Tag Success',
-  props<{ tag: Tag }>(),
+  props<{
+    createdTag: Tag;
+    page: number;
+    limit: number;
+    orderBy: string;
+    sortOrder: string;
+    searchString: string;
+  }>(),
 );
 
 export const setSelectedTag = createAction(
@@ -47,14 +61,24 @@ export const checkIfTagIsInUseSuccess = createAction(
 export const updateTag = createAction(
   '[Tag List] Update Tag',
   props<{
-    tag: CreateUpdateTagDto;
     id: number;
+    tagToUpdate: CreateUpdateTagDto;
+    page: number;
+    limit: number;
+    orderBy: string;
+    sortOrder: string;
+    searchString: string;
   }>(),
 );
 export const updateTagSuccess = createAction(
   '[Tag List] Update Tag Success',
   props<{
-    tag: Tag;
+    updatedTag: Tag;
+    page: number;
+    limit: number;
+    orderBy: string;
+    sortOrder: string;
+    searchString: string;
   }>(),
 );
 
@@ -72,7 +96,7 @@ export const deleteTag = createAction(
 export const deleteTagSuccess = createAction(
   '[Tag List] Remove Tag Success',
   props<{
-    tagToDelete: Tag;
+    deletedTag: Tag;
     page: number;
     limit: number;
     orderBy: string;

@@ -207,7 +207,15 @@ export class TableViewComponent implements AfterViewInit {
     modalRef.result.then(
       (resfestival) => {
         this.store.dispatch(
-          updateFestival({ festival: resfestival, id: festival.id }),
+          updateFestival({
+            id: festival.id,
+            newFestival: resfestival,
+            page: this.page,
+            limit: this.pageSize,
+            orderBy: this.orderBy,
+            sortOrder: this.sortOrder,
+            searchString: this.search.nativeElement.value,
+          }),
         );
       },
       () => {
@@ -217,13 +225,22 @@ export class TableViewComponent implements AfterViewInit {
   }
 
   createFestival(festival: Festival) {
-    this.store.dispatch(FestivalActions.createFestival({ festival: festival }));
+    this.store.dispatch(
+      FestivalActions.createFestival({
+        festivalToCreate: festival,
+        page: this.page,
+        limit: this.pageSize,
+        orderBy: this.orderBy,
+        sortOrder: this.sortOrder,
+        searchString: this.search.nativeElement.value,
+      }),
+    );
     this.actions$
       .pipe(
         ofType(createFestivalSuccess),
         takeUntil(this.destroy$),
         tap((x) => {
-          this.router.navigate(['/festivals', 'edit', x.festival.id]);
+          this.router.navigate(['/festivals', 'edit', x.createdFestival.id]);
         }),
       )
       .subscribe();

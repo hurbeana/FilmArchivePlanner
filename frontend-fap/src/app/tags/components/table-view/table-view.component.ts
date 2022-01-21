@@ -205,8 +205,13 @@ export class TableViewComponent implements AfterViewInit {
   editTag(tag: CreateUpdateTagDto, id: number) {
     this.store.dispatch(
       TagActions.updateTag({
-        tag: tag,
         id: id,
+        tagToUpdate: tag,
+        page: this.page,
+        limit: this.pageSize,
+        orderBy: this.orderBy,
+        sortOrder: this.sortOrder,
+        searchString: this.search.nativeElement.value,
       }),
     );
   }
@@ -270,6 +275,15 @@ export class TableViewComponent implements AfterViewInit {
     );
   }
   createTag(tag: Tag) {
-    this.store.dispatch(TagActions.createTag({ tag: tag }));
+    this.store.dispatch(
+      TagActions.createTag({
+        tagToCreate: tag,
+        page: this.page,
+        limit: this.pageSize,
+        orderBy: this.orderBy,
+        sortOrder: this.sortOrder,
+        searchString: this.search.nativeElement.value,
+      }),
+    );
   }
 }
