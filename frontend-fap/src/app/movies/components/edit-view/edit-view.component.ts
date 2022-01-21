@@ -37,13 +37,14 @@ import * as TagActions from 'src/app/tags/state/tags.actions';
 import { Contact } from '../../../contacts/models/contact';
 import { Tag } from '../../../tags/models/tag';
 import { Movie } from '../../models/movie';
+import { createLoadingItem } from '../../../core/loading-item-state/loading.items.actions';
 
 @Component({
   selector: 'app-edit-view',
   templateUrl: './edit-view.component.html',
   styleUrls: ['./edit-view.component.less'],
 })
-export class EditViewComponent implements OnInit, OnDestroy {
+export class EditViewComponent implements OnInit {
   destroy$ = new Subject();
 
   moviesForm = new FormGroup({
@@ -177,7 +178,7 @@ export class EditViewComponent implements OnInit, OnDestroy {
           this.moviesForm.reset();
           this.resetFileFormArrays();
           this.store.dispatch(MovieActions.getMovies({ page: 1, limit: 16 }));
-          this.router.navigate(['/movies']);
+          this.destroy$.next();
         }),
       )
       .subscribe();
@@ -211,7 +212,7 @@ export class EditViewComponent implements OnInit, OnDestroy {
             'success-snackbar',
           );
           this.store.dispatch(MovieActions.getMovies({ page: 1, limit: 16 }));
-          this.router.navigate(['/movies']);
+          this.destroy$.next();
         }),
       )
       .subscribe();
@@ -319,7 +320,6 @@ export class EditViewComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    console.log(this.moviesForm.value);
     if (this.moviesForm.valid) {
       if (this.id) {
         // update
@@ -338,6 +338,12 @@ export class EditViewComponent implements OnInit, OnDestroy {
           }),
         );
       }
+      this.store.dispatch(
+        createLoadingItem({
+          loadingItem: { title: this.moviesForm.value.originalTitle },
+        }),
+      );
+      this.router.navigate(['/movies']);
     } else {
       this.openSnackBar('Validation Error!', 'OK', 'error-snackbar');
       this.getFormValidationErrors();
@@ -373,9 +379,5 @@ export class EditViewComponent implements OnInit, OnDestroy {
         }
       });
     }
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
   }
 }

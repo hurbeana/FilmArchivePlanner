@@ -10,13 +10,15 @@ import { Observable, Subject } from 'rxjs';
 import { Actions, ofType } from '@ngrx/effects';
 import { map, takeUntil, tap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { createLoadingItem } from '../../../core/loading-item-state/loading.items.actions';
+import { CreateUpdateDirectorDto } from '../../models/create.director';
 
 @Component({
   selector: 'app-edit-view',
   templateUrl: './edit-view.component.html',
   styleUrls: ['./edit-view.component.less'],
 })
-export class EditViewComponent implements OnInit, OnDestroy {
+export class EditViewComponent implements OnInit {
   destroy$ = new Subject();
 
   directorsForm = new FormGroup({
@@ -58,7 +60,7 @@ export class EditViewComponent implements OnInit, OnDestroy {
             'success-snackbar',
           );
           this.directorsForm.reset();
-          this.router.navigate(['/directors']);
+          this.destroy$.next();
         }),
       )
       .subscribe();
@@ -100,7 +102,7 @@ export class EditViewComponent implements OnInit, OnDestroy {
             'OK',
             'success-snackbar',
           );
-          this.router.navigate(['/directors']);
+          this.destroy$.next();
         }),
       )
       .subscribe();
@@ -188,22 +190,29 @@ export class EditViewComponent implements OnInit, OnDestroy {
   onSubmit() {
     console.log('formvalue: ', this.directorsForm.value);
     if (this.directorsForm.valid) {
+      const director: CreateUpdateDirectorDto = this.directorsForm.value;
       if (this.id) {
         // update
         this.store.dispatch(
           DirectorActions.updateDirector({
             id: this.id,
-            director: this.directorsForm.value,
+            director: director,
           }),
         );
       } else {
         // create
         this.store.dispatch(
           DirectorActions.createDirector({
-            director: this.directorsForm.value,
+            director: director,
           }),
         );
       }
+      this.store.dispatch(
+        createLoadingItem({
+          loadingItem: { title: director.firstName + ' ' + director.lastName },
+        }),
+      );
+      this.router.navigate(['/directors']);
     } else {
       this.openSnackBar('Validation Error!', 'OK', 'error-snackbar');
       this.getFormValidationErrors();
@@ -232,9 +241,5 @@ export class EditViewComponent implements OnInit, OnDestroy {
         }
       });
     }
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
   }
 }

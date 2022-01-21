@@ -27,6 +27,9 @@ import {
   arrowRight,
   x,
 } from 'ngx-bootstrap-icons';
+import { StoreModule } from '@ngrx/store';
+import { loadingItemsReducer } from './loading-item-state/loading.items.reducer';
+import { EffectsModule } from '@ngrx/effects';
 
 const icons = {
   trash,
@@ -55,6 +58,8 @@ const icons = {
     MatListModule,
     MatSnackBarModule,
     NgxBootstrapIconsModule.pick(icons),
+    EffectsModule.forRoot(),
+    StoreModule.forRoot({ loadingItemsState: loadingItemsReducer }),
   ],
   exports: [
     HeaderComponent,

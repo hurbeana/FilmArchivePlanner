@@ -1,4 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { LoadingItem } from '../../models/loading-item';
+import { Director } from '../../../directors/models/director';
+import { Movie } from '../../../movies/models/movie';
+import { Store } from '@ngrx/store';
+import * as LoadingItemsSelector from '../../loading-item-state/loading.items.selectors';
+import { createLoadingItem } from '../../loading-item-state/loading.items.actions';
 
 @Component({
   selector: 'core-footer',
@@ -6,7 +13,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./footer.component.less'],
 })
 export class FooterComponent implements OnInit {
-  constructor() {}
+  constructor(private store: Store) {}
 
-  ngOnInit(): void {}
+  laodingItems: Observable<LoadingItem[]>;
+
+  ngOnInit(): void {
+    this.laodingItems = this.store.select(LoadingItemsSelector.selectitemState);
+  }
+
+  add() {
+    this.store.dispatch(
+      createLoadingItem({ loadingItem: { title: 'Bernhard' } }),
+    );
+  }
 }

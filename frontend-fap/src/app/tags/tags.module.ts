@@ -42,8 +42,8 @@ import { environment } from '../../environments/environment';
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
-    StoreModule.forRoot({ tagsState: tagsReducer }),
-    EffectsModule.forRoot([TagEffects]),
+    StoreModule.forFeature('tagsState', tagsReducer),
+    EffectsModule.forFeature([TagEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode

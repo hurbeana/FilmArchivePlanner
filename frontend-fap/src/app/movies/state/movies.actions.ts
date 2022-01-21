@@ -68,11 +68,11 @@ export const createMovie = createAction(
 );
 export const createMovieSuccess = createAction(
   '[Movie List] Created Movie Success',
-  props<{ createdMovie: Movie; searchOptions: any }>(),
+  props<{ movie: Movie; searchOptions: any }>(),
 );
 export const createMovieFailed = createAction(
   '[Movie List] Created Movie Failed',
-  props<{ errormessage: string }>(),
+  props<{ movie: CreateUpdateMovieDto; errormessage: string }>(),
 );
 export const updateMovie = createAction(
   '[Movie List] Update Movie',
@@ -84,7 +84,7 @@ export const updatedMovieSuccess = createAction(
 );
 export const updateMovieFailed = createAction(
   '[Movie List] Update Movie Failed',
-  props<{ errormessage: string }>(),
+  props<{ movie: CreateUpdateMovieDto; errormessage: string }>(),
 );
 export const setSelectedMovie = createAction(
   '[Movie List] Set Selected Movie',

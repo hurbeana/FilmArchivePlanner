@@ -50,8 +50,8 @@ import { environment } from '../../environments/environment';
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
-    StoreModule.forRoot({ directorsState: directorsReducer }),
-    EffectsModule.forRoot([DirectorEffects]),
+    StoreModule.forFeature('directorsState', directorsReducer),
+    EffectsModule.forFeature([DirectorEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode

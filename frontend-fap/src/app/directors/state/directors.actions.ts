@@ -43,7 +43,7 @@ export const createDirectorSuccess = createAction(
 );
 export const createDirectorFailed = createAction(
   '[Director List] Created Director Failed',
-  props<{ errormessage: string }>(),
+  props<{ director: CreateUpdateDirectorDto; errormessage: string }>(),
 );
 
 /*update director by id*/
@@ -57,7 +57,7 @@ export const updateDirectorSuccess = createAction(
 );
 export const updateDirectorFailed = createAction(
   '[Director List] Update Director Failed',
-  props<{ errormessage: string }>(),
+  props<{ director: CreateUpdateDirectorDto; errormessage: string }>(),
 );
 
 /* set select director*/

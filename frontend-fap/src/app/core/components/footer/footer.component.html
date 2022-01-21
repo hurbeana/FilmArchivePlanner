@@ -1,1 +1,9 @@
+<div class="loading-tabs">
+  <div *ngFor="let laodingItem of laodingItems | async" class="loading-item">
+    <span class="btn btn-primary" type="button" disabled>
+      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      {{ laodingItem.title }}
+    </span>
+  </div>
+</div>
 <div>&#169; 2021 Copyright Film Archive & Planner Group</div>

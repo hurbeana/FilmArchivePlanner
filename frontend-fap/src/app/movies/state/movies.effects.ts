@@ -4,6 +4,8 @@ import { EMPTY, of } from 'rxjs';
 import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { MovieService } from '../services/movie.service';
 import * as MovieActions from './movies.actions';
+import * as LoadingItemsActions from '../../core/loading-item-state/loading.items.actions';
+
 import { MessageService } from '../../core/services/message.service';
 
 @Injectable()
@@ -124,7 +126,7 @@ export class MovieEffects {
         this.moviesService.createMovie(movieToCreate).pipe(
           map((createdMovie) =>
             MovieActions.createMovieSuccess({
-              createdMovie: createdMovie,
+              movie: createdMovie,
               searchOptions: searchOptions,
             }),
           ),
@@ -136,11 +138,30 @@ export class MovieEffects {
           catchError((error) =>
             of(
               MovieActions.createMovieFailed({
+                movie: movieToCreate,
                 errormessage: this.messageService.getErrorMessage(error),
               }),
             ),
           ),
         ),
+      ),
+    ),
+  );
+
+  deleteLoadinItemMovieSucess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        MovieActions.createMovieSuccess,
+        MovieActions.createMovieFailed,
+        MovieActions.updatedMovieSuccess,
+        MovieActions.updateMovieFailed,
+      ),
+      map((movie) =>
+        LoadingItemsActions.deleteLoadingItem({
+          loadingItemToDelete: {
+            title: movie.movie.originalTitle,
+          },
+        }),
       ),
     ),
   );
@@ -154,6 +175,7 @@ export class MovieEffects {
           catchError((error) =>
             of(
               MovieActions.updateMovieFailed({
+                movie: movie,
                 errormessage: this.messageService.getErrorMessage(error),
               }),
             ),
@@ -198,7 +220,7 @@ export class MovieEffects {
   reloadAfterCreate$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MovieActions.createMovieSuccess),
-      mergeMap(({ createdMovie, searchOptions }) =>
+      mergeMap(({ movie, searchOptions }) =>
         this.moviesService
           .getMovies(
             searchOptions.page,

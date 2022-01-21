@@ -45,8 +45,8 @@ import { environment } from '../../environments/environment';
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
-    StoreModule.forRoot({ contactsState: contactsReducer }),
-    EffectsModule.forRoot([ContactEffects]),
+    StoreModule.forFeature('contactsState', contactsReducer),
+    EffectsModule.forFeature([ContactEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode

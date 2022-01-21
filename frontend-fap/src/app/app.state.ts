@@ -3,7 +3,7 @@ import { Director } from './directors/models/director';
 import { Contact } from './contacts/models/contact';
 import { Tag } from './tags/models/tag';
 import { Festival } from './festivals/models/festival';
-import { NgModule } from '@angular/core';
+import { LoadingItem } from './core/models/loading-item';
 
 /* The state of the application*/
 export interface MoviesPaginationState {
@@ -121,4 +121,8 @@ export interface FestivalsState {
   pagination: FestivalsPaginationState;
   selectedFestival?: Festival | null;
   detailsFestival?: Festival; // festival which is loaded by id for fullscreen detailsview
+}
+
+export interface LoadingItemsState {
+  items: LoadingItem[];
 }

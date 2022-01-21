@@ -5,6 +5,7 @@ import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { DirectorService } from '../services/director.service';
 import * as DirectorActions from './directors.actions';
 import { MessageService } from '../../core/services/message.service';
+import * as LoadingItemsActions from '../../core/loading-item-state/loading.items.actions';
 
 @Injectable()
 export class DirectorEffects {
@@ -65,6 +66,7 @@ export class DirectorEffects {
           catchError((error) =>
             of(
               DirectorActions.createDirectorFailed({
+                director,
                 errormessage: this.messageService.getErrorMessage(error),
               }),
             ),
@@ -87,6 +89,7 @@ export class DirectorEffects {
           catchError((error) =>
             of(
               DirectorActions.updateDirectorFailed({
+                director,
                 errormessage: this.messageService.getErrorMessage(error),
               }),
             ),
@@ -140,6 +143,25 @@ export class DirectorEffects {
               ),
               catchError(() => EMPTY), // TODO: error handling
             ),
+      ),
+    ),
+  );
+
+  deleteLoadinItemDirectorSucess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        DirectorActions.createDirectorSuccess,
+        DirectorActions.createDirectorFailed,
+        DirectorActions.updateDirectorSuccess,
+        DirectorActions.updateDirectorFailed,
+      ),
+      map((director) =>
+        LoadingItemsActions.deleteLoadingItem({
+          loadingItemToDelete: {
+            title:
+              director.director.firstName + ' ' + director.director.lastName,
+          },
+        }),
       ),
     ),
   );

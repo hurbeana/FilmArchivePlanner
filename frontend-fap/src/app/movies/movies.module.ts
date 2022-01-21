@@ -61,15 +61,17 @@ import { ConfirmDeleteMovieModalComponent } from './components/table-view/confir
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
-    StoreModule.forRoot({
-      moviesState: moviesReducer,
-      directorsState: directorsReducer,
-      contactsState: contactsReducer,
-      tagsState: tagsReducer,
-      advancedSearchState: moviesReducer, // <-- this works but is wrong
-    }),
-    EffectsModule.forRoot([MovieEffects]),
-    EffectsModule.forFeature([DirectorEffects, ContactEffects, TagEffects]),
+    StoreModule.forFeature('moviesState', moviesReducer),
+    StoreModule.forFeature('directorsState', directorsReducer),
+    StoreModule.forFeature('tagsState', tagsReducer),
+    StoreModule.forFeature('contactsState', contactsReducer),
+    StoreModule.forFeature('advancedSearchState', moviesReducer),
+    EffectsModule.forFeature([
+      MovieEffects,
+      DirectorEffects,
+      ContactEffects,
+      TagEffects,
+    ]),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode
