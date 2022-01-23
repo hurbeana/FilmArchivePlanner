@@ -151,18 +151,33 @@ export class MovieEffects {
   updateMovie$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MovieActions.updateMovie),
-      switchMap(({ id, movie }) =>
-        this.moviesService.updateMovie(id, movie).pipe(
-          map((movie) => MovieActions.updatedMovieSuccess({ movie })),
-          catchError((error) =>
-            of(
-              MovieActions.updateMovieFailed({
-                movie: movie,
-                errormessage: this.messageService.getErrorMessage(error),
+      switchMap(
+        ({ id, movie, page, limit, orderBy, sortOrder, searchString }) =>
+          this.moviesService.updateMovie(id, movie).pipe(
+            map((movie) =>
+              MovieActions.updateMovieSuccess({
+                movie,
+                page,
+                limit,
+                orderBy,
+                sortOrder,
+                searchString,
               }),
             ),
+            tap((_) =>
+              this.messageService.showSuccessSnackBar(
+                'Movie edited successfully',
+              ),
+            ),
+            catchError((error) =>
+              of(
+                MovieActions.updateMovieFailed({
+                  movie: movie,
+                  errormessage: this.messageService.getErrorMessage(error),
+                }),
+              ),
+            ),
           ),
-        ),
       ),
     ),
   );
@@ -221,6 +236,22 @@ export class MovieEffects {
     ),
   );
 
+  reloadAfterUpdate$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(MovieActions.updateMovieSuccess),
+      mergeMap(({ movie, page, limit, orderBy, sortOrder, searchString }) =>
+        this.moviesService
+          .getMovies(page, limit, orderBy, sortOrder, searchString)
+          .pipe(
+            map((pagination) =>
+              MovieActions.getMoviesSuccess({ pagination: pagination }),
+            ),
+            catchError(() => EMPTY), // TODO: error handling
+          ),
+      ),
+    ),
+  );
+
   reloadAfterDelete$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MovieActions.deleteMovieSuccess),
@@ -243,7 +274,7 @@ export class MovieEffects {
       ofType(
         MovieActions.createMovieSuccess,
         MovieActions.createMovieFailed,
-        MovieActions.updatedMovieSuccess,
+        MovieActions.updateMovieSuccess,
         MovieActions.updateMovieFailed,
       ),
       map((result) =>

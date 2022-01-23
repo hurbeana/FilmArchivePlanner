@@ -1,8 +1,16 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import {
+  Component,
+  EventEmitter,
+  HostBinding,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
+import { NgForm, NgModel } from '@angular/forms';
 import { TagService } from '../../../tags/services/tag.service';
 import { Tag } from '../../../tags/models/tag';
 import { CreateUpdateTagDto } from '../../../tags/models/create.tag';
+import { NgSelectComponent } from '@ng-select/ng-select';
 
 @Component({
   selector: 'shared-tag-input',
@@ -16,7 +24,7 @@ export class TagInputComponent {
   @Input()
   model: Tag[] | Tag | null | undefined; // depending on multiple
   @Output()
-  modelChange = new EventEmitter<any>();
+  modelChange: EventEmitter<any> = new EventEmitter<any>();
   @Input()
   tagType: string;
   @Input()
@@ -32,7 +40,10 @@ export class TagInputComponent {
   @Input()
   enterSubmit = false;
 
+  @ViewChild('tagInput') ngSelect: NgSelectComponent;
+
   items: Tag[];
+  @HostBinding('className')
   className: string;
   isRequired: boolean;
   addTagText: string;
@@ -64,7 +75,7 @@ export class TagInputComponent {
         });
         this.model.push(result);
       }
-      this.modelChange.emit(this.model);
+      //this.modelChange.emit(this.model);
 
       this.loading = false;
     } else {
@@ -72,6 +83,7 @@ export class TagInputComponent {
       /* Tag already existed in list --> Nothing to do here */
       this.loading = false;
     }
+    this.modelChange.emit(this.getTagsAsReference(this.model));
     this.checkIsValid();
   }
 
@@ -90,10 +102,30 @@ export class TagInputComponent {
     this.items = [...this.items, result];
     this.model = result;
     this.loading = false;
+    this.modelChange.emit(this.getTagsAsReference(this.model));
   }
 
   removeTag() {
     this.checkIsValid();
+    this.modelChange.emit(this.getTagsAsReference(this.model));
+  }
+
+  getTagsAsReference(model: any) {
+    if (Array.isArray(model)) {
+      return model.map((tag) => ({
+        id: tag.id,
+        type: tag.type,
+        value: tag.value,
+      }));
+    } else if (model.id && model.type && model.value) {
+      return {
+        id: model.id,
+        type: model.type,
+        value: model.value,
+      };
+    } else {
+      return null;
+    }
   }
 
   async onChange(tag: Tag) {
@@ -112,7 +144,7 @@ export class TagInputComponent {
         await this.setTag(tag, this.model);
       }
     }
-    this.modelChange.emit(this.model);
+    this.modelChange.emit(this.getTagsAsReference(this.model));
     this.checkIsValid();
   }
 
@@ -122,11 +154,11 @@ export class TagInputComponent {
         this.items = tags;
       });
     }
+  }
 
-    // weird, without 'className' set from outside class value is correct but tags have wrong style
+  ngAfterContentInit() {
     this.className =
       'custom-tag-select ' + 'tag-' + this.tagType.toLowerCase() + '-input';
-
     this.addTagText = 'Add ' + this.tagType;
   }
 

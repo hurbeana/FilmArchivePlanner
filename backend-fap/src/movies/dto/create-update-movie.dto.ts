@@ -126,9 +126,8 @@ export class CreateUpdateMovieDto {
   @AutoMap({ typeFn: () => TagReferenceDto })
   @IsArray()
   @ValidateNested({ each: true })
-  @ArrayNotEmpty()
   @Type(() => TagReferenceDto)
-  submissionCategories: TagReferenceDto[]; // TODO allow empty Array like the others???
+  submissionCategories: TagReferenceDto[];
 
   @AutoMap()
   @IsOptional()

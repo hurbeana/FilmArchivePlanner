@@ -52,7 +52,14 @@ export class DirectorsController {
   @Get('/all')
   findAllWOPaging() {
     this.logger.log(`Get all directors without paging called.`);
-    return this.directorsService.findAllWOPaging();
+    // TODO change back to findAllWOPaging() if needed
+    return this.directorsService.findAllAsRefWOPaging();
+  }
+
+  @Get('/allAsRefs')
+  findAllAsRefsWOPaging() {
+    this.logger.log(`Get all directors as references without paging called.`);
+    return this.directorsService.findAllAsRefWOPaging();
   }
 
   @Get(':id')

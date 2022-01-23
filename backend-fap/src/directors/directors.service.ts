@@ -34,6 +34,7 @@ import { join } from 'path';
 import * as namor from 'namor';
 import { DirectorFilesFolder } from './directors.enum';
 import { File } from '../files/entities/file.entity';
+import { DirectorReferenceDto } from './dto/director-reference.dto';
 
 /**
  * Service for directors CRUD
@@ -147,11 +148,11 @@ export class DirectorsService {
     if (duplicateNames.size > 0) {
       throw new HttpException(
         {
-          status: HttpStatus.UNPROCESSABLE_ENTITY,
-          error: 'Following files names are duplicate',
+          status: HttpStatus.BAD_REQUEST,
+          message: 'Two or more files have the same name.',
           files: Array.from(duplicateNames.values()),
         },
-        HttpStatus.UNPROCESSABLE_ENTITY,
+        HttpStatus.BAD_REQUEST,
       );
     }
 
@@ -275,7 +276,7 @@ export class DirectorsService {
 
   /**
   Returns all tags in an array
-  @returns {Promise<TagDto[]>} Array of all tags
+  @returns {Promise<DirectorDto[]>} Array of all tags
   */
   async findAllWOPaging(): Promise<DirectorDto[]> {
     let directors: Director[];
@@ -290,6 +291,28 @@ export class DirectorsService {
     if (directors.length > 0) {
       directors.forEach((tag) => {
         dtos.push(this.mapDirectorToDto(tag));
+      });
+    }
+    return dtos;
+  }
+
+  /**
+   Returns all tags in an array
+   @returns {Promise<DirectorReferenceDto[]>} Array of all tags
+   */
+  async findAllAsRefWOPaging(): Promise<DirectorReferenceDto[]> {
+    let directors: Director[];
+    try {
+      directors = await this.directorRepository.find();
+    } catch (e) {
+      this.logger.error(`Getting all tags without paging failed.`, e.stack);
+      throw new NotFoundException(); //Is this the right exception for tagType not in Enum?
+    }
+    const dtos: DirectorReferenceDto[] = [];
+
+    if (directors.length > 0) {
+      directors.forEach((director) => {
+        dtos.push(this.mapDirectorToReferenceDto(director));
       });
     }
     return dtos;
@@ -397,5 +420,11 @@ export class DirectorsService {
 
   private mapDirectorToDto(director: Director): DirectorDto {
     return this.mapper.map(director, DirectorDto, Director);
+  }
+  private mapDirectorToReferenceDto(director: Director): DirectorReferenceDto {
+    return {
+      id: director.id,
+      fullName: director.firstName + ' ' + director.lastName,
+    };
   }
 }

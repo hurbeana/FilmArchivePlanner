@@ -8,7 +8,7 @@
       </notes>
       <segment>
         <source>Original Title</source>
-        <target>Original Titel</target>
+        <target>Originaltitel</target>
       </segment>
     </unit>
     <unit id="3390764610002600019">
@@ -17,7 +17,7 @@
       </notes>
       <segment>
         <source>English Title</source>
-        <target>Titel Englisch</target>
+        <target>Englischer Titel</target>
       </segment>
     </unit>
     <unit id="5798400700034143644">
@@ -25,8 +25,8 @@
         <note category="location">src/app/movies/components/details-view/details-view.component.html:11</note>
       </notes>
       <segment>
-        <source>Movie File</source>
-        <target>Film Datei</target>
+        <source>Movie Files</source>
+        <target>Filmdateien</target>
       </segment>
     </unit>
     <unit id="3812799984769687924">
@@ -35,7 +35,7 @@
       </notes>
       <segment>
         <source>Preview File</source>
-        <target>Vorschau Datei</target>
+        <target>Vorschaudatei</target>
       </segment>
     </unit>
     <unit id="8354046126695169758">
@@ -44,7 +44,7 @@
       </notes>
       <segment>
         <source>Trailer File</source>
-        <target>Trailer Datei</target>
+        <target>Trailer-Datei</target>
       </segment>
     </unit>
     <unit id="7536201549694998705">
@@ -52,8 +52,8 @@
         <note category="location">src/app/movies/components/details-view/details-view.component.html:17</note>
       </notes>
       <segment>
-        <source>Still File</source>
-        <target>Still Datei</target>
+        <source>Still Files</source>
+        <target>Still-Dateien</target>
       </segment>
     </unit>
     <unit id="8063276897623182518">
@@ -62,7 +62,7 @@
       </notes>
       <segment>
         <source>Subtitle Folder</source>
-        <target>Untertitel Verzeichniss</target>
+        <target>Untertitelordner</target>
       </segment>
     </unit>
     <unit id="8707352275157977601">
@@ -71,6 +71,7 @@
       </notes>
       <segment>
         <source>Directors</source>
+        <target>Regisseure</target>
       </segment>
     </unit>
     <unit id="1199643963944280124">
@@ -96,7 +97,7 @@
         <note category="location">src/app/movies/components/details-view/details-view.component.html:27</note>
       </notes>
       <segment>
-        <source>Duration</source>
+        <source>Duration in Minutes</source>
         <target>Dauer</target>
       </segment>
     </unit>
@@ -114,8 +115,8 @@
         <note category="location">src/app/movies/components/details-view/details-view.component.html:31</note>
       </notes>
       <segment>
-        <source>Software Used</source>
-        <target>Verwendete Software</target>
+        <source>Software</source>
+        <target>Software</target>
       </segment>
     </unit>
     <unit id="1604795977599078115">
@@ -124,7 +125,7 @@
       </notes>
       <segment>
         <source>Keywords</source>
-        <target>Keywörter</target>
+        <target>Schlagwörter</target>
       </segment>
     </unit>
     <unit id="7583812820943189780">
@@ -151,7 +152,7 @@
       </notes>
       <segment>
         <source>Submission Category</source>
-        <target>Kategorie der Einreichung</target>
+        <target>Einreichungskategorie</target>
       </segment>
     </unit>
     <unit id="5009339133193077332">
@@ -214,7 +215,7 @@
       </notes>
       <segment>
         <source>Editing</source>
-        <target>Editing</target>
+        <target>Schnitt</target>
       </segment>
     </unit>
     <unit id="6230180786088475979">
@@ -223,7 +224,7 @@
       </notes>
       <segment>
         <source>Sound</source>
-        <target>Sound</target>
+        <target>Ton</target>
      </segment>
     </unit>
     <unit id="855872803871324523">

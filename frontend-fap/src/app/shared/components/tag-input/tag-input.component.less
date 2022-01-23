@@ -1,3 +1,5 @@
+@import 'src/styles.config';
+
 :host.is-invalid ng-select .ng-select-container {
   border-color: #dc3545 !important;
 }
@@ -143,4 +145,14 @@ each(@tagInputClasses, {
       }
     }
   }
+}
+
+
+::ng-deep .ng-value{
+  border-radius: 0.25em !important;
+}
+::ng-deep .ng-value-label{
+  padding: 0.35em 0.65em !important;
+  line-height: 1 !important;
+  font-weight: @tag-font-weight;
 }

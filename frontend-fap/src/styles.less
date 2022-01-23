@@ -70,18 +70,24 @@ html,body,
  }
 
 .success-snackbar {
-  background: #3c763d;
-  color: white;
+  color: #3d9e11;
+  border: 1px solid #3d9e11;
+  background-color: white;
 }
-
 .error-snackbar {
-  background: #f44336;
-  color: white;
+  color: #c94b1a;
+  border: 1px solid #c94b1a;
+  background-color: white;
+}
+.success-snackbar span.mat-button-wrapper {
+  color: #3d9e11;
+}
+.error-snackbar span.mat-button-wrapper {
+  color: #c94b1a;
 }
 
-.success-snackbar span.mat-button-wrapper,
-.error-snackbar span.mat-button-wrapper {
-  color: white;
+.btn.btn-primary.br-r{
+  border-radius: 0 0.25rem 0.25rem 0 !important
 }
 
 /* hide bootstrap screenreader stuff ..*/

@@ -76,11 +76,26 @@ export const createMovieFailed = createAction(
 );
 export const updateMovie = createAction(
   '[Movie List] Update Movie',
-  props<{ id: number; movie: CreateUpdateMovieDto }>(),
+  props<{
+    id: number;
+    movie: CreateUpdateMovieDto;
+    page: number;
+    limit: number;
+    orderBy: string;
+    sortOrder: string;
+    searchString: string;
+  }>(),
 );
-export const updatedMovieSuccess = createAction(
+export const updateMovieSuccess = createAction(
   '[Movie List] Updated Movie Success',
-  props<{ movie: Movie }>(),
+  props<{
+    movie: Movie;
+    page: number;
+    limit: number;
+    orderBy: string;
+    sortOrder: string;
+    searchString: string;
+  }>(),
 );
 export const updateMovieFailed = createAction(
   '[Movie List] Update Movie Failed',

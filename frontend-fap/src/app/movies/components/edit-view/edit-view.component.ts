@@ -1,43 +1,48 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { MoviesState } from '../../../app.state';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import * as MovieActions from '../../state/movies.actions';
 import {
   createMovieSuccess,
   createMovie,
   createMovieFailed,
   getMovie,
-  updatedMovieSuccess,
+  updateMovieSuccess,
   updateMovie,
   updateMovieFailed,
+  setSelectedMovie,
 } from '../../state/movies.actions';
-import {
-  selectContactItems,
-  selectDetailsMovie,
-  selectDirectorItems,
-  selectTagsAnimationItems,
-  selectTagsCategoryItems,
-  selectTagsCountryItems,
-  selectTagsKeywordItems,
-  selectTagsLanguageItems,
-  selectTagsSoftwareItems,
-  selectTagsSelectionItems,
-} from '../../state/movies.selectors';
-import { Director } from 'src/app/directors/models/director';
+import { selectDetailsMovie } from '../../state/movies.selectors';
 import { Observable, Subject } from 'rxjs';
 import { Actions, ofType } from '@ngrx/effects';
 import { map, takeUntil, tap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileDto } from '../../../shared/models/file';
-import * as DirectorActions from 'src/app/directors/state/directors.actions';
-import * as ContactActions from 'src/app/contacts/state/contacts.actions';
-import * as TagActions from 'src/app/tags/state/tags.actions';
 import { Contact } from '../../../contacts/models/contact';
 import { Tag } from '../../../tags/models/tag';
 import { Movie } from '../../models/movie';
+import { DirectorService } from '../../../directors/services/director.service';
+import { ContactService } from '../../../contacts/services/contact.service';
+import { DirectorReference } from 'src/app/directors/models/director-ref';
 import { createLoadingItem } from '../../../core/loading-item-state/loading.items.actions';
+import { NgSelectComponent } from '@ng-select/ng-select';
+import { TagInputComponent } from '../../../shared/components/tag-input/tag-input.component';
 
 @Component({
   selector: 'app-edit-view',
@@ -46,6 +51,20 @@ import { createLoadingItem } from '../../../core/loading-item-state/loading.item
 })
 export class EditViewComponent implements OnInit {
   destroy$ = new Subject();
+  formIsSubmitted = false;
+
+  @ViewChild('directorNgSelect') directorNgSelect: NgSelectComponent;
+  @ViewChild('contactNgSelect') contactNgSelect: NgSelectComponent;
+  @ViewChild('countriesOfProductionInput')
+  countriesOfProductionInput: TagInputComponent;
+  @ViewChild('dialogLanguagesInput') dialogLanguagesInput: TagInputComponent;
+  @ViewChild('animationTechniquesInput')
+  animationTechniquesInput: TagInputComponent;
+  @ViewChild('submissionCategoriesInput')
+  submissionCategoriesInput: TagInputComponent;
+  @ViewChild('softwareUsedInput') softwareUsedInput: TagInputComponent;
+  @ViewChild('keywordsInput') keywordsInput: TagInputComponent;
+  @ViewChild('selectionTagsInput') selectionTagsInput: TagInputComponent;
 
   moviesForm = new FormGroup({
     originalTitle: new FormControl('', [Validators.required]),
@@ -56,19 +75,26 @@ export class EditViewComponent implements OnInit {
     trailerFile: new FormGroup({}),
     stillFiles: new FormArray([]),
     subtitleFiles: new FormArray([]),
-    directors: new FormControl('', [Validators.required]),
-    selectionTags: new FormControl([]), // TODO: tags
-    countriesOfProduction: new FormControl([]), // TODO: tags
-    yearOfProduction: new FormControl(),
-    duration: new FormControl('', [Validators.required]),
-    animationTechniques: new FormControl([]), // TODO: tags
-    softwareUsed: new FormControl([]), // TODO: tags
-    keywords: new FormControl([]), //TODO: tags
+    directors: new FormControl([], [Validators.required]),
+    selectionTags: new FormControl([]),
+    countriesOfProduction: new FormControl([]),
+    yearOfProduction: new FormControl('', [
+      Validators.min(0),
+      this.customNumberValidator2(),
+    ]),
+    duration: new FormControl('', [
+      Validators.min(0),
+      this.customNumberValidator(),
+      Validators.required,
+    ]),
+    animationTechniques: new FormControl([]),
+    softwareUsed: new FormControl(),
+    keywords: new FormControl([]),
     germanSynopsis: new FormControl('', [Validators.required]),
     englishSynopsis: new FormControl('', [Validators.required]),
     submissionCategories: new FormControl(),
     hasDialog: new FormControl(),
-    dialogLanguages: new FormControl([]), //TODO: tags
+    dialogLanguages: new FormControl([]),
     hasSubtitles: new FormControl(),
     isStudentFilm: new FormControl(false, [Validators.required]), // required makes no sense for checkbox
     filmSchool: new FormControl(),
@@ -78,78 +104,73 @@ export class EditViewComponent implements OnInit {
     sound: new FormControl(),
     music: new FormControl(),
     productionCompany: new FormControl(),
-    contact: new FormControl('', [Validators.required]),
+    contact: new FormControl({}, [
+      Validators.required,
+      this.customContactValidator(),
+    ]),
   });
 
-  directors: Observable<Director[]>;
+  directors: Observable<DirectorReference[]>;
   contacts: Observable<Contact[]>;
-
-  tagsAnimation: Observable<Tag[]>;
-  tagsCategory: Observable<Tag[]>;
-  tagsCountry: Observable<Tag[]>;
-  tagsKeyword: Observable<Tag[]>;
-  tagsLanguage: Observable<Tag[]>;
-  tagsSoftware: Observable<Tag[]>;
-  tagsSelection: Observable<Tag[]>;
 
   id: number;
   movie: Movie;
-  softwareTagType = 'Software';
   // All Validation messages
-  validation_messages = {
-    username: [
-      // example (we have no username)
-      { type: 'required', message: 'Username is required' },
-      {
-        type: 'minlength',
-
-        message: 'Username must be at least 5 characters long',
-      },
-      {
-        type: 'maxlength',
-        message: 'Username cannot be more than 25 characters long',
-      },
-      {
-        type: 'pattern',
-        message: 'Your username must contain only numbers and letters',
-      },
-      {
-        type: 'validUsername',
-        message: 'Your username has already been taken',
-      },
-    ],
+  validation_messages: { [key: string]: any } = {
     originalTitle: [
       { type: 'required', message: 'Original Title is required' },
     ],
     englishTitle: [{ type: 'required', message: 'English Title is required' }],
-    movieFiles: [{ type: 'required', message: 'Movie File is required' }],
     directors: [{ type: 'required', message: 'Directors are required' }],
-    duration: [{ type: 'required', message: 'Duration is required' }],
+    contact: [{ type: 'required', message: 'Contact is required' }],
+    duration: [
+      { type: 'min', message: 'Duration must be > 0' },
+      { type: 'notANumber', message: 'Duration is required' },
+      { type: 'required', message: 'Duration is required' },
+    ],
+    yearOfProduction: [
+      { type: 'min', message: 'Year of Production must be > 0' },
+      { type: 'notANumber2', message: 'Year of Production has to be a number' },
+    ],
     germanSynopsis: [
       { type: 'required', message: 'German Synopsis is required' },
     ],
     englishSynopsis: [
       { type: 'required', message: 'English Synopsis is required' },
     ],
-    isStudentFilm: [
-      { type: 'required', message: 'Is Studentfilm is required' },
-    ],
-    contact: [{ type: 'required', message: 'Contact is required' }],
-    submissionCategories: undefined,
-    dialogLanguages: undefined,
-    keywords: undefined,
-    softwareUsed: undefined,
-    animationTechniques: undefined,
-    productionCompany: undefined,
-    music: undefined,
-    sound: undefined,
-    editing: undefined,
-    animation: undefined,
-    script: undefined,
-    yearOfProduction: undefined,
-    countriesOfProduction: undefined,
-    selectionTags: undefined,
   };
+
+  customNumberValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      return isNaN(+control.value)
+        ? { notANumber: { value: control.value } }
+        : null;
+    };
+  }
+
+  customNumberValidator2(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (
+        control.value === undefined ||
+        control.value === null ||
+        control.value === ''
+      ) {
+        return null;
+      }
+      return isNaN(+control.value)
+        ? { notANumber2: { value: control.value } }
+        : null;
+    };
+  }
+
+  customContactValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      console.log(control.value);
+      return isNaN(control.value.id)
+        ? { required: { value: control.value } }
+        : null;
+    };
+  }
 
   constructor(
     private route: ActivatedRoute,
@@ -157,13 +178,12 @@ export class EditViewComponent implements OnInit {
     private actions$: Actions,
     private _snackBar: MatSnackBar,
     private router: Router,
+    private directorService: DirectorService,
+    private contactService: ContactService,
   ) {
     /* Fetch lists for dropdowns */
-    this.store.dispatch(DirectorActions.getDirectors({ page: 1, limit: 30 }));
-    this.store.dispatch(ContactActions.getContacts({ page: 1, limit: 30 }));
-    this.store.dispatch(
-      TagActions.getTags({ page: 1, limit: 50 }), //can get more as tagtypes share one list
-    );
+    this.directors = this.directorService.getAllDirectorsAsReferences();
+    this.contacts = this.contactService.getAllContacts();
 
     this.actions$
       .pipe(
@@ -203,7 +223,7 @@ export class EditViewComponent implements OnInit {
 
     this.actions$
       .pipe(
-        ofType(updatedMovieSuccess),
+        ofType(updateMovieSuccess),
         takeUntil(this.destroy$),
         tap(() => {
           this.openSnackBar(
@@ -225,38 +245,35 @@ export class EditViewComponent implements OnInit {
     });
   }
 
-  getSubmissionTagsFormGroup() {
-    return (this.moviesForm.controls['submissionCategories'] as FormArray)
-      .controls[0] as FormGroup;
-  }
-
-  getContactForm() {
-    return this.moviesForm.controls['contact'] as FormGroup;
-  }
-
-  //TODO: directors liste vom backend/store laden
-
   ngOnInit(): void {
-    this.directors = this.store.select(selectDirectorItems);
-    this.contacts = this.store.select(selectContactItems);
-    /* tagtypes */
-    this.tagsAnimation = this.store.select(selectTagsAnimationItems);
-    this.tagsCategory = this.store.select(selectTagsCategoryItems);
-    this.tagsCountry = this.store.select(selectTagsCountryItems);
-    this.tagsKeyword = this.store.select(selectTagsKeywordItems);
-    this.tagsLanguage = this.store.select(selectTagsLanguageItems);
-    this.tagsSoftware = this.store.select(selectTagsSoftwareItems);
-    this.tagsSelection = this.store.select(selectTagsSelectionItems);
-
     this.store.select(selectDetailsMovie).subscribe((movie) => {
+      console.log('SUBSC', movie);
+
       if (movie && this.id) {
-        console.log('MMMM', movie);
-        this.movie = movie;
+        console.log('ASSIGNMENT HAPPENS!');
+        this.movie = { ...movie };
 
         this.fillFilesFormGroup('movieFiles', movie.movieFiles);
         this.fillFilesFormGroup('dcpFiles', movie.dcpFiles);
         this.fillFilesFormGroup('subtitleFiles', movie.subtitleFiles);
         this.fillFilesFormGroup('stillFiles', movie.stillFiles);
+        /*this.fillFilesFormGroup(
+          'trailerFile',
+          movie.trailerFile ? [movie.trailerFile] : [],
+        );
+        this.fillFilesFormGroup(
+          'previewFile',
+          movie.previewFile ? [movie.previewFile] : [],
+        );
+
+         */
+        /*
+        if (movie.directors) {
+          (this.moviesForm.controls['directors'] as FormGroup).addControl(
+            'directors',
+            new FormControl(''),
+          );
+        }*/
         if (movie.trailerFile) {
           (this.moviesForm.controls['trailerFile'] as FormGroup).addControl(
             'id',
@@ -294,6 +311,59 @@ export class EditViewComponent implements OnInit {
           );
         }
         this.moviesForm.patchValue(movie);
+      } else {
+        console.log('DUMMY ASSIGNMENT!');
+        const emptyMovie = {
+          animation: '',
+          animationTechniques: [],
+          contact: {
+            id: NaN,
+            type: {
+              id: NaN,
+              value: '',
+              type: '',
+              user: '',
+              public: true,
+              created_at: '',
+            },
+            name: '',
+            created_at: '',
+          },
+          countriesOfProduction: [],
+          dcpFiles: [],
+          dialogLanguages: [],
+          editing: '',
+          filmSchool: '',
+          hasDialog: false,
+          hasSubtitles: false,
+          isStudentFilm: false,
+          keywords: [],
+          movieFiles: [],
+          previewFile: undefined,
+          productionCompany: '',
+          script: '',
+          selectionTags: [],
+          softwareUsed: [],
+          sound: '',
+          stillFiles: [],
+          submissionCategories: [],
+          subtitleFiles: [],
+          trailerFile: undefined,
+          yearOfProduction: undefined,
+          id: NaN,
+          originalTitle: '',
+          englishTitle: '',
+          directors: [],
+          duration: NaN, // 0
+          germanSynopsis: '',
+          englishSynopsis: '',
+          created_at: new Date(),
+          last_updated: new Date(),
+        };
+
+        this.movie = { ...emptyMovie };
+
+        this.moviesForm.patchValue(this.movie);
       }
     });
 
@@ -321,10 +391,33 @@ export class EditViewComponent implements OnInit {
 
   onSubmit() {
     if (this.moviesForm.valid) {
+      // update
+      console.log(this.movie);
+      console.log('FORM', this.moviesForm.value);
+
+      this.moviesForm.patchValue({
+        countriesOfProduction: this.movie.countriesOfProduction,
+        animationTechniques: this.movie.animationTechniques,
+        submissionCategories: this.movie.submissionCategories,
+        keywords: this.movie.keywords,
+        dialogLanguages: this.movie.dialogLanguages,
+        softwareUsed: this.movie.softwareUsed,
+        selectionTags: this.movie.selectionTags,
+      });
+
+      console.log('FORM AFTER PATCH', this.moviesForm.value);
+
       if (this.id) {
-        // update
         this.store.dispatch(
-          updateMovie({ id: this.id, movie: this.moviesForm.value }),
+          updateMovie({
+            id: this.id,
+            movie: this.moviesForm.value,
+            page: 1,
+            limit: 16,
+            orderBy: '',
+            sortOrder: '',
+            searchString: '',
+          }),
         );
       } else {
         // create
@@ -343,10 +436,13 @@ export class EditViewComponent implements OnInit {
           loadingItem: { title: this.moviesForm.value.originalTitle },
         }),
       );
+      this.store.dispatch(setSelectedMovie({ selectedMovie: null }));
       this.router.navigate(['/movies']);
     } else {
-      this.openSnackBar('Validation Error!', 'OK', 'error-snackbar');
-      this.getFormValidationErrors();
+      this.formIsSubmitted = true;
+
+      this.openSnackBar('Required Fields are missing', 'OK', 'error-snackbar');
+      console.log(this.getFormValidationErrors());
     }
   }
 
@@ -361,23 +457,68 @@ export class EditViewComponent implements OnInit {
     return object1 && object2 && object1.id == object2.id;
   }
 
-  getFormValidationErrors() {
+  getValidationMessage(field: string): string {
+    const messages: string[] = [];
+    const controlErrors = this.moviesForm.get(field)?.errors;
+    if (controlErrors) {
+      Object.keys(controlErrors).forEach((keyError) =>
+        messages.push(
+          this.validation_messages[field]?.find(
+            (key: any) => key.type === keyError,
+          ).message,
+        ),
+      );
+    }
+    return messages.shift() ?? field + 'is invalid';
+  }
+
+  getFormValidationErrors(): unknown[] {
+    const errorMsgs: unknown[] = [];
+
     if (this.moviesForm) {
       Object.keys(this.moviesForm.controls).forEach((key) => {
         const controlErrors = this.moviesForm.get(key)?.errors;
         if (controlErrors != null) {
           Object.keys(controlErrors).forEach((keyError) => {
-            console.log(
-              'Key control: ' +
-                key +
-                ', keyError: ' +
-                keyError +
-                ', err value: ',
-              controlErrors[keyError],
-            );
+            errorMsgs.push({ keyControl: key, keyError: keyError });
           });
         }
       });
     }
+    return errorMsgs;
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+  }
+
+  ngAfterViewInit() {}
+
+  clearDirectors() {
+    this.directorNgSelect.clearModel();
+  }
+  clearContact() {
+    this.contactNgSelect.clearModel();
+  }
+  clearCountries() {
+    this.countriesOfProductionInput.ngSelect.clearModel();
+  }
+  clearDialogLanguages() {
+    this.dialogLanguagesInput.ngSelect.clearModel();
+  }
+  clearAnimationTechniques() {
+    this.animationTechniquesInput.ngSelect.clearModel();
+  }
+  clearCategories() {
+    this.submissionCategoriesInput.ngSelect.clearModel();
+  }
+  clearSoftware() {
+    this.softwareUsedInput.ngSelect.clearModel();
+  }
+  clearKeywords() {
+    this.keywordsInput.ngSelect.clearModel();
+  }
+  clearSelectionTags() {
+    this.selectionTagsInput.ngSelect.clearModel();
   }
 }

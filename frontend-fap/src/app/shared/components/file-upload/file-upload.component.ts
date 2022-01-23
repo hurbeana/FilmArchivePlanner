@@ -32,7 +32,8 @@ export class FileUploadComponent implements OnInit {
   fileGroup: FormGroup;
 
   //files: FileDto[] = [];
-  uploadProgress = 0;
+
+  uploadProgress: { [key: string]: number } = {};
   uploadSub?: Subscription;
   canceled = false;
 
@@ -69,6 +70,7 @@ export class FileUploadComponent implements OnInit {
 
     Array.from(element.files).forEach((file) => {
       if (file) {
+        this.uploadProgress[file.name] = 0;
         const newfileGroup = new FormGroup({
           filename: new FormControl(file.name),
         });
@@ -97,11 +99,11 @@ export class FileUploadComponent implements OnInit {
               observe: 'events',
             },
           )
-          .pipe(finalize(() => this.finishedUpload()));
+          .pipe(finalize(() => this.finishedUpload(file.name)));
 
         this.uploadSub = upload$.subscribe((response) => {
           if (response?.type == HttpEventType.UploadProgress) {
-            this.uploadProgress = Math.round(
+            this.uploadProgress[file.name] = Math.round(
               100 * (response.loaded / (response.total ?? 0)),
             );
           } else if (
@@ -127,19 +129,33 @@ export class FileUploadComponent implements OnInit {
     });
   }
 
-  finishedUpload() {
-    this.reset();
+  finishedUpload(filename: string) {
+    this.reset(filename);
   }
 
-  cancelUpload() {
+  cancelUpload(filename: string) {
     this.canceled = true;
     this.uploadSub?.unsubscribe();
     //this.files = []; //TODO
-    this.reset();
+    this.reset(filename);
+
+    if (this.multiple) {
+      //remove files from list when upload is canceled
+      for (let i = 0; i < this.formFileArray.length; ++i) {
+        console.log(this.formFileArray.value[i]);
+        if (this.formFileArray.value[i].filename == filename) {
+          this.formFileArray.removeAt(i);
+          console.log('REMOVED');
+        }
+      }
+    } else {
+      this.resetFormGroup();
+      this.fileGroup.disable();
+    }
   }
 
-  reset() {
-    this.uploadProgress = 0;
+  reset(filename: string) {
+    this.uploadProgress[filename] = 0;
     this.uploadSub = undefined;
   }
 

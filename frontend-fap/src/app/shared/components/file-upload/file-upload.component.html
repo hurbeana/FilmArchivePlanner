@@ -12,14 +12,14 @@
             *ngIf="getFormGroup(fileForm)?.contains('path')"
             type="button"
             class="btn btn-primary btn-sm btn-x"
-            (click)="uploadProgress === 0 ? removeFile($any(fileForm.get('id')?.value)) : cancelUpload()">
+            (click)="uploadProgress[fileForm.get('filename')?.value] === 0 ? removeFile($any(fileForm.get('id')?.value)) : cancelUpload(fileForm.get('filename')?.value)">
             <p class="x">X</p>
           </button>
           <button
             *ngIf="!getFormGroup(fileForm)?.contains('path')"
             type="button"
             class="btn btn-primary btn-sm btn-x"
-            (click)="uploadProgress === 0 ? removeCacheFile($any(fileForm.get('id')?.value)) : cancelUpload()">
+            (click)="uploadProgress[fileForm.get('filename')?.value] === 0 ? removeCacheFile($any(fileForm.get('id')?.value)) : cancelUpload(fileForm.get('filename')?.value)">
             <p class="x">X</p>
           </button>
 
@@ -28,12 +28,17 @@
           </div>
         </div>
 
-        <div class="progress-container" *ngIf="uploadProgress">
+        <div class="progress-container" *ngIf="uploadProgress[fileForm.get('filename')?.value] > 0">
           <div class="progress">
-            <div class="progress-bar" id="progress-bar" role="progressbar" [style.width]="uploadProgress + '%'" aria-valuemin="0" aria-valuemax="100" *ngIf="uploadProgress"></div>
+            <div
+              class="progress-bar"
+              id="progress-bar"
+              role="progressbar"
+              [style.width]="uploadProgress[fileForm.get('filename')?.value] + '%'"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              *ngIf="uploadProgress[fileForm.get('filename')?.value] > 0"></div>
           </div>
-          <mat-error *ngIf="canceled" i18n>File upload canceled!</mat-error>
-          <!--FIXME: When upload is canceled, text box with file name doesn't go away-->
         </div>
       </ng-container>
     </div>

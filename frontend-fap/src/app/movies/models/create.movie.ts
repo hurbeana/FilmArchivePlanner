@@ -22,7 +22,7 @@ export interface CreateUpdateMovieDto {
   selectionTags?: Array<string>;
   countriesOfProduction?: Array<string>;
   yearOfProduction?: number;
-  duration: number;
+  duration?: number;
   animationTechniques?: Array<string>;
   softwareUsed?: Array<string>;
   keywords?: Array<string>;

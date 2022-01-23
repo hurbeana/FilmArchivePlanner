@@ -1,227 +1,376 @@
-<div class="form-container">
+<div class="form-container" *ngIf="movie">
   <form class="" [formGroup]="moviesForm" (ngSubmit)="onSubmit()">
-    <fieldset class="form-group">
-      <legend i18n>General</legend>
-      <mat-form-field appearance="standard">
-        <mat-label i18n>Original Title</mat-label>
-        <input matInput formControlName="originalTitle" />
-        <mat-error *ngFor="let validation of validation_messages.originalTitle">
-          <mat-error *ngIf="moviesForm.controls['originalTitle']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="standard">
-        <mat-label class="mat-primary label-colon" i18n>English Title</mat-label>
-        <input matInput type="text" formControlName="englishTitle" />
-        <mat-error *ngFor="let validation of validation_messages.englishTitle">
-          <mat-error *ngIf="moviesForm.controls['englishTitle']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="standard">
-        <mat-label class="mat-primary label-colon" i18n>Directors</mat-label>
-        <mat-select formControlName="directors" multiple [compareWith]="compareSelectObjects">
-          <mat-option *ngFor="let director of directors | async" [value]="{ id: director.id }">{{
-            director.firstName + ' ' + director.middleName + ' ' + director.lastName
-          }}</mat-option>
-        </mat-select>
-        <mat-error *ngFor="let validation of validation_messages.directors">
-          <mat-error *ngIf="moviesForm.controls['directors']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="standard">
-        <mat-label class="mat-primary label-colon" i18n>Selection Tags</mat-label>
-        <mat-select formControlName="selectionTags" multiple [compareWith]="compareSelectObjects">
-          <mat-option *ngFor="let tag of tagsSelection | async" [value]="{ id: tag.id }">{{ tag.value + ' - ' + tag.type }}</mat-option>
-        </mat-select>
-        <mat-error *ngFor="let validation of validation_messages.selectionTags">
-          <mat-error *ngIf="moviesForm.controls['selectionTags']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="standard">
-        <mat-label class="mat-primary label-colon" i18n>Countries of Production</mat-label>
-        <mat-select formControlName="countriesOfProduction" multiple [compareWith]="compareSelectObjects">
-          <mat-option *ngFor="let tag of tagsCountry | async" [value]="{ id: tag.id }">{{ tag.value + ' - ' + tag.type }}</mat-option>
-        </mat-select>
-        <mat-error *ngFor="let validation of validation_messages.countriesOfProduction">
-          <mat-error *ngIf="moviesForm.controls['countriesOfProduction']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="standard">
-        <mat-label class="mat-primary label-colon" i18n>Year of Production</mat-label>
-        <input matInput type="number" formControlName="yearOfProduction" />
-        <mat-error *ngFor="let validation of validation_messages.yearOfProduction">
-          <mat-error *ngIf="moviesForm.controls['yearOfProduction']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="standard">
-        <mat-label class="mat-primary label-colon" i18n>Duration in minutes</mat-label>
-        <input matInput type="number" formControlName="duration" />
-        <mat-error *ngFor="let validation of validation_messages.duration">
-          <mat-error *ngIf="moviesForm.controls['duration']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="standard">
-        <mat-label class="mat-primary label-colon" i18n>German Synopsis</mat-label>
-        <textarea matInput formControlName="germanSynopsis"></textarea>
-        <mat-error *ngFor="let validation of validation_messages.germanSynopsis">
-          <mat-error *ngIf="moviesForm.controls['germanSynopsis']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="standard">
-        <mat-label class="mat-primary label-colon" i18n>English Synopsis</mat-label>
-        <textarea matInput type="text" formControlName="englishSynopsis"></textarea>
-        <mat-error *ngFor="let validation of validation_messages.englishSynopsis">
-          <mat-error *ngIf="moviesForm.controls['englishSynopsis']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
-        </mat-error>
-      </mat-form-field>
-    </fieldset>
-    <mat-divider></mat-divider>
-    <fieldset class="form-group">
-      <legend i18n>Files</legend>
-      <div>
-        <mat-label class="mat-primary label-colon" i18n>Movie Files</mat-label>
-        <shared-file-upload controlname="movieFiles" requiredFileType="video/*" [multiple]="true"></shared-file-upload>
-      </div>
-      <div>
-        <mat-label class="mat-primary label-colon" i18n>DCP Files</mat-label>
-        <shared-file-upload controlname="dcpFiles" requiredFileType="video/*" [multiple]="true"></shared-file-upload>
-      </div>
-      <div>
-        <mat-label class="mat-primary label-colon" i18n>Preview File</mat-label>
-        <shared-file-upload controlname="previewFile" requiredFileType="video/*" [multiple]="false"></shared-file-upload>
-      </div>
-      <div>
-        <mat-label class="mat-primary label-colon" i18n>Trailer File</mat-label>
-        <shared-file-upload controlname="trailerFile" requiredFileType="video/*" [multiple]="false"></shared-file-upload>
-      </div>
-      <div>
-        <mat-label class="mat-primary label-colon" i18n>Still Files</mat-label>
-        <shared-file-upload controlname="stillFiles" requiredFileType="image/*" [multiple]="true"></shared-file-upload>
-      </div>
-      <div>
-        <mat-label class="mat-primary label-colon" i18n>Subtitle Files</mat-label>
-        <shared-file-upload controlname="subtitleFiles" requiredFileType="image/*" [multiple]="true"></shared-file-upload>
-      </div>
-    </fieldset>
-    <mat-divider></mat-divider>
-    <fieldset class="form-group">
-      <legend i18n>Production</legend>
-      <mat-form-field appearance="standard">
-        <mat-label class="mat-primary label-colon" i18n>Script</mat-label>
-        <textarea matInput type="text" formControlName="script"></textarea>
-        <mat-error *ngFor="let validation of validation_messages.script">
-          <mat-error *ngIf="moviesForm.controls['script']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="standard">
-        <mat-label class="mat-primary label-colon" i18n>Animation</mat-label>
-        <input matInput type="text" formControlName="animation" />
-        <mat-error *ngFor="let validation of validation_messages.animation">
-          <mat-error *ngIf="moviesForm.controls['animation']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="standard">
-        <mat-label class="mat-primary label-colon" i18n>Editing</mat-label>
-        <input matInput type="text" formControlName="editing" />
-        <mat-error *ngFor="let validation of validation_messages.editing">
-          <mat-error *ngIf="moviesForm.controls['editing']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="standard">
-        <mat-label class="mat-primary label-colon" i18n>Sound</mat-label>
-        <input matInput type="text" formControlName="sound" />
-        <mat-error *ngFor="let validation of validation_messages.sound">
-          <mat-error *ngIf="moviesForm.controls['sound']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="standard">
-        <mat-label class="mat-primary label-colon" i18n>Music</mat-label>
-        <input matInput type="text" formControlName="music" />
-        <mat-error *ngFor="let validation of validation_messages.music">
-          <mat-error *ngIf="moviesForm.controls['music']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="standard">
-        <mat-label class="mat-primary label-colon" i18n>Production Company</mat-label>
-        <input matInput type="text" formControlName="productionCompany" />
-        <mat-error *ngFor="let validation of validation_messages.productionCompany">
-          <mat-error *ngIf="moviesForm.controls['productionCompany']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
-        </mat-error>
-      </mat-form-field>
-      <mat-checkbox color="primary" formControlName="hasSubtitles" i18n>Has Subtitles</mat-checkbox>
-      <mat-checkbox color="primary" formControlName="isStudentFilm" i18n>Is Student Film</mat-checkbox>
-      <mat-form-field appearance="standard">
-        <mat-label class="mat-primary label-colon" i18n>Film School</mat-label>
-        <input matInput type="text" formControlName="filmSchool" />
-        <mat-error *ngFor="let validation of validation_messages.originalTitle">
-          <mat-error *ngIf="moviesForm.controls['originalTitle']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="standard">
-        <mat-label class="mat-primary label-colon" i18n>Animation Technique</mat-label>
-        <mat-select formControlName="animationTechniques" multiple [compareWith]="compareSelectObjects">
-          <mat-option *ngFor="let tag of tagsAnimation | async" [value]="{ id: tag.id }">{{ tag.value + ' - ' + tag.type }}</mat-option>
-        </mat-select>
-        <mat-error *ngFor="let validation of validation_messages.animationTechniques">
-          <mat-error *ngIf="moviesForm.controls['animationTechniques']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="standard">
-        <mat-label class="mat-primary label-colon" i18n>Software Used</mat-label>
-        <mat-select formControlName="softwareUsed" multiple [compareWith]="compareSelectObjects">
-          <mat-option *ngFor="let tag of tagsSoftware | async" [value]="{ id: tag.id }">{{ tag.value + ' - ' + tag.type }}</mat-option>
-        </mat-select>
-        <mat-error *ngFor="let validation of validation_messages.softwareUsed">
-          <mat-error *ngIf="moviesForm.controls['softwareUsed']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
-        </mat-error>
-      </mat-form-field>
-    </fieldset>
-    <mat-divider></mat-divider>
-    <fieldset class="form-group">
-      <legend i18n>Further Details</legend>
-      <mat-form-field appearance="standard">
-        <mat-label class="mat-primary label-colon" i18n>Keywords</mat-label>
-        <mat-select formControlName="keywords" multiple [compareWith]="compareSelectObjects">
-          <mat-option *ngFor="let tag of tagsKeyword | async" [value]="{ id: tag.id }">{{ tag.value + ' - ' + tag.type }}</mat-option>
-        </mat-select>
-        <mat-error *ngFor="let validation of validation_messages.keywords">
-          <mat-error *ngIf="moviesForm.controls['keywords']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
-        </mat-error>
-      </mat-form-field>
+    <mat-card class="card">
+      <mat-card-title i18n>Required Information</mat-card-title>
+      <br />
+      <table>
+        <td>
+          <div class="row">
+            <p class="description" i18n>Original Title</p>
+            <input
+              type="text"
+              name="originalTitle"
+              class="form-control form-control-sm text-field"
+              placeholder="Enter Original Title"
+              formControlName="originalTitle"
+              required
+              [ngClass]="{ 'is-invalid': formIsSubmitted && this.moviesForm.controls['originalTitle'].errors }" />
+          </div>
+          <div class="row invalid-feedback-row">
+            <div class="custom-invalid-feedback" *ngIf="formIsSubmitted && this.moviesForm.controls['originalTitle'].errors">
+              <p>{{ getValidationMessage('originalTitle') }}</p>
+            </div>
+          </div>
+          <div class="row">
+            <p class="description" i18n>English Title</p>
+            <input
+              type="text"
+              name="englishTitle"
+              class="form-control form-control-sm text-field"
+              placeholder="Enter English Title"
+              formControlName="englishTitle"
+              required
+              [ngClass]="{ 'is-invalid': formIsSubmitted && this.moviesForm.controls['englishTitle'].errors }" />
+          </div>
+          <div class="row invalid-feedback-row">
+            <div class="custom-invalid-feedback" *ngIf="formIsSubmitted && this.moviesForm.controls['englishTitle'].errors">
+              <p>{{ getValidationMessage('englishTitle') }}</p>
+            </div>
+          </div>
+          <div [ngClass]="{ row: true, 'is-invalid': formIsSubmitted && this.moviesForm.controls['directors'].errors }">
+            <p class="description" i18n>Directors</p>
+            <ng-select
+              class="tag-field tag-field-dropdown-mb"
+              placeholder="Choose Directors..."
+              [items]="directors | async"
+              [multiple]="true"
+              [closeOnSelect]="false"
+              [searchable]="true"
+              bindLabel="fullName"
+              formControlName="directors"
+              #directorNgSelect
+              required>
+            </ng-select>
+            <button type="button" class="btn btn-primary btn-sm btn-x" (click)="clearDirectors()">
+              <p class="x">X</p>
+            </button>
+          </div>
+          <div class="row invalid-feedback-row">
+            <div class="custom-invalid-feedback" *ngIf="formIsSubmitted && this.moviesForm.controls['directors'].errors">
+              <p>Directors are required</p>
+            </div>
+          </div>
+          <div class="row">
+            <p class="description" i18n>Duration in Minutes</p>
+            <input
+              type="number"
+              name="duration"
+              class="form-control form-control-sm text-field"
+              placeholder="Enter Duration"
+              formControlName="duration"
+              required
+              [ngClass]="{ 'is-invalid': formIsSubmitted && this.moviesForm.controls['duration'].errors }" />
+          </div>
+          <div class="row invalid-feedback-row">
+            <div class="custom-invalid-feedback" *ngIf="formIsSubmitted && this.moviesForm.controls['duration'].errors">
+              <p>{{ getValidationMessage('duration') }}</p>
+            </div>
+          </div>
+          <div [ngClass]="{ row: true, 'is-invalid': formIsSubmitted && this.moviesForm.controls['contact'].errors }">
+            <p class="description" i18n>Contact</p>
+            <ng-select
+              class="tag-field tag-field-dropdown-mb"
+              placeholder="Choose Contact..."
+              [items]="contacts | async"
+              [multiple]="false"
+              [closeOnSelect]="false"
+              [searchable]="true"
+              bindLabel="name"
+              #contactNgSelect
+              formControlName="contact">
+            </ng-select>
+            <button type="button" class="btn btn-primary btn-sm btn-x" (click)="clearContact()">
+              <p class="x">X</p>
+            </button>
+          </div>
+          <div class="row invalid-feedback-row">
+            <div class="custom-invalid-feedback" *ngIf="formIsSubmitted && this.moviesForm.controls['contact'].errors">
+              <p>{{ getValidationMessage('contact') }}</p>
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="row large-row">
+            <p class="description" i18n>German Synopsis</p>
+            <textarea
+              type="text"
+              name="germanSynopsis"
+              class="form-control form-control-sm text-field large-text-field"
+              placeholder="Enter German Synopsis"
+              formControlName="germanSynopsis"
+              required
+              [ngClass]="{ 'is-invalid': formIsSubmitted && this.moviesForm.controls['germanSynopsis'].errors }"></textarea>
+          </div>
+          <div class="row invalid-feedback-row">
+            <div class="custom-invalid-feedback" *ngIf="formIsSubmitted && this.moviesForm.controls['germanSynopsis'].errors">
+              <p>{{ getValidationMessage('germanSynopsis') }}</p>
+            </div>
+          </div>
+          <div class="row large-row">
+            <p class="description" i18n>English Synopsis</p>
+            <textarea
+              type="text"
+              name="englishSynopsis"
+              class="form-control form-control-sm text-field large-text-field"
+              placeholder="Enter English Synopsis"
+              formControlName="englishSynopsis"
+              required
+              [ngClass]="{ 'is-invalid': formIsSubmitted && this.moviesForm.controls['englishSynopsis'].errors }"></textarea>
+          </div>
+          <div class="row invalid-feedback-row">
+            <div class="custom-invalid-feedback" *ngIf="formIsSubmitted && this.moviesForm.controls['englishSynopsis'].errors">
+              <p>{{ getValidationMessage('englishSynopsis') }}</p>
+            </div>
+          </div>
+        </td>
+      </table>
+    </mat-card>
 
-      <mat-form-field appearance="standard">
-        <mat-label class="mat-primary label-colon" i18n>Submission Categories</mat-label>
-        <mat-select formControlName="submissionCategories" multiple [compareWith]="compareSelectObjects">
-          <mat-option *ngFor="let tag of tagsCategory | async" [value]="{ id: tag.id }">{{ tag.value + ' - ' + tag.type }}</mat-option>
-        </mat-select>
-        <mat-error *ngFor="let validation of validation_messages.submissionCategories">
-          <mat-error *ngIf="moviesForm.controls['submissionCategories']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
-        </mat-error>
-      </mat-form-field>
+    <mat-card class="card">
+      <fieldset class="form-group">
+        <mat-card-title i18n>Files</mat-card-title>
+        <br />
 
-      <mat-checkbox color="primary" formControlName="hasDialog" i18n>Has Dialog</mat-checkbox>
-      <mat-form-field appearance="standard">
-        <mat-label class="mat-primary label-colon" i18n>Dialog Languages</mat-label>
-        <mat-select formControlName="dialogLanguages" multiple [compareWith]="compareSelectObjects">
-          <mat-option *ngFor="let tag of tagsLanguage | async" [value]="{ id: tag.id }">{{ tag.value + ' - ' + tag.type }}</mat-option>
-        </mat-select>
-        <mat-error *ngFor="let validation of validation_messages.dialogLanguages">
-          <mat-error *ngIf="moviesForm.controls['dialogLanguages']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="standard">
-        <mat-label class="mat-primary label-colon" i18n>Contact</mat-label>
-        <mat-select formControlName="contact" [compareWith]="compareSelectObjects">
-          <mat-option [value]="{}"></mat-option>
-          <mat-option *ngFor="let contact of contacts | async" [value]="{ id: contact.id }">{{ contact.name }}</mat-option>
-        </mat-select>
-        <mat-error *ngFor="let validation of validation_messages.contact">
-          <mat-error *ngIf="moviesForm.controls['contacts']?.hasError(validation.type)" class="error-message">{{ validation.message }}</mat-error>
-        </mat-error>
-      </mat-form-field>
-    </fieldset>
+        <table>
+          <td>
+            <div class="row">
+              <p class="description" i18n>Movie Files</p>
+              <shared-file-upload class="file-field" controlname="movieFiles" requiredFileType="video/*" [multiple]="true"></shared-file-upload>
+            </div>
+            <div class="row">
+              <p class="description" i18n>DCP Files</p>
+              <shared-file-upload class="file-field" controlname="dcpFiles" requiredFileType="video/*" [multiple]="true"></shared-file-upload>
+            </div>
+            <div class="row">
+              <p class="description" i18n>Still Files</p>
+              <shared-file-upload class="file-field" controlname="stillFiles" requiredFileType="image/*" [multiple]="true"></shared-file-upload>
+            </div>
+            <div class="row">
+              <p class="description" i18n>Subtitle Files</p>
+              <shared-file-upload class="file-field" controlname="subtitleFiles" [multiple]="true"></shared-file-upload>
+            </div>
+          </td>
+          <td>
+            <div class="row">
+              <p class="description" i18n>Trailer File</p>
+              <shared-file-upload class="file-field" controlname="trailerFile" requiredFileType="video/*" [multiple]="false"></shared-file-upload>
+            </div>
+            <div class="row">
+              <p class="description" i18n>Preview File</p>
+              <shared-file-upload class="file-field" controlname="previewFile" requiredFileType="video/*" [multiple]="false"></shared-file-upload>
+            </div>
+          </td>
+        </table>
+      </fieldset>
+    </mat-card>
 
-    <div>
-      <button mat-raised-button color="primary" type="submit" i18n>Submit</button>
-    </div>
+    <mat-card class="card">
+      <mat-card-title i18n>Other</mat-card-title>
+      <br />
+      <table>
+        <td>
+          <div class="row">
+            <p class="description" i18n>Countries of Prod.</p>
+            <form #movieEditForm="ngForm" class="tag-field">
+              <shared-tag-input
+                [form]="movieEditForm"
+                [formCtrlName]="'countriesOfProduction'"
+                [required]="true"
+                [(model)]="movie.countriesOfProduction"
+                [tagType]="'Country'"
+                [readonly]="false"
+                #countriesOfProductionInput
+                [multiple]="true">
+              </shared-tag-input>
+            </form>
+            <button type="button" class="btn btn-primary btn-sm btn-x" (click)="clearCountries()">
+              <p class="x">X</p>
+            </button>
+          </div>
+          <div class="row">
+            <p class="description" i18n>Year of Production</p>
+            <input
+              type="number"
+              name="yearOfProduction"
+              class="form-control form-control-sm text-field"
+              placeholder="Enter Year of Production"
+              formControlName="yearOfProduction"
+              [ngClass]="{ 'is-invalid': formIsSubmitted && this.moviesForm.controls['yearOfProduction'].errors }" />
+          </div>
+          <div class="row invalid-feedback-row">
+            <div class="custom-invalid-feedback" *ngIf="formIsSubmitted && this.moviesForm.controls['yearOfProduction'].errors">
+              <p>{{ getValidationMessage('yearOfProduction') }}</p>
+            </div>
+          </div>
+          <div class="row">
+            <p class="description" i18n>Animation</p>
+            <input type="text" class="form-control form-control-sm text-field" formControlName="animation" />
+          </div>
+          <div class="row">
+            <p class="description" i18n>Editing</p>
+            <input type="text" class="form-control form-control-sm text-field" formControlName="editing" />
+          </div>
+          <div class="row">
+            <p class="description" i18n>Music</p>
+            <input type="text" class="form-control form-control-sm text-field" formControlName="music" />
+          </div>
+          <div class="row">
+            <p class="description" i18n>Sound</p>
+            <input type="text" class="form-control form-control-sm text-field" formControlName="sound" />
+          </div>
+          <div class="row">
+            <p class="description" i18n>Prod. Company</p>
+            <input type="text" class="form-control form-control-sm text-field" formControlName="productionCompany" />
+          </div>
+          <div class="row">
+            <p class="description" i18n>Film School</p>
+            <input type="text" class="form-control form-control-sm text-field" formControlName="filmSchool" />
+          </div>
+          <div class="row">
+            <p class="description" i18n>Has Dialogue</p>
+            <input class="form-check-input tick-box" type="checkbox" formControlName="hasDialog" />
+          </div>
+          <div class="row">
+            <p class="description" i18n>Has Subtitles</p>
+            <input class="form-check-input tick-box" type="checkbox" formControlName="hasSubtitles" />
+          </div>
+          <div class="row">
+            <p class="description" i18n>Is Student Film</p>
+            <input class="form-check-input tick-box" type="checkbox" formControlName="isStudentFilm" />
+          </div>
+        </td>
+        <td>
+          <div class="row">
+            <p class="description" i18n>Animation Techn.</p>
+            <form #movieEditForm="ngForm" class="tag-field">
+              <shared-tag-input
+                [form]="movieEditForm"
+                [formCtrlName]="'animationTechniques'"
+                [required]="true"
+                [(model)]="movie.animationTechniques"
+                [tagType]="'Animation'"
+                [readonly]="false"
+                #animationTechniquesInput
+                [multiple]="true">
+              </shared-tag-input>
+            </form>
+            <button type="button" class="btn btn-primary btn-sm" (click)="clearAnimationTechniques()">
+              <p class="x">X</p>
+            </button>
+          </div>
+          <div class="row">
+            <p class="description" i18n>Dialogue Lang.</p>
+            <form #movieEditForm="ngForm" class="tag-field">
+              <shared-tag-input
+                [form]="movieEditForm"
+                [formCtrlName]="'dialogLanguages'"
+                [required]="true"
+                [(model)]="movie.dialogLanguages"
+                [tagType]="'Language'"
+                [readonly]="false"
+                #dialogLanguagesInput
+                [multiple]="true">
+              </shared-tag-input>
+            </form>
+            <button type="button" class="btn btn-primary btn-sm" (click)="clearDialogLanguages()">
+              <p class="x">X</p>
+            </button>
+          </div>
+          <div class="row">
+            <p class="description" i18n>Submission Cat.</p>
+            <form #movieEditForm="ngForm" class="tag-field">
+              <shared-tag-input
+                [form]="movieEditForm"
+                [formCtrlName]="'submissionCategories'"
+                [required]="true"
+                [(model)]="movie.submissionCategories"
+                [tagType]="'Category'"
+                [readonly]="false"
+                #submissionCategoriesInput
+                [multiple]="true">
+              </shared-tag-input>
+            </form>
+            <button type="button" class="btn btn-primary btn-sm" (click)="clearCategories()">
+              <p class="x">X</p>
+            </button>
+          </div>
+          <div class="row">
+            <p class="description" i18n>Software</p>
+            <form #movieEditForm="ngForm" class="tag-field">
+              <shared-tag-input
+                [form]="movieEditForm"
+                [formCtrlName]="'softwareUsed'"
+                [required]="true"
+                [(model)]="movie.softwareUsed"
+                [tagType]="'Software'"
+                [readonly]="false"
+                #softwareUsedInput
+                [multiple]="true">
+              </shared-tag-input>
+            </form>
+            <button type="button" class="btn btn-primary btn-sm" (click)="clearSoftware()">
+              <p class="x">X</p>
+            </button>
+          </div>
+          <div class="row">
+            <p class="description" i18n>Keywords</p>
+            <form #movieEditForm="ngForm" class="tag-field">
+              <shared-tag-input
+                [form]="movieEditForm"
+                [formCtrlName]="'keywords'"
+                [required]="true"
+                [(model)]="movie.keywords"
+                [tagType]="'Keyword'"
+                [readonly]="false"
+                #keywordsInput
+                [multiple]="true">
+              </shared-tag-input>
+            </form>
+            <button type="button" class="btn btn-primary btn-sm" (click)="clearKeywords()">
+              <p class="x">X</p>
+            </button>
+          </div>
+          <div class="row">
+            <p class="description" i18n>Selection Tags</p>
+            <form #movieEditForm="ngForm" class="tag-field">
+              <shared-tag-input
+                [form]="movieEditForm"
+                [formCtrlName]="'selectionTags'"
+                [required]="true"
+                [(model)]="movie.selectionTags"
+                [tagType]="'Selection'"
+                [readonly]="false"
+                #selectionTagsInput
+                [multiple]="true">
+              </shared-tag-input>
+            </form>
+            <button type="button" class="btn btn-primary btn-sm" (click)="clearSelectionTags()">
+              <p class="x">X</p>
+            </button>
+          </div>
+          <div class="row huge-row">
+            <p class="description" i18n>Script</p>
+            <textarea type="text" class="form-control form-control-sm text-field huge-text-field" formControlName="script"></textarea>
+          </div>
+        </td>
+      </table>
+    </mat-card>
+    <mat-card class="card">
+      <div>
+        <button class="btn btn-primary control-btn" type="submit" i18n>Save</button>
+        <button class="btn btn-light control-btn" [routerLink]="['/movies']" i18n>Cancel</button>
+      </div>
+    </mat-card>
+    <br />
   </form>
 </div>

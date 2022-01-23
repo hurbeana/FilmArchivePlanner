@@ -1,6 +1,6 @@
 <div class="form-group form-inline input-group">
   <input class="form-control ml-2 mb-2" type="text" name="searchTerm" [(ngModel)]="searchTerm" placeholder="Search..." #search />
-  <button class="btn btn-primary mb-2" (click)="openCreateFestivalModal()">Add Festival</button>
+  <button class="btn btn-primary mb-2 br-r" (click)="openCreateFestivalModal()">Add Festival</button>
 </div>
 
 <div class="table-responsive bordered-box" *ngIf="fullyLoaded; else loadingBlock">

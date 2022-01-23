@@ -160,11 +160,11 @@ export class MoviesService {
     if (duplicateNames.size > 0) {
       throw new HttpException(
         {
-          status: HttpStatus.UNPROCESSABLE_ENTITY,
-          error: 'Following files names are duplicate',
+          status: HttpStatus.BAD_REQUEST,
+          message: 'Two or more files have the same name.',
           files: Array.from(duplicateNames.values()),
         },
-        HttpStatus.UNPROCESSABLE_ENTITY,
+        HttpStatus.BAD_REQUEST,
       );
     }
 

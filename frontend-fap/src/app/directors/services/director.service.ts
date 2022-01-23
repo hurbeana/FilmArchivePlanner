@@ -6,6 +6,7 @@ import { Director } from '../models/director';
 import { CreateUpdateDirectorDto } from '../models/create.director';
 import { DirectorsPaginationState } from '../../app.state';
 import { FileDto } from '../../shared/models/file';
+import { DirectorReference } from '../models/director-ref';
 
 const api = 'http://localhost:3000/directors'; //TODO: url to rest
 
@@ -55,6 +56,11 @@ export class DirectorService {
   getAllDirectors(): Observable<Director[]> {
     console.log('[DirectorService] - GET ALL DIRECTORS WITHOUT PAGING');
     return this.http.get<Director[]>(`${api}/all`);
+  }
+
+  getAllDirectorsAsReferences(): Observable<DirectorReference[]> {
+    console.log('[DirectorService] - GET ALL DIRECTORS WITHOUT PAGING');
+    return this.http.get<DirectorReference[]>(`${api}/allAsRefs`);
   }
 
   updateDirector(id: number, director: CreateUpdateDirectorDto) {

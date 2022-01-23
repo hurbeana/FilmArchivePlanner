@@ -106,10 +106,10 @@
           [multiple]="true"
           [closeOnSelect]="false"
           [searchable]="true"
-          bindLabel="lastName"
+          bindLabel="fullName"
           placeholder="Select Directors"
           [(ngModel)]="selectedDirectors">
-          <ng-template ng-option-tmp let-item="item" let-search="searchTerm"> {{ item.firstName }} {{ item.lastName }} </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-search="searchTerm"> {{ item.fullName }} </ng-template>
         </ng-select>
         <button type="button" class="btn btn-primary btn-sm" (click)="clearDirectors()">
           <p class="x">X</p>

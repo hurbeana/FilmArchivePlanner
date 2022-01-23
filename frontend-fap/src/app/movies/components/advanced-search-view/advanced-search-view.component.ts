@@ -11,6 +11,7 @@ import * as MovieActions from '../../state/movies.actions';
 import * as MovieSelectors from '../../state/movies.selectors';
 import { MoviesState } from '../../../app.state';
 import { ofType } from '@ngrx/effects';
+import { DirectorReference } from 'src/app/directors/models/director-ref';
 
 @Component({
   selector: 'app-advanced-search-view',
@@ -19,7 +20,7 @@ import { ofType } from '@ngrx/effects';
 })
 export class AdvancedSearchViewComponent implements OnInit {
   tags$ = new Observable<Tag[]>();
-  directors$ = new Observable<Director[]>();
+  directors$ = new Observable<DirectorReference[]>();
   contacts$ = new Observable<Contact[]>();
 
   selectedTags: Tag[] = [];
@@ -64,7 +65,7 @@ export class AdvancedSearchViewComponent implements OnInit {
   ngOnInit(): void {
     this.tags$ = this.tagService.getAllTags(); //retrieve tags, contacts and directors from backend
     this.contacts$ = this.contactService.getAllContacts();
-    this.directors$ = this.directorsService.getAllDirectors();
+    this.directors$ = this.directorsService.getAllDirectorsAsReferences();
     this.store
       .select(MovieSelectors.selectTotalItems)
       .subscribe((itemCount) => {
