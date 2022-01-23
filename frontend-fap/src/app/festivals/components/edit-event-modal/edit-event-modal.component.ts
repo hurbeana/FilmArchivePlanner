@@ -179,9 +179,10 @@ export class EditEventModalComponent implements OnInit {
       const endTime: Date = this.eventForm.get('endTime')?.value;
       this.event.start = this.mergeDateTime(startDate, startTime);
       this.event.end = this.mergeDateTime(endDate, endTime);
-      this.event.meta.description = this.eventForm.get('description')?.value;
+      this.event.meta.description =
+        this.eventForm.get('description')?.value ?? '';
       this.event.meta.eventLocation =
-        this.eventForm.get('eventLocation')?.value;
+        this.eventForm.get('eventLocation')?.value ?? '';
       this.event.meta.movie = { id: this.eventForm.get('movie')?.value };
       this.event.meta.type = this.eventForm.get('type')?.value;
       if (this.event.meta.movie) {
