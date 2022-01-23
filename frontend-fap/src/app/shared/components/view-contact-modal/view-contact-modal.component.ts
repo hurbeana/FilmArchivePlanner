@@ -24,10 +24,7 @@ import { Store } from '@ngrx/store';
       <details-view-contact [contact]="contact"></details-view-contact>
     </div>
     <div class="modal-footer">
-      <button
-        class="btn btn-outline-secondary close"
-        (click)="onCancelContactModal()"
-      >
+      <button class="btn btn-light close" (click)="onCancelContactModal()">
         Close
       </button>
     </div>

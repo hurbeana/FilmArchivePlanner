@@ -164,6 +164,18 @@ export class TableViewComponent implements AfterViewInit {
     this.loadDirectors();
   }
 
+  formatDate(d: string): string {
+    return (
+      d.substr(8, 2) +
+      '.' +
+      d.substr(5, 2) +
+      '.' +
+      d.substr(0, 4) +
+      ', ' +
+      d.substr(11, 5)
+    );
+  }
+
   deleteDirector(director: Director) {
     this.store.dispatch(
       DirectorActions.deleteDirector({

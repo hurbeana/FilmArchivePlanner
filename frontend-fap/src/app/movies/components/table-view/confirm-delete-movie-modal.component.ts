@@ -37,7 +37,7 @@ import { MovieService } from '../../services/movie.service';
       <div class="modal-footer">
         <button
           type="button"
-          class="btn btn-outline-secondary"
+          class="btn btn-light"
           (click)="modal.dismiss('cancel click')"
         >
           Cancel

@@ -20,6 +20,44 @@ export class HeaderComponent implements OnInit {
 
   constructor(private router: Router) {}
 
+  navigation = [
+    {
+      routerLink: '/',
+      text: 'Home',
+      icon: 'home',
+    },
+    {
+      routerLink: '/movies',
+      text: 'Movies',
+      icon: 'movie',
+    },
+    {
+      routerLink: '/festivals',
+      text: 'Festivals',
+      icon: 'event_note',
+    },
+    {
+      routerLink: '/directors',
+      text: 'Directors',
+      icon: 'people',
+    },
+    {
+      routerLink: '/contacts',
+      text: 'Contacts',
+      icon: 'person',
+    },
+    {
+      routerLink: '/tags',
+      text: 'Tag Manager',
+      icon: 'label',
+    },
+    {
+      routerLink: '/import',
+      text: 'Import',
+      icon: 'backup',
+    },
+  ];
+
   ngOnInit(): void {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {

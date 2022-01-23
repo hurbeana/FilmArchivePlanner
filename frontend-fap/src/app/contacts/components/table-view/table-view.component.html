@@ -1,5 +1,5 @@
 <div class="form-group form-inline input-group">
-  <input class="form-control ml-2 mb-2" type="text" name="searchTerm" [(ngModel)]="searchTerm" placeholder="Search for name, type, email, phone or website..." #search />
+  <input class="form-control ml-2 mb-2" type="text" name="searchTerm" [(ngModel)]="searchTerm" placeholder="Search for Name, Type, Email, Phone or Website..." #search />
   <button class="btn btn-primary mb-2 br-r" (click)="openCreateContactModal()">Add Contact</button>
   <export-button downloadType="contacts"></export-button>
 </div>
@@ -71,7 +71,7 @@
           <ngb-highlight [result]="contact.website" [term]="searchTerm"></ngb-highlight>
         </td>
         <td>
-          <ngb-highlight [result]="contact.created_at"></ngb-highlight>
+          <ngb-highlight [result]="formatDate(contact.created_at)"></ngb-highlight>
         </td>
         <td>
           <div class="actions">

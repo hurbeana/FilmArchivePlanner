@@ -1,6 +1,6 @@
 <div class="modal-header">
   <h4 class="modal-title" id="modal-basic-title">Edit Event</h4>
-  <button type="button" class="btn btn-outline-secondary close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+  <button type="button" class="btn btn-light close" aria-label="Close" (click)="modal.dismiss('Cross click')">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
@@ -26,7 +26,9 @@
           #dpStart="ngbDatepicker"
           [ngClass]="{ 'is-invalid': fieldInvalid('startDate') }" />
         <div class="input-group-append">
-          <button class="btn btn-outline-secondary" (click)="dpStart.toggle()" type="button"><i-bs name="calendar"></i-bs></button>
+          <button class="btn btn-light" (click)="dpStart.toggle()" type="button">
+            <i-bs name="calendar"></i-bs>
+          </button>
         </div>
       </div>
       <div class="invalid-feedback" *ngIf="eventForm.get('startDate')?.hasError('required')">Startdate is required!</div>
@@ -48,7 +50,9 @@
           #dpEnd="ngbDatepicker"
           [ngClass]="{ 'is-invalid': fieldInvalid('endDate') }" />
         <div class="input-group-append">
-          <button class="btn btn-outline-secondary" (click)="dpEnd.toggle()" type="button"><i-bs name="calendar"></i-bs></button>
+          <button class="btn btn-secondary" (click)="dpEnd.toggle()" type="button">
+            <i-bs name="calendar"></i-bs>
+          </button>
         </div>
       </div>
       <div class="invalid-feedback" *ngIf="eventForm.get('endDate')?.hasError('required')">Enddate is required!</div>
@@ -92,6 +96,6 @@
 </div>
 
 <div class="modal-footer">
-  <button class="btn btn-outline-secondary close" (click)="onCancelModal()">Cancel</button>
-  <button ngbAutoFocus type="button" class="btn btn-success" (click)="saveModal()" i18n>Save</button>
+  <button class="btn btn-light close control-btn" (click)="onCancelModal()">Cancel</button>
+  <button ngbAutoFocus type="button" class="btn btn-success control-btn" (click)="saveModal()" i18n>Save</button>
 </div>

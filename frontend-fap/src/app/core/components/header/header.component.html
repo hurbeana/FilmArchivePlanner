@@ -5,21 +5,29 @@
   <a [routerLink]="'/'">
     <img src="assets/img/logo.png" class="header-logo-img" height="50" style="margin: 0 10px" />
   </a>
-  <span class="toolbar-title">Film Archive & Planner {{ currentRoute ? '- ' + currentRoute : '' }}</span>
-  <span class="example-spacer"></span>
-  <div></div>
+  <span class="toolbar-title">Film Archiver & Planner {{ currentRoute ? '- ' + currentRoute : '' }}</span>
+
+  <div class="quicknav-btns">
+    <button type="button" class="btn btn-primary" [routerLink]="'/movies'">Movies</button>
+    <button type="button" class="btn btn-primary" [routerLink]="'/festivals'">Festivals</button>
+    <button type="button" class="btn btn-primary" [routerLink]="'/directors'">Directors</button>
+    <button type="button" class="btn btn-primary" [routerLink]="'/contacts'">Contacts</button>
+  </div>
 </mat-toolbar>
-<mat-sidenav-container class="main-content" [hasBackdrop]="false">
-  <mat-sidenav class="main-sidenav" position="start" mode="over" (click)="sidenav.close()">
+
+<mat-sidenav-container class="main-content" [hasBackdrop]="true">
+  <mat-sidenav class="main-sidenav" position="start" mode="over" role="navigation" (click)="sidenav.close()">
     <mat-nav-list>
-      <a mat-list-item [routerLink]="'/'" i18n><mat-icon>home_outline</mat-icon> Home</a>
-      <a mat-list-item [routerLink]="'/festivals'" i18n><mat-icon>event_note</mat-icon> Festivals</a>
-      <a mat-list-item [routerLink]="'/movies'" i18n><mat-icon>movie_outline</mat-icon> Movies</a>
-      <a mat-list-item [routerLink]="'/directors'" i18n><mat-icon>people_outline</mat-icon> Directors</a>
-      <a mat-list-item [routerLink]="'/contacts'" i18n><mat-icon>person_outline</mat-icon> Contacts</a>
-      <a mat-list-item [routerLink]="'/tags'" i18n><mat-icon>label_outline</mat-icon> Tag Manager</a>
-      <a mat-list-item [routerLink]="'/import'" i18n><mat-icon>backup</mat-icon> Import</a>
-      <a mat-list-item (click)="sidenav.toggle()" i18n>Close</a>
+      <a mat-list-item *ngFor="let nav of navigation" [routerLink]="nav.routerLink" i18n>
+        <mat-icon matListIcon>{{ nav.icon }}</mat-icon>
+        <span>{{ nav.text }}</span>
+      </a>
+    </mat-nav-list>
+    <mat-nav-list>
+      <mat-list-item>
+        <mat-icon matListIcon>close</mat-icon>
+        <a matLine (click)="sidenav.toggle()">Close</a>
+      </mat-list-item>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

@@ -1,5 +1,5 @@
 <div class="form-group form-inline input-group">
-  <input class="form-control ml-2 mb-2" type="text" [(ngModel)]="searchString" placeholder="Search for original title or english title..." #search />
+  <input class="form-control ml-2 mb-2" type="text" [(ngModel)]="searchString" placeholder="Search for Title..." #search />
   <button class="btn btn-primary mb-2" (click)="openAdvancedSearch()">Advanced Search</button>
   <button class="btn btn-primary mb-2 br-r" routerLink="create">Add Movie</button>
   <export-button downloadType="movies"></export-button>
@@ -66,7 +66,7 @@
           <ngb-highlight [result]="movie.duration | durationFormat"></ngb-highlight>
         </td>
         <td>
-          <ngb-highlight [result]="movie.created_at.toString()"></ngb-highlight>
+          <ngb-highlight [result]="formatDate(movie.created_at.toString())"></ngb-highlight>
         </td>
         <td>
           <div class="actions">

@@ -1,11 +1,20 @@
 <div class="movie-list-container">
   <div class="movie-list-header">
     <h2 id="movie-list-header-title" class="movie-list-header-element">Movies</h2>
-    <button id="movie-list-button-clear-search" class="btn btn-secondary no-wrap" (click)="clearSearchFields()">clear search</button>
+    <button id="movie-list-button-clear-search" class="btn btn-light" (click)="clearSearchFields()">Clear Search</button>
   </div>
   <div class="movie-list-filter">
     <div class="movie-list-filter-element">
-      <label>Selection tag:</label>
+      <input
+        type="text"
+        name="selectionTag"
+        id="movieSearchString"
+        class="form-control form-control-sm"
+        placeholder="Search..."
+        [(ngModel)]="movieSearchString"
+        #searchStringField />
+    </div>
+    <div class="movie-list-filter-element">
       <!--input type="text" name="selectionTag" id="selectionTag" placeholder="PLACEHOLDER ELEMENT" /-->
       <form id="movieSelectionForm" #movieSelectionForm="ngForm" style="width: 100%">
         <shared-tag-input
@@ -18,10 +27,6 @@
           [readonly]="false"
           [multiple]="false"></shared-tag-input>
       </form>
-    </div>
-    <div class="movie-list-filter-element">
-      <!--label>Search:</label-->
-      <input type="text" name="selectionTag" id="movieSearchString" class="form-control" placeholder="Search..." [(ngModel)]="movieSearchString" #searchStringField />
     </div>
   </div>
   <div class="movie-list-container">

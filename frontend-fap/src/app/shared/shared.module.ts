@@ -27,7 +27,6 @@ import { DetailsViewFestivalComponent } from './details-view/details-view-festiv
 import { DurationFormatPipe } from './pipes/duration-format.pipe';
 import { RouterModule } from '@angular/router';
 import { ViewContactModalComponent } from './components/view-contact-modal/view-contact-modal.component';
-import { VimeModule } from '@vime/angular';
 import { FileDisplayComponent } from '../shared/components/file-display/file-display.component';
 
 @NgModule({

@@ -1,135 +1,139 @@
-<div class="planner-header d-flex align-items-center">
-  <div id="FestivalInfoContainer" class="planner-header-info d-flex flex-row align-items-start">
-    <div class="d-flex flex-column align-items-start festival-edit-box">
-      <label>Festival name:</label>
-      <label>Festival location:</label>
-    </div>
-    <div class="d-flex flex-column align-items-start festival-edit-box">
-      <strong class="m-0">{{ festival?.name }}</strong>
-      <strong>{{ festival?.location }}</strong>
-    </div>
-    <button *ngIf="!readonly" id="btnEditFestivalInfo" class="btn btn-primary btn-sm ms-2" (click)="openEditFestivalModal()">
-      <i i-bs name="pencil" width="1rem" height="1rem"></i>
-    </button>
-  </div>
-  <div id="calendarViewChangeContainer" class="d-flex flex-column align-items-center">
-    <h2 class="m-1">{{ viewDate | calendarDate: view + 'ViewTitle':locale }}</h2>
-    <div class="btn-group d-flex">
-      <div class="btn btn-primary cal-next-prev-button" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="viewDateChange()">
-        <i i-bs name="arrow-left" width="1.5rem" height="1.5rem"></i>
-        <span class="ms-2">Previous</span>
+<mat-card class="card">
+  <mat-card-title>{{ festival?.name }}</mat-card-title>
+  <div class="planner-header d-flex align-items-center">
+    <div id="FestivalInfoContainer" class="planner-header-info d-flex flex-row align-items-start">
+      <div class="d-flex flex-column align-items-start festival-edit-box">
+        <label i18n>Location:</label>
       </div>
-      <div class="btn btn-outline-secondary cal-next-prev-button" mwlCalendarToday [(viewDate)]="viewDate">Today</div>
-      <div class="btn btn-primary cal-next-prev-button" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="viewDateChange()">
-        <span class="me-2">Next</span>
-        <i i-bs name="arrow-right" width="1.5rem" height="1.5rem"></i>
+      <div class="d-flex flex-column align-items-start festival-edit-box">
+        <strong>{{ festival?.location }}</strong>
       </div>
-    </div>
-  </div>
-  <div id="CalendarViewRangeChangeContainer" class="btn-group">
-    <div id="CalendarViewRangeChangerHelper">
-      <div class="btn btn-primary" (click)="setView(CalendarView.Month)" [class.active]="view === CalendarView.Month">Month</div>
-      <div class="btn btn-primary" (click)="setView(CalendarView.Week)" [class.active]="view === CalendarView.Week">Week</div>
-      <div class="btn btn-primary" (click)="setView(CalendarView.Day)" [class.active]="view === CalendarView.Day">Day</div>
-    </div>
-  </div>
-</div>
-<div>
-  <mat-drawer-container>
-    <mat-drawer #drawer mode="side" position="end" [opened]="!readonly" [@.disabled]="readonly">
-      <app-planner-movie-list></app-planner-movie-list>
-    </mat-drawer>
-    <mat-drawer-content>
-      <button
-        *ngIf="!readonly"
-        class="mat-elevation-z2"
-        style="z-index: 2; position: absolute; top: 50px; right: 0; background-color: white; border-radius: 20px 0 0 20px"
-        (click)="!readonly && drawer.toggle()"
-        mat-icon-button>
-        <i i-bs name="filter" width="1.5rem" height="1.5rem"></i>
+
+      <button *ngIf="!readonly" id="btnEditFestivalInfo" class="btn btn-primary btn-sm ms-2" (click)="openEditFestivalModal()">
+        <i i-bs name="pencil" width="1rem" height="1rem"></i>
       </button>
-      <ng-template #weekViewHourSegmentTemplate let-segment="segment" let-locale="locale" let-segmentHeight="segmentHeight" let-isTimeLabel="isTimeLabel">
-        <div
-          #segmentElement
-          class="cal-hour-segment"
-          [style.height.px]="segmentHeight"
-          [class.cal-hour-start]="segment.isStart"
-          [class.cal-after-hour-start]="!segment.isStart"
-          [ngClass]="segment.cssClass"
-          (mousedown)="!this.readonly && startDragToCreate(segment, $event, segmentElement)">
-          <div class="cal-time" *ngIf="isTimeLabel">
-            {{ parseDate(segment.date) | calendarDate: 'weekViewHour':locale }}
-          </div>
+    </div>
+    <div id="calendarViewChangeContainer" class="d-flex flex-column align-items-center">
+      <h2 class="m-1">{{ viewDate | calendarDate: view + 'ViewTitle':locale }}</h2>
+      <div class="btn-group d-flex">
+        <div class="btn btn-primary cal-next-prev-button" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="viewDateChange()">
+          <i i-bs name="arrow-left" width="1.5rem" height="1.5rem"></i>
+          <span class="ms-2">Previous</span>
         </div>
-      </ng-template>
-      <ng-template #eventTemplate let-weekEvent="weekEvent" let-tooltipPlacement="tooltipPlacement" let-eventClicked="eventClicked" let-tooltipTemplate="tooltipTemplate">
-        <div
-          class="cal-event"
-          [style.backgroundColor]="weekEvent.event.color?.secondary"
-          [style.borderColor]="weekEvent.event.color?.primary"
-          [style.color]="'black'"
-          [mwlCalendarTooltip]="weekEvent.event.title | calendarEventTitle: 'weekTooltip':weekEvent.event"
-          [tooltipPlacement]="tooltipPlacement">
-          <!--[tooltipEvent]="weekEvent.event"
+        <div class="btn btn-secondary cal-next-prev-button" mwlCalendarToday [(viewDate)]="viewDate">Today</div>
+        <div class="btn btn-primary cal-next-prev-button" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="viewDateChange()">
+          <span class="me-2">Next</span>
+          <i i-bs name="arrow-right" width="1.5rem" height="1.5rem"></i>
+        </div>
+      </div>
+    </div>
+    <div id="CalendarViewRangeChangeContainer" class="btn-group">
+      <div id="CalendarViewRangeChangerHelper" class="timespan-btns">
+        <div class="btn btn-primary timespan-btn" (click)="setView(CalendarView.Month)" [class.active]="view === CalendarView.Month">Month</div>
+        <div class="btn btn-primary timespan-btn" (click)="setView(CalendarView.Week)" [class.active]="view === CalendarView.Week">Week</div>
+        <div class="btn btn-primary timespan-btn" (click)="setView(CalendarView.Day)" [class.active]="view === CalendarView.Day">Day</div>
+      </div>
+    </div>
+  </div>
+</mat-card>
+<mat-card class="card">
+  <div>
+    <mat-drawer-container>
+      <mat-drawer #drawer mode="side" position="end" [opened]="!readonly" [@.disabled]="readonly">
+        <app-planner-movie-list></app-planner-movie-list>
+      </mat-drawer>
+      <mat-drawer-content>
+        <button
+          *ngIf="!readonly"
+          class="mat-elevation-z2"
+          style="z-index: 2; position: absolute; top: 50px; right: 0; background-color: white; border-radius: 20px 0 0 20px"
+          (click)="!readonly && drawer.toggle()"
+          mat-icon-button>
+          <i i-bs name="filter" width="1.5rem" height="1.5rem"></i>
+        </button>
+        <ng-template #weekViewHourSegmentTemplate let-segment="segment" let-locale="locale" let-segmentHeight="segmentHeight" let-isTimeLabel="isTimeLabel">
+          <div
+            #segmentElement
+            class="cal-hour-segment"
+            [style.height.px]="segmentHeight"
+            [class.cal-hour-start]="segment.isStart"
+            [class.cal-after-hour-start]="!segment.isStart"
+            [ngClass]="segment.cssClass"
+            (mousedown)="!this.readonly && startDragToCreate(segment, $event, segmentElement)">
+            <div class="cal-time" *ngIf="isTimeLabel">
+              {{ parseDate(segment.date) | calendarDate: 'weekViewHour':locale }}
+            </div>
+          </div>
+        </ng-template>
+        <ng-template #eventTemplate let-weekEvent="weekEvent" let-tooltipPlacement="tooltipPlacement" let-eventClicked="eventClicked" let-tooltipTemplate="tooltipTemplate">
+          <div
+            class="cal-event"
+            [style.backgroundColor]="weekEvent.event.color?.secondary"
+            [style.borderColor]="weekEvent.event.color?.primary"
+            [style.color]="'black'"
+            [mwlCalendarTooltip]="weekEvent.event.title | calendarEventTitle: 'weekTooltip':weekEvent.event"
+            [tooltipPlacement]="tooltipPlacement">
+            <!--[tooltipEvent]="weekEvent.event"
         [tooltipTemplate]="tooltipTemplate"
         -->
-          <span *ngIf="weekEvent?.event?.actions" class="cal-event-actions">
-            <a
-              class="cal-event-action"
-              [style.color]="'black'"
-              *ngFor="let action of weekEvent?.event?.actions"
-              (mwlClick)="action.onClick({ event: weekEvent?.event, sourceEvent: $event })"
-              (mwlKeydownEnter)="action.onClick({ event: weekEvent?.event, sourceEvent: $event })"
-              [ngClass]="action.cssClass"
-              tabindex="0"
-              role="button"
-              [attr.aria-label]="{ action: action } | calendarA11y: 'actionButtonLabel'">
-              <i i-bs [name]="action?.label"></i>
-            </a>
-          </span>
-          <div>{{ weekEvent?.event?.title }}</div>
-          <div>
-            <span> {{ weekEvent?.event?.start | calendarDate: 'weekViewHour':locale ?? '' }}</span>
-            <span>-</span>
-            <span>{{ weekEvent?.event?.end | calendarDate: 'weekViewHour':locale ?? '' }}</span>
+            <span *ngIf="weekEvent?.event?.actions" class="cal-event-actions">
+              <a
+                class="cal-event-action"
+                [style.color]="'black'"
+                *ngFor="let action of weekEvent?.event?.actions"
+                (mwlClick)="action.onClick({ event: weekEvent?.event, sourceEvent: $event })"
+                (mwlKeydownEnter)="action.onClick({ event: weekEvent?.event, sourceEvent: $event })"
+                [ngClass]="action.cssClass"
+                tabindex="0"
+                role="button"
+                [attr.aria-label]="{ action: action } | calendarA11y: 'actionButtonLabel'">
+                <i i-bs [name]="action?.label"></i>
+              </a>
+            </span>
+            <div>{{ weekEvent?.event?.title }}</div>
+            <div>
+              <span> {{ weekEvent?.event?.start | calendarDate: 'weekViewHour':locale ?? '' }}</span>
+              <span>-</span>
+              <span>{{ weekEvent?.event?.end | calendarDate: 'weekViewHour':locale ?? '' }}</span>
+            </div>
+            <div>{{ weekEvent?.event?.meta?.eventLocation }}</div>
+            <div>{{ weekEvent?.event?.meta?.type }}</div>
+            <div class="movie-title-row" *ngIf="weekEvent?.event?.meta?.movie">{{ weekEvent.event.meta.movie.originalTitle }}</div>
+            <div *ngIf="weekEvent?.event?.meta?.description">{{ weekEvent?.event?.meta?.description }}</div>
           </div>
-          <div>{{ weekEvent?.event?.meta?.eventLocation }}</div>
-          <div>{{ weekEvent?.event?.meta?.type }}</div>
-          <div class="movie-title-row" *ngIf="weekEvent?.event?.meta?.movie">{{ weekEvent.event.meta.movie.originalTitle }}</div>
-          <div *ngIf="weekEvent?.event?.meta?.description">{{ weekEvent?.event?.meta?.description }}</div>
+        </ng-template>
+        <div [ngSwitch]="view">
+          <mwl-calendar-month-view
+            *ngSwitchCase="CalendarView.Month"
+            [viewDate]="viewDate"
+            [events]="events"
+            [refresh]="refresh"
+            [locale]="locale"
+            (eventTimesChanged)="!this.readonly && eventTimesChanged($event)">
+          </mwl-calendar-month-view>
+          <mwl-calendar-week-view
+            *ngSwitchCase="CalendarView.Week"
+            id="calendar-view"
+            [viewDate]="viewDate"
+            [refresh]="refresh"
+            (eventTimesChanged)="!this.readonly && eventTimesChanged($event)"
+            [locale]="locale"
+            [events]="events"
+            [weekStartsOn]="weekStartsOn"
+            [hourSegmentTemplate]="weekViewHourSegmentTemplate"
+            [eventTemplate]="eventTemplate">
+          </mwl-calendar-week-view>
+          <mwl-calendar-day-view
+            *ngSwitchCase="CalendarView.Day"
+            [viewDate]="viewDate"
+            [events]="events"
+            [refresh]="refresh"
+            [eventTemplate]="eventTemplate"
+            [locale]="locale"
+            (eventTimesChanged)="!this.readonly && eventTimesChanged($event)">
+          </mwl-calendar-day-view>
         </div>
-      </ng-template>
-      <div [ngSwitch]="view">
-        <mwl-calendar-month-view
-          *ngSwitchCase="CalendarView.Month"
-          [viewDate]="viewDate"
-          [events]="events"
-          [refresh]="refresh"
-          [locale]="locale"
-          (eventTimesChanged)="!this.readonly && eventTimesChanged($event)">
-        </mwl-calendar-month-view>
-        <mwl-calendar-week-view
-          *ngSwitchCase="CalendarView.Week"
-          id="calendar-view"
-          [viewDate]="viewDate"
-          [refresh]="refresh"
-          (eventTimesChanged)="!this.readonly && eventTimesChanged($event)"
-          [locale]="locale"
-          [events]="events"
-          [weekStartsOn]="weekStartsOn"
-          [hourSegmentTemplate]="weekViewHourSegmentTemplate"
-          [eventTemplate]="eventTemplate">
-        </mwl-calendar-week-view>
-        <mwl-calendar-day-view
-          *ngSwitchCase="CalendarView.Day"
-          [viewDate]="viewDate"
-          [events]="events"
-          [refresh]="refresh"
-          [eventTemplate]="eventTemplate"
-          [locale]="locale"
-          (eventTimesChanged)="!this.readonly && eventTimesChanged($event)">
-        </mwl-calendar-day-view>
-      </div>
-    </mat-drawer-content>
-  </mat-drawer-container>
-</div>
+      </mat-drawer-content>
+    </mat-drawer-container>
+  </div>
+</mat-card>

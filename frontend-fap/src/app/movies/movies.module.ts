@@ -42,6 +42,7 @@ import { ContactEffects } from '../contacts/state/contacts.effects';
 import { VimeModule } from '@vime/angular';
 import { AdvancedSearchViewComponent } from './components/advanced-search-view/advanced-search-view.component';
 import { ConfirmDeleteMovieModalComponent } from './components/table-view/confirm-delete-movie-modal.component';
+import { NgxBootstrapIconsModule } from 'ngx-bootstrap-icons';
 
 @NgModule({
   declarations: [
@@ -90,6 +91,7 @@ import { ConfirmDeleteMovieModalComponent } from './components/table-view/confir
     MatDividerModule,
     MatSelectModule,
     VimeModule,
+    NgxBootstrapIconsModule,
   ],
 })
 /* Movie Module contains everything related to movies */

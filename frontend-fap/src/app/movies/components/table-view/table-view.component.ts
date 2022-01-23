@@ -93,6 +93,18 @@ export class TableViewComponent implements AfterViewInit {
       .subscribe((state) => (this.advancedSearchState = state));
   }
 
+  formatDate(d: string): string {
+    return (
+      d.substr(8, 2) +
+      '.' +
+      d.substr(5, 2) +
+      '.' +
+      d.substr(0, 4) +
+      ', ' +
+      d.substr(11, 5)
+    );
+  }
+
   loadMovies() {
     //dispatch(Action) -> Effect -> Success Action -> Reducer (changes AppState)
     if (this.showAdvanced && this.advancedSearchState) {

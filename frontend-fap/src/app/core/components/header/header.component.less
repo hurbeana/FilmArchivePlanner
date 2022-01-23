@@ -5,6 +5,8 @@ core-header:host {
   flex-flow: column;
 }
 
+
+
 core-header:host .main-toolbar {
   //background-color: #0a58ca;
   //color: white;
@@ -30,4 +32,27 @@ core-header:host .main-sidenav {
 
 .header-logo-img:hover {
   cursor: pointer;
+}
+
+.toolbar-title{
+  width: 350px;
+}
+
+.btn{
+  height: inherit;
+  border: 0;
+  border-radius: 0px;
+  font-weight: normal;
+  width: 100px;
+  text-align: center;
+  color: @accent-color;
+  background-color: transparent;
+  transition: 0.2s;
+}
+.btn:hover{
+  background-color: #f8f8f8;
+  filter: brightness(100%);
+}
+.page-link:checked{
+    background-color: transparent;
 }
