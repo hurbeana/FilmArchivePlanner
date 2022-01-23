@@ -9,6 +9,7 @@ import {
 } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEvent } from 'angular-calendar';
 import {
+  addDays,
   addHours,
   addMinutes,
   setDate,
@@ -27,6 +28,7 @@ import {
 import { Observable } from 'rxjs';
 import { Movie } from '../../../movies/models/movie';
 import { EventService } from '../../services/event.service';
+import { MovieService } from '../../../movies/services/movie.service';
 
 //TODO: move adapters to global
 
@@ -128,6 +130,7 @@ export class EditEventModalComponent implements OnInit {
   constructor(
     public modal: NgbActiveModal,
     private eventService: EventService,
+    private movieService: MovieService,
   ) {}
 
   eventForm: FormGroup;
@@ -181,7 +184,19 @@ export class EditEventModalComponent implements OnInit {
         this.eventForm.get('eventLocation')?.value;
       this.event.meta.movie = { id: this.eventForm.get('movie')?.value };
       this.event.meta.type = this.eventForm.get('type')?.value;
-      this.modal.close(this.event);
+      if (this.event.meta.movie) {
+        this.movieService
+          .getMovie(this.event.meta.movie.id)
+          .toPromise()
+          .then((movie) => {
+            const newEndTime = addMinutes(startTime, movie.duration);
+            this.event.end = this.mergeDateTime(endDate, newEndTime);
+
+            this.modal.close(this.event);
+          });
+      } else {
+        this.modal.close(this.event);
+      }
     }
   }
 
