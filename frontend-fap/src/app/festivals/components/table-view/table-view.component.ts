@@ -117,6 +117,18 @@ export class TableViewComponent implements AfterViewInit {
       });
   }
 
+  formatDate(d: string): string {
+    return (
+      d.substr(8, 2) +
+      '.' +
+      d.substr(5, 2) +
+      '.' +
+      d.substr(0, 4) +
+      ', ' +
+      d.substr(11, 5)
+    );
+  }
+
   ngOnDestroy() {
     // executed on routing --> get rid of stale entries
     this.store.dispatch(

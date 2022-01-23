@@ -152,6 +152,18 @@ export class TableViewComponent implements AfterViewInit {
     this.loadTags();
   }
 
+  formatDate(d: string): string {
+    return (
+      d.substr(8, 2) +
+      '.' +
+      d.substr(5, 2) +
+      '.' +
+      d.substr(0, 4) +
+      ', ' +
+      d.substr(11, 5)
+    );
+  }
+
   getTagTypeClass(type: string) {
     return {
       tag_animation: type === 'Animation',

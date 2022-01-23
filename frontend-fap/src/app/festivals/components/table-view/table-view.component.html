@@ -7,32 +7,32 @@
   <table class="table">
     <thead>
       <tr>
-        <th scope="col" style="width: 15%" sortable="name" (sort)="onSort($event)">
+        <th scope="col" style="width: 20%" sortable="name" (sort)="onSort($event)">
           <div class="header-value" i18n>
             Name
             <div class="arrow"></div>
           </div>
         </th>
-        <th scope="col" style="width: 15%">
+        <th scope="col" style="width: 20%">
           <div class="header-value" i18n>
             Location
             <div class="arrow"></div>
           </div>
         </th>
-        <th scope="col" style="width: 10%">
+        <th scope="col" style="width: 20%">
           <div class="header-value" i18n>
             Year
             <div class="arrow"></div>
           </div>
         </th>
-        <th scope="col" style="width: 10%" sortable="created_at" (sort)="onSort($event)">
+        <th scope="col" style="width: 20%" sortable="created_at" (sort)="onSort($event)">
           <div class="header-value" i18n>
             Created at
             <div class="arrow"></div>
           </div>
         </th>
         <th scope="col">
-          <div class="header-value" i18n>Actions</div>
+          <div class="header-value header-value-right" i18n>Actions</div>
         </th>
       </tr>
     </thead>
@@ -49,7 +49,7 @@
           <ngb-highlight [result]="festival.firstDate?.getFullYear()?.toString()" [term]="searchTerm"></ngb-highlight>
         </td>
         <td>
-          <ngb-highlight [result]="festival.created_at"></ngb-highlight>
+          <ngb-highlight [result]="formatDate(festival.created_at)"></ngb-highlight>
         </td>
         <td class="actions">
           <!-- view -->

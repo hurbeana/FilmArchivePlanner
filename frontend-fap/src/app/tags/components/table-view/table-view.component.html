@@ -28,7 +28,7 @@
           </div>
         </th>
         <th scope="col">
-          <div class="header-value" i18n>Actions</div>
+          <div class="header-value header-value-right" i18n>Actions</div>
         </th>
       </tr>
     </thead>
@@ -44,7 +44,7 @@
           </span>
         </td>
         <td>
-          <ngb-highlight [result]="tag.created_at"></ngb-highlight>
+          <ngb-highlight [result]="formatDate(tag.created_at)"></ngb-highlight>
         </td>
         <td>
           <div class="actions">
