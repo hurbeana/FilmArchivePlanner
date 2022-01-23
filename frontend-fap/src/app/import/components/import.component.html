@@ -19,7 +19,7 @@
       <div class="feedback invalid-feedback">{{ directorsErrorMessage }}</div>
     </div>
     <div class="col-md-4">
-      <button type="button" class="btn btn-primary btn-sm" (click)="formFileDirectors.value = ''; isDirectorsSubmitted = false">
+      <button type="button" class="btn btn-primary btn-sm" (click)="formFileDirectors.value = ''; clearInput('directors')">
         <i-bs class="x" name="x"></i-bs>
       </button>
     </div>
@@ -43,7 +43,7 @@
       <div class="feedback invalid-feedback">{{ tagsErrorMessage }}</div>
     </div>
     <div class="col-md-4">
-      <button type="button" class="btn btn-primary btn-sm" (click)="formFileTags.value = ''; isTagsSubmitted = false">
+      <button type="button" class="btn btn-primary btn-sm" (click)="formFileTags.value = ''; clearInput('tags')">
         <i-bs class="x" name="x"></i-bs>
       </button>
     </div>
@@ -67,7 +67,7 @@
       <div class="feedback invalid-feedback">{{ contactsErrorMessage }}</div>
     </div>
     <div class="col-md-4">
-      <button type="button" class="btn btn-primary btn-sm" (click)="formFileContacts.value = ''; isContactsSubmitted = false">
+      <button type="button" class="btn btn-primary btn-sm" (click)="formFileContacts.value = ''; clearInput('contacts')">
         <i-bs class="x" name="x"></i-bs>
       </button>
     </div>
@@ -92,7 +92,7 @@
       <div class="feedback invalid-feedback">{{ moviesErrorMessage }}</div>
     </div>
     <div class="col-md-4">
-      <button type="button" class="btn btn-primary btn-sm" (click)="formFileMovies.value = ''; isMoviesSubmitted = false">
+      <button type="button" class="btn btn-primary btn-sm" (click)="formFileMovies.value = ''; clearInput('movies')">
         <i-bs class="x" name="x"></i-bs>
       </button>
     </div>

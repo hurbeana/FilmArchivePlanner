@@ -117,9 +117,11 @@ export class ImportComponent implements OnInit {
       console.log(`[ImportComponent] - Importing ${type}`);
       await this.http.post(`${api}/${type}`, this.files.get(type)).toPromise();
       this.setValid(type, true);
+      this.setSubmitted(type, true);
     } catch (e) {
       console.error(`[ImportComponent] - importing ${type} failed`, e.error);
       this.setValid(type, false);
+      this.setSubmitted(type, true);
       this.setErrorMessage(type, e.error.message);
     }
   }
@@ -128,19 +130,32 @@ export class ImportComponent implements OnInit {
     switch (type) {
       case this.directors:
         this.isDirectorsValid = isValid;
-        this.isDirectorsSubmitted = true;
         break;
       case this.tags:
         this.isTagsValid = isValid;
-        this.isTagsSubmitted = true;
         break;
       case this.contacts:
         this.isContactsValid = isValid;
-        this.isContactsSubmitted = true;
         break;
       case this.movies:
         this.isMoviesValid = isValid;
-        this.isMoviesSubmitted = true;
+        break;
+    }
+  }
+
+  private setSubmitted(type: string, isSubmitted: boolean) {
+    switch (type) {
+      case this.directors:
+        this.isDirectorsSubmitted = isSubmitted;
+        break;
+      case this.tags:
+        this.isTagsSubmitted = isSubmitted;
+        break;
+      case this.contacts:
+        this.isContactsSubmitted = isSubmitted;
+        break;
+      case this.movies:
+        this.isMoviesSubmitted = isSubmitted;
         break;
     }
   }
@@ -165,5 +180,10 @@ export class ImportComponent implements OnInit {
   private async sendClearCacheRequest() {
     console.log(`[ImportComponent] - Sending clear cache request`);
     await this.http.delete(`${api}/cache`).toPromise();
+  }
+
+  clearInput(type: string) {
+    this.files.delete(type);
+    this.setSubmitted(type, false);
   }
 }
