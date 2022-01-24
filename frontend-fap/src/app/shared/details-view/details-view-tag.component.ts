@@ -26,6 +26,7 @@ import { Tag } from '../../tags/models/tag';
       ></shared-tag-input>
     </form>
 
+    <!--
     <span class="mat-primary label-colon" i18n>User</span>
     <input
       type="text"
@@ -40,7 +41,7 @@ import { Tag } from '../../tags/models/tag';
       class="form-control form-control-sm"
       readonly
       [value]="tag?.public ? 'Yes' : 'No'"
-    />
+    /> -->
   `,
 })
 export class DetailsViewTagComponent {
