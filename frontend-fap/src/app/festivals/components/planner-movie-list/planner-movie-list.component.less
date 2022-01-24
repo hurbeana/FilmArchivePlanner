@@ -1,14 +1,16 @@
+@import "/src/styles.config";
+
 .movie-list-container {
   display: flex;
   flex-direction: column;
-  height: 100%;
-  padding: 0.5rem;
+  margin: 0.5rem;
 }
 
-.movie-list-content{
-  flex-grow: 1;
-  overflow-y: scroll;
-
+.drag-active{
+  background-color: @accent-color;
+  color: @font-color;
+  border-radius: 10px;
+  padding: 10px;
 }
 
 .movie-list-header {

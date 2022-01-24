@@ -6,7 +6,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { fromEvent, Observable, of, Subject } from 'rxjs';
+import { fromEvent, Observable } from 'rxjs';
 import { Movie } from '../../../movies/models/movie';
 import * as MovieSelectors from '../../../movies/state/movies.selectors';
 import { Store } from '@ngrx/store';
@@ -17,22 +17,13 @@ import {
   distinctUntilChanged,
   filter,
   map,
-  pairwise,
-  takeUntil,
   tap,
-  throttleTime,
 } from 'rxjs/operators';
 import { Actions, ofType } from '@ngrx/effects';
-import {
-  createMovieFailed,
-  getMoviesAdvanced,
-  getMoviesSuccess,
-  updateMovieFailed,
-} from '../../../movies/state/movies.actions';
+import { getMoviesSuccess } from '../../../movies/state/movies.actions';
 import { MoviesState } from '../../../app.state';
 import { Tag } from 'src/app/tags/models/tag';
 import { CalendarEvent } from 'angular-calendar';
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
 @Component({
@@ -68,8 +59,6 @@ export class PlannerMovieListComponent implements OnInit, AfterViewInit {
   @ViewChild('searchStringField', { static: true })
   searchStringField: ElementRef;
 
-  @ViewChild('scroller') scroller: CdkVirtualScrollViewport;
-
   @ViewChild('movieSelectionTagInput', { static: true })
   movieSelectionTagInput: ElementRef;
 
@@ -77,12 +66,11 @@ export class PlannerMovieListComponent implements OnInit, AfterViewInit {
   movieSearchString: string;
 
   page = 1;
-  limit = 10;
+  limit = 50;
 
-  itemsPerPage = 10;
-  itemSize = 50;
-
-  ngOnInit() {}
+  ngOnInit() {
+    this.loadMovies();
+  }
 
   mapEventFestivalToCalendar(movie: Movie): CalendarEvent {
     return {
@@ -106,47 +94,19 @@ export class PlannerMovieListComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.scroller
-      .elementScrolled()
-      .pipe(
-        map(() => this.scroller.measureScrollOffset('bottom')),
-        pairwise(),
-        filter(([y1, y2]) => y2 < y1 && y2 < 140),
-        throttleTime(200),
-      )
-      .subscribe(() => {
-        this.ngZone.run(() => {
-          if (!this.loading.value) {
-            //we have to lock this function until the last load is executed compleltly
-            this.limit += this.itemsPerPage;
-            this.loadMovies();
-          }
-        });
-      });
     fromEvent(this.searchStringField.nativeElement, 'keyup')
       .pipe(
         filter((value) => !!value),
         debounceTime(200),
         distinctUntilChanged(),
         tap(() => {
-          this.limit = this.itemsPerPage;
-          this.scroller.scrollToIndex(0, 'smooth');
           this.loadMovies();
         }),
       )
       .subscribe();
-    setTimeout(() => {
-      this.itemsPerPage = Math.ceil(
-        this.scroller.getViewportSize() / this.itemSize,
-      );
-      this.limit = this.itemsPerPage;
-      this.loadMovies();
-    }, 100);
   }
 
   tagsChange() {
-    this.scroller.scrollToIndex(0, 'smooth');
-    this.limit = this.itemsPerPage;
     this.loadMovies();
   }
 
@@ -186,7 +146,6 @@ export class PlannerMovieListComponent implements OnInit, AfterViewInit {
   clearSearchFields() {
     this.movieSearchString = '';
     this.movieSelectionTag = null;
-    this.limit = this.itemsPerPage;
     this.loadMovies();
   }
 }
