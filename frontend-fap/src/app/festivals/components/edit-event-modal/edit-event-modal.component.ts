@@ -185,7 +185,7 @@ export class EditEventModalComponent implements OnInit {
         this.eventForm.get('eventLocation')?.value ?? '';
       this.event.meta.movie = { id: this.eventForm.get('movie')?.value };
       this.event.meta.type = this.eventForm.get('type')?.value;
-      if (this.event.meta.movie) {
+      if (this.eventForm.get('movie') && this.event.meta.movie.id) {
         this.movieService
           .getMovie(this.event.meta.movie.id)
           .toPromise()
