@@ -43,6 +43,7 @@ import { VimeModule } from '@vime/angular';
 import { AdvancedSearchViewComponent } from './components/advanced-search-view/advanced-search-view.component';
 import { ConfirmDeleteMovieModalComponent } from './components/table-view/confirm-delete-movie-modal.component';
 import { NgxBootstrapIconsModule } from 'ngx-bootstrap-icons';
+import { DurationFormatPipe } from '../shared/pipes/duration-format.pipe';
 
 @NgModule({
   declarations: [
@@ -93,6 +94,7 @@ import { NgxBootstrapIconsModule } from 'ngx-bootstrap-icons';
     VimeModule,
     NgxBootstrapIconsModule,
   ],
+  providers: [DurationFormatPipe],
 })
 /* Movie Module contains everything related to movies */
 export class MoviesModule {

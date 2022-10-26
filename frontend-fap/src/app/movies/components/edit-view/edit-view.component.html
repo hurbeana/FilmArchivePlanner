@@ -61,14 +61,15 @@
             </div>
           </div>
           <div class="row">
-            <p class="description" i18n>Duration in Minutes</p>
+            <p class="description" i18n>Duration</p>
             <input
-              type="number"
+              type="text"
               name="duration"
               class="form-control form-control-sm text-field"
               placeholder="Enter Duration"
               formControlName="duration"
               required
+              [ngModel]="movie.duration | durationFormat"
               [ngClass]="{ 'is-invalid': formIsSubmitted && this.moviesForm.controls['duration'].errors }" />
           </div>
           <div class="row invalid-feedback-row">

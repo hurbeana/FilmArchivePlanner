@@ -43,6 +43,7 @@ import { DirectorReference } from 'src/app/directors/models/director-ref';
 import { createLoadingItem } from '../../../core/loading-item-state/loading.items.actions';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { TagInputComponent } from '../../../shared/components/tag-input/tag-input.component';
+import { DurationFormatPipe } from '../../../shared/pipes/duration-format.pipe';
 
 @Component({
   selector: 'app-edit-view',
@@ -83,8 +84,7 @@ export class EditViewComponent implements OnInit {
       this.customNumberValidator2(),
     ]),
     duration: new FormControl('', [
-      Validators.min(0),
-      this.customNumberValidator(),
+      this.customDurationValidator(),
       Validators.required,
     ]),
     animationTechniques: new FormControl([]),
@@ -163,6 +163,15 @@ export class EditViewComponent implements OnInit {
     };
   }
 
+  customDurationValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const rexexp = new RegExp('^[0-9]{1,3}:[0-9]{2}$');
+      return rexexp.test(control.value)
+        ? { required: { value: control.value } }
+        : null;
+    };
+  }
+
   customContactValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       console.log(control.value);
@@ -180,6 +189,7 @@ export class EditViewComponent implements OnInit {
     private router: Router,
     private directorService: DirectorService,
     private contactService: ContactService,
+    private durationFormatPipe: DurationFormatPipe
   ) {
     /* Fetch lists for dropdowns */
     this.directors = this.directorService.getAllDirectorsAsReferences();
@@ -354,7 +364,7 @@ export class EditViewComponent implements OnInit {
           originalTitle: '',
           englishTitle: '',
           directors: [],
-          duration: NaN, // 0
+          duration: 0, // 0
           germanSynopsis: '',
           englishSynopsis: '',
           created_at: new Date(),
@@ -391,11 +401,13 @@ export class EditViewComponent implements OnInit {
 
   onSubmit() {
     if (this.moviesForm.valid) {
+      this.movie.duration = this.durationFormatPipe.transform(this.moviesForm.value.duration);
       // update
       console.log(this.movie);
       console.log('FORM', this.moviesForm.value);
 
       this.moviesForm.patchValue({
+        duration: this.movie.duration,
         countriesOfProduction: this.movie.countriesOfProduction,
         animationTechniques: this.movie.animationTechniques,
         submissionCategories: this.movie.submissionCategories,
