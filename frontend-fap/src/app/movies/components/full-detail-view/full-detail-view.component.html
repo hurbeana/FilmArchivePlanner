@@ -60,7 +60,7 @@
       </div>
       <div>
         <span class="mat-subheading-2 text-bold" i18n>Directors</span>
-        <div *ngFor="let director of movie?.directors">{{ director.fullName }},</div>
+        <div *ngFor="let director of movie?.directors; let i = index">{{ director.fullName }}{{i === movie?.directors!.length -1 ? '' : ',&nbsp;' }}</div>
       </div>
       <div>
         <span class="mat-subheading-2 text-bold" i18n>Countries of Production</span> <span>{{ printTags(movie?.countriesOfProduction) }}</span>
