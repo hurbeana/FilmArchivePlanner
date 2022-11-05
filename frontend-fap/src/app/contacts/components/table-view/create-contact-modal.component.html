@@ -68,10 +68,7 @@
           [ngClass]="{
             'is-invalid': visible && (contactForm.submitted || enterSubmit) && (mail.invalid || emailInvalid)
           }"
-          required />
-        <div class="invalid-feedback" *ngIf="(contactForm.submitted || enterSubmit) && mail.invalid">
-          <p *ngIf="visible && mail.errors?.required">E-mail is required</p>
-        </div>
+           />
         <div class="invalid-feedback" *ngIf="(contactForm.submitted || enterSubmit) && emailInvalid">
           <p *ngIf="visible && emailInvalid && !mail.invalid">E-mail is not valid</p>
         </div>
@@ -90,10 +87,7 @@
           [ngClass]="{
             'is-invalid': visible && (contactForm.submitted || enterSubmit) && phone.invalid
           }"
-          required />
-        <div class="invalid-feedback" *ngIf="(contactForm.submitted || enterSubmit) && phone.invalid">
-          <p *ngIf="visible && phone.errors?.required">Phonenumber is required</p>
-        </div>
+          />
       </div>
     </div>
     <div class="form-group row">
@@ -109,10 +103,7 @@
           [ngClass]="{
             'is-invalid': visible && (contactForm.submitted || enterSubmit) && website.invalid
           }"
-          required />
-        <div class="invalid-feedback" *ngIf="(contactForm.submitted || enterSubmit) && website.invalid">
-          <p *ngIf="visible && website.errors?.required">Website is required</p>
-        </div>
+          />
       </div>
     </div>
   </div>

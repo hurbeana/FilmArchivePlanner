@@ -41,7 +41,6 @@ export class ContactsService extends TypeOrmCrudService<Contact> {
    * @returns {Promise<ContactDto>} The created contact, including id and timestamps
    */
   async create(createContactDto: CreateUpdateContactDto): Promise<ContactDto> {
-    await this.validateEmailAndPhone(createContactDto);
     await this.checkIfReferencedTagExists(createContactDto.type);
     const contactParam = this.contactRepository.create(createContactDto);
     const createdContact = await this.contactRepository.save(contactParam);
@@ -94,7 +93,6 @@ export class ContactsService extends TypeOrmCrudService<Contact> {
     id: number,
     updateContactDto: CreateUpdateContactDto,
   ): Promise<ContactDto> {
-    await this.validateEmailAndPhone(updateContactDto);
     await this.checkIfReferencedTagExists(updateContactDto.type);
     try {
       await this.contactRepository.findOneOrFail({ where: { id } });
@@ -145,17 +143,6 @@ export class ContactsService extends TypeOrmCrudService<Contact> {
 
   private mapContactToDto(contact: Contact): ContactDto {
     return this.mapper.map(contact, ContactDto, Contact);
-  }
-
-  private async validateEmailAndPhone(contact: CreateUpdateContactDto) {
-    if (!contact.email && !contact.phone) {
-      this.logger.error(
-        `Creating/updating contact ${contact.name} without email and phone failed. At least one must be defined.`,
-      );
-      throw new BadRequestException(
-        `Contact ${contact.name} must have a phone or an email.`,
-      );
-    }
   }
 
   private async checkIfReferencedTagExists(tag: TagReferenceDto) {
