@@ -151,7 +151,7 @@
         <note category="location">src/app/movies/components/details-view/details-view.component.html:39</note>
       </notes>
       <segment>
-        <source>Submission Category</source>
+        <source>Category</source>
         <target>Einreichungskategorie</target>
       </segment>
     </unit>

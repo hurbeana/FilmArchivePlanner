@@ -252,7 +252,7 @@ import { Subscription } from 'rxjs';
         value="{{ movie?.englishSynopsis }}"
       />
 
-      <span class="mat-primary label-colon" i18n>Submission Categories</span>
+      <span class="mat-primary label-colon" i18n>Categories</span>
       <form
         #dummyForm="ngForm"
         *ngIf="movie?.submissionCategories; else emptyInput"
