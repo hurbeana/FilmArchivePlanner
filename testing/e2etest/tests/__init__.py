@@ -26,7 +26,8 @@ def cache_file(file_path: Path):
     ]
     headers = {}
 
-    r = post(f"{base_url}/files/cache", headers=headers, data=payload, files=files)
+    r = post(f"{base_url}/files/cache",
+             headers=headers, data=payload, files=files)
     r.raise_for_status()
     return {"id": r.json()["id"]}
 
@@ -89,7 +90,6 @@ def create_movie(director, contact):
             "movieFiles": [cache_file(scp)],
             "dcpFiles": [cache_file(scp)],
             "previewFile": cache_file(scp),
-            "trailerFile": cache_file(scp),
             "stillFiles": [cache_file(scp)],
             "subtitleFiles": [cache_file(scp)],
             "directors": [{"id": director["id"]}],

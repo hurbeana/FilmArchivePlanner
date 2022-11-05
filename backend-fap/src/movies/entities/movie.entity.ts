@@ -19,7 +19,6 @@ import {
   MovieFile,
   DCPFile,
   PreviewFile,
-  TrailerFile,
   StillFile,
   SubtitleFile,
 } from './moviefiles.entity';
@@ -61,10 +60,6 @@ export class Movie {
   @AutoMap({ typeFn: () => PreviewFile })
   @OneToOne(() => PreviewFile, (file) => file.movie, { eager: true })
   previewFile?: PreviewFile;
-
-  @AutoMap({ typeFn: () => TrailerFile })
-  @OneToOne(() => TrailerFile, (file) => file.movie, { eager: true })
-  trailerFile?: TrailerFile;
 
   @AutoMap({ typeFn: () => StillFile })
   @OneToMany(() => StillFile, (file) => file.movie)

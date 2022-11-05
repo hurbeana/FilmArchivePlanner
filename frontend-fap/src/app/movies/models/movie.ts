@@ -10,7 +10,6 @@ export interface Movie {
   movieFiles?: FileDto[];
   dcpFiles?: FileDto[];
   previewFile?: FileDto;
-  trailerFile?: FileDto;
   stillFiles?: FileDto[];
   subtitleFiles?: FileDto[];
   directors: DirectorReference[];

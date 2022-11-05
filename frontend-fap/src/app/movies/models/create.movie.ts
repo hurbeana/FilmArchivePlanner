@@ -15,7 +15,6 @@ export interface CreateUpdateMovieDto {
   englishTitle: string;
   movieFiles: string;
   previewFile?: string;
-  trailerFile?: string;
   stillFiles: Array<string>;
   subtitleFiles?: Array<string>;
   directors: Array<number>;

@@ -47,10 +47,6 @@
         <app-file-display [file]="movie.previewFile" [fileType]="fileTypes.previewFile" (playClicked)="play($event)" *ngIf="movie.previewFile"></app-file-display>
       </div>
       <div>
-        <span class="mat-subheading-2 text-bold" i18n>Trailer File</span>
-        <app-file-display [file]="movie.trailerFile" [fileType]="fileTypes.trailerFile" (playClicked)="play($event)" *ngIf="movie.trailerFile"></app-file-display>
-      </div>
-      <div>
         <span class="mat-subheading-2 text-bold" i18n>Still File</span>
         <app-file-display [file]="file" [fileType]="fileTypes.stillFiles" *ngFor="let file of movie?.stillFiles"></app-file-display>
       </div>

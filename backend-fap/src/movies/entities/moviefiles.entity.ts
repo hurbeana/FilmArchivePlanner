@@ -22,13 +22,6 @@ export class PreviewFile extends File {
 }
 
 @Entity()
-export class TrailerFile extends File {
-  @OneToOne(() => Movie, (movie) => movie.trailerFile)
-  @JoinColumn()
-  movie: Movie;
-}
-
-@Entity()
 export class StillFile extends File {
   @ManyToOne(() => Movie, (movie) => movie.stillFiles, { eager: true })
   movie: Movie;

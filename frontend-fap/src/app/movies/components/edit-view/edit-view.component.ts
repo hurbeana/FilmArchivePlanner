@@ -73,7 +73,6 @@ export class EditViewComponent implements OnInit {
     movieFiles: new FormArray([]),
     dcpFiles: new FormArray([]),
     previewFile: new FormGroup({}),
-    trailerFile: new FormGroup({}),
     stillFiles: new FormArray([]),
     subtitleFiles: new FormArray([]),
     directors: new FormControl([], [Validators.required]),
@@ -268,41 +267,7 @@ export class EditViewComponent implements OnInit {
         this.fillFilesFormGroup('dcpFiles', movie.dcpFiles);
         this.fillFilesFormGroup('subtitleFiles', movie.subtitleFiles);
         this.fillFilesFormGroup('stillFiles', movie.stillFiles);
-        /*this.fillFilesFormGroup(
-          'trailerFile',
-          movie.trailerFile ? [movie.trailerFile] : [],
-        );
-        this.fillFilesFormGroup(
-          'previewFile',
-          movie.previewFile ? [movie.previewFile] : [],
-        );
 
-         */
-        /*
-        if (movie.directors) {
-          (this.moviesForm.controls['directors'] as FormGroup).addControl(
-            'directors',
-            new FormControl(''),
-          );
-        }*/
-        if (movie.trailerFile) {
-          (this.moviesForm.controls['trailerFile'] as FormGroup).addControl(
-            'id',
-            new FormControl(''),
-          );
-          (this.moviesForm.controls['trailerFile'] as FormGroup).addControl(
-            'path',
-            new FormControl(''),
-          );
-          (this.moviesForm.controls['trailerFile'] as FormGroup).addControl(
-            'mimetype',
-            new FormControl(''),
-          );
-          (this.moviesForm.controls['trailerFile'] as FormGroup).addControl(
-            'filename',
-            new FormControl(''),
-          );
-        }
         if (movie.previewFile) {
           (this.moviesForm.controls['previewFile'] as FormGroup).addControl(
             'id',
@@ -360,7 +325,6 @@ export class EditViewComponent implements OnInit {
           stillFiles: [],
           submissionCategories: [],
           subtitleFiles: [],
-          trailerFile: undefined,
           yearOfProduction: undefined,
           id: NaN,
           originalTitle: '',

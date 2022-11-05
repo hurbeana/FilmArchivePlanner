@@ -152,7 +152,6 @@ export class ImportService {
       object.movieFiles = null;
       object.dcpFiles = null;
       object.previewFile = null;
-      object.trailerFile = null;
       object.stillFiles = null;
       object.subtitleFiles = null;
 

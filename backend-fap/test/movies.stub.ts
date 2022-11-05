@@ -8,7 +8,6 @@ export const moviesListStub = (): Array<Movie> => {
       englishTitle: 'Titanic',
       movieFile: '/path/to/some/movieFile.mov',
       previewFile: '/path/to/some/previewFile.mov',
-      trailerFile: '/path/to/some/trailerFile.mov',
       stillFiles: [
         '/path/to/some/stillFile1.mov',
         '/path/to/some/stillFile2.mov',
@@ -45,7 +44,6 @@ export const moviesListStub = (): Array<Movie> => {
       englishTitle: 'Fight Club',
       movieFile: '/path/to/some/otherMovieFile.mov',
       previewFile: '/path/to/some/otherPreviewFile.mov',
-      trailerFile: '/path/to/some/otherTrailerFile.mov',
       stillFiles: ['/path/to/some/fight.mov', '/path/to/some/club.mov'],
       subtitleFiles: ['/path/to/some/subtitleFolder'],
       directors: ['David Fincher'],
@@ -88,7 +86,6 @@ export const moviesListStub = (): Array<Movie> => {
       englishTitle: 'Pulp Fiction',
       movieFile: '/path/to/some/movieFile.mov',
       previewFile: '/path/to/some/previewFile.mov',
-      trailerFile: '/path/to/some/trailerFile.mov',
       stillFiles: [
         '/path/to/some/stillFile1.mov',
         '/path/to/some/stillFile2.mov',
@@ -125,7 +122,6 @@ export const moviesListStub = (): Array<Movie> => {
       englishTitle: 'Seven',
       movieFile: '/path/to/some/movieFile.mov',
       previewFile: '/path/to/some/previewFile.mov',
-      trailerFile: '/path/to/some/trailerFile.mov',
       stillFiles: [
         '/path/to/some/stillFile1.mov',
         '/path/to/some/stillFile2.mov',
@@ -162,7 +158,6 @@ export const moviesListStub = (): Array<Movie> => {
       englishTitle: 'Matrix',
       movieFile: '/path/to/some/Matrix.mov',
       previewFile: '/path/to/some/Matrix.mov',
-      trailerFile: '/path/to/some/Matrix.mov',
       stillFiles: ['/path/to/some/Matrix.mov', '/path/to/some/Matrix2.mov'],
       subtitleFiles: ['/path/to/some/subtitleFolder'],
       directors: ['James Cameron'],
@@ -196,7 +191,6 @@ export const moviesListStub = (): Array<Movie> => {
       englishTitle: 'Dark Knight',
       movieFile: '/path/to/some/Knight.mov',
       previewFile: '/path/to/some/Knight.mov',
-      trailerFile: '/path/to/some/Knight.mov',
       stillFiles: ['/path/to/some/Knight.mov', '/path/to/some/stillFile2.mov'],
       subtitleFiles: ['/path/to/some/subtitleFolder'],
       directors: ['James Cameron'],
@@ -230,7 +224,6 @@ export const moviesListStub = (): Array<Movie> => {
       englishTitle: 'Forrest Gump',
       movieFile: '/path/to/some/movieFile.mov',
       previewFile: '/path/to/some/previewFile.mov',
-      trailerFile: '/path/to/some/trailerFile.mov',
       stillFiles: [
         '/path/to/some/stillFile1.mov',
         '/path/to/some/stillFile2.mov',
@@ -267,7 +260,6 @@ export const moviesListStub = (): Array<Movie> => {
       englishTitle: 'The Shawshank Redemtion',
       movieFile: '/path/to/some/shaw.mov',
       previewFile: '/path/to/some/shaw.mov',
-      trailerFile: '/path/to/some/trailerShaw.mov',
       stillFiles: [
         '/path/to/some/trailerShaw1.mov',
         '/path/to/some/trailerShaw2.mov',
@@ -304,7 +296,6 @@ export const moviesListStub = (): Array<Movie> => {
       englishTitle: 'Inglorious Basterds',
       movieFile: '/path/to/some/movieFile.mov',
       previewFile: '/path/to/some/previewFile.mov',
-      trailerFile: '/path/to/some/trailerFile.mov',
       stillFiles: [
         '/path/to/some/stillFile1.mov',
         '/path/to/some/stillFile2.mov',
@@ -341,7 +332,6 @@ export const moviesListStub = (): Array<Movie> => {
       englishTitle: 'Django Unchained',
       movieFile: '/path/to/some/movieFile.mov',
       previewFile: '/path/to/some/previewFile.mov',
-      trailerFile: '/path/to/some/trailerFile.mov',
       stillFiles: [
         '/path/to/some/stillFile1.mov',
         '/path/to/some/stillFile2.mov',
@@ -378,7 +368,6 @@ export const moviesListStub = (): Array<Movie> => {
       englishTitle: 'Django Unchained',
       movieFile: '/path/to/some/movieFile.mov',
       previewFile: '/path/to/some/previewFile.mov',
-      trailerFile: '/path/to/some/trailerFile.mov',
       stillFiles: [
         '/path/to/some/stillFile1.mov',
         '/path/to/some/stillFile2.mov',
@@ -415,7 +404,6 @@ export const moviesListStub = (): Array<Movie> => {
       englishTitle: 'Django Unchained',
       movieFile: '/path/to/some/movieFile.mov',
       previewFile: '/path/to/some/previewFile.mov',
-      trailerFile: '/path/to/some/trailerFile.mov',
       stillFiles: [
         '/path/to/some/stillFile1.mov',
         '/path/to/some/stillFile2.mov',
@@ -452,7 +440,6 @@ export const moviesListStub = (): Array<Movie> => {
       englishTitle: 'Django Unchained',
       movieFile: '/path/to/some/movieFile.mov',
       previewFile: '/path/to/some/previewFile.mov',
-      trailerFile: '/path/to/some/trailerFile.mov',
       stillFiles: [
         '/path/to/some/stillFile1.mov',
         '/path/to/some/stillFile2.mov',
@@ -489,7 +476,6 @@ export const moviesListStub = (): Array<Movie> => {
       englishTitle: 'Django Unchained',
       movieFile: '/path/to/some/movieFile.mov',
       previewFile: '/path/to/some/previewFile.mov',
-      trailerFile: '/path/to/some/trailerFile.mov',
       stillFiles: [
         '/path/to/some/stillFile1.mov',
         '/path/to/some/stillFile2.mov',

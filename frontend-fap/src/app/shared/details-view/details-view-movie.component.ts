@@ -80,15 +80,6 @@ import { Subscription } from 'rxjs';
         </div>
       </div>
 
-      <span class="mat-primary label-colon" i18n>Trailer File</span>
-      <div *ngIf="movie?.trailerFile; else emptyInput">
-        <div type="text" class="form-control form-control-sm disabled">
-          <a href="{{ getDownloadLink('trailer_file', movie?.trailerFile) }}">
-            {{ printFile(movie?.trailerFile) }}
-          </a>
-        </div>
-      </div>
-
       <span class="mat-primary label-colon" i18n>Still Files</span>
       <div
         *ngIf="

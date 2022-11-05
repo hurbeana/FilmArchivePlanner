@@ -22,7 +22,6 @@ import {
   MovieFile,
   DCPFile,
   PreviewFile,
-  TrailerFile,
   StillFile,
   SubtitleFile,
 } from './entities/moviefiles.entity';
@@ -109,10 +108,6 @@ describe('MoviesController', () => {
         },
         {
           provide: getRepositoryToken(PreviewFile),
-          useClass: Repository,
-        },
-        {
-          provide: getRepositoryToken(TrailerFile),
           useClass: Repository,
         },
         {

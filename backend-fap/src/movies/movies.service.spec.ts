@@ -24,7 +24,6 @@ import {
   PreviewFile,
   StillFile,
   SubtitleFile,
-  TrailerFile,
 } from './entities/moviefiles.entity';
 import { FILES_PERSISTENCY_PROVIDER } from '../files/files.constants';
 import {
@@ -123,10 +122,6 @@ describe('MoviesService', () => {
         },
         {
           provide: getRepositoryToken(PreviewFile),
-          useClass: Repository,
-        },
-        {
-          provide: getRepositoryToken(TrailerFile),
           useClass: Repository,
         },
         {

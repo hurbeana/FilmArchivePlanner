@@ -93,7 +93,7 @@ export class ConfirmDeleteMovieModalComponent {
       .getMovie(this.movieToDelete.id)
       .toPromise()
       .then((movie) => {
-        const movieHasFiles = [movie.previewFile, movie.trailerFile].some(
+        const movieHasFiles = [movie.previewFile].some(
           (f) => f !== null,
         );
 

@@ -9,7 +9,6 @@ import {
   PreviewFile,
   StillFile,
   SubtitleFile,
-  TrailerFile,
 } from './entities/moviefiles.entity';
 import { Movie } from './entities/movie.entity';
 import { Global, Module } from '@nestjs/common';
@@ -30,7 +29,6 @@ import { Tag } from '../tags/entities/tag.entity';
       MovieFile,
       DCPFile,
       PreviewFile,
-      TrailerFile,
       StillFile,
       SubtitleFile,
       Director,

@@ -50,7 +50,6 @@ import {
   PreviewFile,
   StillFile,
   SubtitleFile,
-  TrailerFile,
 } from './entities/moviefiles.entity';
 import { join } from 'path';
 import { MOVIEROOTFOLDER } from './movies.constants';
@@ -71,8 +70,6 @@ export class MoviesService {
     private dcpFilesRepository: Repository<DCPFile>,
     @InjectRepository(PreviewFile)
     private previewFilesRepository: Repository<PreviewFile>,
-    @InjectRepository(TrailerFile)
-    private trailerFilesRepository: Repository<TrailerFile>,
     @InjectRepository(StillFile)
     private stillFilesRepository: Repository<StillFile>,
     @InjectRepository(SubtitleFile)
@@ -95,7 +92,6 @@ export class MoviesService {
     this.mapper.createMap(MovieFile, FileDto);
     this.mapper.createMap(DCPFile, FileDto);
     this.mapper.createMap(PreviewFile, FileDto);
-    this.mapper.createMap(TrailerFile, FileDto);
     this.mapper.createMap(StillFile, FileDto);
     this.mapper.createMap(SubtitleFile, FileDto);
   }
@@ -120,7 +116,6 @@ export class MoviesService {
         createUpdateMovieDto.movieFiles,
         createUpdateMovieDto.dcpFiles,
         createUpdateMovieDto.previewFile,
-        createUpdateMovieDto.trailerFile,
         createUpdateMovieDto.stillFiles,
         createUpdateMovieDto.subtitleFiles,
       )
@@ -220,14 +215,6 @@ export class MoviesService {
         MovieFilesFolder.PREVIEWFILE,
       )
     )[0];
-    const trailerFile = (
-      await commitFiles<TrailerFile>(
-        basePath,
-        [createUpdateMovieDto.trailerFile],
-        this.trailerFilesRepository,
-        MovieFilesFolder.TRAILERFILE,
-      )
-    )[0];
     const stillFiles = await commitFiles<StillFile>(
       basePath,
       createUpdateMovieDto.stillFiles,
@@ -247,7 +234,6 @@ export class MoviesService {
       movieFiles,
       dcpFiles,
       previewFile,
-      trailerFile,
       stillFiles,
       subtitleFiles,
     });
@@ -272,7 +258,6 @@ export class MoviesService {
       createMovieDto.dcpFiles ||
       createMovieDto.stillFiles ||
       createMovieDto.subtitleFiles ||
-      createMovieDto.trailerFile ||
       createMovieDto.previewFile
     ) {
       createdMovie = await this.moviesRepository.save(
@@ -544,7 +529,6 @@ export class MoviesService {
           'movieFiles',
           'dcpFiles',
           'previewFile',
-          'trailerFile',
           'stillFiles',
           'subtitleFiles',
           'selectionTags',
@@ -574,7 +558,6 @@ export class MoviesService {
           'movieFiles',
           'dcpFiles',
           'previewFile',
-          'trailerFile',
           'stillFiles',
           'subtitleFiles',
           'selectionTags',
@@ -648,7 +631,6 @@ export class MoviesService {
       movie.movieFiles.length > 0 ||
       movie.dcpFiles.length > 0 ||
       movie.previewFile != null ||
-      movie.trailerFile != null ||
       movie.stillFiles.length > 0 ||
       movie.subtitleFiles.length > 0
     );

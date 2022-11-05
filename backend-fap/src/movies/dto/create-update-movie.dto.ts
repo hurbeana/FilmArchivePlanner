@@ -53,11 +53,6 @@ export class CreateUpdateMovieDto {
   previewFile?: FileDto;
 
   @AutoMap({ typeFn: () => FileDto })
-  @IsOptional()
-  @Type(() => FileDto)
-  trailerFile?: FileDto;
-
-  @AutoMap({ typeFn: () => FileDto })
   @IsArray()
   @IsOptional()
   @ValidateNested({ each: true })

@@ -71,8 +71,6 @@ class Client:
         ]
         if bool(random.getrandbits(1)):
             movie["previewFile"] = self.cache_file(files.get_mp4())
-        if bool(random.getrandbits(1)):
-            movie["trailerFile"] = self.cache_file(files.get_mp4())
         movie["stillFiles"] = [
             self.cache_file(files.get_png()) for i in range(random.randrange(0, 3))
         ]
