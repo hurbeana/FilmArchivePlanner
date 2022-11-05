@@ -104,6 +104,7 @@ export class EditViewComponent implements OnInit {
     music: new FormControl(),
     productionCompany: new FormControl(),
     referenceNumber: new FormControl(),
+    previewLink: new FormControl(),
     contact: new FormControl({}, [
       Validators.required,
       this.customContactValidator(),
@@ -318,6 +319,7 @@ export class EditViewComponent implements OnInit {
           previewFile: undefined,
           productionCompany: '',
           referenceNumber: '',
+          previewLink: '',
           script: '',
           selectionTags: [],
           softwareUsed: [],

@@ -126,6 +126,9 @@
         <span class="mat-subheading-2 text-bold" i18n>Reference Number</span> <span>{{ movie?.referenceNumber ?? 'empty' }}</span>
       </div>
       <div>
+        <span class="mat-subheading-2 text-bold" i18n>Preview Link</span> <a href="{{movie?.previewLink}}" target="_blank">{{ movie?.previewLink ?? 'empty' }}</a>
+      </div>
+      <div>
         <span class="mat-subheading-2 text-bold" i18n>Contact</span>
         <span><b>Type: </b>{{ contact?.type?.value ?? 'empty' }}</span>
         <span><b>Name: </b>{{ contact?.name ?? 'empty' }}</span>

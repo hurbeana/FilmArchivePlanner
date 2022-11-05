@@ -40,5 +40,6 @@ export interface CreateUpdateMovieDto {
   music?: string;
   productionCompany?: string;
   referenceNumber?: string;
+  previewLink?: string;
   contact: string;
 }

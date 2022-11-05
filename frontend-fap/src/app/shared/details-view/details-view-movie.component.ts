@@ -352,6 +352,14 @@ import { Subscription } from 'rxjs';
         readonly
         value="{{ movie?.referenceNumber }}"
       />
+      <span class="mat-primary label-colon" i18n>Preview Link</span>
+      <div *ngIf="movie?.previewLink; else emptyInput">
+        <div type="text" class="form-control form-control-sm disabled">
+          <a target="_blank" href="{{ movie?.previewLink }}">
+            {{ movie?.previewLink }}
+          </a>
+        </div>
+      </div>
 
       <span class="mat-primary label-colon" i18n>Contact</span>
       <div

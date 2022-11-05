@@ -184,6 +184,11 @@ export class CreateUpdateMovieDto {
   @IsString()
   referenceNumber?: string;
 
+  @AutoMap()
+  @IsOptional()
+  @IsString()
+  previewLink?: string;
+
   @AutoMap({ typeFn: () => ContactReferenceDto })
   @IsNotEmptyObject()
   contact: ContactReferenceDto;

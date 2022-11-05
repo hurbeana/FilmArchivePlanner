@@ -35,6 +35,7 @@ export interface Movie {
   music?: string;
   productionCompany?: string;
   referenceNumber?: string;
+  previewLink?: string;
   contact: Contact;
   created_at: Date;
   last_updated: Date;

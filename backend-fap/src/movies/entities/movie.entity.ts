@@ -165,6 +165,10 @@ export class Movie {
   referenceNumber?: string;
 
   @AutoMap()
+  @Column({ nullable: true })
+  previewLink?: string;
+
+  @AutoMap()
   @ManyToOne(() => Contact)
   contact: Contact;
 
