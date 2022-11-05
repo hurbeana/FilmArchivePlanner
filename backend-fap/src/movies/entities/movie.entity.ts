@@ -166,6 +166,10 @@ export class Movie {
   productionCompany?: string;
 
   @AutoMap()
+  @Column({ nullable: true })
+  referenceNumber?: string;
+
+  @AutoMap()
   @ManyToOne(() => Contact)
   contact: Contact;
 

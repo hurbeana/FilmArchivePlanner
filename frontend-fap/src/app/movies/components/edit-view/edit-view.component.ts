@@ -104,6 +104,7 @@ export class EditViewComponent implements OnInit {
     sound: new FormControl(),
     music: new FormControl(),
     productionCompany: new FormControl(),
+    referenceNumber: new FormControl(),
     contact: new FormControl({}, [
       Validators.required,
       this.customContactValidator(),
@@ -351,6 +352,7 @@ export class EditViewComponent implements OnInit {
           movieFiles: [],
           previewFile: undefined,
           productionCompany: '',
+          referenceNumber: '',
           script: '',
           selectionTags: [],
           softwareUsed: [],

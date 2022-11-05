@@ -9,6 +9,7 @@ export class SearchMovieDto extends PartialType(MovieDto) {
     return {
       originalTitle: '',
       englishTitle: '',
+      referenceNumber: '',
     };
   }
 }

@@ -354,6 +354,13 @@ import { Subscription } from 'rxjs';
         readonly
         value="{{ movie?.productionCompany }}"
       />
+      <span class="mat-primary label-colon" i18n>Reference Number</span>
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        readonly
+        value="{{ movie?.referenceNumber }}"
+      />
 
       <span class="mat-primary label-colon" i18n>Contact</span>
       <div
